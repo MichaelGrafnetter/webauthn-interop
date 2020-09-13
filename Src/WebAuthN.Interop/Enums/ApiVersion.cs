@@ -3,7 +3,7 @@
     /// <summary>
     /// WebAuthN API Version Information.
     /// </summary>
-    public enum ApiVersion : uint
+    public enum ApiVersion : int
     {
         /// <summary>
         /// Baseline Version

@@ -17,7 +17,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public class GetAssertionOptions
+    internal class GetAssertionOptions
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.

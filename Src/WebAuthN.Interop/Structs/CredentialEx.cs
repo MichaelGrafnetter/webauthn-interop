@@ -17,7 +17,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL_EX.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct  CredentialEx
+    internal struct  CredentialEx
     {
         /// <summary>
         /// 

@@ -23,17 +23,7 @@ namespace WebAuthN.Interop.Test
         //                            HRESULT_FROM_WIN32(ERROR_TIMEOUT)
         //  L"UnknownError"         - All other hr values
             */
-            bool helloAvailable = NativeMethods.;
-            PrivateObject objToTestPrivateMethod = new PrivateObject(typeof(Salary));
-
-            bool result = Convert.ToBoolean(objToTestPrivateMethod.Invoke("isValidNwd", 6));
-
-            Assert.AreEqual(result, true);
         }
 
-        private void Call_WebAuthNGetErrorName()
-        {
-
-        }
     }
 }
