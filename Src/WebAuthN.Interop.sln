@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAuthN.Interop", "WebAuthN.Interop\WebAuthN.Interop.csproj", "{59243739-A05A-463B-91EF-035FF88DE520}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAuthN.Interop.Test", "WebAuthN.Interop.Test\WebAuthN.Interop.Test.csproj", "{AF9F792D-6C81-4EE8-91BE-2C0181023869}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59243739-A05A-463B-91EF-035FF88DE520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59243739-A05A-463B-91EF-035FF88DE520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59243739-A05A-463B-91EF-035FF88DE520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59243739-A05A-463B-91EF-035FF88DE520}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF9F792D-6C81-4EE8-91BE-2C0181023869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF9F792D-6C81-4EE8-91BE-2C0181023869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF9F792D-6C81-4EE8-91BE-2C0181023869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF9F792D-6C81-4EE8-91BE-2C0181023869}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5EAF41A3-0BD0-46BF-95A9-27963D948EE4}
+	EndGlobalSection
+EndGlobal
