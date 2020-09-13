@@ -12,15 +12,9 @@ namespace WebAuthN.Interop
     public class RelyingPartyInformation
     {
         /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION.</remarks>
-        private const int CurrentVersion = 1;
-
-        /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        public int  Version;
+        private protected RelyingPartyInformationVersion Version = RelyingPartyInformationVersion.Current;
 
         /// <summary>
         /// Identifier for the RP.

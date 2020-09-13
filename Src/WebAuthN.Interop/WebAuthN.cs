@@ -12,7 +12,7 @@ namespace WebAuthN.Interop
             {
                 try
                 {
-                    return NativeMethods.WebAuthNGetApiVersionNumber();
+                    return NativeMethods.GetApiVersionNumber();
                 }
                 catch(EntryPointNotFoundException)
                 {
@@ -26,7 +26,7 @@ namespace WebAuthN.Interop
         {
             get
             {
-                var hResult = NativeMethods.WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable(out bool value);
+                var hResult = NativeMethods.IsUserVerifyingPlatformAuthenticatorAvailable(out bool value);
 
                 // TODO: Process hResult
 
@@ -36,6 +36,7 @@ namespace WebAuthN.Interop
 
         public void AuthenticatorMakeCredential()
         {
+
         }
 
         public void AuthenticatorGetAssertion()
@@ -44,7 +45,7 @@ namespace WebAuthN.Interop
 
         public void CancelCurrentOperation()
         {
-
+            // Note: WebAuthNCancelCurrentOperation and WebAuthNGetCancellationId are only available in newer systems.
         }
     }
 }

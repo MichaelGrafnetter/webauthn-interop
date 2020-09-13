@@ -3,18 +3,12 @@
 namespace WebAuthN.Interop
 {
     /// <summary>
-    /// Information about an User Entity
+    /// Information about a User Entity
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct UserInformation
+    public class UserInformation
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION.</remarks>
-        private const uint CurrentVersion = 1;
-
         /// <summary>
         /// Maximum length of the Identifier for the User, in bytes.
         /// </summary>
@@ -24,7 +18,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        public int Version;
+        private protected UserInformationVersion Version = UserInformationVersion.Current;
 
         /// <summary>
         /// Length of the Identifier for the User, in bytes.

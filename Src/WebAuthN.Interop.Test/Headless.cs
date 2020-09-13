@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WebAuthN.Interop.Test
 {
@@ -15,6 +16,19 @@ namespace WebAuthN.Interop.Test
         public void WebAuthN_IsPlatformAuthenticatorAvailable()
         {
             bool helloAvailable = WebAuthN.IsPlatformAuthenticatorAvailable;
+        }
+
+        [TestMethod]
+        public void NativeMethods_GetForegroundWindow()
+        {
+            IntPtr hwnd = NativeMethods.GetForegroundWindow();
+            Assert.AreNotEqual(IntPtr.Zero, hwnd);
+        }
+
+        [TestMethod]
+        public void NativeMethods_GetCancellationId()
+        {
+            HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
         }
     }
 }

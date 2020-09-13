@@ -9,7 +9,7 @@ namespace WebAuthN.Interop
 
         protected override bool ReleaseHandle()
         {
-            NativeMethods.WebAuthNFreeCredentialAttestation(this.handle);
+            NativeMethods.FreeCredentialAttestation(this.handle);
             return true;
         }
 

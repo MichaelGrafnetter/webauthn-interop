@@ -6,24 +6,17 @@ namespace WebAuthN.Interop.Test
     public class ErrorProcessing
     {
         [TestMethod]
-        public void NativeMethods_WebAuthNGetErrorName()
+        public void NativeMethods_GetErrorName_Success()
         {
-            /*
-             *         // Returns the following Error Names:
-        //  L"Success"              - S_OK
-        //  L"InvalidStateError"    - NTE_EXISTS
-        //  L"ConstraintError"      - HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED),
-        //                            NTE_NOT_SUPPORTED,
-        //                            NTE_TOKEN_KEYSET_STORAGE_FULL
-        //  L"NotSupportedError"    - NTE_INVALID_PARAMETER
-        //  L"NotAllowedError"      - NTE_DEVICE_NOT_FOUND,
-        //                            NTE_NOT_FOUND,
-        //                            HRESULT_FROM_WIN32(ERROR_CANCELLED),
-        //                            NTE_USER_CANCELLED,
-        //                            HRESULT_FROM_WIN32(ERROR_TIMEOUT)
-        //  L"UnknownError"         - All other hr values
-            */
+            string result = NativeMethods.GetErrorName(HResult.Success);
+            Assert.AreEqual("Success", result);
         }
 
+        [TestMethod]
+        public void NativeMethods_GetErrorName_NotAllowedError()
+        {
+            string result = NativeMethods.GetErrorName(HResult.ActionCancelled);
+            Assert.AreEqual("NotAllowedError", result);
+        }
     }
 }

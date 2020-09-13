@@ -8,7 +8,7 @@ namespace WebAuthN.Interop
 
         protected override bool ReleaseHandle()
         {
-            NativeMethods.WebAuthNFreeAssertion(this.handle);
+            NativeMethods.FreeAssertion(this.handle);
             return true;
         }
 
