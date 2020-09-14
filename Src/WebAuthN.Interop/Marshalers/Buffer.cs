@@ -3,12 +3,12 @@
 namespace WebAuthN.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct Buffer
+    public struct Buffer
     {
         public int Length;
         public byte[] Data;
 
-        internal Buffer(byte[] data)
+        public Buffer(byte[] data)
         {
             if(data != null)
             {

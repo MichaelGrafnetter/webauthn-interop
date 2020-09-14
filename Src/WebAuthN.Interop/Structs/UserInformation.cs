@@ -6,7 +6,7 @@ namespace WebAuthN.Interop
     /// Information about a User Entity
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class UserInformation
     {
         /// <summary>
@@ -21,14 +21,10 @@ namespace WebAuthN.Interop
         private protected UserInformationVersion Version = UserInformationVersion.Current;
 
         /// <summary>
-        /// Length of the Identifier for the User, in bytes.
-        /// </summary>
-        public int IdLength;
-
-        /// <summary>
         /// Identifier for the User.
         /// </summary>
-        public byte[] Id;
+        [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(BufferMarshaler))]
+        public Buffer Id;
 
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
