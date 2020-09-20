@@ -7,45 +7,29 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COMMON_ATTESTATION.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct CommonAttestation
+    public class CommonAttestation
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_COMMON_ATTESTATION_CURRENT_VERSION.</remarks>
-        private const int CurrentVersion = 1;
-
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        uint Version;
+        protected private CommonAttestationVersion Version = CommonAttestationVersion.Current;
 
         /// <summary>
         /// Hash and Padding Algorithm
         /// </summary>
         /// <remarks>The following won't be set for "fido-u2f" which assumes "ES256".</remarks>
-        //
-        // 
         string Algorithm;
 
-        // TODO: Fix type and comment.
         /// <summary>
         /// COSE algorithm
         /// </summary>
-        int CoseAlgorithm;
-
-        /// <summary>
-        /// Length of the signature.
-        /// </summary>
-        uint SignatureLength;
+        CoseAlgorithm CoseAlgorithm;
 
         /// <summary>
         /// Signature that was generated for this attestation.
         /// </summary>
-        byte[] Signature;
+        VariableByteArray Signature;
 
-        int CertificateCount;
-        
         /// <summary>
         /// Array of X.509 DER encoded certificates.
         /// </summary>
@@ -53,19 +37,14 @@ namespace WebAuthN.Interop
         /// The first certificate is the signer, leaf certificate.
         /// It is set for Full Basic Attestation. If not, set then, this is Self Attestation.
         /// </remarks>
-        Certificate[] Certificates;
+        Certificates Certificates;
 
-        // TODO: Refactor the TPM part.
         // TODO: #define WEBAUTHN_ATTESTATION_VER_TPM_2_0   L"2.0"
         // Following are also set for tpm
         string TPMVersion; // "2.0"
-        
-        uint CertificateInfoLength;
-        
-        byte[] CertificateInfo;
 
-        uint PubAreaLength;
-        
-        byte[] PubArea;
+        VariableByteArray CertificateInfo;
+
+        VariableByteArray PubArea;
     }
 }

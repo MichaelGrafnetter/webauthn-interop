@@ -8,7 +8,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public class MakeCredentialOptions
+    internal class MakeCredentialOptions
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -29,26 +29,22 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        public ExtensionlList Extensions;
+        public Extensions Extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
         /// </summary>
-        public AuthenticatorAttachment AuthenticatorAttachment;
+        internal AuthenticatorAttachment AuthenticatorAttachment;
 
         /// <summary>
         /// Require key to be resident or not. Defaulting to false.
         /// </summary>
         public bool RequireResidentKey;
 
-        // TODO: Create enum WEBAUTHN_USER_VERIFICATION.
-
         /// <summary>
         /// User Verification Requirement.
         /// </summary>
         public UserVerificationRequirement UserVerificationRequirement;
-
-        // TODO: Create enum WEBAUTHN_ATTESTATION_CONVEYANCE.
 
         /// <summary>
         /// Attestation Conveyance Preference.
@@ -60,12 +56,12 @@ namespace WebAuthN.Interop
         /// </summary>
         private int Flags;
 
-        // TODO: Change to Guid
         /// <summary>
         /// Cancellation Id (Optional)
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
-        public IntPtr CancellationId;
+        [MarshalAs(UnmanagedType.LPStruct)]
+        public Guid? CancellationId;
 
         /// <summary>
         /// Exclude Credential List. 

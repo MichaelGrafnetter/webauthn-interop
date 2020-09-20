@@ -54,7 +54,8 @@ namespace WebAuthN.Interop
         string U2fAppId;
 
         // If the following is non-NULL, then, set to TRUE if the above U2fAppid was used instead of RpId
-        IntPtr IsU2fAppIdUsed; //*bool
+        // TODO: *bool
+        IntPtr IsU2fAppIdUsed;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3
@@ -63,7 +64,8 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Cancellation Id (Optional)
         /// </summary>
-        IntPtr CancellationId; //*Guid
+        // TODO: *Guid
+        IntPtr CancellationId;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4
@@ -72,6 +74,6 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allow Credential List. If present, "CredentialList" will be ignored.
         /// </summary>
-        //VariableArray<Credential> AllowCredentialList;
+        VariableArray<Credential> AllowCredentialList;
     }
 }

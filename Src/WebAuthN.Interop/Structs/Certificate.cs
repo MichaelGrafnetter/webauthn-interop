@@ -7,16 +7,8 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_X5C.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Certificate
+    internal sealed class Certificate : VariableByteArray
     {
-        /// <summary>
-        /// // Length of X.509 encoded certificate.
-        /// </summary>
-        public int DataLength;
-
-        /// <summary>
-        /// X.509 encoded certificate bytes.
-        /// </summary>
-        public byte[] Data;
+        // TODO: Certificate Conversion
     }
 }

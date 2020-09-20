@@ -12,7 +12,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        protected private CoseCredentialParameterVersion _version = CoseCredentialParameterVersion.Current;
+        private protected CoseCredentialParameterVersion _version = CoseCredentialParameterVersion.Current;
 
         /// <summary>
         /// Well-known credential type specifying a credential to create.
@@ -36,7 +36,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETERS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public class PublicKeyCredentialParameters : VariableArray<CoseCredentialParameter>
+    internal class PublicKeyCredentialParameters : VariableArray<CoseCredentialParameter>
     {
         PublicKeyCredentialParameters(CoseCredentialParameter[] data) : base(data)
         {

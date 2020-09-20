@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace WebAuthN.Interop
 {
@@ -7,7 +8,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public class UserInformation
+    internal class UserInformation : IDisposable
     {
         /// <summary>
         /// Maximum length of the Identifier for the User, in bytes.
@@ -23,7 +24,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Identifier for the User.
         /// </summary>
-        public VariableByteArray Id;
+        private VariableByteArray _id;
 
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
@@ -39,5 +40,26 @@ namespace WebAuthN.Interop
         /// Contains the friendly name associated with the user account by the Relying Party, such as "John P. Smith".
         /// </summary>
         public string DisplayName;
+
+        /// <summary>
+        /// Identifier for the User.
+        /// </summary>
+        public byte[] Id
+        {
+            get
+            {
+                return _id?.Data;
+            }
+            set
+            {
+                // TODO: Validate length
+                _id = new VariableByteArray(value);
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            _id?.Dispose();
+        }
     }
 }

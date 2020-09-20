@@ -14,12 +14,14 @@ namespace WebAuthN.Interop.Test
             var info = new UserInformation();
             info.Name = "test@contoso.com";
             info.DisplayName = "Test";
-            info.Id = new VariableByteArray(new byte[] { 0, 1, 2, 3 });
+            info.Id = new byte[] { 0, 1, 2, 3 };
 
             // Marshal
             int structSize = Marshal.SizeOf<UserInformation>();
             IntPtr nativeStruct = Marshal.AllocHGlobal(structSize);
             Marshal.StructureToPtr<UserInformation>(info, nativeStruct, false);
+
+            // Free
             Marshal.DestroyStructure<UserInformation>(nativeStruct);
         }
 
@@ -28,6 +30,14 @@ namespace WebAuthN.Interop.Test
         {
             var calculatedSize = Marshal.SizeOf<UserInformation>();
             var actualSize = 2 * sizeof(int) + 4 * Marshal.SizeOf(typeof(IntPtr));
+            Assert.AreEqual(actualSize, calculatedSize);
+        }
+
+        [TestMethod]
+        public void Marshalling_BinaryArray_SizeOf()
+        {
+            var calculatedSize = Marshal.SizeOf<VariableByteArray>();
+            var actualSize = sizeof(int) + Marshal.SizeOf(typeof(IntPtr));
             Assert.AreEqual(actualSize, calculatedSize);
         }
     }

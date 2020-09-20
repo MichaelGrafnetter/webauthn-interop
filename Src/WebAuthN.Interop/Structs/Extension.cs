@@ -10,7 +10,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSION.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public class  Extension
+    internal class  Extension
     {
         /// <summary>
         /// Extension identifier.
@@ -20,7 +20,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Extension data.
         /// </summary>
-        public VariableByteArray Data;
+        internal VariableByteArray Data;
     }
 
     /// <summary>
@@ -28,8 +28,10 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public class Extensions : VariableArray<Extension>
+    internal class Extensions : VariableArray<Extension>
     {
-
+        Extensions(Extension[] extensions) : base(extensions)
+        {
+        }
     }
 }
