@@ -21,24 +21,14 @@ namespace WebAuthN.Interop
         uint Version;
 
         /// <summary>
-        /// Size of cbAuthenticatorData.
-        /// </summary>
-        uint AuthenticatorDataLength;
-
-        /// <summary>
         /// Authenticator data that was created for this assertion.
         /// </summary>
-        byte[] AuthenticatorData;
-
-        /// <summary>
-        /// Size of pbSignature.
-        /// </summary>
-        uint SignatureLength;
+        VariableByteArray AuthenticatorData;
 
         /// <summary>
         /// Signature that was generated for this assertion.
         /// </summary>
-        byte[] Signature;
+        VariableByteArray Signature;
 
         /// <summary>
         /// Credential that was used for this assertion.
@@ -46,13 +36,8 @@ namespace WebAuthN.Interop
         Credential Credential;
 
         /// <summary>
-        /// Size of User Id.
-        /// </summary>
-        uint UserIdLength;
-
-        /// <summary>
         /// UserId
         /// </summary>
-        byte[] UserId;
+        VariableByteArray UserId;
     }
 }

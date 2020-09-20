@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net472</TargetFrameworks>
     <Authors>Michael Grafnetter</Authors>
     <PackageProjectUrl>https://github.com/MichaelGrafnetter/WebAuthN.Interop</PackageProjectUrl>
     <PackageIconUrl>https://webauthn.io/dist/images/shield.svg</PackageIconUrl>
@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fido2" Version="2.0.0-preview2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6" Condition="'$(TargetFramework)' == 'netstandard2.1' And '$(Configuration)' == 'Release'">
+    <PackageReference Include="Fido2.Models" Version="2.0.0-preview2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6" Condition="'$(TargetFramework)' == 'netcoreapp3.1' And '$(Configuration)' == 'Release'">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

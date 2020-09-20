@@ -8,20 +8,12 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct MakeCredentialOptions
+    public class MakeCredentialOptions
     {
-        // TODO: Add enum for WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION.</remarks>
-        private const int CurrentVersion = 3;
-
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        public int Version;
+        private protected AuthenticatorMakeCredentialOptionsVersion Version = AuthenticatorMakeCredentialOptionsVersion.Current;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -32,18 +24,17 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Credentials used for exclusion.
         /// </summary>
-        public CredentialList ExcludeCredentials;
+        public VariableArray<Credential> ExcludeCredentials;
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
         public ExtensionlList Extensions;
 
-        // TODO: Create enum WEBAUTHN_AUTHENTICATOR_ATTACHMENT
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
         /// </summary>
-        public int AuthenticatorAttachment;
+        public AuthenticatorAttachment AuthenticatorAttachment;
 
         /// <summary>
         /// Require key to be resident or not. Defaulting to false.
@@ -55,19 +46,19 @@ namespace WebAuthN.Interop
         /// <summary>
         /// User Verification Requirement.
         /// </summary>
-        public int UserVerificationRequirement;
+        public UserVerificationRequirement UserVerificationRequirement;
 
         // TODO: Create enum WEBAUTHN_ATTESTATION_CONVEYANCE.
 
         /// <summary>
         /// Attestation Conveyance Preference.
         /// </summary>
-        public int AttestationConveyancePreference;
+        public AttestationConveyancePreference AttestationConveyancePreference;
 
         /// <summary>
         /// Reserved for future Use
         /// </summary>
-        public int Flags;
+        private int Flags;
 
         // TODO: Change to Guid
         /// <summary>

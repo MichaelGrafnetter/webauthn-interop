@@ -23,14 +23,20 @@ namespace WebAuthN.Interop
             IntPtr hwnd,
             RelyingPartyInformation rpInformation,
             UserInformation userInformation,
-            PublicKeyCredentialParameterList pubKeyCredParams,
-            ClientData webAuthNClientData,
-            [Optional] MakeCredentialOptions webAuthNMakeCredentialOptions,
-            out CredentialAttestationSafeHandle webAuthNCredentialAttestation
+            PublicKeyCredentialParameters pubKeyCredParams,
+            ClientData clientData,
+            [Optional] MakeCredentialOptions makeCredentialOptions,
+            out CredentialAttestationSafeHandle credentialAttestation
         );
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion")]
-        internal static extern HResult AuthenticatorGetAssertion();
+        internal static extern HResult AuthenticatorGetAssertion(
+            IntPtr hwnd,
+            string rpId,
+            ClientData clientData,
+            [Optional] AuthenticatorGetAssertionOptions getAssertionOptions,
+            out AssertionSafeHandle assertion
+        );
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNFreeCredentialAttestation")]
         internal static extern void FreeCredentialAttestation(IntPtr webAuthNCredentialAttestation);

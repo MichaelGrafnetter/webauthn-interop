@@ -1,15 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-// TODO: Create enum WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION.
-/*
- * #define WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_1          1
-#define WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2          2
-#define WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3          3
-#define WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4          4
-#define WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION    WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4
-*/
-
 namespace WebAuthN.Interop
 {
     /// <summary>
@@ -17,12 +8,12 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal class GetAssertionOptions
+    internal class AuthenticatorGetAssertionOptions
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        public int Version;
+        private protected AuthenticatorGetAssertionOptionsVersion Version = AuthenticatorGetAssertionOptionsVersion.Current;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -33,27 +24,27 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allowed Credentials List.
         /// </summary>
-        public CredentialList AllowedCredentials;
+        public VariableArray<Credential> AllowedCredentials;
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        public ExtensionlList Extensions;
+        public Extensions Extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
         /// </summary>
-        public int AuthenticatorAttachment;
+        public AuthenticatorAttachment AuthenticatorAttachment;
 
         /// <summary>
         /// User Verification Requirement.
         /// </summary>
-        public uint UserVerificationRequirement;
+        public UserVerificationRequirement UserVerificationRequirement;
 
         /// <summary>
         /// Reserved for future Use.
         /// </summary>
-        uint Flags = 0;
+        private uint Flags = 0;
 
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2
 
@@ -81,6 +72,6 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allow Credential List. If present, "CredentialList" will be ignored.
         /// </summary>
-        CredentialList AllowCredentialList;
+        //VariableArray<Credential> AllowCredentialList;
     }
 }

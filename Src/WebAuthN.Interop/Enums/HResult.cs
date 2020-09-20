@@ -1,5 +1,9 @@
 ﻿namespace WebAuthN.Interop
 {
+    /// <summary>
+    /// Error codes relevant to the WebAuthN API.
+    /// </summary>
+    /// <remarks>Corresponds to HRESULT.</remarks>
     public enum HResult : uint
     {
         /// <summary>

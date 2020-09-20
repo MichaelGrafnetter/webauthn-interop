@@ -13,14 +13,14 @@ namespace WebAuthN.Interop
             return true;
         }
 
-        internal CredentialAttestation Marshal()
+        internal CredentialAttestation ToManaged()
         {
             if(this.IsInvalid)
             {
                 return null;
             }
 
-            return System.Runtime.InteropServices.Marshal.PtrToStructure<CredentialAttestation>(this.handle);
+            return Marshal.PtrToStructure<CredentialAttestation>(this.handle);
         }
     }
 }

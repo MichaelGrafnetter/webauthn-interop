@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace WebAuthN.Interop.Structs
+namespace WebAuthN.Interop
 {
     /// <summary>
     /// Attestation Info

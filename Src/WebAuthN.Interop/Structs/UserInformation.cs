@@ -23,8 +23,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Identifier for the User.
         /// </summary>
-        [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(BufferMarshaler))]
-        public Buffer Id;
+        public VariableByteArray Id;
 
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".

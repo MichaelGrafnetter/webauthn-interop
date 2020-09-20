@@ -1,5 +1,4 @@
-﻿using Fido2NetLib;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace WebAuthN.Interop
 {
@@ -8,28 +7,28 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETER.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct PublicKeyCredentialParameter
+    public class CoseCredentialParameter
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETER_CURRENT_VERSION.</remarks>
-        private const int CurrentVersion = 1;
-
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        public int Version;
+        protected private CoseCredentialParameterVersion _version = CoseCredentialParameterVersion.Current;
 
         /// <summary>
         /// Well-known credential type specifying a credential to create.
         /// </summary>
-        string CredentialType;
+        // TODO: replace public-key with an enum.
+        private string _credentialType = "public-key";
 
         /// <summary>
         /// Well-known COSE algorithm specifying the algorithm to use for the credential.
         /// </summary>
-        long Alg;
+        private CoseAlgorithm _algorithm;
+
+        public CoseCredentialParameter(CoseAlgorithm algorithm)
+        {
+            _algorithm = algorithm;
+        }
     }
 
     /// <summary>
@@ -37,9 +36,10 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETERS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct PublicKeyCredentialParameterList
+    public class PublicKeyCredentialParameters : VariableArray<CoseCredentialParameter>
     {
-        int Count;
-        PublicKeyCredentialParameter[] Values;
+        PublicKeyCredentialParameters(CoseCredentialParameter[] data) : base(data)
+        {
+        }
     }
 }

@@ -10,19 +10,17 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSION.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct  Extension
+    public class  Extension
     {
-        public string Identifier;
-
         /// <summary>
-        /// Size of extension data.
+        /// Extension identifier.
         /// </summary>
-        public int DataLength;
+        public string Identifier;
 
         /// <summary>
         /// Extension data.
         /// </summary>
-        public byte[] Data;
+        public VariableByteArray Data;
     }
 
     /// <summary>
@@ -30,9 +28,8 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct ExtensionlList
+    public class Extensions : VariableArray<Extension>
     {
-        int Count;
-        Extension[] Values;
+
     }
 }
