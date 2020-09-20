@@ -4,11 +4,11 @@ using System.Text;
 namespace WebAuthN.Interop
 {
     /// <summary>
-    /// 
+    /// Information about client data.
     /// </summary>
-    /// <remarks></remarks>
+    /// <remarks>Corresponds to WEBAUTHN_CLIENT_DATA.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public class ClientData
+    internal class ClientData
     {
         // TODO: Hash algorithm Id enum
         private const string SHA256 = "SHA-256";
@@ -46,8 +46,9 @@ namespace WebAuthN.Interop
                 return (binaryData != null) ? Encoding.UTF8.GetString(binaryData) : null;
             }
 
-            private set
+            set
             {
+                // TODO: Validate input
                 byte[] binaryString = Encoding.UTF8.GetBytes(value);
                 _clientData = new VariableByteArray(binaryString);
             }

@@ -7,7 +7,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public class RelyingPartyInformation
+    internal class RelyingPartyInformation
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.

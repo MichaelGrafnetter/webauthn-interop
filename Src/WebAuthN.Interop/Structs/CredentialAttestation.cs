@@ -8,12 +8,12 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public class CredentialAttestation
+    internal class CredentialAttestation
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private CredentialAttestationVersion Version = CredentialAttestationVersion.Current;
+        private protected CredentialAttestationVersion Version = CredentialAttestationVersion.Current;
 
         // TODO: Change FormatType to enum
         /*
@@ -42,8 +42,8 @@ namespace WebAuthN.Interop
         /// <summary>
         /// CBOR attestation information.
         /// </summary>
-        [MarshalAs(UnmanagedType.LPStruct)]
-        CommonAttestation AttestationDecoded;
+        // TODO: [MarshalAs(UnmanagedType.LPStruct)]
+        // TODO: CommonAttestation AttestationDecoded;
 
         /// <summary>
         /// The CBOR encoded Attestation Object to be returned to the RP.
@@ -60,7 +60,7 @@ namespace WebAuthN.Interop
         /// WebAuthn Extensions
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2.</remarks>
-        Extensions Extensions;
+        // TODO: Extensions Extensions;
 
         /// <summary>
         /// The transport that was used.

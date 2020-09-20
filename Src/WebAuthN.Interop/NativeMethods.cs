@@ -25,7 +25,7 @@ namespace WebAuthN.Interop
             UserInformation userInformation,
             PublicKeyCredentialParameters pubKeyCredParams,
             ClientData clientData,
-            [Optional] MakeCredentialOptions makeCredentialOptions,
+            [Optional] AuthenticatorMakeCredentialOptions makeCredentialOptions,
             out CredentialAttestationSafeHandle credentialAttestation
         );
 

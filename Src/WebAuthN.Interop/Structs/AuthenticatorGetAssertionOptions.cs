@@ -24,12 +24,12 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allowed Credentials List.
         /// </summary>
-        public VariableArray<Credential> AllowedCredentials;
+        // TODO: public VariableArray<Credential> AllowedCredentials;
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        public Extensions Extensions;
+        // TODO: public Extensions Extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
@@ -65,7 +65,7 @@ namespace WebAuthN.Interop
         /// Cancellation Id (Optional)
         /// </summary>
         // TODO: *Guid
-        IntPtr CancellationId;
+        // TODO: IntPtr CancellationId;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4
@@ -74,6 +74,6 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allow Credential List. If present, "CredentialList" will be ignored.
         /// </summary>
-        VariableArray<Credential> AllowCredentialList;
+        // TODO: VariableArray<Credential> AllowCredentialList;
     }
 }

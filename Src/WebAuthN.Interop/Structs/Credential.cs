@@ -17,7 +17,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        VariableByteArray Id;
+        private VariableByteArray Id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.

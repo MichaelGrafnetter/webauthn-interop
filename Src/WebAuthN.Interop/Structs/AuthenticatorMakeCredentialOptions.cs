@@ -8,7 +8,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal class MakeCredentialOptions
+    internal class AuthenticatorMakeCredentialOptions
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -24,12 +24,12 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Credentials used for exclusion.
         /// </summary>
-        public VariableArray<Credential> ExcludeCredentials;
+        // TODO: public VariableArray<Credential> ExcludeCredentials;
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        public Extensions Extensions;
+        // TODO: public Extensions Extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
@@ -60,8 +60,8 @@ namespace WebAuthN.Interop
         /// Cancellation Id (Optional)
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
-        [MarshalAs(UnmanagedType.LPStruct)]
-        public Guid? CancellationId;
+        // [MarshalAs(UnmanagedType.LPStruct)]
+        // TODO: public Guid? CancellationId;
 
         /// <summary>
         /// Exclude Credential List. 
@@ -70,6 +70,6 @@ namespace WebAuthN.Interop
         /// If present, "CredentialList" will be ignored.
         /// This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.
         /// </remarks>
-        public CredentialExList ExcludeCredentialsEx;
+        // TODO: public CredentialExList ExcludeCredentialsEx;
     }
 }

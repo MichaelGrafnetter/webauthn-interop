@@ -37,7 +37,7 @@ namespace WebAuthN.Interop
         /// The first certificate is the signer, leaf certificate.
         /// It is set for Full Basic Attestation. If not, set then, this is Self Attestation.
         /// </remarks>
-        Certificates Certificates;
+        // TODO: Certificates Certificates;
 
         // TODO: #define WEBAUTHN_ATTESTATION_VER_TPM_2_0   L"2.0"
         // Following are also set for tpm
