@@ -6,19 +6,13 @@ namespace WebAuthN.Interop
     /// Information about credential.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct  Credential
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    internal class  Credential
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL_CURRENT_VERSION.</remarks>
-        private const int CurrentVersion = 1;
-
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        public int Version;
+        private protected CredentialVersion Version = CredentialVersion.Current;
 
         /// <summary>
         /// Unique ID for this particular credential.

@@ -6,7 +6,7 @@ namespace WebAuthN.Interop
     /// Information about credential parameter.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETER.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class CoseCredentialParameter
     {
         /// <summary>

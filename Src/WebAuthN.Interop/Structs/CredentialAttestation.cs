@@ -7,7 +7,7 @@ namespace WebAuthN.Interop
     /// Attestation Info
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class CredentialAttestation
     {
         /// <summary>

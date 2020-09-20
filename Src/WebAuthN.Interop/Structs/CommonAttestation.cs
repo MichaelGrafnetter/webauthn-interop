@@ -6,7 +6,7 @@ namespace WebAuthN.Interop
     /// Attestation Info
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COMMON_ATTESTATION.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class CommonAttestation
     {
         /// <summary>
@@ -41,7 +41,7 @@ namespace WebAuthN.Interop
 
         // TODO: #define WEBAUTHN_ATTESTATION_VER_TPM_2_0   L"2.0"
         // Following are also set for tpm
-        string TPMVersion; // "2.0"
+        string TPMVersion;
 
         VariableByteArray CertificateInfo;
 

@@ -1,10 +1,13 @@
-﻿namespace WebAuthN.Interop
+﻿using System.Runtime.InteropServices;
+
+namespace WebAuthN.Interop
 {
     // TODO: #define WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_PROTECT                 L"credProtect"
     /// <summary>
     /// CredProtect  extension.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CRED_PROTECT_EXTENSION_IN.</remarks>
+    [StructLayout(LayoutKind.Sequential)]
     internal class CredProtectExtension
     {
         public UserVerification CredProtect;

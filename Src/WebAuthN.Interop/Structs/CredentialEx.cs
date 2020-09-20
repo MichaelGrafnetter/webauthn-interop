@@ -6,7 +6,7 @@ namespace WebAuthN.Interop
     /// Information about credential with extra information, such as, Transports.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL_EX.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal class  CredentialEx
     {
         /// <summary>

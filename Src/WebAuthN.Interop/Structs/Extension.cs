@@ -9,7 +9,7 @@ namespace WebAuthN.Interop
     /// Information about Extension.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSION.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal class  Extension
     {
         /// <summary>

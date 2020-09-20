@@ -10,15 +10,9 @@ namespace WebAuthN.Interop
     public class Assertion
     {
         /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.</remarks>
-        private const uint CurrentVersion = 1;
-
-        /// <summary>
         /// // Version of this structure, to allow for modifications in the future.
         /// </summary>
-        uint Version;
+        private protected AssertionVersion Version = AssertionVersion.Current;
 
         /// <summary>
         /// Authenticator data that was created for this assertion.

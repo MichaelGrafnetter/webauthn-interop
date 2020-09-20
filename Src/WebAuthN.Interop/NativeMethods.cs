@@ -13,13 +13,13 @@ namespace WebAuthN.Interop
         private const string User32 = "user32.dll";
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetApiVersionNumber")]
-        internal static extern ApiVersion GetApiVersionNumber();
+        public static extern ApiVersion GetApiVersionNumber();
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable")]
-        internal static extern HResult IsUserVerifyingPlatformAuthenticatorAvailable(out bool isUserVerifyingPlatformAuthenticatorAvailable);
+        public static extern HResult IsUserVerifyingPlatformAuthenticatorAvailable(out bool isUserVerifyingPlatformAuthenticatorAvailable);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorMakeCredential")]
-        internal static extern HResult AuthenticatorMakeCredential(
+        public static extern HResult AuthenticatorMakeCredential(
             IntPtr hwnd,
             RelyingPartyInformation rpInformation,
             UserInformation userInformation,
@@ -30,7 +30,7 @@ namespace WebAuthN.Interop
         );
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion")]
-        internal static extern HResult AuthenticatorGetAssertion(
+        public static extern HResult AuthenticatorGetAssertion(
             IntPtr hwnd,
             string rpId,
             ClientData clientData,
@@ -39,25 +39,25 @@ namespace WebAuthN.Interop
         );
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNFreeCredentialAttestation")]
-        internal static extern void FreeCredentialAttestation(IntPtr webAuthNCredentialAttestation);
+        public static extern void FreeCredentialAttestation(IntPtr webAuthNCredentialAttestation);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNFreeAssertion")]
-        internal static extern void FreeAssertion(IntPtr webAuthNAssertion);
+        public static extern void FreeAssertion(IntPtr webAuthNAssertion);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetCancellationId")]
-        internal static extern HResult GetCancellationId(out Guid cancellationId);
+        public static extern HResult GetCancellationId(out Guid cancellationId);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNCancelCurrentOperation")]
         internal static extern HResult CancelCurrentOperation(in Guid cancellationId);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetErrorName")]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(PtrToConstStringMarshaler))]
-        internal static extern string GetErrorName(HResult hr);
+        public static extern string GetErrorName(HResult hr);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetW3CExceptionDOMError")]
-        internal static extern HResult GetW3CExceptionDOMError(HResult hr);
+        public static extern HResult GetW3CExceptionDOMError(HResult hr);
 
         [DllImport(User32)]
-        internal static extern IntPtr GetForegroundWindow();
+        public static extern IntPtr GetForegroundWindow();
     }
 }

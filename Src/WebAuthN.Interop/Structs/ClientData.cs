@@ -7,7 +7,7 @@ namespace WebAuthN.Interop
     /// 
     /// </summary>
     /// <remarks></remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class ClientData
     {
         // TODO: Hash algorithm Id enum
