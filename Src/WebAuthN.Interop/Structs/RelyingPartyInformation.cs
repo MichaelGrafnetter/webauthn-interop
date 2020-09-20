@@ -2,8 +2,6 @@
 
 namespace WebAuthN.Interop
 {
-    // TODO: Create a base class with Version, Id, Name and Icon.
-
     /// <summary>
     /// Information about an RP Entity
     /// </summary>

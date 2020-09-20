@@ -15,6 +15,13 @@ namespace WebAuthN.Interop
         /// </summary>
         private CredentialAttestationVersion Version = CredentialAttestationVersion.Current;
 
+        // TODO: Change FormatType to enum
+        /*
+        #define WEBAUTHN_ATTESTATION_TYPE_PACKED                                L"packed"
+        #define WEBAUTHN_ATTESTATION_TYPE_U2F                                   L"fido-u2f"
+        #define WEBAUTHN_ATTESTATION_TYPE_TPM                                   L"tpm"
+        #define WEBAUTHN_ATTESTATION_TYPE_NONE                                  L"none"
+        */
         /// <summary>
         /// Attestation format type
         /// </summary>
@@ -30,18 +37,13 @@ namespace WebAuthN.Interop
         /// </summary>
         VariableByteArray Attestation;
 
-        // TODO: Create enum ATTESTATION_DECODE_.
-        /*
-         #define WEBAUTHN_ATTESTATION_DECODE_NONE                                0
-         #define WEBAUTHN_ATTESTATION_DECODE_COMMON                              1
-        */
-        uint dwAttestationDecodeType;
-        // Following depends on the dwAttestationDecodeType
-        //  WEBAUTHN_ATTESTATION_DECODE_NONE
-        //      NULL - not able to decode the CBOR attestation information
-        //  WEBAUTHN_ATTESTATION_DECODE_COMMON
-        //      PWEBAUTHN_COMMON_ATTESTATION;
-        CommonAttestation AttestationDecode;
+        AttestationDecode AttestationDecodeType;
+
+        /// <summary>
+        /// CBOR attestation information.
+        /// </summary>
+        [MarshalAs(UnmanagedType.LPStruct)]
+        CommonAttestation AttestationDecoded;
 
         /// <summary>
         /// The CBOR encoded Attestation Object to be returned to the RP.
