@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
+using Newtonsoft.Json;
 
 namespace WebAuthN.Interop
 {
@@ -91,8 +92,9 @@ namespace WebAuthN.Interop
 
         public static ExtensionsIn Translate(AuthenticationExtensionsClientInputs extensions)
         {
-            if(extensions == null)
+            if (extensions == null)
             {
+                // Null pointer is allowed in the parent structure.
                 return null;
             }
 
@@ -115,7 +117,10 @@ namespace WebAuthN.Interop
 
         public static CredentialExIn Translate(PublicKeyCredentialDescriptor credential)
         {
-            // TODO: Test null
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
 
             return new CredentialExIn()
             {
@@ -126,9 +131,102 @@ namespace WebAuthN.Interop
             };
         }
 
+        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return new AuthenticatorGetAssertionOptions()
+            {
+                TimeoutMilliseconds = checked((int)options.Timeout),
+                // TODO: AllowedCredentials vs. AllowCredentialList
+
+                // TODO: AllowCredentialList = ApiMapper.Translate(options.AllowCredentials),
+
+
+
+                Extensions = ApiMapper.Translate(options.Extensions),
+                UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
+                // TODO: AuthenticatorAttachment
+                // TODO: CancellationId
+                // TODO: U2fAppId
+            };
+        }
+
+        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return new AuthenticatorMakeCredentialOptions()
+            {
+                TimeoutMilliseconds = checked((int)options.Timeout),
+                AuthenticatorAttachment = ApiMapper.Translate(options.AuthenticatorSelection?.AuthenticatorAttachment),
+                RequireResidentKey = options.AuthenticatorSelection?.RequireResidentKey ?? false,
+                AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
+                UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
+                Extensions = ApiMapper.Translate(options.Extensions),
+                // TODO: ExcludeCredentials vs. ExcludeCredentialsEx
+                ExcludeCredentialsEx = ApiMapper.Translate(options.ExcludeCredentials),
+                // TODO: CancellationId
+            };
+        }
+
+        public static ClientData Translate(CredentialCreateOptions options, bool crossOrigin = false)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            var clientDataJson = JsonConvert.SerializeObject(new {
+                // TODO: Convert "webauthn.create" to constant
+                Type = "webauthn.create",
+                Challenge = options.Challenge,
+                Origin = options.Rp?.Id,
+                CrossOrigin = crossOrigin
+                // TODO: TokenBinding
+            });
+
+            return new ClientData()
+            {
+                ClientDataJson = clientDataJson,
+                // TODO: Convert "SHA-256" to a constant
+                HashAlgId = "SHA-256"
+            };
+        }
+
+        public static ClientData Translate(AssertionOptions options, bool crossOrigin = false)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            var clientDataJson = JsonConvert.SerializeObject(new {
+                // TODO: Convert "webauthn.create" to constant
+                Type = "webauthn.get",
+                Challenge = options.Challenge,
+                Origin = options.RpId,
+                CrossOrigin = crossOrigin
+                // TODO: TokenBinding
+            });
+
+            return new ClientData()
+            {
+                ClientDataJson = clientDataJson,
+                // TODO: Convert "SHA-256" to a constant
+                HashAlgId = "SHA-256"
+            };
+        }
+
         public static AuthenticatorTransport Translate(Fido2NetLib.Objects.AuthenticatorTransport[] transports)
         {
-            if(transports == null)
+            if (transports == null)
             {
                 return AuthenticatorTransport.NoRestrictions;
             }
@@ -140,7 +238,7 @@ namespace WebAuthN.Interop
 
         public static AuthenticatorTransport Translate(Fido2NetLib.Objects.AuthenticatorTransport? transport)
         {
-            switch(transport)
+            switch (transport)
             {
                 case Fido2NetLib.Objects.AuthenticatorTransport.Ble:
                     return AuthenticatorTransport.BLE;
@@ -166,7 +264,7 @@ namespace WebAuthN.Interop
 
         public static AuthenticatorAttachment Translate(Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment)
         {
-            switch(authenticatorAttachment)
+            switch (authenticatorAttachment)
             {
                 case Fido2NetLib.Objects.AuthenticatorAttachment.CrossPlatform:
                     return AuthenticatorAttachment.CrossPlatform;
@@ -182,7 +280,7 @@ namespace WebAuthN.Interop
 
         public static UserVerificationRequirement Translate(Fido2NetLib.Objects.UserVerificationRequirement? userVerification)
         {
-            switch(userVerification)
+            switch (userVerification)
             {
                 case Fido2NetLib.Objects.UserVerificationRequirement.Discouraged:
                     return UserVerificationRequirement.Discouraged;

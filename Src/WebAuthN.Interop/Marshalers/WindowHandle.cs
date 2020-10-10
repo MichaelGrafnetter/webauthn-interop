@@ -14,10 +14,10 @@ namespace WebAuthN.Interop
             _handle = handle;
         }
 
+        public bool IsValid => _handle != IntPtr.Zero;
+
         public static WindowHandle ForegroundWindow => NativeMethods.GetForegroundWindow();
 
         public static WindowHandle MainWindow => new WindowHandle(Process.GetCurrentProcess().MainWindowHandle);
-
-        public bool IsValid => _handle != IntPtr.Zero;
     }
 }

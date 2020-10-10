@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using Fido2NetLib;
 
 namespace WebAuthN.Interop
 {
@@ -33,97 +33,45 @@ namespace WebAuthN.Interop
             }
         }
 
-        public void AuthenticatorMakeCredential(Fido2NetLib.CredentialCreateOptions options)
+        public void AuthenticatorMakeCredential(CredentialCreateOptions options)
         {
-            // TODO: Check options == null
-
-            var windowHandle = NativeMethods.GetForegroundWindow();
-
-            // Wrap options to ClientData
-            // TODO: Extract to ClientData Translate(Fido2NetLib.CredentialCreateOptions options)
-            var clientData = new
+            if(options == null)
             {
-                // TODO: Convert "webauthn.create" to constant
-                Type = "webauthn.create",
-                Challenge = options.Challenge,
-                Origin = options.Rp?.Id,
-                CrossOrigin = false
-                // TODO: TokenBinding
-            };
-            var clientDataJson = JsonConvert.SerializeObject(clientData);
-            
-            HResult result = NativeMethods.AuthenticatorMakeCredential(
-                windowHandle,
-                ApiMapper.Translate(options.Rp),
-                ApiMapper.Translate(options.User),
-                ApiMapper.Translate(options.PubKeyCredParams),
-                new ClientData()
-                {
-                    ClientDataJSON = clientDataJson,
-                    // TODO: Convert "SHA-256" to a constant
-                    HashAlgId = "SHA-256"
-                },
-                new AuthenticatorMakeCredentialOptions()
-                {
-                    TimeoutMilliseconds = checked((int)options.Timeout),
-                    AuthenticatorAttachment = ApiMapper.Translate(options.AuthenticatorSelection?.AuthenticatorAttachment),
-                    RequireResidentKey = options.AuthenticatorSelection.RequireResidentKey,
-                    AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
-                    UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
-                    Extensions = ApiMapper.Translate(options.Extensions),
-                    // TODO: ExcludeCredentials vs. ExcludeCredentialsEx
-                    ExcludeCredentialsEx = ApiMapper.Translate(options.ExcludeCredentials),
-                    // TODO: CancellationId
-                },
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            var rp = ApiMapper.Translate(options.Rp);
+            var user = ApiMapper.Translate(options.User);
+            var credParams = ApiMapper.Translate(options.PubKeyCredParams);
+            var clientData = ApiMapper.Translate(options, false);
+            var nativeOptions = ApiMapper.Translate(options);
+
+            var result = NativeMethods.AuthenticatorMakeCredential(
+                WindowHandle.ForegroundWindow,
+                rp,
+                user,
+                credParams,
+                clientData,
+                nativeOptions,
                 out var attestationHandle
                 );
+
             Validate(result);
             // TODO: Handle destroy
         }
 
-        public void AuthenticatorGetAssertion(Fido2NetLib.AssertionOptions options)
+        public void AuthenticatorGetAssertion(AssertionOptions options)
         {
-            // TODO: Check options == null
-
-            var windowHandle = NativeMethods.GetForegroundWindow();
-
-            // Wrap options to ClientData
-            // TODO: Extract to ClientData Translate(Fido2NetLib.AssertionOptions options)
-            var clientData = new
+            if (options == null)
             {
-                // TODO: Convert "webauthn.create" to constant
-                Type = "webauthn.get",
-                Challenge = options.Challenge,
-                Origin = options.RpId,
-                CrossOrigin = false
-                // TODO: TokenBinding
-            };
-            var clientDataJson = JsonConvert.SerializeObject(clientData);
+                throw new ArgumentNullException(nameof(options));
+            }
 
             HResult result = NativeMethods.AuthenticatorGetAssertion(
-                windowHandle,
+                WindowHandle.ForegroundWindow,
                 options.RpId,
-                new ClientData()
-                {
-                    ClientDataJSON = clientDataJson,
-                    // TODO: Convert "SHA-256" to a constant
-                    HashAlgId = "SHA-256"
-                },
-                new AuthenticatorGetAssertionOptions()
-                {
-                    TimeoutMilliseconds = checked((int)options.Timeout),
-                    // TODO: AllowedCredentials vs. AllowCredentialList
-
-                    // TODO: AllowCredentialList = ApiMapper.Translate(options.AllowCredentials),
-
-
-
-                    Extensions = ApiMapper.Translate(options.Extensions),
-                    UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
-                    // TODO: AuthenticatorAttachment
-                    // TODO: CancellationId
-                    // TODO: U2fAppId
-                },
+                ApiMapper.Translate(options, false),
+                ApiMapper.Translate(options),
                 out var assertionHandle
                 );
 
@@ -136,9 +84,27 @@ namespace WebAuthN.Interop
             // Note: WebAuthNCancelCurrentOperation and WebAuthNGetCancellationId are only available in newer systems.
         }
 
+        protected static Guid? CancellationId
+        {
+            get
+            {
+                try
+                {
+                    HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
+                    Validate(result);
+                    return cancelationId;
+                }
+                catch(EntryPointNotFoundException)
+                {
+                    // Async support is not present in earlier versions of Windows 10.
+                    return null;
+                }
+            }
+        }
+
         private static void Validate(HResult result)
         {
-            switch(result)
+            switch (result)
             {
                 case HResult.Success:
                     break;
@@ -169,14 +135,6 @@ namespace WebAuthN.Interop
                 default:
                     // TODO: Exception type.
                     throw new NotImplementedException();
-            }
-        }
-
-        private Guid? CancellationId
-        {
-            get
-            {
-                HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
             }
         }
     }

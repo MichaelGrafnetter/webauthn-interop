@@ -33,7 +33,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// JSON serialization of the client data.
         /// </summary>
-        public string ClientDataJSON
+        public string ClientDataJson
         {
             get
             {
@@ -48,8 +48,7 @@ namespace WebAuthN.Interop
 
             set
             {
-                // TODO: Validate input
-                byte[] binaryString = Encoding.UTF8.GetBytes(value);
+                byte[] binaryString = (value != null) ? Encoding.UTF8.GetBytes(value) : null;
                 _clientData = new VariableByteArrayIn(binaryString);
             }
         }

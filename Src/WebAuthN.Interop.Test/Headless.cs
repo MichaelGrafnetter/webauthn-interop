@@ -28,7 +28,14 @@ namespace WebAuthN.Interop.Test
         [TestMethod]
         public void NativeMethods_GetCancellationId()
         {
-            HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
+            try
+            {
+                HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
+            }
+            catch(EntryPointNotFoundException ex)
+            {
+                throw new AssertInconclusiveException("Async operations are not supported on this OS.", ex);
+            }
         }
     }
 }
