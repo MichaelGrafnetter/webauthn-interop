@@ -44,7 +44,7 @@ namespace WebAuthN.Interop.Test
         [TestMethod]
         public void Marshalling_CoseCredentialParameters_SizeOf()
         {
-            var calculatedSize = Marshal.SizeOf<PublicKeyCredentialParameters>();
+            var calculatedSize = Marshal.SizeOf<CoseCredentialParameters>();
             var expectedSize = sizeof(int) + Marshal.SizeOf(typeof(IntPtr));
             Assert.AreEqual(expectedSize, calculatedSize);
         }
@@ -82,10 +82,26 @@ namespace WebAuthN.Interop.Test
         }
 
         [TestMethod]
-        public void Marshalling_BinaryArray_SizeOf()
+        public void Marshalling_BinaryArrayIn_SizeOf()
         {
-            var calculatedSize = Marshal.SizeOf<VariableByteArray>();
+            var calculatedSize = Marshal.SizeOf<VariableByteArrayIn>();
             var actualSize = sizeof(int) + Marshal.SizeOf(typeof(IntPtr));
+            Assert.AreEqual(actualSize, calculatedSize);
+        }
+
+        [TestMethod]
+        public void Marshalling_BinaryArrayOut_SizeOf()
+        {
+            var calculatedSize = Marshal.SizeOf<VariableByteArrayOut>();
+            var actualSize = sizeof(int) + Marshal.SizeOf(typeof(IntPtr));
+            Assert.AreEqual(actualSize, calculatedSize);
+        }
+
+        [TestMethod]
+        public void Marshalling_CommonAttestation_SizeOf()
+        {
+            var calculatedSize = Marshal.SizeOf<CommonAttestation>();
+            var actualSize = 6 * sizeof(int) + 6 * Marshal.SizeOf(typeof(IntPtr));
             Assert.AreEqual(actualSize, calculatedSize);
         }
     }

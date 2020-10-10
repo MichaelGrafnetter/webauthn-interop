@@ -19,22 +19,23 @@ namespace WebAuthN.Interop
         /// Time that the operation is expected to complete within.
         /// </summary>
         /// <remarks>This is used as guidance, and can be overridden by the platform.</remarks>
-        public int TimeoutMilliseconds;
+        // TODO: Constant for default timeout
+        public int TimeoutMilliseconds = 60000;
 
         /// <summary>
         /// Credentials used for exclusion.
         /// </summary>
-        // TODO: public VariableArray<Credential> ExcludeCredentials;
+        public CredentialsIn ExcludeCredentials;
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        // TODO: public Extensions Extensions;
+        public ExtensionsIn Extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
         /// </summary>
-        internal AuthenticatorAttachment AuthenticatorAttachment;
+        public AuthenticatorAttachment AuthenticatorAttachment;
 
         /// <summary>
         /// Require key to be resident or not. Defaulting to false.
@@ -54,14 +55,13 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Reserved for future Use
         /// </summary>
-        private int Flags;
+        private int Flags = 0;
 
         /// <summary>
         /// Cancellation Id (Optional)
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
-        // [MarshalAs(UnmanagedType.LPStruct)]
-        // TODO: public Guid? CancellationId;
+        private Guid[] _cancellationId;
 
         /// <summary>
         /// Exclude Credential List. 
@@ -70,6 +70,18 @@ namespace WebAuthN.Interop
         /// If present, "CredentialList" will be ignored.
         /// This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.
         /// </remarks>
-        // TODO: public CredentialExList ExcludeCredentialsEx;
+        private CredentialExListIn[] _excludeCredentialsEx;
+
+        public Guid? CancellationId
+        {
+            get => _cancellationId?[0];
+            set => _cancellationId = value.HasValue ? new Guid[] { value.Value } : null;
+        }
+
+        public CredentialExListIn ExcludeCredentialsEx
+        {
+            get => _excludeCredentialsEx?[0];
+            set => _excludeCredentialsEx = value != null ? new CredentialExListIn[] { value } : null;
+        }
     }
 }

@@ -1,10 +1,9 @@
 ﻿namespace WebAuthN.Interop
 {
-    // TODO: Use Fido2NetLib instead
     /// <summary>
     /// COSE Algorithms
     /// </summary>
-    public enum CoseAlgorithm : int
+    internal enum CoseAlgorithm : int
     {
         /// <summary> 
         /// ECDSA with SHA-256

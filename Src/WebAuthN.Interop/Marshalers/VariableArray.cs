@@ -1,26 +1,15 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 
 namespace WebAuthN.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal abstract class VariableArray<T> : IDisposable
+    internal abstract class VariableArrayOut<T>
     {
-        protected int length = 0;
-        protected IntPtr nativeArray = IntPtr.Zero;
+        protected int _length = 0;
+        protected IntPtr _nativeArray = IntPtr.Zero;
 
-        public VariableArray(T[] data)
-        {
-            if(data != null)
-            {
-                this.length = data.Length;
-                this.InitializePointer(data);
-            }
-        }
-
-        protected VariableArray()
+        protected VariableArrayOut()
         {
         }
 
@@ -28,99 +17,67 @@ namespace WebAuthN.Interop
         {
             get
             {
-                if (nativeArray == IntPtr.Zero)
+                if (_nativeArray == IntPtr.Zero)
                 {
                     return null;
                 }
 
                 // Allocate a managed array
-                T[] managedArray = new T[length];
+                T[] managedArray = new T[_length];
 
                 // Marshal items one-by-one
                 int itemSize = Marshal.SizeOf<T>();
-                for (int i = 0; i < length; i++)
+                for (int i = 0; i < _length; i++)
                 {
-                    managedArray[i] = Marshal.PtrToStructure<T>(nativeArray + (itemSize * i));
+                    managedArray[i] = Marshal.PtrToStructure<T>(_nativeArray + (itemSize * i));
                 }
 
                 return managedArray;
             }
         }
-
-        protected virtual void InitializePointer(T[] data)
-        {
-            // Allocate memory
-            int itemSize = Marshal.SizeOf<T>();
-            int arraySize = data.Length * itemSize;
-            nativeArray = Marshal.AllocHGlobal(arraySize);
-
-            // Copy items
-            for (int i = 0; i < data.Length; i++)
-            {
-                Marshal.StructureToPtr<T>(data[i], nativeArray + (itemSize * i), false);
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            if (nativeArray != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(nativeArray);
-                nativeArray = IntPtr.Zero;
-            }
-
-            GC.SuppressFinalize(this);
-        }
-
-        ~VariableArray()
-        {
-            Dispose();
-        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal class VariableByteArray : VariableArray<byte>
+    internal sealed class VariableByteArrayOut : VariableArrayOut<byte>
     {
-        public VariableByteArray(byte[] data) : base(data)
-        {
-        }
-
-        protected VariableByteArray() : base()
-        {
-        }
-
-        protected override void InitializePointer(byte[] data)
-        {
-            nativeArray = Marshal.AllocHGlobal(data.Length);
-            Marshal.Copy(data, 0, nativeArray, data.Length);
-        }
+        private VariableByteArrayOut() : base() { }
 
         public override byte[] Data
         {
             get
             {
-                if(nativeArray == IntPtr.Zero)
+                if(_nativeArray == IntPtr.Zero)
                 {
                     return null;
                 }
 
-                byte[] managedArray = new byte[length];
-                Marshal.Copy(nativeArray, managedArray, 0, length);
+                byte[] managedArray = new byte[_length];
+                Marshal.Copy(_nativeArray, managedArray, 0, _length);
 
                 return managedArray;
             }
         }
+    }
 
-        internal sealed class VariableByteArrayOut : VariableByteArray
+    [StructLayout(LayoutKind.Sequential)]
+    internal abstract class VariableArrayIn<T>
+    {
+        private int _length = 0;
+        public T[] Data { get; private set; } = null;
+
+        public VariableArrayIn(T[] data)
         {
-            private VariableByteArrayOut() : base()
+            if (data != null)
             {
-            }
-
-            public override void Dispose()
-            {
-                // Do nothing, as the memory is managed by someone else.
+                _length = data.Length;
+                Data = data;
             }
         }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal sealed class VariableByteArrayIn : VariableArrayIn<byte>
+    {
+        public VariableByteArrayIn(byte[] data) : base(data) { }
     }
 }

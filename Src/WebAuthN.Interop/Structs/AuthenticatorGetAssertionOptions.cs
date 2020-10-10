@@ -7,7 +7,7 @@ namespace WebAuthN.Interop
     /// Options.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal class AuthenticatorGetAssertionOptions
     {
         /// <summary>
@@ -24,12 +24,12 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allowed Credentials List.
         /// </summary>
-        // TODO: public VariableArray<Credential> AllowedCredentials;
+        public CredentialsIn AllowedCredentials;
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        // TODO: public Extensions Extensions;
+        public ExtensionsIn Extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
@@ -51,11 +51,10 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower cased.
         /// </summary>
-        string U2fAppId;
+        private string _u2fAppId;
 
         // If the following is non-NULL, then, set to TRUE if the above U2fAppid was used instead of RpId
-        // TODO: *bool
-        IntPtr IsU2fAppIdUsed;
+        private bool[] _isU2fAppIdUsed;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3
@@ -64,8 +63,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Cancellation Id (Optional)
         /// </summary>
-        // TODO: *Guid
-        // TODO: IntPtr CancellationId;
+        private Guid[] _cancellationId;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4
@@ -74,6 +72,31 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allow Credential List. If present, "CredentialList" will be ignored.
         /// </summary>
-        // TODO: VariableArray<Credential> AllowCredentialList;
+        public CredentialExListIn[] AllowCredentialList;
+
+        public string U2fAppId
+        {
+            get
+            {
+                return _u2fAppId;
+            }
+            set
+            {
+                _u2fAppId = value;
+                _isU2fAppIdUsed = value != null ? new bool[] { true } : null;
+            }
+        }
+
+        public Guid? CancellationId
+        {
+            get
+            {
+                return _cancellationId?[0];
+            }
+            set
+            {
+                _cancellationId = value.HasValue ? new Guid[] { value.Value } : null;
+            }
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Signature that was generated for this attestation.
         /// </summary>
-        VariableByteArray Signature;
+        VariableByteArrayOut Signature;
 
         /// <summary>
         /// Array of X.509 DER encoded certificates.
@@ -37,14 +37,14 @@ namespace WebAuthN.Interop
         /// The first certificate is the signer, leaf certificate.
         /// It is set for Full Basic Attestation. If not, set then, this is Self Attestation.
         /// </remarks>
-        // TODO: Certificates Certificates;
+        Certificates Certificates;
 
         // TODO: #define WEBAUTHN_ATTESTATION_VER_TPM_2_0   L"2.0"
         // Following are also set for tpm
         string TPMVersion;
 
-        VariableByteArray CertificateInfo;
+        VariableByteArrayOut CertificateInfo;
 
-        VariableByteArray PubArea;
+        VariableByteArrayOut PubArea;
     }
 }

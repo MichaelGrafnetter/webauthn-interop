@@ -8,7 +8,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class UserInformation : IDisposable
+    internal class UserInformation
     {
         /// <summary>
         /// Maximum length of the Identifier for the User, in bytes.
@@ -24,7 +24,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Identifier for the User.
         /// </summary>
-        private VariableByteArray _id;
+        private VariableByteArrayIn _id;
 
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
@@ -53,13 +53,8 @@ namespace WebAuthN.Interop
             set
             {
                 // TODO: Validate length
-                _id = new VariableByteArray(value);
+                _id = new VariableByteArrayIn(value);
             }
-        }
-
-        public virtual void Dispose()
-        {
-            _id?.Dispose();
         }
     }
 }

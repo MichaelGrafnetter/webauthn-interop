@@ -7,8 +7,15 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_X5C.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class Certificate : VariableByteArray
+    internal sealed class Certificate : VariableArrayOut<byte>
     {
         // TODO: Certificate Conversion
+        private Certificate() : base() { }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal sealed class Certificates : VariableArrayOut<Certificate>
+    {
+        private Certificates() : base() { }
     }
 }

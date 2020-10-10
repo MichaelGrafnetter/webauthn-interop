@@ -30,37 +30,36 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Authenticator data that was created for this credential.
         /// </summary>
-        VariableByteArray AuthenticatorData;
+        VariableByteArrayOut AuthenticatorData;
 
         /// <summary>
         /// Encoded CBOR attestation information
         /// </summary>
-        VariableByteArray Attestation;
+        VariableByteArrayOut Attestation;
 
         AttestationDecode AttestationDecodeType;
 
         /// <summary>
         /// CBOR attestation information.
         /// </summary>
-        // TODO: [MarshalAs(UnmanagedType.LPStruct)]
-        // TODO: CommonAttestation AttestationDecoded;
+        CommonAttestation[] AttestationDecoded;
 
         /// <summary>
         /// The CBOR encoded Attestation Object to be returned to the RP.
         /// </summary>
-        VariableByteArray AttestationObject;
+        VariableByteArrayOut AttestationObject;
 
         /// <summary>
         /// The CredentialId bytes extracted from the Authenticator Data.
         /// </summary>
         /// <remarks>Used by Edge to return to the RP.</remarks>
-        VariableByteArray CredentialId;
+        VariableByteArrayOut CredentialId;
 
         /// <summary>
         /// WebAuthn Extensions
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2.</remarks>
-        // TODO: Extensions Extensions;
+        ExtensionsOut Extensions;
 
         /// <summary>
         /// The transport that was used.

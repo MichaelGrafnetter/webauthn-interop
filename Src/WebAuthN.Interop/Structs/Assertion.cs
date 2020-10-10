@@ -17,21 +17,21 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Authenticator data that was created for this assertion.
         /// </summary>
-        VariableByteArray AuthenticatorData;
+        VariableByteArrayOut AuthenticatorData;
 
         /// <summary>
         /// Signature that was generated for this assertion.
         /// </summary>
-        VariableByteArray Signature;
+        VariableByteArrayOut Signature;
 
         /// <summary>
         /// Credential that was used for this assertion.
         /// </summary>
-        Credential Credential;
+        CredentialOut Credential;
 
         /// <summary>
         /// UserId
         /// </summary>
-        VariableByteArray UserId;
+        VariableByteArrayOut UserId;
     }
 }

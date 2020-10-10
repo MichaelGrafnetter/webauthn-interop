@@ -21,7 +21,7 @@ namespace WebAuthN.Interop.Test
         [TestMethod]
         public void NativeMethods_GetForegroundWindow()
         {
-            IntPtr hwnd = NativeMethods.GetForegroundWindow();
+            var hwnd = NativeMethods.GetForegroundWindow();
             Assert.AreNotEqual(IntPtr.Zero, hwnd);
         }
 

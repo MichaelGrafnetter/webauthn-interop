@@ -20,10 +20,10 @@ namespace WebAuthN.Interop
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorMakeCredential")]
         public static extern HResult AuthenticatorMakeCredential(
-            IntPtr hwnd,
+            WindowHandle windowHandle,
             RelyingPartyInformation rpInformation,
             UserInformation userInformation,
-            PublicKeyCredentialParameters pubKeyCredParams,
+            CoseCredentialParameters pubKeyCredParams,
             ClientData clientData,
             [Optional] AuthenticatorMakeCredentialOptions makeCredentialOptions,
             out CredentialAttestationSafeHandle credentialAttestation
@@ -31,7 +31,7 @@ namespace WebAuthN.Interop
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion")]
         public static extern HResult AuthenticatorGetAssertion(
-            IntPtr hwnd,
+            WindowHandle windowHandle,
             string rpId,
             ClientData clientData,
             [Optional] AuthenticatorGetAssertionOptions getAssertionOptions,
@@ -58,6 +58,6 @@ namespace WebAuthN.Interop
         public static extern HResult GetW3CExceptionDOMError(HResult hr);
 
         [DllImport(User32)]
-        public static extern IntPtr GetForegroundWindow();
+        public static extern WindowHandle GetForegroundWindow();
     }
 }

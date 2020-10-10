@@ -10,7 +10,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class  Extension
+    internal class  ExtensionIn
     {
         /// <summary>
         /// Extension identifier.
@@ -20,7 +20,25 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Extension data.
         /// </summary>
-        internal VariableByteArray Data;
+        internal VariableByteArrayIn Data;
+    }
+
+    /// <summary>
+    /// Information about Extension.
+    /// </summary>
+    /// <remarks>Corresponds to WEBAUTHN_EXTENSION.</remarks>
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    internal class ExtensionOut
+    {
+        /// <summary>
+        /// Extension identifier.
+        /// </summary>
+        public string Identifier;
+
+        /// <summary>
+        /// Extension data.
+        /// </summary>
+        internal VariableByteArrayOut Data;
     }
 
     /// <summary>
@@ -28,9 +46,19 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal class Extensions : VariableArray<Extension>
+    internal class ExtensionsOut : VariableArrayOut<ExtensionOut>
     {
-        Extensions(Extension[] extensions) : base(extensions)
+        private ExtensionsOut() : base() { }
+    }
+
+    /// <summary>
+    /// Information about Extensions.
+    /// </summary>
+    /// <remarks>Corresponds to WEBAUTHN_EXTENSIONS.</remarks>
+    [StructLayout(LayoutKind.Sequential)]
+    internal class ExtensionsIn : VariableArrayIn<ExtensionIn>
+    {
+        public ExtensionsIn(ExtensionIn[] extensions) : base(extensions)
         {
         }
     }

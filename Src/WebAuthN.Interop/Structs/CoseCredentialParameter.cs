@@ -7,7 +7,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETER.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public class CoseCredentialParameter
+    internal class CoseCredentialParameter
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -36,10 +36,11 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETERS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal class PublicKeyCredentialParameters : VariableArray<CoseCredentialParameter>
+    internal sealed class CoseCredentialParameters : VariableArrayIn<CoseCredentialParameter>
     {
-        PublicKeyCredentialParameters(CoseCredentialParameter[] data) : base(data)
-        {
-        }
+        public CoseCredentialParameters(CoseCredentialParameter[] data) : base(data) { }
+
+        public CoseCredentialParameters(CoseAlgorithm algorithm) :
+            base(new CoseCredentialParameter[] { new CoseCredentialParameter(algorithm) }) { }
     }
 }

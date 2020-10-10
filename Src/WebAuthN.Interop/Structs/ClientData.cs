@@ -23,7 +23,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// UTF-8 encoded JSON serialization of the client data.
         /// </summary>
-        private VariableByteArray _clientData;
+        private VariableByteArrayIn _clientData;
 
         /// <summary>
         /// Hash algorithm ID used to hash the ClientDataJSON field.
@@ -50,7 +50,7 @@ namespace WebAuthN.Interop
             {
                 // TODO: Validate input
                 byte[] binaryString = Encoding.UTF8.GetBytes(value);
-                _clientData = new VariableByteArray(binaryString);
+                _clientData = new VariableByteArrayIn(binaryString);
             }
         }
     }
