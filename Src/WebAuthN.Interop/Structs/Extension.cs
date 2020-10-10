@@ -46,7 +46,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal class ExtensionsOut : VariableArrayOut<ExtensionOut>
+    internal class ExtensionsOut : VariableArray<ExtensionOut>
     {
         private ExtensionsOut() : base() { }
     }

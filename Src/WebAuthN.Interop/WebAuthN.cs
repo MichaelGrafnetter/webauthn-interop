@@ -33,7 +33,7 @@ namespace WebAuthN.Interop
             }
         }
 
-        public void AuthenticatorMakeCredential(CredentialCreateOptions options)
+        public AuthenticatorAttestationRawResponse AuthenticatorMakeCredential(CredentialCreateOptions options)
         {
             if(options == null)
             {
@@ -42,41 +42,75 @@ namespace WebAuthN.Interop
 
             var rp = ApiMapper.Translate(options.Rp);
             var user = ApiMapper.Translate(options.User);
-            var credParams = ApiMapper.Translate(options.PubKeyCredParams);
-            var clientData = ApiMapper.Translate(options, false);
-            var nativeOptions = ApiMapper.Translate(options);
-
-            var result = NativeMethods.AuthenticatorMakeCredential(
-                WindowHandle.ForegroundWindow,
-                rp,
-                user,
-                credParams,
-                clientData,
-                nativeOptions,
-                out var attestationHandle
+            using (var credParams = ApiMapper.Translate(options.PubKeyCredParams))
+            using (var clientData = ApiMapper.Translate(options, false))
+            using (var nativeOptions = ApiMapper.Translate(options))
+            {
+                var result = NativeMethods.AuthenticatorMakeCredential(
+                    WindowHandle.ForegroundWindow.Handle,
+                    rp,
+                    user,
+                    credParams,
+                    clientData,
+                    nativeOptions,
+                    out var attestationHandle
                 );
 
-            Validate(result);
-            // TODO: Handle destroy
+                Validate(result);
+
+                try
+                {
+                    var attestation = attestationHandle.ToManaged();
+                    /* TODO:
+                    attestation.Attestation
+                    attestation.AttestationDecoded
+                    attestation.AttestationObject,
+                    attestation.AuthenticatorData,
+                    attestation.FormatType
+                    attestation.UsedTransport
+                    */
+                    return new AuthenticatorAttestationRawResponse()
+                    {
+                        // TODO: Extensions = attestation.Extensions.Data,
+                        Id = attestation.CredentialId.Data,
+                        RawId = attestation.CredentialId.Data,
+                        Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
+                        Response = new AuthenticatorAttestationRawResponse.ResponseData()
+                        {
+                            AttestationObject = attestation.AttestationObject.Data
+                            // TODO: ClientDataJson = attestation.
+                        }
+                    };
+                }
+                finally
+                {
+                    attestationHandle.Dispose();
+                }
+            }
         }
 
-        public void AuthenticatorGetAssertion(AssertionOptions options)
+        public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options)
         {
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            HResult result = NativeMethods.AuthenticatorGetAssertion(
-                WindowHandle.ForegroundWindow,
+            using (var clientData = ApiMapper.Translate(options, false))
+            using (var nativeOptions = ApiMapper.Translate(options))
+            {
+                HResult result = NativeMethods.AuthenticatorGetAssertion(
+                WindowHandle.ForegroundWindow.Handle,
                 options.RpId,
-                ApiMapper.Translate(options, false),
-                ApiMapper.Translate(options),
+                clientData,
+                nativeOptions,
                 out var assertionHandle
                 );
 
-            Validate(result);
-            // TODO: Handle destroy
+                Validate(result);
+                // TODO: Handle destroy
+                return null;
+            }
         }
 
         public void CancelCurrentOperation()

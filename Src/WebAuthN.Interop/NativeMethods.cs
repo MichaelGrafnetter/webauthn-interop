@@ -20,7 +20,7 @@ namespace WebAuthN.Interop
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorMakeCredential")]
         public static extern HResult AuthenticatorMakeCredential(
-            WindowHandle windowHandle,
+            IntPtr windowHandle,
             RelyingPartyInformation rpInformation,
             UserInformation userInformation,
             CoseCredentialParameters pubKeyCredParams,
@@ -31,7 +31,7 @@ namespace WebAuthN.Interop
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion")]
         public static extern HResult AuthenticatorGetAssertion(
-            WindowHandle windowHandle,
+            IntPtr windowHandle,
             string rpId,
             ClientData clientData,
             [Optional] AuthenticatorGetAssertionOptions getAssertionOptions,
@@ -48,7 +48,7 @@ namespace WebAuthN.Interop
         public static extern HResult GetCancellationId(out Guid cancellationId);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNCancelCurrentOperation")]
-        internal static extern HResult CancelCurrentOperation(in Guid cancellationId);
+        public static extern HResult CancelCurrentOperation(in Guid cancellationId);
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetErrorName")]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(PtrToConstStringMarshaler))]

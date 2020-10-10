@@ -170,6 +170,7 @@ namespace WebAuthN.Interop
                 AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
                 UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
                 Extensions = ApiMapper.Translate(options.Extensions),
+                ExcludeCredentials = new CredentialsIn(null),
                 // TODO: ExcludeCredentials vs. ExcludeCredentialsEx
                 ExcludeCredentialsEx = ApiMapper.Translate(options.ExcludeCredentials),
                 // TODO: CancellationId
@@ -218,7 +219,7 @@ namespace WebAuthN.Interop
 
             return new ClientData()
             {
-                ClientDataJson = clientDataJson,
+                // ClientDataJson = clientDataJson,
                 // TODO: Convert "SHA-256" to a constant
                 HashAlgId = "SHA-256"
             };

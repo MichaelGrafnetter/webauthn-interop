@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace WebAuthN.Interop
@@ -8,7 +9,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CLIENT_DATA.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class ClientData
+    internal class ClientData : IDisposable
     {
         // TODO: Hash algorithm Id enum
         private const string SHA256 = "SHA-256";
@@ -23,7 +24,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// UTF-8 encoded JSON serialization of the client data.
         /// </summary>
-        private VariableByteArrayIn _clientData;
+        private VariableByteArrayIn _clientData = new VariableByteArrayIn(null);
 
         /// <summary>
         /// Hash algorithm ID used to hash the ClientDataJSON field.
@@ -50,6 +51,15 @@ namespace WebAuthN.Interop
             {
                 byte[] binaryString = (value != null) ? Encoding.UTF8.GetBytes(value) : null;
                 _clientData = new VariableByteArrayIn(binaryString);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_clientData != null)
+            {
+                _clientData.Dispose();
+                _clientData = null;
             }
         }
     }

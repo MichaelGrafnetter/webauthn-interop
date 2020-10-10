@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 namespace WebAuthN.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal abstract class VariableArrayOut<T>
+    internal abstract class VariableArray<T>
     {
         protected int _length = 0;
         protected IntPtr _nativeArray = IntPtr.Zero;
 
-        protected VariableArrayOut()
+        protected VariableArray()
         {
         }
 
@@ -38,15 +38,64 @@ namespace WebAuthN.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class VariableByteArrayOut : VariableArrayOut<byte>
+    internal sealed class VariableByteArrayOut : VariableArray<byte>
     {
         private VariableByteArrayOut() : base() { }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal class VariableArrayIn<T> : VariableArray<T>, IDisposable
+    {
+        public VariableArrayIn(T[] data)
+        {
+            if (data != null)
+            {
+                _length = data.Length;
+                InitializePointer(data);
+            }
+        }
+
+        protected virtual void InitializePointer(T[] data)
+        {
+            // Allocate memory
+            int itemSize = Marshal.SizeOf<T>();
+            int arraySize = data.Length * itemSize;
+            _nativeArray = Marshal.AllocHGlobal(arraySize);
+
+            // Copy items
+            for (int i = 0; i < data.Length; i++)
+            {
+                Marshal.StructureToPtr<T>(data[i], _nativeArray + (itemSize * i), false);
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            if (_nativeArray != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_nativeArray);
+                _nativeArray = IntPtr.Zero;
+            }
+
+            GC.SuppressFinalize(this);
+        }
+
+        ~VariableArrayIn()
+        {
+            Dispose();
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal sealed class VariableByteArrayIn : VariableArrayIn<byte>
+    {
+        public VariableByteArrayIn(byte[] data) : base(data) { }
 
         public override byte[] Data
         {
             get
             {
-                if(_nativeArray == IntPtr.Zero)
+                if (_nativeArray == IntPtr.Zero)
                 {
                     return null;
                 }
@@ -57,27 +106,11 @@ namespace WebAuthN.Interop
                 return managedArray;
             }
         }
-    }
 
-    [StructLayout(LayoutKind.Sequential)]
-    internal abstract class VariableArrayIn<T>
-    {
-        private int _length = 0;
-        public T[] Data { get; private set; } = null;
-
-        public VariableArrayIn(T[] data)
+        protected override void InitializePointer(byte[] data)
         {
-            if (data != null)
-            {
-                _length = data.Length;
-                Data = data;
-            }
+            _nativeArray = Marshal.AllocHGlobal(data.Length);
+            Marshal.Copy(data, 0, _nativeArray, data.Length);
         }
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal sealed class VariableByteArrayIn : VariableArrayIn<byte>
-    {
-        public VariableByteArrayIn(byte[] data) : base(data) { }
     }
 }

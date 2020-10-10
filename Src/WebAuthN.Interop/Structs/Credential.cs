@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace WebAuthN.Interop
 {
@@ -7,7 +8,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class  CredentialIn
+    internal class  CredentialIn : IDisposable
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -28,6 +29,14 @@ namespace WebAuthN.Interop
         {
             get => _id?.Data;
             set => _id = new VariableByteArrayIn(value);
+        }
+
+        public void Dispose()
+        {
+            if(_id != null)
+            {
+                _id.Dispose();
+            }
         }
     }
 
@@ -59,7 +68,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIALS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class CredentialsOut : VariableArrayOut<CredentialOut>
+    internal sealed class CredentialsOut : VariableArray<CredentialOut>
     {
         private CredentialsOut() : base() { }
     }

@@ -8,12 +8,12 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal class AuthenticatorMakeCredentialOptions
+    internal class AuthenticatorMakeCredentialOptions : IDisposable
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected AuthenticatorMakeCredentialOptionsVersion Version = AuthenticatorMakeCredentialOptionsVersion.Current;
+        private protected AuthenticatorMakeCredentialOptionsVersion Version;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -25,7 +25,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Credentials used for exclusion.
         /// </summary>
-        public CredentialsIn ExcludeCredentials;
+        public CredentialsIn ExcludeCredentials = new CredentialsIn(null);
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
@@ -61,7 +61,7 @@ namespace WebAuthN.Interop
         /// Cancellation Id (Optional)
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
-        private Guid[] _cancellationId;
+        private IntPtr _cancellationId = IntPtr.Zero;
 
         /// <summary>
         /// Exclude Credential List. 
@@ -70,18 +70,93 @@ namespace WebAuthN.Interop
         /// If present, "CredentialList" will be ignored.
         /// This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.
         /// </remarks>
-        private CredentialExListIn[] _excludeCredentialsEx;
+        private IntPtr _excludeCredentialsEx = IntPtr.Zero;
+
+        public AuthenticatorMakeCredentialOptions()
+        {
+             Version = AuthenticatorMakeCredentialOptionsVersion.Current;
+        }
 
         public Guid? CancellationId
         {
-            get => _cancellationId?[0];
-            set => _cancellationId = value.HasValue ? new Guid[] { value.Value } : null;
+            set
+            {
+                if (value.HasValue)
+                {
+                    if(_cancellationId == IntPtr.Zero)
+                    {
+                        _cancellationId = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Guid)));
+                    }
+
+                    Marshal.StructureToPtr<Guid>(value.Value, _cancellationId, false);
+                }
+                else
+                {
+                    if(_cancellationId != IntPtr.Zero)
+                    {
+                        Marshal.FreeHGlobal(_cancellationId);
+                        _cancellationId = IntPtr.Zero;
+                    }
+                }
+            }
         }
 
         public CredentialExListIn ExcludeCredentialsEx
         {
-            get => _excludeCredentialsEx?[0];
-            set => _excludeCredentialsEx = value != null ? new CredentialExListIn[] { value } : null;
+            set
+            {
+                if (value != null)
+                {
+                    if (_excludeCredentialsEx == IntPtr.Zero)
+                    {
+                        _excludeCredentialsEx = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CredentialExListIn)));
+                    }
+
+                    Marshal.StructureToPtr<CredentialExListIn>(value, _excludeCredentialsEx, false);
+                }
+                else
+                {
+                    if (_excludeCredentialsEx != IntPtr.Zero)
+                    {
+                        Marshal.FreeHGlobal(_excludeCredentialsEx);
+                        _excludeCredentialsEx = IntPtr.Zero;
+                    }
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            if(Extensions != null)
+            {
+                Extensions.Dispose();
+                Extensions = null;
+            }
+
+            if(ExcludeCredentials != null)
+            {
+                ExcludeCredentials.Dispose();
+                ExcludeCredentials = null;
+            }
+
+            if(_excludeCredentialsEx != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_excludeCredentialsEx);
+                _excludeCredentialsEx = IntPtr.Zero;
+            }
+
+            if (_cancellationId != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_cancellationId);
+                _cancellationId = IntPtr.Zero;
+            }
+
+            GC.SuppressFinalize(this);
+        }
+
+        ~AuthenticatorMakeCredentialOptions()
+        {
+            Dispose();
         }
     }
 }

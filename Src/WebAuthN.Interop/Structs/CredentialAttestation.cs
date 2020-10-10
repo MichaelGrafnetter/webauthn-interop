@@ -25,46 +25,46 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Attestation format type
         /// </summary>
-        string FormatType;
+        public string FormatType;
 
         /// <summary>
         /// Authenticator data that was created for this credential.
         /// </summary>
-        VariableByteArrayOut AuthenticatorData;
+        public VariableByteArrayOut AuthenticatorData;
 
         /// <summary>
         /// Encoded CBOR attestation information
         /// </summary>
-        VariableByteArrayOut Attestation;
+        public VariableByteArrayOut Attestation;
 
-        AttestationDecode AttestationDecodeType;
+        public AttestationDecode AttestationDecodeType;
 
         /// <summary>
         /// CBOR attestation information.
         /// </summary>
-        CommonAttestation[] AttestationDecoded;
+        public CommonAttestation[] AttestationDecoded;
 
         /// <summary>
         /// The CBOR encoded Attestation Object to be returned to the RP.
         /// </summary>
-        VariableByteArrayOut AttestationObject;
+        public VariableByteArrayOut AttestationObject;
 
         /// <summary>
         /// The CredentialId bytes extracted from the Authenticator Data.
         /// </summary>
         /// <remarks>Used by Edge to return to the RP.</remarks>
-        VariableByteArrayOut CredentialId;
+        public VariableByteArrayOut CredentialId;
 
         /// <summary>
         /// WebAuthn Extensions
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2.</remarks>
-        ExtensionsOut Extensions;
+        public ExtensionsOut Extensions;
 
         /// <summary>
         /// The transport that was used.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
-        AuthenticatorTransport UsedTransport;
+        public AuthenticatorTransport UsedTransport;
     }
 }

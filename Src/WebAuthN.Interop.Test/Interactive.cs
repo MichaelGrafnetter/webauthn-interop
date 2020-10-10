@@ -30,7 +30,7 @@ namespace WebAuthN.Interop.Test
             {
                 AuthenticatorAttachment = Fido2NetLib.Objects.AuthenticatorAttachment.Platform,
                 RequireResidentKey = false,
-                UserVerification = Fido2NetLib.Objects.UserVerificationRequirement.Preferred,
+                UserVerification = Fido2NetLib.Objects.UserVerificationRequirement.Discouraged,
             };
 
             byte[] challenge = new byte[config.ChallengeSize];

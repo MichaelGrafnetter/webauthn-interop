@@ -1,14 +1,14 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace WebAuthN.Interop
 {
-    // TODO: CredentialExIn should be derived from Credential.
     /// <summary>
     /// Information about credential with extra information, such as, Transports.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL_EX.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class  CredentialExIn
+    internal class  CredentialExIn : IDisposable
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -18,7 +18,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private VariableByteArrayIn _id;
+        private VariableByteArrayIn _id = new VariableByteArrayIn(null);
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
@@ -35,9 +35,16 @@ namespace WebAuthN.Interop
             get => _id?.Data;
             set => _id = new VariableByteArrayIn(value);
         }
-    }
 
-    // TODO: CredentialExOut should be derived from Credential.
+        public void Dispose()
+        {
+            if(_id != null)
+            {
+                _id.Dispose();
+                _id = null;
+            }
+        }
+    }
 
     /// <summary>
     /// Information about credential with extra information, such as, Transports.
@@ -72,7 +79,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL_LIST.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class CredentialExListOut : VariableArrayOut<CredentialExOut>
+    internal sealed class CredentialExListOut : VariableArray<CredentialExOut>
     {
         private CredentialExListOut() : base() { }
     }
