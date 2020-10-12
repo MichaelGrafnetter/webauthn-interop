@@ -25,7 +25,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Attestation format type
         /// </summary>
-        public string FormatType;
+        public string FormatType { get; private set; }
 
         /// <summary>
         /// Authenticator data that was created for this credential.
@@ -37,13 +37,12 @@ namespace WebAuthN.Interop
         /// </summary>
         private VariableByteArrayOut _attestation;
 
-        public AttestationDecode AttestationDecodeType;
+        private AttestationDecode _attestationDecodeType;
 
         /// <summary>
         /// CBOR attestation information.
         /// </summary>
-        // TODO: Decode CommonAttestation
-        private CommonAttestation[] AttestationDecoded;
+        private IntPtr _attestationDecoded;
 
         /// <summary>
         /// The CBOR encoded Attestation Object to be returned to the RP.
@@ -66,12 +65,26 @@ namespace WebAuthN.Interop
         /// The transport that was used.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
-        public AuthenticatorTransport UsedTransport;
+        public AuthenticatorTransport UsedTransport { get; private set; }
 
         public byte[] AuthenticatorData => _authenticatorData?.Data;
         public byte[] Attestation => _attestation?.Data;
         public byte[] AttestationObject => _attestationObject?.Data;
         public byte[] CredentialId => _credentialId?.Data;
         public ExtensionOut[] Extensions => _extensions?.Data;
+
+        public CommonAttestation AttestationDecoded
+        {
+            get
+            {
+                if (_attestationDecodeType != AttestationDecode.Common)
+                {
+                    // Nothing else is currently supported by the API.
+                    return null;
+                }
+
+                return Marshal.PtrToStructure<CommonAttestation>(_attestationDecoded);
+            }
+        }
     }
 }

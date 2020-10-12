@@ -38,19 +38,30 @@ namespace WebAuthN.Interop
         {
             get
             {
-                if (_clientData == null)
-                {
-                    return null;
-                }
-
-                byte[] binaryData = _clientData.Data;
+                byte[] binaryData = ClientDataRaw;
                 return (binaryData != null) ? Encoding.UTF8.GetString(binaryData) : null;
             }
 
             set
             {
-                byte[] binaryString = (value != null) ? Encoding.UTF8.GetBytes(value) : null;
-                _clientData = new VariableByteArrayIn(binaryString);
+                ClientDataRaw = (value != null) ? Encoding.UTF8.GetBytes(value) : null;
+            }
+        }
+
+        public byte[] ClientDataRaw
+        {
+            get
+            {
+                return _clientData?.Data;
+            }
+
+            set
+            {
+                // Get rid of any previous data first
+                Dispose();
+
+                // Now replace the previous value with a new one
+                _clientData = new VariableByteArrayIn(value);
             }
         }
 

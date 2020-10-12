@@ -64,25 +64,16 @@ namespace WebAuthN.Interop
                 try
                 {
                     var attestation = attestationHandle.ToManaged();
-                    /* TODO:
-                    attestation.Attestation
-                    attestation.AttestationDecoded
-                    attestation.AttestationObject,
-                    attestation.AuthenticatorData,
-                    attestation.FormatType
-                    attestation.UsedTransport
-                    */
                     return new AuthenticatorAttestationRawResponse()
                     {
                         // TODO: Extensions = attestation.Extensions.Data,
                         Id = attestation.CredentialId,
                         RawId = attestation.CredentialId,
-                        // TODO: Read the Type from the assertion?
                         Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
                         Response = new AuthenticatorAttestationRawResponse.ResponseData()
                         {
-                            AttestationObject = attestation.AttestationObject
-                            // TODO: ClientDataJson = attestation. Encoding.UTF8.GetBytes(json)
+                            AttestationObject = attestation.AttestationObject,
+                            ClientDataJson = clientData.ClientDataRaw
                         }
                     };
                 }
@@ -93,7 +84,7 @@ namespace WebAuthN.Interop
             }
         }
 
-        public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options)
+        public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null)
         {
             if (options == null)
             {
@@ -104,7 +95,7 @@ namespace WebAuthN.Interop
             using (var allowCreds = ApiMapper.Translate(options.AllowCredentials))
             // TODO: Get rid of ToArray
             using (var allowCredList = new CredentialExListIn(allowCreds.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, allowCredList))
+            using (var nativeOptions = ApiMapper.Translate(options, allowCredList, authenticatorAttachment))
             {
                 HResult result = NativeMethods.AuthenticatorGetAssertion(
                     WindowHandle.ForegroundWindow,
@@ -119,24 +110,17 @@ namespace WebAuthN.Interop
                 try
                 {
                     var assertion = assertionHandle.ToManaged();
-                    // assertion.UserId
-                    // assertion.Signature
-                    // assertion.Credential
-                    // assertion.AuthenticatorData
-
-                    
                     return new AuthenticatorAssertionRawResponse()
                     {
                         Id = assertion.Credential.Id,
                         RawId = assertion.Credential.Id,
-                        // TODO: Read the Type from the attestation?
                         Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
                         Response = new AuthenticatorAssertionRawResponse.AssertionResponse()
                         {
                             AuthenticatorData = assertion.AuthenticatorData,
                             Signature = assertion.Signature,
                             UserHandle = assertion.UserId,
-                            // TODO: ClientDataJson = Encoding.UTF8.GetBytes(jsonA)
+                            ClientDataJson = clientData.ClientDataRaw
                         },
                         // TODO: Extensions
                     };

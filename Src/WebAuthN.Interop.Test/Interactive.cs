@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,7 +16,7 @@ namespace WebAuthN.Interop.Test
             var config = new Fido2Configuration()
             {
                 ChallengeSize = 32,
-                Origin = "https://login.microsoft.com",
+                Origin = "login.microsoft.com",
                 ServerDomain = "login.microsoft.com",
                 ServerName = "Microsoft",
                 Timeout = 60000
@@ -62,11 +63,13 @@ namespace WebAuthN.Interop.Test
                 new PubKeyCredParam() { Alg = -257, Type = PublicKeyCredentialType.PublicKey }
             };
 
-            var fido = new WebAuthN();
-            var credential = fido.AuthenticatorMakeCredential(options);
+            var webauthn = new WebAuthN();
+            var response = webauthn.AuthenticatorMakeCredential(options);
 
             // Validate
-            // var makeRes = Fido2NetLib Fido2NetLib.MakeNewCredentialAsync(resp, f2req, _ => Task.FromResult(true)).Result;
+            var fido2 = new Fido2(config);
+            var result = fido2.MakeNewCredentialAsync(response, options, _ => Task.FromResult(true)).GetAwaiter().GetResult();
+            Assert.AreEqual(user.Name, result.Result.User.Name);
         }
 
         [TestMethod]
@@ -74,7 +77,7 @@ namespace WebAuthN.Interop.Test
         {
             var config = new Fido2Configuration()
             {
-                Origin = "https://login.microsoft.com",
+                Origin = "login.microsoft.com",
                 ServerDomain = "login.microsoft.com",
                 ServerName = "Microsoft",
                 Timeout = 60000
@@ -108,13 +111,16 @@ namespace WebAuthN.Interop.Test
                 allowedCredentials,
                 Fido2NetLib.Objects.UserVerificationRequirement.Required,
                 null
-                );
+            );
            
-            var fido = new WebAuthN();
-            var assertion = fido.AuthenticatorGetAssertion(options);
+            var webauthn = new WebAuthN();
+            var response = webauthn.AuthenticatorGetAssertion(options);
 
-            // TODO: Validate
-            // var getResult = fido2NetLib.MakeAssertionAsync(respA, f2reqA, makeRes.Result.PublicKey, makeRes.Result.Counter, _ => Task.FromResult(true)).Result;
+            // Validate
+            var fido2 = new Fido2(config);
+            var pubKey = new byte[] { 0, 0, 0 };
+            uint counter = 25;
+            var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, _ => Task.FromResult(true)).GetAwaiter().GetResult();
         }
 
         [TestMethod]
@@ -122,7 +128,7 @@ namespace WebAuthN.Interop.Test
         {
             var config = new Fido2Configuration()
             {
-                Origin = "https://login.microsoft.com",
+                Origin = "login.microsoft.com",
                 ServerDomain = "login.microsoft.com",
                 ServerName = "Microsoft",
                 Timeout = 60000
@@ -138,11 +144,14 @@ namespace WebAuthN.Interop.Test
                 null
                 );
 
-            var fido = new WebAuthN();
-            var assertion = fido.AuthenticatorGetAssertion(options);
+            var webauthn = new WebAuthN();
+            var response = webauthn.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.CrossPlatform);
 
-            // TODO: Validate
-            // var getResult = fido2NetLib.MakeAssertionAsync(respA, f2reqA, makeRes.Result.PublicKey, makeRes.Result.Counter,  _ => Task.FromResult(true)).Result;
+            // Validate
+            var fido2 = new Fido2(config);
+            var pubKey = new byte[] { 0, 0, 0 };
+            uint counter = 25;
+            var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, _ => Task.FromResult(true)).GetAwaiter().GetResult();
         }
     }
 }

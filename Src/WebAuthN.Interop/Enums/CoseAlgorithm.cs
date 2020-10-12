@@ -5,6 +5,8 @@
     /// </summary>
     internal enum CoseAlgorithm : int
     {
+        // TODO: Add -65535 from TPM?
+
         /// <summary> 
         /// ECDSA with SHA-256
         /// </summary>

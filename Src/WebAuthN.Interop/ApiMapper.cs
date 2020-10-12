@@ -54,7 +54,6 @@ namespace WebAuthN.Interop
                 Id = user.Id,
                 Name = user.Name,
                 DisplayName = user.DisplayName
-                // TODO: Icon = user.Icon
             };
         }
 
@@ -130,7 +129,7 @@ namespace WebAuthN.Interop
             };
         }
 
-        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, CredentialExListIn allowCreds)
+        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, CredentialExListIn allowCreds, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment)
         {
             if (options == null)
             {
@@ -141,11 +140,10 @@ namespace WebAuthN.Interop
             {
                 TimeoutMilliseconds = checked((int)options.Timeout),
                 // TODO: AllowedCredentials vs. AllowCredentialList
-
+                AuthenticatorAttachment = Translate(authenticatorAttachment),
                 AllowCredentialList = allowCreds,
                 // Extensions = ApiMapper.Translate(options.Extensions),
                 UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
-                // TODO: AuthenticatorAttachment
                 // TODO: CancellationId
                 // TODO: U2fAppId
             };
@@ -269,7 +267,7 @@ namespace WebAuthN.Interop
                 case null:
                     return AuthenticatorAttachment.Any;
                 default:
-                    // TODO: AuthenticatorAttachment.CrossPlatformU2F
+                    // TODO: Add support for AuthenticatorAttachment.CrossPlatformU2F
                     throw new NotSupportedException();
             }
         }

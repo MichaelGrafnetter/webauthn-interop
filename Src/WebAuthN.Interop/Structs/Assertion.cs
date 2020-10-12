@@ -27,7 +27,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Credential that was used for this assertion.
         /// </summary>
-        public CredentialOut Credential;
+        public CredentialOut Credential { get; private set; }
 
         /// <summary>
         /// UserId
