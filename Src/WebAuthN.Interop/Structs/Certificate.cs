@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace WebAuthN.Interop
 {
@@ -7,14 +8,16 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_X5C.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class Certificate : VariableArray<byte>
+    internal sealed class Certificate : SafeByteArrayOut
     {
         // TODO: Certificate Conversion
         private Certificate() : base() { }
+
+        public X509Certificate2 Cert => new X509Certificate2(Data);
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class Certificates : VariableArray<Certificate>
+    internal sealed class Certificates : SafeStructArrayOut<Certificate>
     {
         private Certificates() : base() { }
     }

@@ -24,7 +24,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allowed Credentials List.
         /// </summary>
-        public CredentialsIn AllowedCredentials = new CredentialsIn(null);
+        private Credentials _allowCredentials = new Credentials(null);
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
@@ -117,7 +117,16 @@ namespace WebAuthN.Interop
             }
         }
 
-        public CredentialExListIn AllowCredentialList
+        public Credentials AllowCredentials
+        {
+            set
+            {
+                _allowCredentials?.Dispose();
+                _allowCredentials = value;
+            }
+        }
+
+        public CredentialList AllowCredentialsEx
         {
             set
             {
@@ -125,10 +134,10 @@ namespace WebAuthN.Interop
                 {
                     if (_allowCredentialList == IntPtr.Zero)
                     {
-                        _allowCredentialList = Marshal.AllocHGlobal(Marshal.SizeOf<CredentialExListIn>());
+                        _allowCredentialList = Marshal.AllocHGlobal(Marshal.SizeOf<CredentialList>());
                     }
 
-                    Marshal.StructureToPtr<CredentialExListIn>(value, _allowCredentialList, false);
+                    Marshal.StructureToPtr<CredentialList>(value, _allowCredentialList, false);
                 }
                 else
                 {
@@ -143,17 +152,11 @@ namespace WebAuthN.Interop
 
         public void Dispose()
         {
-            if (Extensions != null)
-            {
-                Extensions.Dispose();
-                Extensions = null;
-            }
-
-            if (AllowedCredentials != null)
-            {
-                AllowedCredentials.Dispose();
-                AllowedCredentials = null;
-            }
+            Extensions?.Dispose();
+            Extensions = null;
+            
+            _allowCredentials?.Dispose();
+            _allowCredentials = null;
 
             if (_allowCredentialList != IntPtr.Zero)
             {

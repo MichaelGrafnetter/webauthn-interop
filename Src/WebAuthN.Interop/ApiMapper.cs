@@ -100,7 +100,19 @@ namespace WebAuthN.Interop
             throw new NotImplementedException();
         }
 
-        public static DisposableList<CredentialExIn> Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
+        public static DisposableList<CredentialIn> Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
+        {
+            if (credentials == null)
+            {
+                return null;
+            }
+
+            var result = new DisposableList<CredentialIn>();
+            result.AddRange(credentials.Select(item => Translate(item)));
+            return result;
+        }
+
+        public static DisposableList<CredentialEx> TranslateEx(IEnumerable<PublicKeyCredentialDescriptor> credentials)
         {
             // TODO: This is sometimes IEnumerable and Sometimes List in FIDO2 API
 
@@ -109,27 +121,32 @@ namespace WebAuthN.Interop
                 return null;
             }
 
-            var result = new DisposableList<CredentialExIn>();
-            result.AddRange(credentials.Select(item => Translate(item)));
+            var result = new DisposableList<CredentialEx>();
+            result.AddRange(credentials.Select(item => TranslateEx(item)));
             return result;
         }
 
-        public static CredentialExIn Translate(PublicKeyCredentialDescriptor credential)
+        public static CredentialIn Translate(PublicKeyCredentialDescriptor credential)
         {
             if (credential == null)
             {
                 throw new ArgumentNullException(nameof(credential));
             }
 
-            return new CredentialExIn()
-            {
-                Id = credential.Id,
-                Type = Translate(credential.Type),
-                Transports = Translate(credential.Transports)
-            };
+            return new CredentialIn(credential.Id, Translate(credential.Type));
         }
 
-        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, CredentialExListIn allowCreds, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment)
+        public static CredentialEx TranslateEx(PublicKeyCredentialDescriptor credential)
+        {
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+
+            return new CredentialEx(credential.Id, Translate(credential.Type), Translate(credential.Transports));
+        }
+
+        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment, Credentials allowCreds, CredentialList allowCredsEx)
         {
             if (options == null)
             {
@@ -139,17 +156,17 @@ namespace WebAuthN.Interop
             return new AuthenticatorGetAssertionOptions()
             {
                 TimeoutMilliseconds = checked((int)options.Timeout),
-                // TODO: AllowedCredentials vs. AllowCredentialList
                 AuthenticatorAttachment = Translate(authenticatorAttachment),
-                AllowCredentialList = allowCreds,
-                // Extensions = ApiMapper.Translate(options.Extensions),
+                AllowCredentials = allowCreds,
+                AllowCredentialsEx = allowCredsEx,
+                // TODO: Extensions = ApiMapper.Translate(options.Extensions),
                 UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
                 // TODO: CancellationId
                 // TODO: U2fAppId
             };
         }
 
-        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, CredentialExListIn excludeCreds)
+        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, Credentials excludeCreds, CredentialList excludeCredsEx)
         {
             if (options == null)
             {
@@ -163,9 +180,9 @@ namespace WebAuthN.Interop
                 RequireResidentKey = options.AuthenticatorSelection?.RequireResidentKey ?? false,
                 AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
                 UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
-                ExcludeCredentialsEx = excludeCreds
+                ExcludeCredentials = excludeCreds,
+                ExcludeCredentialsEx = excludeCredsEx,
                 // Extensions = ApiMapper.Translate(options.Extensions),
-                // TODO: ExcludeCredentials vs. ExcludeCredentialsEx
                 // TODO: CancellationId
             };
         }

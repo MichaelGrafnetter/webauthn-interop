@@ -17,12 +17,12 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Authenticator data that was created for this assertion.
         /// </summary>
-        private VariableByteArrayOut _authenticatorData;
+        private SafeByteArrayOut _authenticatorData;
 
         /// <summary>
         /// Signature that was generated for this assertion.
         /// </summary>
-        private VariableByteArrayOut _signature;
+        private SafeByteArrayOut _signature;
 
         /// <summary>
         /// Credential that was used for this assertion.
@@ -32,7 +32,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// UserId
         /// </summary>
-        private VariableByteArrayOut _userId;
+        private SafeByteArrayOut _userId;
 
         public byte[] AuthenticatorData => _authenticatorData?.Data;
         public byte[] Signature => _signature?.Data;

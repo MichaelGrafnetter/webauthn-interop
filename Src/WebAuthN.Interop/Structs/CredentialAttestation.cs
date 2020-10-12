@@ -30,12 +30,12 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Authenticator data that was created for this credential.
         /// </summary>
-        private VariableByteArrayOut _authenticatorData;
+        private SafeByteArrayOut _authenticatorData;
 
         /// <summary>
         /// Encoded CBOR attestation information
         /// </summary>
-        private VariableByteArrayOut _attestation;
+        private SafeByteArrayOut _attestation;
 
         private AttestationDecode _attestationDecodeType;
 
@@ -47,13 +47,13 @@ namespace WebAuthN.Interop
         /// <summary>
         /// The CBOR encoded Attestation Object to be returned to the RP.
         /// </summary>
-        private VariableByteArrayOut _attestationObject;
+        private SafeByteArrayOut _attestationObject;
 
         /// <summary>
         /// The CredentialId bytes extracted from the Authenticator Data.
         /// </summary>
         /// <remarks>Used by Edge to return to the RP.</remarks>
-        private VariableByteArrayOut _credentialId;
+        private SafeByteArrayOut _credentialId;
 
         /// <summary>
         /// WebAuthn Extensions

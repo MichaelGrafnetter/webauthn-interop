@@ -28,7 +28,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Signature that was generated for this attestation.
         /// </summary>
-        private VariableByteArrayOut _signature;
+        private SafeByteArrayOut _signature;
 
         /// <summary>
         /// Array of X.509 DER encoded certificates.
@@ -43,16 +43,16 @@ namespace WebAuthN.Interop
         // Following are also set for tpm
         public string TPMVersion { get; private set; }
 
-        private VariableByteArrayOut _certificateInfo;
+        private SafeByteArrayOut _certificateInfo;
 
-        private VariableByteArrayOut _pubArea;
+        private SafeByteArrayOut _pubArea;
 
         public byte[] Signature => _signature?.Data;
         // TODO: Change data type of Certificates
         public Certificate[] Certificates => _certificates?.Data;
         // TODO: Decode CertificateInfo
-        public byte[] CertificateInfo => _certificateInfo?.Data;
+        public byte[] TPMCertificate => _certificateInfo?.Data;
         // TODO: Rename PubArea
-        public byte[] PubArea => _pubArea?.Data;
+        public byte[] TPMPubArea => _pubArea?.Data;
     }
 }

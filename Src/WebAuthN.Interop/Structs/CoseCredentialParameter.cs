@@ -36,7 +36,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETERS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class CoseCredentialParameters : VariableArrayIn<CoseCredentialParameter>
+    internal sealed class CoseCredentialParameters : SafeStructArrayIn<CoseCredentialParameter>
     {
         public CoseCredentialParameters(CoseCredentialParameter[] data) : base(data) { }
 

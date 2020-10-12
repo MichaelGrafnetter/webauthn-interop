@@ -2,9 +2,6 @@
 
 namespace WebAuthN.Interop
 {
-    // TODO: Add WEBAUTHN_EXTENSIONS_IDENTIFIER_HMAC_SECRET
-    // TODO: Add WEBAUTHN_CRED_PROTECT_EXTENSION_IN
-
     /// <summary>
     /// Information about Extension.
     /// </summary>
@@ -15,12 +12,18 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Extension identifier.
         /// </summary>
-        public string Identifier;
+        public string _identifier;
 
         /// <summary>
         /// Extension data.
         /// </summary>
-        internal VariableByteArrayIn Data;
+        private SafeByteArrayIn _data;
+
+        public ExtensionIn(string id, byte[] data)
+        {
+            _identifier = id;
+            _data = new SafeByteArrayIn(data);
+        }
     }
 
     /// <summary>
@@ -33,33 +36,15 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Extension identifier.
         /// </summary>
-        public string Identifier;
+        public string Identifier { get; private set; }
 
         /// <summary>
         /// Extension data.
         /// </summary>
-        internal VariableByteArrayOut Data;
-    }
+        private SafeByteArrayOut _data;
 
-    /// <summary>
-    /// Information about Extensions.
-    /// </summary>
-    /// <remarks>Corresponds to WEBAUTHN_EXTENSIONS.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    internal class ExtensionsOut : VariableArray<ExtensionOut>
-    {
-        private ExtensionsOut() : base() { }
-    }
+        public byte[] Data => _data?.Data;
 
-    /// <summary>
-    /// Information about Extensions.
-    /// </summary>
-    /// <remarks>Corresponds to WEBAUTHN_EXTENSIONS.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    internal class ExtensionsIn : VariableArrayIn<ExtensionIn>
-    {
-        public ExtensionsIn(ExtensionIn[] extensions) : base(extensions)
-        {
-        }
+        private ExtensionOut() { }
     }
 }

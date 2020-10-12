@@ -24,7 +24,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Identifier for the User.
         /// </summary>
-        private VariableByteArrayIn _id;
+        private SafeByteArrayIn _id;
 
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
@@ -52,8 +52,8 @@ namespace WebAuthN.Interop
             }
             set
             {
-                // TODO: Validate length
-                _id = new VariableByteArrayIn(value);
+                _id?.Dispose();
+                _id = new SafeByteArrayIn(value);
             }
         }
     }

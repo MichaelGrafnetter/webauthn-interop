@@ -8,7 +8,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_CREDENTIAL.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class  CredentialIn : IDisposable
+    internal class CredentialIn : IDisposable
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -18,25 +18,23 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private VariableByteArrayIn _id;
+        private SafeByteArrayIn _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
         /// </summary>
-        public string Type;
+        private string _type;
 
-        public byte[] Id
+        public CredentialIn(byte[] id, string type)
         {
-            get => _id?.Data;
-            set => _id = new VariableByteArrayIn(value);
+            _id = new SafeByteArrayIn(id);
+            _type = type;
         }
 
         public void Dispose()
         {
-            if(_id != null)
-            {
-                _id.Dispose();
-            }
+            _id?.Dispose();
+            _id = null;
         }
     }
 
@@ -55,33 +53,15 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private VariableByteArrayOut _id;
+        private SafeByteArrayOut _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
         /// </summary>
-        public string Type;
+        public string Type { get; private set; }
 
         public byte[] Id => _id?.Data;
-    }
 
-    /// <summary>
-    /// Information about credential list with extra information.
-    /// </summary>
-    /// <remarks>Corresponds to WEBAUTHN_CREDENTIALS.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    internal sealed class CredentialsOut : VariableArray<CredentialOut>
-    {
-        private CredentialsOut() : base() { }
-    }
-
-    /// <summary>
-    /// Information about credential list with extra information.
-    /// </summary>
-    /// <remarks>Corresponds to WEBAUTHN_CREDENTIALS.</remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    internal sealed class CredentialsIn : VariableArrayIn<CredentialIn>
-    {
-        public CredentialsIn(CredentialIn[] credentials) : base(credentials) { }
+        private CredentialOut() { }
     }
 }

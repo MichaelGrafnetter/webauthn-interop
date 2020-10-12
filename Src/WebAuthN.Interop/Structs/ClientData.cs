@@ -24,7 +24,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// UTF-8 encoded JSON serialization of the client data.
         /// </summary>
-        private VariableByteArrayIn _clientData = new VariableByteArrayIn(null);
+        private SafeByteArrayIn _clientData = new SafeByteArrayIn(null);
 
         /// <summary>
         /// Hash algorithm ID used to hash the ClientDataJSON field.
@@ -61,7 +61,7 @@ namespace WebAuthN.Interop
                 Dispose();
 
                 // Now replace the previous value with a new one
-                _clientData = new VariableByteArrayIn(value);
+                _clientData = new SafeByteArrayIn(value);
             }
         }
 

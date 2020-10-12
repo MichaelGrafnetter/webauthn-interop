@@ -6,7 +6,6 @@ namespace WebAuthN.Interop
     public class WebAuthN
     {
         // TODO: Async operations
-
         public static ApiVersion ApiVersion
         {
             get
@@ -45,9 +44,10 @@ namespace WebAuthN.Interop
             using (var credParams = ApiMapper.Translate(options.PubKeyCredParams))
             using (var clientData = ApiMapper.Translate(options, false))
             using (var excludeCreds = ApiMapper.Translate(options.ExcludeCredentials))
-            // TODO: Get rid of ToArray
-            using (var excludeCredList = new CredentialExListIn(excludeCreds.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, excludeCredList))
+            using (var excludeCredsEx = ApiMapper.TranslateEx(options.ExcludeCredentials))
+            using (var excludeCredList = new Credentials(excludeCreds.ToArray()))
+            using (var excludeCredListEx = new CredentialList(excludeCredsEx.ToArray()))
+            using (var nativeOptions = ApiMapper.Translate(options, excludeCredList, excludeCredListEx))
             {
                 var result = NativeMethods.AuthenticatorMakeCredential(
                     WindowHandle.ForegroundWindow,
@@ -93,9 +93,10 @@ namespace WebAuthN.Interop
 
             using (var clientData = ApiMapper.Translate(options, false))
             using (var allowCreds = ApiMapper.Translate(options.AllowCredentials))
-            // TODO: Get rid of ToArray
-            using (var allowCredList = new CredentialExListIn(allowCreds.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, allowCredList, authenticatorAttachment))
+            using (var allowCredsEx = ApiMapper.TranslateEx(options.AllowCredentials))
+            using (var allowCredList = new Credentials(allowCreds.ToArray()))
+            using (var allowCredListEx = new CredentialList(allowCredsEx.ToArray()))
+            using (var nativeOptions = ApiMapper.Translate(options, authenticatorAttachment, allowCredList, allowCredListEx))
             {
                 HResult result = NativeMethods.AuthenticatorGetAssertion(
                     WindowHandle.ForegroundWindow,

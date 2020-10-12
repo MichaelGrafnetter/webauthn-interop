@@ -84,7 +84,7 @@ namespace WebAuthN.Interop.Test
         [TestMethod]
         public void Marshalling_BinaryArrayIn_SizeOf()
         {
-            var calculatedSize = Marshal.SizeOf<VariableByteArrayIn>();
+            var calculatedSize = Marshal.SizeOf<SafeByteArrayIn>();
             var actualSize = sizeof(int) + IntPtr.Size;
             Assert.AreEqual(actualSize, calculatedSize);
         }
@@ -92,7 +92,7 @@ namespace WebAuthN.Interop.Test
         [TestMethod]
         public void Marshalling_BinaryArrayOut_SizeOf()
         {
-            var calculatedSize = Marshal.SizeOf<VariableByteArrayOut>();
+            var calculatedSize = Marshal.SizeOf<SafeByteArrayOut>();
             var actualSize = sizeof(int) + IntPtr.Size;
             Assert.AreEqual(actualSize, calculatedSize);
         }

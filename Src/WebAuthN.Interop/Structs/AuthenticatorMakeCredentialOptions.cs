@@ -26,7 +26,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Credentials used for exclusion.
         /// </summary>
-        public CredentialsIn ExcludeCredentials = new CredentialsIn(null);
+        private Credentials _excludeCredentials = new Credentials(null);
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
@@ -71,7 +71,7 @@ namespace WebAuthN.Interop
         /// If present, "CredentialList" will be ignored.
         /// This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.
         /// </remarks>
-        private IntPtr _excludeCredentialsEx = IntPtr.Zero;
+        private IntPtr _excludeCredentialList = IntPtr.Zero;
 
         public AuthenticatorMakeCredentialOptions()
         {
@@ -102,25 +102,34 @@ namespace WebAuthN.Interop
             }
         }
 
-        public CredentialExListIn ExcludeCredentialsEx
+        public Credentials ExcludeCredentials
+        {
+            set
+            {
+                _excludeCredentials?.Dispose();
+                _excludeCredentials = value;
+            }
+        }
+
+        public CredentialList ExcludeCredentialsEx
         {
             set
             {
                 if (value != null)
                 {
-                    if (_excludeCredentialsEx == IntPtr.Zero)
+                    if (_excludeCredentialList == IntPtr.Zero)
                     {
-                        _excludeCredentialsEx = Marshal.AllocHGlobal(Marshal.SizeOf<CredentialExListIn>());
+                        _excludeCredentialList = Marshal.AllocHGlobal(Marshal.SizeOf<CredentialList>());
                     }
 
-                    Marshal.StructureToPtr<CredentialExListIn>(value, _excludeCredentialsEx, false);
+                    Marshal.StructureToPtr<CredentialList>(value, _excludeCredentialList, false);
                 }
                 else
                 {
-                    if (_excludeCredentialsEx != IntPtr.Zero)
+                    if (_excludeCredentialList != IntPtr.Zero)
                     {
-                        Marshal.FreeHGlobal(_excludeCredentialsEx);
-                        _excludeCredentialsEx = IntPtr.Zero;
+                        Marshal.FreeHGlobal(_excludeCredentialList);
+                        _excludeCredentialList = IntPtr.Zero;
                     }
                 }
             }
@@ -128,22 +137,16 @@ namespace WebAuthN.Interop
 
         public void Dispose()
         {
-            if(Extensions != null)
-            {
-                Extensions.Dispose();
-                Extensions = null;
-            }
+            Extensions?.Dispose();
+            Extensions = null;
 
-            if(ExcludeCredentials != null)
-            {
-                ExcludeCredentials.Dispose();
-                ExcludeCredentials = null;
-            }
+            _excludeCredentials?.Dispose();
+            _excludeCredentials = null;
 
-            if(_excludeCredentialsEx != IntPtr.Zero)
+            if(_excludeCredentialList != IntPtr.Zero)
             {
-                Marshal.FreeHGlobal(_excludeCredentialsEx);
-                _excludeCredentialsEx = IntPtr.Zero;
+                Marshal.FreeHGlobal(_excludeCredentialList);
+                _excludeCredentialList = IntPtr.Zero;
             }
 
             if (_cancellationId != IntPtr.Zero)
