@@ -101,18 +101,18 @@ namespace WebAuthN.Interop
             throw new NotImplementedException();
         }
 
-        public static CredentialExListIn Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
+        public static DisposableList<CredentialExIn> Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
         {
             // TODO: This is sometimes IEnumerable and Sometimes List in FIDO2 API
 
             if (credentials == null)
             {
-                // Null pointer is allowed in the parent structure.
                 return null;
             }
 
-            var translatedCredentials = credentials.Select(item => Translate(item)).ToArray();
-            return new CredentialExListIn(translatedCredentials);
+            var result = new DisposableList<CredentialExIn>();
+            result.AddRange(credentials.Select(item => Translate(item)));
+            return result;
         }
 
         public static CredentialExIn Translate(PublicKeyCredentialDescriptor credential)
@@ -125,7 +125,6 @@ namespace WebAuthN.Interop
             return new CredentialExIn()
             {
                 Id = credential.Id,
-                // TODO: Should the type be nullable?
                 Type = Translate(credential.Type),
                 Transports = Translate(credential.Transports)
             };
@@ -145,9 +144,7 @@ namespace WebAuthN.Interop
 
                 // TODO: AllowCredentialList = ApiMapper.Translate(options.AllowCredentials),
 
-
-
-                Extensions = ApiMapper.Translate(options.Extensions),
+                // Extensions = ApiMapper.Translate(options.Extensions),
                 UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
                 // TODO: AuthenticatorAttachment
                 // TODO: CancellationId
@@ -169,10 +166,9 @@ namespace WebAuthN.Interop
                 RequireResidentKey = options.AuthenticatorSelection?.RequireResidentKey ?? false,
                 AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
                 UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
-                Extensions = ApiMapper.Translate(options.Extensions),
-                ExcludeCredentials = new CredentialsIn(null),
+                // Extensions = ApiMapper.Translate(options.Extensions),
+                // ExcludeCredentials = new CredentialsIn(null),
                 // TODO: ExcludeCredentials vs. ExcludeCredentialsEx
-                ExcludeCredentialsEx = ApiMapper.Translate(options.ExcludeCredentials),
                 // TODO: CancellationId
             };
         }
@@ -209,17 +205,17 @@ namespace WebAuthN.Interop
             }
 
             var clientDataJson = JsonConvert.SerializeObject(new {
-                // TODO: Convert "webauthn.create" to constant
+                // TODO: Convert "webauthn.get" to constant
                 Type = "webauthn.get",
                 Challenge = options.Challenge,
-                Origin = options.RpId,
-                CrossOrigin = crossOrigin
+                Origin = options.RpId //,
+                // CrossOrigin = crossOrigin
                 // TODO: TokenBinding
             });
 
             return new ClientData()
             {
-                // ClientDataJson = clientDataJson,
+                ClientDataJson = clientDataJson,
                 // TODO: Convert "SHA-256" to a constant
                 HashAlgId = "SHA-256"
             };

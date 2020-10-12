@@ -76,13 +76,6 @@ namespace WebAuthN.Interop
                 Marshal.FreeHGlobal(_nativeArray);
                 _nativeArray = IntPtr.Zero;
             }
-
-            GC.SuppressFinalize(this);
-        }
-
-        ~VariableArrayIn()
-        {
-            Dispose();
         }
     }
 

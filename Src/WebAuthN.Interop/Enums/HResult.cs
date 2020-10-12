@@ -31,6 +31,12 @@
         ObjectAlreadyExists = 0x8009000F,
 
         /// <summary>
+        /// The data is invalid.
+        /// </summary>
+        /// <remarks>Corresponds to HRESULT_FROM_WIN32(ERROR_INVALID_DATA).</remarks>
+        InvalidData = 0x8007000D,
+
+        /// <summary>
         /// The request is not supported.
         /// </summary>
         /// <remarks>Corresponds to HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED).</remarks>

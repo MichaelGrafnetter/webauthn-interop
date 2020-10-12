@@ -18,7 +18,7 @@ namespace WebAuthN.Interop
                 catch(EntryPointNotFoundException)
                 {
                     // The WebAuthNGetApiVersionNumber() function was added in Windows 10 1903.
-                    return ApiVersion.Version1;
+                    throw new NotSupportedException();
                 }
             }
         }
@@ -44,8 +44,14 @@ namespace WebAuthN.Interop
             var user = ApiMapper.Translate(options.User);
             using (var credParams = ApiMapper.Translate(options.PubKeyCredParams))
             using (var clientData = ApiMapper.Translate(options, false))
+            using (var excludeCreds = ApiMapper.Translate(options.ExcludeCredentials))
+            // TODO: Get rid of ToArray
+            using (var excludeCredList = new CredentialExListIn(excludeCreds.ToArray()))
             using (var nativeOptions = ApiMapper.Translate(options))
             {
+                // TODO: Add ExcludeCredentialsEx = excludeCredList to Translate
+                nativeOptions.ExcludeCredentialsEx = excludeCredList;
+
                 var result = NativeMethods.AuthenticatorMakeCredential(
                     WindowHandle.ForegroundWindow.Handle,
                     rp,
@@ -100,11 +106,11 @@ namespace WebAuthN.Interop
             using (var nativeOptions = ApiMapper.Translate(options))
             {
                 HResult result = NativeMethods.AuthenticatorGetAssertion(
-                WindowHandle.ForegroundWindow.Handle,
-                options.RpId,
-                clientData,
-                nativeOptions,
-                out var assertionHandle
+                    WindowHandle.ForegroundWindow.Handle,
+                    options.RpId,
+                    clientData,
+                    nativeOptions,
+                    out var assertionHandle
                 );
 
                 Validate(result);
@@ -157,6 +163,7 @@ namespace WebAuthN.Interop
                     // TODO: Exception type.
                     throw new NotImplementedException();
                 case HResult.ParameterInvalid:
+                case HResult.InvalidData:
                     throw new ArgumentException();
                 case HResult.DeviceNotFound:
                     // TODO: Exception type.

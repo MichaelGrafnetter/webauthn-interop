@@ -13,6 +13,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
+        // TODO: Configurable version
         private protected AuthenticatorMakeCredentialOptionsVersion Version;
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        public ExtensionsIn Extensions;
+        public ExtensionsIn Extensions = new ExtensionsIn(null);
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
@@ -85,7 +86,7 @@ namespace WebAuthN.Interop
                 {
                     if(_cancellationId == IntPtr.Zero)
                     {
-                        _cancellationId = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Guid)));
+                        _cancellationId = Marshal.AllocHGlobal(Marshal.SizeOf<Guid>());
                     }
 
                     Marshal.StructureToPtr<Guid>(value.Value, _cancellationId, false);
@@ -109,7 +110,7 @@ namespace WebAuthN.Interop
                 {
                     if (_excludeCredentialsEx == IntPtr.Zero)
                     {
-                        _excludeCredentialsEx = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CredentialExListIn)));
+                        _excludeCredentialsEx = Marshal.AllocHGlobal(Marshal.SizeOf<CredentialExListIn>());
                     }
 
                     Marshal.StructureToPtr<CredentialExListIn>(value, _excludeCredentialsEx, false);
@@ -150,13 +151,6 @@ namespace WebAuthN.Interop
                 Marshal.FreeHGlobal(_cancellationId);
                 _cancellationId = IntPtr.Zero;
             }
-
-            GC.SuppressFinalize(this);
-        }
-
-        ~AuthenticatorMakeCredentialOptions()
-        {
-            Dispose();
         }
     }
 }

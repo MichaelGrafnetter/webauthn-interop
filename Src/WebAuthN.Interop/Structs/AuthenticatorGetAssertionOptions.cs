@@ -8,7 +8,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class AuthenticatorGetAssertionOptions
+    internal class AuthenticatorGetAssertionOptions : IDisposable
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -24,12 +24,12 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allowed Credentials List.
         /// </summary>
-        public CredentialsIn AllowedCredentials;
+        public CredentialsIn AllowedCredentials = new CredentialsIn(null);
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        public ExtensionsIn Extensions;
+        public ExtensionsIn Extensions = new ExtensionsIn(null);
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
@@ -54,7 +54,7 @@ namespace WebAuthN.Interop
         private string _u2fAppId;
 
         // If the following is non-NULL, then, set to TRUE if the above U2fAppid was used instead of RpId
-        private bool[] _isU2fAppIdUsed;
+        private IntPtr _isU2fAppIdUsed;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3
@@ -63,7 +63,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Cancellation Id (Optional)
         /// </summary>
-        private Guid[] _cancellationId;
+        private IntPtr _cancellationId = IntPtr.Zero;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4
@@ -72,7 +72,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Allow Credential List. If present, "CredentialList" will be ignored.
         /// </summary>
-        public CredentialExListIn[] AllowCredentialList;
+        private IntPtr _allowCredentialList = IntPtr.Zero;
 
         public string U2fAppId
         {
@@ -83,19 +83,93 @@ namespace WebAuthN.Interop
             set
             {
                 _u2fAppId = value;
-                _isU2fAppIdUsed = value != null ? new bool[] { true } : null;
+                if(_isU2fAppIdUsed == IntPtr.Zero)
+                {
+                    _isU2fAppIdUsed = Marshal.AllocHGlobal(sizeof(int));
+                }
+                
+                Marshal.WriteInt32(_isU2fAppIdUsed, Convert.ToInt32(value != null));
             }
         }
 
         public Guid? CancellationId
         {
-            get
-            {
-                return _cancellationId?[0];
-            }
             set
             {
-                _cancellationId = value.HasValue ? new Guid[] { value.Value } : null;
+                if (value.HasValue)
+                {
+                    if (_cancellationId == IntPtr.Zero)
+                    {
+                        _cancellationId = Marshal.AllocHGlobal(Marshal.SizeOf<Guid>());
+                    }
+
+                    Marshal.StructureToPtr<Guid>(value.Value, _cancellationId, false);
+                }
+                else
+                {
+                    if (_cancellationId != IntPtr.Zero)
+                    {
+                        Marshal.FreeHGlobal(_cancellationId);
+                        _cancellationId = IntPtr.Zero;
+                    }
+                }
+            }
+        }
+
+        public CredentialExListIn AllowCredentialList
+        {
+            set
+            {
+                if (value != null)
+                {
+                    if (_allowCredentialList == IntPtr.Zero)
+                    {
+                        _allowCredentialList = Marshal.AllocHGlobal(Marshal.SizeOf<CredentialExListIn>());
+                    }
+
+                    Marshal.StructureToPtr<CredentialExListIn>(value, _allowCredentialList, false);
+                }
+                else
+                {
+                    if (_allowCredentialList != IntPtr.Zero)
+                    {
+                        Marshal.FreeHGlobal(_allowCredentialList);
+                        _allowCredentialList = IntPtr.Zero;
+                    }
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            if (Extensions != null)
+            {
+                Extensions.Dispose();
+                Extensions = null;
+            }
+
+            if (AllowedCredentials != null)
+            {
+                AllowedCredentials.Dispose();
+                AllowedCredentials = null;
+            }
+
+            if (_allowCredentialList != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_allowCredentialList);
+                _allowCredentialList = IntPtr.Zero;
+            }
+
+            if (_isU2fAppIdUsed != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_isU2fAppIdUsed);
+                _isU2fAppIdUsed = IntPtr.Zero;
+            }
+
+            if (_cancellationId != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_cancellationId);
+                _cancellationId = IntPtr.Zero;
             }
         }
     }
