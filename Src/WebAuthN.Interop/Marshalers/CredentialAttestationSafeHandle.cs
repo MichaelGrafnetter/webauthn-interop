@@ -1,5 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace WebAuthN.Interop
 {
@@ -15,7 +15,7 @@ namespace WebAuthN.Interop
 
         internal CredentialAttestation ToManaged()
         {
-            if(this.IsInvalid)
+            if (this.IsInvalid)
             {
                 return null;
             }

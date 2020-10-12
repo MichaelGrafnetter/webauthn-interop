@@ -55,12 +55,14 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private VariableByteArrayOut Id;
+        private VariableByteArrayOut _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
         /// </summary>
         public string Type;
+
+        public byte[] Id => _id?.Data;
     }
 
     /// <summary>

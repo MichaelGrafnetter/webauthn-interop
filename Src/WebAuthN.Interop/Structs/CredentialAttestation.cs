@@ -30,41 +30,48 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Authenticator data that was created for this credential.
         /// </summary>
-        public VariableByteArrayOut AuthenticatorData;
+        private VariableByteArrayOut _authenticatorData;
 
         /// <summary>
         /// Encoded CBOR attestation information
         /// </summary>
-        public VariableByteArrayOut Attestation;
+        private VariableByteArrayOut _attestation;
 
         public AttestationDecode AttestationDecodeType;
 
         /// <summary>
         /// CBOR attestation information.
         /// </summary>
-        public CommonAttestation[] AttestationDecoded;
+        // TODO: Decode CommonAttestation
+        private CommonAttestation[] AttestationDecoded;
 
         /// <summary>
         /// The CBOR encoded Attestation Object to be returned to the RP.
         /// </summary>
-        public VariableByteArrayOut AttestationObject;
+        private VariableByteArrayOut _attestationObject;
 
         /// <summary>
         /// The CredentialId bytes extracted from the Authenticator Data.
         /// </summary>
         /// <remarks>Used by Edge to return to the RP.</remarks>
-        public VariableByteArrayOut CredentialId;
+        private VariableByteArrayOut _credentialId;
 
         /// <summary>
         /// WebAuthn Extensions
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2.</remarks>
-        public ExtensionsOut Extensions;
+        private ExtensionsOut _extensions;
 
         /// <summary>
         /// The transport that was used.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
         public AuthenticatorTransport UsedTransport;
+
+        public byte[] AuthenticatorData => _authenticatorData?.Data;
+        public byte[] Attestation => _attestation?.Data;
+        public byte[] AttestationObject => _attestationObject?.Data;
+        public byte[] CredentialId => _credentialId?.Data;
+        public ExtensionOut[] Extensions => _extensions?.Data;
     }
 }

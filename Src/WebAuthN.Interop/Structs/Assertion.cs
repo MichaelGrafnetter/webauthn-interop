@@ -7,7 +7,7 @@ namespace WebAuthN.Interop
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_ASSERTION.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public class Assertion
+    internal class Assertion
     {
         /// <summary>
         /// // Version of this structure, to allow for modifications in the future.
@@ -17,21 +17,25 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Authenticator data that was created for this assertion.
         /// </summary>
-        VariableByteArrayOut AuthenticatorData;
+        private VariableByteArrayOut _authenticatorData;
 
         /// <summary>
         /// Signature that was generated for this assertion.
         /// </summary>
-        VariableByteArrayOut Signature;
+        private VariableByteArrayOut _signature;
 
         /// <summary>
         /// Credential that was used for this assertion.
         /// </summary>
-        CredentialOut Credential;
+        public CredentialOut Credential;
 
         /// <summary>
         /// UserId
         /// </summary>
-        VariableByteArrayOut UserId;
+        private VariableByteArrayOut _userId;
+
+        public byte[] AuthenticatorData => _authenticatorData?.Data;
+        public byte[] Signature => _signature?.Data;
+        public byte[] UserId => _userId?.Data;
     }
 }

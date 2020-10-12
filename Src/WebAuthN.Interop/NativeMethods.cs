@@ -20,7 +20,7 @@ namespace WebAuthN.Interop
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorMakeCredential", CharSet = CharSet.Unicode)]
         public static extern HResult AuthenticatorMakeCredential(
-            IntPtr windowHandle,
+            WindowHandle windowHandle,
             RelyingPartyInformation rpInformation,
             UserInformation userInformation,
             CoseCredentialParameters pubKeyCredParams,
@@ -31,7 +31,7 @@ namespace WebAuthN.Interop
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion", CharSet = CharSet.Unicode)]
         public static extern HResult AuthenticatorGetAssertion(
-            IntPtr windowHandle,
+            WindowHandle windowHandle,
             string rpId,
             ClientData clientData,
             [Optional] AuthenticatorGetAssertionOptions getAssertionOptions,

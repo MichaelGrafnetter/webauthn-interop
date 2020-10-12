@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace WebAuthN.Interop
 {
@@ -12,14 +13,14 @@ namespace WebAuthN.Interop
             return true;
         }
 
-        internal Assertion Marshal()
+        internal Assertion ToManaged()
         {
             if (this.IsInvalid)
             {
                 return null;
             }
 
-            return System.Runtime.InteropServices.Marshal.PtrToStructure<Assertion>(this.handle);
+            return Marshal.PtrToStructure<Assertion>(this.handle);
         }
     }
 }

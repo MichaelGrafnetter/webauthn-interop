@@ -13,8 +13,6 @@ namespace WebAuthN.Interop
         {
             _handle = handle;
         }
-        // TODO: Make this work without exposing the handle
-        public IntPtr Handle => _handle;
 
         public bool IsValid => _handle != IntPtr.Zero;
 

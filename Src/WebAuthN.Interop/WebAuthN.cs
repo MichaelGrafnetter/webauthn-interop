@@ -47,13 +47,10 @@ namespace WebAuthN.Interop
             using (var excludeCreds = ApiMapper.Translate(options.ExcludeCredentials))
             // TODO: Get rid of ToArray
             using (var excludeCredList = new CredentialExListIn(excludeCreds.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options))
+            using (var nativeOptions = ApiMapper.Translate(options, excludeCredList))
             {
-                // TODO: Add ExcludeCredentialsEx = excludeCredList to Translate
-                nativeOptions.ExcludeCredentialsEx = excludeCredList;
-
                 var result = NativeMethods.AuthenticatorMakeCredential(
-                    WindowHandle.ForegroundWindow.Handle,
+                    WindowHandle.ForegroundWindow,
                     rp,
                     user,
                     credParams,
@@ -78,13 +75,14 @@ namespace WebAuthN.Interop
                     return new AuthenticatorAttestationRawResponse()
                     {
                         // TODO: Extensions = attestation.Extensions.Data,
-                        Id = attestation.CredentialId.Data,
-                        RawId = attestation.CredentialId.Data,
+                        Id = attestation.CredentialId,
+                        RawId = attestation.CredentialId,
+                        // TODO: Read the Type from the assertion?
                         Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
                         Response = new AuthenticatorAttestationRawResponse.ResponseData()
                         {
-                            AttestationObject = attestation.AttestationObject.Data
-                            // TODO: ClientDataJson = attestation.
+                            AttestationObject = attestation.AttestationObject
+                            // TODO: ClientDataJson = attestation. Encoding.UTF8.GetBytes(json)
                         }
                     };
                 }
@@ -105,14 +103,11 @@ namespace WebAuthN.Interop
             using (var clientData = ApiMapper.Translate(options, false))
             using (var allowCreds = ApiMapper.Translate(options.AllowCredentials))
             // TODO: Get rid of ToArray
-            using (var excludeCredList = new CredentialExListIn(allowCreds.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options))
+            using (var allowCredList = new CredentialExListIn(allowCreds.ToArray()))
+            using (var nativeOptions = ApiMapper.Translate(options, allowCredList))
             {
-                // TODO: Add ExcludeCredentialsEx = excludeCredList to Translate
-                nativeOptions.AllowCredentialList = excludeCredList;
-
                 HResult result = NativeMethods.AuthenticatorGetAssertion(
-                    WindowHandle.ForegroundWindow.Handle,
+                    WindowHandle.ForegroundWindow,
                     options.RpId,
                     clientData,
                     nativeOptions,
@@ -120,13 +115,42 @@ namespace WebAuthN.Interop
                 );
 
                 Validate(result);
-                // TODO: Handle destroy
-                return null;
+
+                try
+                {
+                    var assertion = assertionHandle.ToManaged();
+                    // assertion.UserId
+                    // assertion.Signature
+                    // assertion.Credential
+                    // assertion.AuthenticatorData
+
+                    
+                    return new AuthenticatorAssertionRawResponse()
+                    {
+                        Id = assertion.Credential.Id,
+                        RawId = assertion.Credential.Id,
+                        // TODO: Read the Type from the attestation?
+                        Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
+                        Response = new AuthenticatorAssertionRawResponse.AssertionResponse()
+                        {
+                            AuthenticatorData = assertion.AuthenticatorData,
+                            Signature = assertion.Signature,
+                            UserHandle = assertion.UserId,
+                            // TODO: ClientDataJson = Encoding.UTF8.GetBytes(jsonA)
+                        },
+                        // TODO: Extensions
+                    };
+                }
+                finally
+                {
+                    assertionHandle.Dispose();
+                }
             }
         }
 
         public void CancelCurrentOperation()
         {
+            // TODO: Implement cancellation
             // Note: WebAuthNCancelCurrentOperation and WebAuthNGetCancellationId are only available in newer systems.
         }
 

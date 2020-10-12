@@ -64,6 +64,9 @@ namespace WebAuthN.Interop.Test
 
             var fido = new WebAuthN();
             var credential = fido.AuthenticatorMakeCredential(options);
+
+            // Validate
+            // var makeRes = Fido2NetLib Fido2NetLib.MakeNewCredentialAsync(resp, f2req, _ => Task.FromResult(true)).Result;
         }
 
         [TestMethod]
@@ -109,6 +112,9 @@ namespace WebAuthN.Interop.Test
            
             var fido = new WebAuthN();
             var assertion = fido.AuthenticatorGetAssertion(options);
+
+            // TODO: Validate
+            // var getResult = fido2NetLib.MakeAssertionAsync(respA, f2reqA, makeRes.Result.PublicKey, makeRes.Result.Counter, _ => Task.FromResult(true)).Result;
         }
 
         [TestMethod]
@@ -134,6 +140,9 @@ namespace WebAuthN.Interop.Test
 
             var fido = new WebAuthN();
             var assertion = fido.AuthenticatorGetAssertion(options);
+
+            // TODO: Validate
+            // var getResult = fido2NetLib.MakeAssertionAsync(respA, f2reqA, makeRes.Result.PublicKey, makeRes.Result.Counter,  _ => Task.FromResult(true)).Result;
         }
     }
 }

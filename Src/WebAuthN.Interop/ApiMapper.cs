@@ -130,7 +130,7 @@ namespace WebAuthN.Interop
             };
         }
 
-        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options)
+        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, CredentialExListIn allowCreds)
         {
             if (options == null)
             {
@@ -142,8 +142,7 @@ namespace WebAuthN.Interop
                 TimeoutMilliseconds = checked((int)options.Timeout),
                 // TODO: AllowedCredentials vs. AllowCredentialList
 
-                // TODO: AllowCredentialList = ApiMapper.Translate(options.AllowCredentials),
-
+                AllowCredentialList = allowCreds,
                 // Extensions = ApiMapper.Translate(options.Extensions),
                 UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
                 // TODO: AuthenticatorAttachment
@@ -152,7 +151,7 @@ namespace WebAuthN.Interop
             };
         }
 
-        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options)
+        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, CredentialExListIn excludeCreds)
         {
             if (options == null)
             {
@@ -166,8 +165,8 @@ namespace WebAuthN.Interop
                 RequireResidentKey = options.AuthenticatorSelection?.RequireResidentKey ?? false,
                 AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
                 UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
+                ExcludeCredentialsEx = excludeCreds
                 // Extensions = ApiMapper.Translate(options.Extensions),
-                // ExcludeCredentials = new CredentialsIn(null),
                 // TODO: ExcludeCredentials vs. ExcludeCredentialsEx
                 // TODO: CancellationId
             };
