@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
@@ -68,7 +67,7 @@ namespace WebAuthN.Interop.Test
         }
 
         [TestMethod]
-        public void WebAuthN_GetAssertion_MSAccount()
+        public void WebAuthN_GetAssertion_MSAccount_CredentialList()
         {
             var config = new Fido2Configuration()
             {

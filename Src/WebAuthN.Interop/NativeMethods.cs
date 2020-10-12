@@ -18,7 +18,7 @@ namespace WebAuthN.Interop
         [DllImport(WebAuthn, EntryPoint = "WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable")]
         public static extern HResult IsUserVerifyingPlatformAuthenticatorAvailable(out bool isUserVerifyingPlatformAuthenticatorAvailable);
 
-        [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorMakeCredential")]
+        [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorMakeCredential", CharSet = CharSet.Unicode)]
         public static extern HResult AuthenticatorMakeCredential(
             IntPtr windowHandle,
             RelyingPartyInformation rpInformation,
@@ -29,7 +29,7 @@ namespace WebAuthN.Interop
             out CredentialAttestationSafeHandle credentialAttestation
         );
 
-        [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion")]
+        [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion", CharSet = CharSet.Unicode)]
         public static extern HResult AuthenticatorGetAssertion(
             IntPtr windowHandle,
             string rpId,

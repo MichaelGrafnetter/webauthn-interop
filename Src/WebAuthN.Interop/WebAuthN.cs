@@ -103,8 +103,14 @@ namespace WebAuthN.Interop
             }
 
             using (var clientData = ApiMapper.Translate(options, false))
+            using (var allowCreds = ApiMapper.Translate(options.AllowCredentials))
+            // TODO: Get rid of ToArray
+            using (var excludeCredList = new CredentialExListIn(allowCreds.ToArray()))
             using (var nativeOptions = ApiMapper.Translate(options))
             {
+                // TODO: Add ExcludeCredentialsEx = excludeCredList to Translate
+                nativeOptions.AllowCredentialList = excludeCredList;
+
                 HResult result = NativeMethods.AuthenticatorGetAssertion(
                     WindowHandle.ForegroundWindow.Handle,
                     options.RpId,

@@ -22,7 +22,7 @@ namespace WebAuthN.Interop
                 case null:
                     return AttestationConveyancePreference.Any;
                 default:
-                    // TODO: AttestationConveyancePreference.Enterprise
+                    // TODO: Add support for AttestationConveyancePreference.Enterprise
                     throw new NotSupportedException();
             }
         }
@@ -208,8 +208,8 @@ namespace WebAuthN.Interop
                 // TODO: Convert "webauthn.get" to constant
                 Type = "webauthn.get",
                 Challenge = options.Challenge,
-                Origin = options.RpId //,
-                // CrossOrigin = crossOrigin
+                Origin = options.RpId,
+                CrossOrigin = crossOrigin
                 // TODO: TokenBinding
             });
 

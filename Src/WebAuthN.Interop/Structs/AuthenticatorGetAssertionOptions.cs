@@ -51,6 +51,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower cased.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPUTF8Str)]
         private string _u2fAppId;
 
         // If the following is non-NULL, then, set to TRUE if the above U2fAppid was used instead of RpId
