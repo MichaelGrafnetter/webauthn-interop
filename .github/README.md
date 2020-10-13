@@ -4,26 +4,29 @@
 [![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
 [![.NET Core 3+](https://img.shields.io/badge/.NET%20Core-3%2B-007FFF.svg)](#)
 
-FIDO2/WebAuthn .NET Library for Windows Desktop and CLI Applications
+FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications
 
 ## Introduction
-This project implements a managed wrapper of the low-level [Windows 10 WebAuthn API](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
-(exposed through the `webauthn.dll` system library) for communicating with Windows Hello and FIDO2 security keys. This API is mainly used by browsers
+
+This library allows .NET applications to directly interact with FIDO2 security keys (e.g. YubiKey, Feitian, or Crayonic) and with Windows Hello / Windows Hello for Business. 
+It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
+(exposed through the `webauthn.dll` system library). This API is mainly used by browsers
 (see the source code of [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
-and [Firefox](https://searchfox.org/mozilla-central/source/dom/webauthn/WinWebAuthnManager.cpp)) and can now be used by any .NET desktop or CLI application.
+and [Firefox](https://searchfox.org/mozilla-central/source/dom/webauthn/WinWebAuthnManager.cpp)) to implement passwordless web authentication,
+but it can also be used by any .NET desktop or CLI application.
 
 As a front-end, this library uses classes defined in the [Fido2.Models](https://www.nuget.org/packages/Fido2.Models/) package, which it then translates to native C structures.
 See the [project site](https://github.com/abergs/fido2-net-lib) for more details.
 
 ## Downloads
 
-The package is published in the [NuGet Gallery](https://www.nuget.org/profiles/DSInternals).
+The `DSInternals.Win32.WebAuthn` library is published in the [NuGet Gallery](https://www.nuget.org/profiles/DSInternals).
 
 ## Usage
 
 ### Overview
 
-The WebAuthn API is only supported on Windows 10 1903 and newer. It is exposed in the `DSInternals.Win32.WebAuthn` namespace.
+The WebAuthn API is only supported on Windows 10 1903 and newer. It is exposed in the `DSInternals.Win32.WebAuthn` namespace, with the `WebAuthnApi` class being the main entry point.
 
 Following are code samples that mimic the behavior of [login.microsoftonline.com](https://login.microsoftonline.com), with the exception of WebAuthn Extensions. 
 The samples are not ready for production use, as they are missing validation and contain many hardcoded values. Especially the `challenge` must be randomly generated in a cryptographically safe way.
@@ -73,8 +76,8 @@ var options = CredentialCreateOptions.Create(
 
 options.PubKeyCredParams = new List<PubKeyCredParam>()
 {
-    new PubKeyCredParam() { Alg = ApiConstants.CoseAlgorithmEcdsaP256WithSha256, Type = PublicKeyCredentialType.PublicKey },
-    new PubKeyCredParam() { Alg = ApiConstants.CoseAlgorithmRsassaPkcs1V15WithSha256, Type = PublicKeyCredentialType.PublicKey }
+    new PubKeyCredParam() { Alg = -7, Type = PublicKeyCredentialType.PublicKey },
+    new PubKeyCredParam() { Alg = -257, Type = PublicKeyCredentialType.PublicKey }
 };
 
 var webauthn = new WebAuthnApi();
