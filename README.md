@@ -1,11 +1,11 @@
-# WebAuthn Interop
+# WebAuthn Interop Assembly
 FIDO2/WebAuthn .NET Library for Windows Desktop and CLI Applications
 
 ## Introduction
 This project implements a managed wrapper of the low-level [Windows 10 WebAuthn API](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
-(exposed through the `webauthn.dll` library) for communicating with Windows Hello and FIDO2 security keys. This API is mainly used by browsers
-(see [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
-and [Firefox](https://searchfox.org/mozilla-central/source/dom/webauthn/WinWebAuthnManager.cpp) source code) and can now be used by any .NET desktop or CLI application.
+(exposed through the `webauthn.dll` system library) for communicating with Windows Hello and FIDO2 security keys. This API is mainly used by browsers
+(see the source code of [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
+and [Firefox](https://searchfox.org/mozilla-central/source/dom/webauthn/WinWebAuthnManager.cpp)) and can now be used by any .NET desktop or CLI application.
 
 As a front-end, this library uses classes defined in the [Fido2.Models](https://www.nuget.org/packages/Fido2.Models/) package, which it then translates to native C structures.
 See the [project site](https://github.com/abergs/fido2-net-lib) for more details.
@@ -13,10 +13,6 @@ See the [project site](https://github.com/abergs/fido2-net-lib) for more details
 ## Downloads
 
 The package is published in the [NuGet Gallery](https://www.nuget.org/profiles/DSInternals).
-
-## Microsoft's Documentation
-- [WebAuthn APIs for password-less authentication on Windows 10](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthnapis)
-- [C header file](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
 
 ## Usage
 
@@ -39,8 +35,8 @@ var config = new Fido2Configuration()
 
 var user = new Fido2User
 {
-    Name = "michel.grafnetter@outlook.com",
-    DisplayName = "Michael Grafnetter",
+    Name = "john.doe@outlook.com",
+    DisplayName = "John Doe",
     Id = Base64Url.Decode("TUY65dH-Otl4jMdTRvlFQ1aApACYsuqGKSPQDQc1Bd4WVyw")
 };
 
@@ -115,6 +111,10 @@ var response = webauthn.AuthenticatorGetAssertion(options);
 
 The `APiConstants.cs` file is automatically generated from `#define` statements in `webauthn.h`.
 This is performed in the `DSInternals.Win32.WebAuthn.CodeGen` helper application by leveraging the [CppAst.NET project](https://github.com/xoofx/CppAst.NET).
+
+## Microsoft's Documentation
+- [WebAuthn APIs for password-less authentication on Windows 10](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthnapis)
+- [C header file](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
 
 ## Acknowledgements
 - This project uses the [FIDO2 .NET Library](https://github.com/abergs/fido2-net-lib). Huge thanks to its contributors, mainly @abergs and @aseigler.

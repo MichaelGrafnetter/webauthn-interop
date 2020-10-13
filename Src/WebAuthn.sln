@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		..\.gitignore = ..\.gitignore
 		..\.gitmodules = ..\.gitmodules
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSInternals.Win32.WebAuthn", "DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj", "{7CB17FBC-357A-4B3E-883C-B0EA8A7219AD}"
