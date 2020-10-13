@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{686243F0-D2B5-4684-9B92-B2754BBD9401}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		..\.gitignore = ..\.gitignore
+		..\.gitmodules = ..\.gitmodules
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSInternals.Win32.WebAuthn", "DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj", "{7CB17FBC-357A-4B3E-883C-B0EA8A7219AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSInternals.Win32.WebAuthn.CodeGen", "DSInternals.Win32.WebAuthn.CodeGen\DSInternals.Win32.WebAuthn.CodeGen.csproj", "{A8A4D9F8-3ADE-4A20-8A23-47A70E9A3135}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSInternals.Win32.WebAuthn.Tests", "DSInternals.Win32.WebAuthn.Tests\DSInternals.Win32.WebAuthn.Tests.csproj", "{21EE7768-EBFA-4D9B-A37C-2CBF3EF769AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7CB17FBC-357A-4B3E-883C-B0EA8A7219AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CB17FBC-357A-4B3E-883C-B0EA8A7219AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CB17FBC-357A-4B3E-883C-B0EA8A7219AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CB17FBC-357A-4B3E-883C-B0EA8A7219AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A4D9F8-3ADE-4A20-8A23-47A70E9A3135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A4D9F8-3ADE-4A20-8A23-47A70E9A3135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A4D9F8-3ADE-4A20-8A23-47A70E9A3135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A4D9F8-3ADE-4A20-8A23-47A70E9A3135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21EE7768-EBFA-4D9B-A37C-2CBF3EF769AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21EE7768-EBFA-4D9B-A37C-2CBF3EF769AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21EE7768-EBFA-4D9B-A37C-2CBF3EF769AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21EE7768-EBFA-4D9B-A37C-2CBF3EF769AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5EAF41A3-0BD0-46BF-95A9-27963D948EE4}
+	EndGlobalSection
+EndGlobal
