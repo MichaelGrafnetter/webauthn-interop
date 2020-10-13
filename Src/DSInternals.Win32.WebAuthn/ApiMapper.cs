@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
@@ -106,14 +107,14 @@ namespace DSInternals.Win32.WebAuthn
 
             if (extensions is WinExtensionsIn winExtensions)
             {
-                if(winExtensions.CredProtect.HasValue)
+                if (winExtensions.CredProtect.HasValue)
                 {
                     nativeExtensions.Add(ExtensionIn.CreateCredProtect(
                         winExtensions.CredProtect.Value,
                         winExtensions.EnforceCredProtect == true));
                 }
 
-                if(winExtensions.HmacSecret.HasValue)
+                if (winExtensions.HmacSecret.HasValue)
                 {
                     nativeExtensions.Add(ExtensionIn.CreateHmacSecret());
                 }
@@ -214,7 +215,8 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var clientDataJson = JsonConvert.SerializeObject(new {
+            var clientDataJson = JsonConvert.SerializeObject(new
+            {
                 Type = ApiConstants.ClientDataCredentialCreate,
                 Challenge = options.Challenge,
                 Origin = options.Rp?.Id,
@@ -237,7 +239,8 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var clientDataJson = JsonConvert.SerializeObject(new {
+            var clientDataJson = JsonConvert.SerializeObject(new
+            {
                 Type = ApiConstants.ClientDataCredentialGet,
                 Challenge = options.Challenge,
                 Origin = options.RpId,
@@ -320,6 +323,34 @@ namespace DSInternals.Win32.WebAuthn
                     return UserVerificationRequirement.Any;
                 default:
                     throw new NotSupportedException();
+            }
+        }
+
+        public static void Validate(HResult result)
+        {
+            switch (result)
+            {
+                case HResult.Success:
+                    break;
+                case HResult.ActionCancelled:
+                case HResult.OperationCancelled:
+                    throw new OperationCanceledException();
+                case HResult.OperationTimeout:
+                    throw new TimeoutException();
+                case HResult.RequestNotSupported:
+                case HResult.OperationNotSupported:
+                    throw new NotSupportedException();
+                case HResult.ParameterInvalid:
+                case HResult.InvalidData:
+                    throw new ArgumentException();
+                case HResult.ObjectAlreadyExists:
+                case HResult.KeyStorageFull:
+                case HResult.DeviceNotFound:
+                case HResult.ObjectNotFound:
+                default:
+                    // TODO: Differentiate between more error states using custom exception types.
+                    // TODO: Check that translation from HRESULT to int works.
+                    throw new Win32Exception((int)result);
             }
         }
     }

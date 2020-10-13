@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Fido2NetLib;
 
 namespace DSInternals.Win32.WebAuthn
@@ -51,7 +50,7 @@ namespace DSInternals.Win32.WebAuthn
             get
             {
                 HResult result = NativeMethods.IsUserVerifyingPlatformAuthenticatorAvailable(out bool value);
-                Validate(result);
+                ApiMapper.Validate(result);
                 return value;
             }
         }
@@ -85,7 +84,7 @@ namespace DSInternals.Win32.WebAuthn
                     out var attestationHandle
                 );
 
-                Validate(result);
+                ApiMapper.Validate(result);
 
                 try
                 {
@@ -132,7 +131,7 @@ namespace DSInternals.Win32.WebAuthn
                     out var assertionHandle
                 );
 
-                Validate(result);
+                ApiMapper.Validate(result);
 
                 try
                 {
@@ -172,7 +171,7 @@ namespace DSInternals.Win32.WebAuthn
                 try
                 {
                     HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
-                    Validate(result);
+                    ApiMapper.Validate(result);
                     return cancelationId;
                 }
                 catch(EntryPointNotFoundException)
@@ -180,34 +179,6 @@ namespace DSInternals.Win32.WebAuthn
                     // Async support is not present in earlier versions of Windows 10.
                     return null;
                 }
-            }
-        }
-
-        private static void Validate(HResult result)
-        {
-            switch (result)
-            {
-                case HResult.Success:
-                    break;
-                case HResult.ActionCancelled:
-                case HResult.OperationCancelled:
-                    throw new OperationCanceledException();
-                case HResult.OperationTimeout:
-                    throw new TimeoutException();
-                case HResult.RequestNotSupported:
-                case HResult.OperationNotSupported:
-                    throw new NotSupportedException();
-                case HResult.ParameterInvalid:
-                case HResult.InvalidData:
-                    throw new ArgumentException();
-                case HResult.ObjectAlreadyExists:
-                case HResult.KeyStorageFull:
-                case HResult.DeviceNotFound:
-                case HResult.ObjectNotFound:
-                default:
-                    // TODO: Differentiate between more error states using custom exception types.
-                    // TODO: Check that translation from HRESULT to int works.
-                    throw new Win32Exception((int)result);
             }
         }
     }

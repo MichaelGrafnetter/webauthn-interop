@@ -3,7 +3,8 @@
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
-    /// Contains WebAuthn extensions that are supported by Windows 10. These are currently defined in CTAP 2.1 Draft.
+    /// Contains WebAuthn extensions that are actually supported by Windows 10.
+    /// These are currently defined in CTAP 2.1 Draft.
     /// </summary>
     public class WinExtensionsIn : Fido2NetLib.Objects.AuthenticationExtensionsClientInputs
     {
