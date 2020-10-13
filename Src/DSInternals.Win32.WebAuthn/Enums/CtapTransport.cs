@@ -6,7 +6,7 @@ namespace DSInternals.Win32.WebAuthn
     /// Defines hints as to how clients might communicate with a particular authenticator in order to obtain an assertion for a specific credential.
     /// </summary>
     [Flags]
-    public enum CtapTransport : int
+    internal enum CtapTransport : int
     {
         /// <summary>
         /// No transport restrictions.

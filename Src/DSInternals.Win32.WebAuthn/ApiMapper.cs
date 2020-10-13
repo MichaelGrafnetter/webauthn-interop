@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace DSInternals.Win32.WebAuthn
 {
+    /// <summary>
+    /// Performs mapping between Fido2NetLib objects and low-level data structures.
+    /// </summary>
     internal static class ApiMapper
     {
         public static AttestationConveyancePreference Translate(Fido2NetLib.Objects.AttestationConveyancePreference? attestation)

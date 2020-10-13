@@ -1,7 +1,7 @@
 ﻿namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
-    /// WebAuthN API Version Information.
+    /// WebAuthn API Version Information.
     /// </summary>
     public enum ApiVersion : int
     {

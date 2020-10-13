@@ -1,4 +1,5 @@
-﻿/* This file has been automatically generated. Do not modify it! */
+
+/* This file has been automatically generated. Do not modify it! */
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -352,5 +353,7 @@ namespace DSInternals.Win32.WebAuthn
         /// </remarks>
         public const int AssertionCurrentVersion = 1;
 
+
     }
 }
+

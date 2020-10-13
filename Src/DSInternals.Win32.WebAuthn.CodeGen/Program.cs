@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using CppAst;
@@ -8,6 +9,8 @@ namespace DSInternals.Win32.WebAuthn.CodeGen
 {
     class Program
     {
+        private const string InputFile = @"..\..\..\CodeGen.h";
+        private const string OutputFile = @"..\..\..\..\DSInternals.Win32.WebAuthn\ApiConstants.cs";
         private const string MacroPrefix = "WEBAUTHN_";
         private const char WordSeparator = '_';
         private const string Header = @"
@@ -34,42 +37,46 @@ namespace DSInternals.Win32.WebAuthn
                 ParseSystemIncludes = false
             };
 
-            var compilation = CppParser.ParseFile(@"C:\Users\MichaelGrafnetter\source\repos\MichaelGrafnetter\DSInternals.Win32.WebAuthn\Src\WebAuthN\webauthn.h", parserOptions);
+            var compilation = CppParser.ParseFile(InputFile, parserOptions);
 
-            Console.WriteLine(Header);
-
-            foreach (var macro in compilation.Macros)
+            using (var writer = new StreamWriter(OutputFile))
             {
-                if (!macro.Name.StartsWith(MacroPrefix))
-                    continue;
+                writer.WriteLine(Header);
 
-                switch(macro.Tokens[0].Kind)
+                // Process all macros and generate constants from #defines.
+                foreach (var macro in compilation.Macros)
                 {
-                    case CppTokenKind.Identifier:
-                        string normalizedIdentifier = NormalizeName(macro.Value);
-                        ProcessConstant(macro.Name, "int", normalizedIdentifier);
-                        break;
-                    case CppTokenKind.Literal:
-                    case CppTokenKind.Punctuation:
-                        bool isNumber = char.IsDigit(macro.Value[0]) || char.IsPunctuation(macro.Value[0]);
-                        string type = isNumber ? "int" : "string";
-                        string trimmedValue = isNumber ? macro.Value : macro.Value.TrimStart('L');
-                        ProcessConstant(macro.Name, type, trimmedValue);
-                        break;
-                }
-            }
+                    if (!macro.Name.StartsWith(MacroPrefix))
+                        continue;
 
-            Console.WriteLine(Footer);
+                    switch (macro.Tokens[0].Kind)
+                    {
+                        case CppTokenKind.Identifier:
+                            string normalizedIdentifier = NormalizeName(macro.Value);
+                            ProcessConstant(writer, macro.Name, "int", normalizedIdentifier);
+                            break;
+                        case CppTokenKind.Literal:
+                        case CppTokenKind.Punctuation:
+                            bool isNumber = char.IsDigit(macro.Value[0]) || char.IsPunctuation(macro.Value[0]);
+                            string type = isNumber ? "int" : "string";
+                            string trimmedValue = isNumber ? macro.Value : macro.Value.TrimStart('L');
+                            ProcessConstant(writer, macro.Name, type, trimmedValue);
+                            break;
+                    }
+                }
+
+                writer.WriteLine(Footer);
+            }
         }
 
-        static void ProcessConstant(string name, string type, string value)
+        static void ProcessConstant(StreamWriter writer, string name, string type, string value)
         {
             string normalizedName = NormalizeName(name);
 
-            Console.WriteLine(@"{1}/// <remarks>
+            writer.WriteLine(@"{1}/// <remarks>
 {1}/// Corresponds to {0}.
 {1}/// </remarks>", name, Padding);
-            Console.WriteLine("{3}public const {1} {0} = {2};\r\n", normalizedName, type, value, Padding);
+            writer.WriteLine("{3}public const {1} {0} = {2};\r\n", normalizedName, type, value, Padding);
         }
 
         static string NormalizeName(string name)

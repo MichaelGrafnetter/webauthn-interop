@@ -63,7 +63,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 new PubKeyCredParam() { Alg = ApiConstants.CoseAlgorithmRsassaPkcs1V15WithSha256, Type = PublicKeyCredentialType.PublicKey }
             };
 
-            var webauthn = new WebAuthN();
+            var webauthn = new WebAuthnApi();
             var response = webauthn.AuthenticatorMakeCredential(options);
 
             // Validate
@@ -113,7 +113,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 null
             );
            
-            var webauthn = new WebAuthN();
+            var webauthn = new WebAuthnApi();
             var response = webauthn.AuthenticatorGetAssertion(options);
 
             // Validate
@@ -144,7 +144,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 null
                 );
 
-            var webauthn = new WebAuthN();
+            var webauthn = new WebAuthnApi();
             var response = webauthn.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.Platform);
 
             // Validate

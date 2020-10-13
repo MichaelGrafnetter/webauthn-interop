@@ -4,7 +4,7 @@
     /// Error codes relevant to the WebAuthN API.
     /// </summary>
     /// <remarks>Corresponds to HRESULT.</remarks>
-    public enum HResult : uint
+    internal enum HResult : uint
     {
         /// <summary>
         /// Operation successful

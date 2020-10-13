@@ -1,9 +1,16 @@
 ﻿using System;
+using System.ComponentModel;
 using Fido2NetLib;
 
 namespace DSInternals.Win32.WebAuthn
 {
-    public class WebAuthN
+    /// <summary>
+    /// Windows WebAuthn API
+    /// </summary>
+    /// <remarks>
+    /// Requires Windows 10 1903+ to work.
+    /// </remarks>
+    public class WebAuthnApi
     {
         // TODO: Async operations
         public static ApiVersion ApiVersion
@@ -38,6 +45,7 @@ namespace DSInternals.Win32.WebAuthn
                 return IsAvailable && ApiVersion >= ApiVersion.Version2;
             }
         }
+
         public static bool IsPlatformAuthenticatorAvailable
         {
             get
@@ -180,33 +188,24 @@ namespace DSInternals.Win32.WebAuthn
                 case HResult.Success:
                     break;
                 case HResult.ActionCancelled:
-                    throw new OperationCanceledException();
                 case HResult.OperationCancelled:
                     throw new OperationCanceledException();
-                case HResult.ObjectAlreadyExists:
-                    // TODO: Exception type.
-                    throw new NotImplementedException();
+                case HResult.OperationTimeout:
+                    throw new TimeoutException();
                 case HResult.RequestNotSupported:
-                    throw new NotSupportedException();
                 case HResult.OperationNotSupported:
                     throw new NotSupportedException();
-                case HResult.KeyStorageFull:
-                    // TODO: Exception type.
-                    throw new NotImplementedException();
                 case HResult.ParameterInvalid:
                 case HResult.InvalidData:
                     throw new ArgumentException();
+                case HResult.ObjectAlreadyExists:
+                case HResult.KeyStorageFull:
                 case HResult.DeviceNotFound:
-                    // TODO: Exception type.
-                    throw new NotImplementedException();
                 case HResult.ObjectNotFound:
-                    // TODO: Exception type.
-                    throw new NotImplementedException();
-                case HResult.OperationTimeout:
-                    throw new TimeoutException();
                 default:
-                    // TODO: Exception type.
-                    throw new NotImplementedException();
+                    // TODO: Differentiate between more error states using custom exception types.
+                    // TODO: Check that translation from HRESULT to int works.
+                    throw new Win32Exception((int)result);
             }
         }
     }

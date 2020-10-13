@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DSInternals.Win32.WebAUthn\DSInternals.Win32.WebAuthn.csproj" />
+    <ProjectReference Include="..\DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj" />
   </ItemGroup>
 
 </Project>

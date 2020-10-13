@@ -9,13 +9,13 @@ namespace DSInternals.Win32.WebAuthn.Tests
         [TestMethod]
         public void WebAuthN_ApiVersion()
         {
-            var version = WebAuthN.ApiVersion;
+            var version = WebAuthnApi.ApiVersion;
         }
 
         [TestMethod]
         public void WebAuthN_IsPlatformAuthenticatorAvailable()
         {
-            bool helloAvailable = WebAuthN.IsPlatformAuthenticatorAvailable;
+            bool helloAvailable = WebAuthnApi.IsPlatformAuthenticatorAvailable;
         }
 
         [TestMethod]
