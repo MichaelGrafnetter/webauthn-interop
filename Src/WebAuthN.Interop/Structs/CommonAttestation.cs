@@ -51,7 +51,7 @@ namespace WebAuthN.Interop
         public Certificate[] Certificates => _certificates?.Data;
         // TODO: Decode CertificateInfo
         public byte[] TPMCertificate => _certificateInfo?.Data;
-        // TODO: Rename PubArea
+        // TODO: Rename TPMPubArea to something more meaningful
         public byte[] TPMPubArea => _pubArea?.Data;
     }
 }

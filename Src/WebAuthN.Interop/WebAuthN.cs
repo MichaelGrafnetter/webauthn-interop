@@ -22,6 +22,22 @@ namespace WebAuthN.Interop
             }
         }
 
+        public static bool IsAvailable
+        {
+            get
+            {
+                // TODO: Check the real API availability: return is_bound_ && (api_version_ >= WEBAUTHN_API_VERSION_1);
+                return true;
+            }
+        }
+
+        public static bool IsCredProtectExtensionSupported
+        {
+            get
+            {
+                return IsAvailable && ApiVersion >= ApiVersion.Version2;
+            }
+        }
         public static bool IsPlatformAuthenticatorAvailable
         {
             get
@@ -123,7 +139,7 @@ namespace WebAuthN.Interop
                             UserHandle = assertion.UserId,
                             ClientDataJson = clientData.ClientDataRaw
                         },
-                        // TODO: Extensions
+                        // TODO: Translate Extensions
                     };
                 }
                 finally

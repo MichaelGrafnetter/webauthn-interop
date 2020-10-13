@@ -17,16 +17,17 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Well-known credential type specifying a credential to create.
         /// </summary>
-        private string _credentialType = ApiConstants.CredentialTypePublicKey;
+        private string _credentialType;
 
         /// <summary>
         /// Well-known COSE algorithm specifying the algorithm to use for the credential.
         /// </summary>
         private CoseAlgorithm _algorithm;
 
-        public CoseCredentialParameter(CoseAlgorithm algorithm)
+        public CoseCredentialParameter(CoseAlgorithm algorithm, string credentialType)
         {
             _algorithm = algorithm;
+            _credentialType = credentialType;
         }
     }
 
@@ -40,6 +41,6 @@ namespace WebAuthN.Interop
         public CoseCredentialParameters(CoseCredentialParameter[] data) : base(data) { }
 
         public CoseCredentialParameters(CoseAlgorithm algorithm) :
-            base(new CoseCredentialParameter[] { new CoseCredentialParameter(algorithm) }) { }
+            base(new CoseCredentialParameter[] { new CoseCredentialParameter(algorithm, ApiConstants.CredentialTypePublicKey) }) { }
     }
 }

@@ -20,8 +20,7 @@ namespace WebAuthN.Interop
         /// Time that the operation is expected to complete within.
         /// </summary>
         /// <remarks>This is used as guidance, and can be overridden by the platform.</remarks>
-        // TODO: Constant for default timeout
-        public int TimeoutMilliseconds = 60000;
+        public int TimeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds;
 
         /// <summary>
         /// Credentials used for exclusion.

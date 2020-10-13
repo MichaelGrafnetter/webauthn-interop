@@ -10,7 +10,6 @@ namespace WebAuthN.Interop
     [StructLayout(LayoutKind.Sequential)]
     internal sealed class Certificate : SafeByteArrayOut
     {
-        // TODO: Certificate Conversion
         private Certificate() : base() { }
 
         public X509Certificate2 Cert => new X509Certificate2(Data);

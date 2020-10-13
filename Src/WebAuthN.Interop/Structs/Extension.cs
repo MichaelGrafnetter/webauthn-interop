@@ -41,7 +41,7 @@ namespace WebAuthN.Interop
             return new ExtensionIn(ApiConstants.ExtensionsIdentifierHmacSecret, binaryTrue);
         }
 
-        public static ExtensionIn CreateCredProtect(UserVerification uv, bool requireSupport)
+        public static ExtensionIn CreateCredProtect(UserVerification uv, bool enforce)
         {
             // Below type definitions is for WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_PROTECT
             // MakeCredential Input Type:   WEBAUTHN_CRED_PROTECT_EXTENSION_IN.
@@ -52,10 +52,11 @@ namespace WebAuthN.Interop
             //        if credential was successfully created with CRED_PROTECT.
             //      - cbExtension will contain the sizeof(DWORD).
 
+            // TODO: Enforcement can only be done in API v2, so throw error if we only have API v1.
             int structSize = sizeof(UserVerification) + sizeof(int);
             byte[] extensionData = new byte[structSize];
             BitConverter.GetBytes((int)uv).CopyTo(extensionData, 0);
-            BitConverter.GetBytes(requireSupport ? (int)1 : (int)0).CopyTo(extensionData, sizeof(UserVerification));
+            BitConverter.GetBytes(enforce ? (int)1 : (int)0).CopyTo(extensionData, sizeof(UserVerification));
             return new ExtensionIn(ApiConstants.ExtensionsIdentifierCredProtect, extensionData);
         }
     }

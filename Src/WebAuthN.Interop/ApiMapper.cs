@@ -22,7 +22,6 @@ namespace WebAuthN.Interop
                 case null:
                     return AttestationConveyancePreference.Any;
                 default:
-                    // TODO: Add support for AttestationConveyancePreference.Enterprise
                     throw new NotSupportedException();
             }
         }
@@ -70,9 +69,12 @@ namespace WebAuthN.Interop
 
         public static CoseCredentialParameter Translate(PubKeyCredParam credParam)
         {
-            // TODO Check credParam null
-            // TODO: Process credParam.PublicKeyCredentialType
-            return new CoseCredentialParameter(Translate(credParam.Alg));
+            if (credParam == null)
+            {
+                throw new ArgumentNullException(nameof(credParam));
+            }
+
+            return new CoseCredentialParameter(Translate(credParam.Alg), Translate(credParam.Type));
         }
 
         public static string Translate(PublicKeyCredentialType? credentialType)
@@ -113,8 +115,6 @@ namespace WebAuthN.Interop
 
         public static DisposableList<CredentialEx> TranslateEx(IEnumerable<PublicKeyCredentialDescriptor> credentials)
         {
-            // TODO: This is sometimes IEnumerable and Sometimes List in FIDO2 API
-
             if (credentials == null)
             {
                 return null;
@@ -181,7 +181,7 @@ namespace WebAuthN.Interop
                 UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
                 ExcludeCredentials = excludeCreds,
                 ExcludeCredentialsEx = excludeCredsEx,
-                // Extensions = ApiMapper.Translate(options.Extensions),
+                // TODO: Extensions = ApiMapper.Translate(options.Extensions),
                 // TODO: CancellationId
             };
         }
@@ -221,7 +221,7 @@ namespace WebAuthN.Interop
                 Challenge = options.Challenge,
                 Origin = options.RpId,
                 CrossOrigin = crossOrigin
-                // TODO: TokenBinding
+                // TODO: Add support for TokenBinding
             });
 
             return new ClientData()
