@@ -93,15 +93,33 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
-        public static ExtensionsIn Translate(AuthenticationExtensionsClientInputs extensions)
+        public static DisposableList<ExtensionIn> Translate(AuthenticationExtensionsClientInputs extensions)
         {
             if (extensions == null)
             {
                 // Null pointer is allowed in the parent structure.
                 return null;
             }
+            // TODO: Test null Extensions
+            // TODO: Test null Excluderedentials
+            var nativeExtensions = new DisposableList<ExtensionIn>();
 
-            throw new NotImplementedException();
+            if (extensions is WinExtensionsIn winExtensions)
+            {
+                if(winExtensions.CredProtect.HasValue)
+                {
+                    nativeExtensions.Add(ExtensionIn.CreateCredProtect(
+                        winExtensions.CredProtect.Value,
+                        winExtensions.EnforceCredProtect == true));
+                }
+
+                if(winExtensions.HmacSecret.HasValue)
+                {
+                    nativeExtensions.Add(ExtensionIn.CreateHmacSecret());
+                }
+            }
+
+            return nativeExtensions;
         }
 
         public static DisposableList<CredentialIn> Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
@@ -168,7 +186,7 @@ namespace DSInternals.Win32.WebAuthn
             };
         }
 
-        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, Credentials excludeCreds, CredentialList excludeCredsEx)
+        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, ExtensionsIn extensions, Credentials excludeCreds, CredentialList excludeCredsEx)
         {
             if (options == null)
             {
@@ -182,9 +200,9 @@ namespace DSInternals.Win32.WebAuthn
                 RequireResidentKey = options.AuthenticatorSelection?.RequireResidentKey ?? false,
                 AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
                 UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
+                Extensions = extensions,
                 ExcludeCredentials = excludeCreds,
                 ExcludeCredentialsEx = excludeCredsEx,
-                // TODO: Extensions = ApiMapper.Translate(options.Extensions),
                 // TODO: CancellationId
             };
         }

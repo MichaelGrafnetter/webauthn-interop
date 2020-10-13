@@ -25,6 +25,8 @@
         /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION.
         /// </remarks>
+#pragma warning disable CA1069 // Enums values should not be duplicated
         Current = ApiConstants.AuthenticatorGetAssertionOptionsCurrentVersion
+#pragma warning restore CA1069 // Enums values should not be duplicated
     }
 }

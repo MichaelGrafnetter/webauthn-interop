@@ -45,7 +45,11 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 new PublicKeyCredentialDescriptor(Base64Url.Decode("sx2P4XkPO6TUoSf0pMEm3zi5gdwVrIRjiYvuTFRAkNMe_jVsntSgkyG5aV8er5GCA_G1X2idph-8lhhMFX3aaAyBCQIAAA="))
             };
 
-            // TODO: Add extensions: { "hmacCreateSecret": true, "credentialProtectionPolicy": "userVerificationOptional"  }
+            var extensions = new WinExtensionsIn()
+            {
+                HmacSecret = true,
+                CredProtect = UserVerification.Optional
+            };
 
             var options = CredentialCreateOptions.Create(
                 config,
@@ -54,7 +58,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 authenticator,
                 Fido2NetLib.Objects.AttestationConveyancePreference.Direct,
                 excludedCredentials,
-                null
+                extensions
             );
 
             options.PubKeyCredParams = new List<PubKeyCredParam>()

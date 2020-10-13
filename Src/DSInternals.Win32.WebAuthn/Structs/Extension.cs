@@ -8,12 +8,12 @@ namespace DSInternals.Win32.WebAuthn
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_EXTENSION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class  ExtensionIn
+    internal class  ExtensionIn : IDisposable
     {
         /// <summary>
         /// Extension identifier.
         /// </summary>
-        public string _identifier;
+        public string Identifier { get; private set; }
 
         /// <summary>
         /// Extension data.
@@ -22,7 +22,7 @@ namespace DSInternals.Win32.WebAuthn
 
         public ExtensionIn(string id, byte[] data)
         {
-            _identifier = id;
+            Identifier = id;
             _data = new SafeByteArrayIn(data);
         }
 
@@ -58,6 +58,12 @@ namespace DSInternals.Win32.WebAuthn
             BitConverter.GetBytes((int)uv).CopyTo(extensionData, 0);
             BitConverter.GetBytes(enforce ? (int)1 : (int)0).CopyTo(extensionData, sizeof(UserVerification));
             return new ExtensionIn(ApiConstants.ExtensionsIdentifierCredProtect, extensionData);
+        }
+
+        public void Dispose()
+        {
+            _data?.Dispose();
+            _data = null;
         }
     }
 

@@ -20,42 +20,42 @@ namespace DSInternals.Win32.WebAuthn
         /// Time that the operation is expected to complete within.
         /// </summary>
         /// <remarks>This is used as guidance, and can be overridden by the platform.</remarks>
-        public int TimeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds;
+        public int TimeoutMilliseconds { get; set; } = ApiConstants.DefaultTimeoutMilliseconds;
 
         /// <summary>
         /// Credentials used for exclusion.
         /// </summary>
-        private Credentials _excludeCredentials = new Credentials(null);
+        private Credentials _excludeCredentials;
 
         /// <summary>
         /// Extensions to parse when performing the operation. (Optional)
         /// </summary>
-        public ExtensionsIn Extensions = new ExtensionsIn(null);
+        private ExtensionsIn _extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
         /// </summary>
-        public AuthenticatorAttachment AuthenticatorAttachment;
+        public AuthenticatorAttachment AuthenticatorAttachment { get; set; }
 
         /// <summary>
         /// Require key to be resident or not. Defaulting to false.
         /// </summary>
-        public bool RequireResidentKey;
+        public bool RequireResidentKey { get; set; }
 
         /// <summary>
         /// User Verification Requirement.
         /// </summary>
-        public UserVerificationRequirement UserVerificationRequirement;
+        public UserVerificationRequirement UserVerificationRequirement { get; set; }
 
         /// <summary>
         /// Attestation Conveyance Preference.
         /// </summary>
-        public AttestationConveyancePreference AttestationConveyancePreference;
+        public AttestationConveyancePreference AttestationConveyancePreference { get; set; }
 
         /// <summary>
         /// Reserved for future Use
         /// </summary>
-        private int Flags = 0;
+        private int Flags { get; set; }
 
         /// <summary>
         /// Cancellation Id (Optional)
@@ -110,6 +110,15 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        public ExtensionsIn Extensions
+        {
+            set
+            {
+                _extensions?.Dispose();
+                _extensions = value;
+            }
+        }
+
         public CredentialList ExcludeCredentialsEx
         {
             set
@@ -136,8 +145,8 @@ namespace DSInternals.Win32.WebAuthn
 
         public void Dispose()
         {
-            Extensions?.Dispose();
-            Extensions = null;
+            _extensions?.Dispose();
+            _extensions = null;
 
             _excludeCredentials?.Dispose();
             _excludeCredentials = null;

@@ -30,6 +30,7 @@ namespace DSInternals.Win32.WebAuthn
             throw new NotSupportedException();
         }
 
+#pragma warning disable CA1801 // Review unused parameters
         /// <summary>
         /// Returns an instance of the custom marshaler.
         /// </summary>
@@ -37,5 +38,6 @@ namespace DSInternals.Win32.WebAuthn
         {
             return new PtrToConstStringMarshaler();
         }
+#pragma warning restore CA1801 // Review unused parameters
     }
 }

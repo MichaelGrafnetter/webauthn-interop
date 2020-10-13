@@ -20,6 +20,8 @@
         /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION.
         /// </remarks>
+#pragma warning disable CA1069 // Enums values should not be duplicated
         Current = ApiConstants.AuthenticatorMakeCredentialOptionsCurrentVersion
+#pragma warning restore CA1069 // Enums values should not be duplicated
     }
 }

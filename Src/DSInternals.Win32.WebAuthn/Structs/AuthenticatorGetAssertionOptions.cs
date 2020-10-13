@@ -44,7 +44,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Reserved for future Use.
         /// </summary>
-        private uint Flags = 0;
+        private uint Flags;
 
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2
 

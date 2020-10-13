@@ -2,19 +2,41 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net472</TargetFrameworks>
-    <Authors>Michael Grafnetter</Authors>
-    <PackageProjectUrl>https://github.com/MichaelGrafnetter/DSInternals.Win32.WebAUthn</PackageProjectUrl>
-    <PackageIconUrl>https://webauthn.io/dist/images/shield.svg</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/MichaelGrafnetter/webauthn-interop</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MichaelGrafnetter/webauthn-interop.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>icon.png</PackageIcon>
+    <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
+    <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
+    <Authors>Michael Grafnetter</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop</PackageTags>
+    <Product>WebAuthn Interop Assembly</Product>
+    <Title>WebAuthn Interop Assembly</Title>
+    <Version>1.0</Version>
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <ProductVersion>1.0</ProductVersion>
+    <FileVersion>1.0</FileVersion>
+    <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
+    <PackageReleaseNotes>Windows 10 1903 or newer is required.</PackageReleaseNotes>
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
+    <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fido2.Models" Version="1.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6" Condition="'$(TargetFramework)' == 'netcoreapp3.1' And '$(Configuration)' == 'Release'">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1' And '$(Configuration)' == 'Release'">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>

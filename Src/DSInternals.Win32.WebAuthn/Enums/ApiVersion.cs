@@ -21,6 +21,8 @@
         /// Current Version
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_API_CURRENT_VERSION.</remarks>
+#pragma warning disable CA1069 // Enums values should not be duplicated
         Current = ApiConstants.ApiCurrentVersion
+#pragma warning restore CA1069 // Enums values should not be duplicated
     }
 }

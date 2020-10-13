@@ -64,14 +64,16 @@ namespace DSInternals.Win32.WebAuthn
             }
 
             var rp = ApiMapper.Translate(options.Rp);
-            var user = ApiMapper.Translate(options.User);
+            using (var user = ApiMapper.Translate(options.User))
             using (var credParams = ApiMapper.Translate(options.PubKeyCredParams))
             using (var clientData = ApiMapper.Translate(options, false))
             using (var excludeCreds = ApiMapper.Translate(options.ExcludeCredentials))
             using (var excludeCredsEx = ApiMapper.TranslateEx(options.ExcludeCredentials))
             using (var excludeCredList = new Credentials(excludeCreds.ToArray()))
             using (var excludeCredListEx = new CredentialList(excludeCredsEx.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, excludeCredList, excludeCredListEx))
+            using (var extensions = ApiMapper.Translate(options.Extensions))
+            using (var extensionList = new ExtensionsIn(extensions.ToArray()))
+            using (var nativeOptions = ApiMapper.Translate(options, extensionList, excludeCredList, excludeCredListEx))
             {
                 var result = NativeMethods.AuthenticatorMakeCredential(
                     WindowHandle.ForegroundWindow,

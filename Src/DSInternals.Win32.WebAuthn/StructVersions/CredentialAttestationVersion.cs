@@ -20,6 +20,8 @@
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_CURRENT_VERSION.
         /// </remarks>
+#pragma warning disable CA1069 // Enums values should not be duplicated
         Current = ApiConstants.CredentialAttestationCurrentVersion
+#pragma warning restore CA1069 // Enums values should not be duplicated
     }
 }

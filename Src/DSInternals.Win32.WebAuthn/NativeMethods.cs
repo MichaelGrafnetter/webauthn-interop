@@ -50,7 +50,7 @@ namespace DSInternals.Win32.WebAuthn
         [DllImport(WebAuthn, EntryPoint = "WebAuthNCancelCurrentOperation")]
         public static extern HResult CancelCurrentOperation(in Guid cancellationId);
 
-        [DllImport(WebAuthn, EntryPoint = "WebAuthNGetErrorName")]
+        [DllImport(WebAuthn, EntryPoint = "WebAuthNGetErrorName", CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(PtrToConstStringMarshaler))]
         public static extern string GetErrorName(HResult hr);
 

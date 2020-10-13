@@ -8,14 +8,8 @@ namespace DSInternals.Win32.WebAuthn
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class UserInformation
+    internal class UserInformation : IDisposable
     {
-        /// <summary>
-        /// Maximum length of the Identifier for the User, in bytes.
-        /// </summary>
-        /// <remarks>Corresponds to WEBAUTHN_MAX_USER_ID_LENGTH.</remarks>
-        private const int MaxIdLength = 64;
-
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
@@ -29,17 +23,17 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
 
         /// <summary>
         /// Optional URL that can be used to retrieve an image containing the user's current avatar, or a data URI that contains the image data.
         /// </summary>
-        public string Icon;
+        public string Icon { get; set; }
 
         /// <summary>
         /// Contains the friendly name associated with the user account by the Relying Party, such as "John P. Smith".
         /// </summary>
-        public string DisplayName;
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// Identifier for the User.
@@ -55,6 +49,12 @@ namespace DSInternals.Win32.WebAuthn
                 _id?.Dispose();
                 _id = new SafeByteArrayIn(value);
             }
+        }
+
+        public void Dispose()
+        {
+            _id?.Dispose();
+            _id = null;
         }
     }
 }
