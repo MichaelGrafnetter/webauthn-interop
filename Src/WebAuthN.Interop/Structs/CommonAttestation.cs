@@ -39,7 +39,6 @@ namespace WebAuthN.Interop
         /// </remarks>
         private Certificates _certificates;
 
-        // TODO: #define WEBAUTHN_ATTESTATION_VER_TPM_2_0   L"2.0"
         // Following are also set for tpm
         public string TPMVersion { get; private set; }
 
@@ -48,7 +47,7 @@ namespace WebAuthN.Interop
         private SafeByteArrayOut _pubArea;
 
         public byte[] Signature => _signature?.Data;
-        // TODO: Change data type of Certificates
+
         public Certificate[] Certificates => _certificates?.Data;
         // TODO: Decode CertificateInfo
         public byte[] TPMCertificate => _certificateInfo?.Data;

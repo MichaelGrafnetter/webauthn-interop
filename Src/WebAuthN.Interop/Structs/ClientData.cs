@@ -11,11 +11,6 @@ namespace WebAuthN.Interop
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal class ClientData : IDisposable
     {
-        // TODO: Hash algorithm Id enum
-        private const string SHA256 = "SHA-256";
-        private const string SHA384 = "SHA-384";
-        private const string SHA512 = "SHA-512";
-
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>

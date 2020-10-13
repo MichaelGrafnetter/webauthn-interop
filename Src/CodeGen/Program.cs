@@ -18,7 +18,7 @@ namespace DSInternals.Win32.WebAuthn
     /// <summary>
     /// Contains constants from <webauthn.h>.
     /// </summary>
-    internal static class ApiConstants
+    internal static partial class ApiConstants
     {";
         private const string Footer = @"
     }
@@ -50,7 +50,8 @@ namespace DSInternals.Win32.WebAuthn
                         ProcessConstant(macro.Name, "int", normalizedIdentifier);
                         break;
                     case CppTokenKind.Literal:
-                        bool isNumber = char.IsDigit(macro.Value[0]);
+                    case CppTokenKind.Punctuation:
+                        bool isNumber = char.IsDigit(macro.Value[0]) || char.IsPunctuation(macro.Value[0]);
                         string type = isNumber ? "int" : "string";
                         string trimmedValue = isNumber ? macro.Value : macro.Value.TrimStart('L');
                         ProcessConstant(macro.Name, type, trimmedValue);

@@ -80,8 +80,7 @@ namespace WebAuthN.Interop
             switch (credentialType)
             {
                 case PublicKeyCredentialType.PublicKey:
-                    // TODO: Use a constant instead
-                    return "public-key";
+                    return ApiConstants.CredentialTypePublicKey;
                 case null:
                     return null;
                 default:
@@ -195,19 +194,18 @@ namespace WebAuthN.Interop
             }
 
             var clientDataJson = JsonConvert.SerializeObject(new {
-                // TODO: Convert "webauthn.create" to constant
-                Type = "webauthn.create",
+                Type = ApiConstants.ClientDataCredentialCreate,
                 Challenge = options.Challenge,
                 Origin = options.Rp?.Id,
                 CrossOrigin = crossOrigin
-                // TODO: TokenBinding
+                // TODO: Add support for TokenBinding
             });
 
             return new ClientData()
             {
                 ClientDataJson = clientDataJson,
-                // TODO: Convert "SHA-256" to a constant
-                HashAlgId = "SHA-256"
+                // Note that SHA-256 is currently also hardcoded in Chromium and Firefox.
+                HashAlgId = ApiConstants.HashAlgorithmSha256
             };
         }
 
@@ -219,8 +217,7 @@ namespace WebAuthN.Interop
             }
 
             var clientDataJson = JsonConvert.SerializeObject(new {
-                // TODO: Convert "webauthn.get" to constant
-                Type = "webauthn.get",
+                Type = ApiConstants.ClientDataCredentialGet,
                 Challenge = options.Challenge,
                 Origin = options.RpId,
                 CrossOrigin = crossOrigin
@@ -230,8 +227,7 @@ namespace WebAuthN.Interop
             return new ClientData()
             {
                 ClientDataJson = clientDataJson,
-                // TODO: Convert "SHA-256" to a constant
-                HashAlgId = "SHA-256"
+                HashAlgId = ApiConstants.HashAlgorithmSha256
             };
         }
 

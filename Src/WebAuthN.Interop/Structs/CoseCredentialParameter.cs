@@ -17,8 +17,7 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Well-known credential type specifying a credential to create.
         /// </summary>
-        // TODO: replace public-key with an enum.
-        private string _credentialType = "public-key";
+        private string _credentialType = ApiConstants.CredentialTypePublicKey;
 
         /// <summary>
         /// Well-known COSE algorithm specifying the algorithm to use for the credential.

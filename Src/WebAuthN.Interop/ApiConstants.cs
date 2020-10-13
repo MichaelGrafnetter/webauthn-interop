@@ -5,7 +5,7 @@ namespace WebAuthN.Interop
     /// <summary>
     /// Contains constants from <webauthn.h>.
     /// </summary>
-    internal static class ApiConstants
+    internal static partial class ApiConstants
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_API_VERSION_1.
@@ -61,6 +61,51 @@ namespace WebAuthN.Interop
         /// Corresponds to WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY.
         /// </remarks>
         public const string CredentialTypePublicKey = "public-key";
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_ECDSA_P256_WITH_SHA256.
+        /// </remarks>
+        public const int CoseAlgorithmEcdsaP256WithSha256 = -7;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_ECDSA_P384_WITH_SHA384.
+        /// </remarks>
+        public const int CoseAlgorithmEcdsaP384WithSha384 = -35;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_ECDSA_P521_WITH_SHA512.
+        /// </remarks>
+        public const int CoseAlgorithmEcdsaP521WithSha512 = -36;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_RSASSA_PKCS1_V1_5_WITH_SHA256.
+        /// </remarks>
+        public const int CoseAlgorithmRsassaPkcs1V15WithSha256 = -257;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_RSASSA_PKCS1_V1_5_WITH_SHA384.
+        /// </remarks>
+        public const int CoseAlgorithmRsassaPkcs1V15WithSha384 = -258;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_RSASSA_PKCS1_V1_5_WITH_SHA512.
+        /// </remarks>
+        public const int CoseAlgorithmRsassaPkcs1V15WithSha512 = -259;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_RSA_PSS_WITH_SHA256.
+        /// </remarks>
+        public const int CoseAlgorithmRsaPssWithSha256 = -37;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_RSA_PSS_WITH_SHA384.
+        /// </remarks>
+        public const int CoseAlgorithmRsaPssWithSha384 = -38;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COSE_ALGORITHM_RSA_PSS_WITH_SHA512.
+        /// </remarks>
+        public const int CoseAlgorithmRsaPssWithSha512 = -39;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETER_CURRENT_VERSION.
@@ -306,7 +351,6 @@ namespace WebAuthN.Interop
         /// Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.
         /// </remarks>
         public const int AssertionCurrentVersion = 1;
-
 
     }
 }

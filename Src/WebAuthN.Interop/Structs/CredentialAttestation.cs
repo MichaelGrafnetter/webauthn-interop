@@ -15,13 +15,6 @@ namespace WebAuthN.Interop
         /// </summary>
         private protected CredentialAttestationVersion Version = CredentialAttestationVersion.Current;
 
-        // TODO: Change FormatType to enum
-        /*
-        #define WEBAUTHN_ATTESTATION_TYPE_PACKED                                L"packed"
-        #define WEBAUTHN_ATTESTATION_TYPE_U2F                                   L"fido-u2f"
-        #define WEBAUTHN_ATTESTATION_TYPE_TPM                                   L"tpm"
-        #define WEBAUTHN_ATTESTATION_TYPE_NONE                                  L"none"
-        */
         /// <summary>
         /// Attestation format type
         /// </summary>

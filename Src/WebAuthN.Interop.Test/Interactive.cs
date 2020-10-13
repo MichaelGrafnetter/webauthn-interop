@@ -59,8 +59,8 @@ namespace WebAuthN.Interop.Test
 
             options.PubKeyCredParams = new List<PubKeyCredParam>()
             {
-                new PubKeyCredParam() { Alg = -7, Type = PublicKeyCredentialType.PublicKey },
-                new PubKeyCredParam() { Alg = -257, Type = PublicKeyCredentialType.PublicKey }
+                new PubKeyCredParam() { Alg = ApiConstants.CoseAlgorithmEcdsaP256WithSha256, Type = PublicKeyCredentialType.PublicKey },
+                new PubKeyCredParam() { Alg = ApiConstants.CoseAlgorithmRsassaPkcs1V15WithSha256, Type = PublicKeyCredentialType.PublicKey }
             };
 
             var webauthn = new WebAuthN();
