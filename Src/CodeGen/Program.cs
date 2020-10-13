@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CppAst;
 
-namespace CodeGen
+namespace DSInternals.Win32.WebAuthn.CodeGen
 {
     class Program
     {
@@ -19,8 +19,7 @@ namespace DSInternals.Win32.WebAuthn
     /// Contains constants from <webauthn.h>.
     /// </summary>
     internal static class ApiConstants
-    {
-";
+    {";
         private const string Footer = @"
     }
 }
@@ -66,9 +65,10 @@ namespace DSInternals.Win32.WebAuthn
         {
             string normalizedName = NormalizeName(name);
 
-            Console.WriteLine("{1}/// <remarks>Corresponds to {0}.</remarks>", name, Padding);
-            Console.WriteLine("{3}public const {1} {0} = {2};", normalizedName, type, value, Padding);
-            Console.WriteLine();
+            Console.WriteLine(@"{1}/// <remarks>
+{1}/// Corresponds to {0}.
+{1}/// </remarks>", name, Padding);
+            Console.WriteLine("{3}public const {1} {0} = {2};\r\n", normalizedName, type, value, Padding);
         }
 
         static string NormalizeName(string name)

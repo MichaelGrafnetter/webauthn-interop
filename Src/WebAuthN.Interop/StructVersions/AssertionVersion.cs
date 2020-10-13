@@ -2,7 +2,9 @@
 {
     internal enum AssertionVersion
     {
-        /// <remarks>Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.</remarks>
-        Current = 1
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.
+        /// </remarks>
+        Current = ApiConstants.AssertionCurrentVersion
     }
 }

@@ -28,9 +28,9 @@ namespace WebAuthN.Interop
         /// <summary>
         /// Transports.
         /// </summary>
-        private AuthenticatorTransport _transport;
+        private CtapTransport _transport;
 
-        public CredentialEx(byte[] id, string type, AuthenticatorTransport transport)
+        public CredentialEx(byte[] id, string type, CtapTransport transport)
         {
             _id = new SafeByteArrayIn(id);
             _type = type;

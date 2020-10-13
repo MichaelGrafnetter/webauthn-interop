@@ -65,7 +65,7 @@ namespace WebAuthN.Interop
         /// The transport that was used.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
-        public AuthenticatorTransport UsedTransport { get; private set; }
+        public CtapTransport UsedTransport { get; private set; }
 
         public byte[] AuthenticatorData => _authenticatorData?.Data;
         public byte[] Attestation => _attestation?.Data;

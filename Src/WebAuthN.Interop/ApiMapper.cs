@@ -235,33 +235,33 @@ namespace WebAuthN.Interop
             };
         }
 
-        public static AuthenticatorTransport Translate(Fido2NetLib.Objects.AuthenticatorTransport[] transports)
+        public static CtapTransport Translate(AuthenticatorTransport[] transports)
         {
             if (transports == null)
             {
-                return AuthenticatorTransport.NoRestrictions;
+                return CtapTransport.NoRestrictions;
             }
 
             return transports.Aggregate(
-                AuthenticatorTransport.NoRestrictions,
+                CtapTransport.NoRestrictions,
                 (transportFlags, transport) => transportFlags | Translate(transport));
         }
 
-        public static AuthenticatorTransport Translate(Fido2NetLib.Objects.AuthenticatorTransport? transport)
+        public static CtapTransport Translate(AuthenticatorTransport? transport)
         {
             switch (transport)
             {
-                case Fido2NetLib.Objects.AuthenticatorTransport.Ble:
-                    return AuthenticatorTransport.BLE;
-                case Fido2NetLib.Objects.AuthenticatorTransport.Internal:
-                    return AuthenticatorTransport.Internal;
-                case Fido2NetLib.Objects.AuthenticatorTransport.Nfc:
-                    return AuthenticatorTransport.NFC;
-                case Fido2NetLib.Objects.AuthenticatorTransport.Usb:
-                    return AuthenticatorTransport.USB;
+                case AuthenticatorTransport.Ble:
+                    return CtapTransport.BLE;
+                case AuthenticatorTransport.Internal:
+                    return CtapTransport.Internal;
+                case AuthenticatorTransport.Nfc:
+                    return CtapTransport.NFC;
+                case AuthenticatorTransport.Usb:
+                    return CtapTransport.USB;
                 case null:
-                    return AuthenticatorTransport.NoRestrictions;
-                case Fido2NetLib.Objects.AuthenticatorTransport.Lightning:
+                    return CtapTransport.NoRestrictions;
+                case AuthenticatorTransport.Lightning:
                 default:
                     // Lightning is not supported on Windows.
                     throw new NotSupportedException();

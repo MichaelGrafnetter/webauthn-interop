@@ -11,6 +11,6 @@
         /// <remarks>
         /// Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION.
         /// </remarks>
-        Current = 1
+        Current = ApiConstants.UserEntityInformationCurrentVersion
     }
 }

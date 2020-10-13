@@ -6,7 +6,7 @@ namespace WebAuthN.Interop
     /// Defines hints as to how clients might communicate with a particular authenticator in order to obtain an assertion for a specific credential.
     /// </summary>
     [Flags]
-    public enum AuthenticatorTransport : int
+    public enum CtapTransport : int
     {
         /// <summary>
         /// No transport restrictions.
@@ -17,27 +17,27 @@ namespace WebAuthN.Interop
         /// Universal Serial Bus (USB).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_USB.</remarks>
-        USB = 0x00000001,
+        USB = ApiConstants.CtapTransportUsb,
 
         /// <summary>
         /// Near Field Communication (NFC).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_NFC.</remarks>
-        NFC = 0x00000002,
+        NFC = ApiConstants.CtapTransportNfc,
 
         /// <summary>
         /// Bluetooth Low Energy (BLE).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_BLE.</remarks>
-        BLE = 0x00000004,
+        BLE = ApiConstants.CtapTransportBle,
 
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_TEST.</remarks>
-        Test = 0x00000008,
+        Test = ApiConstants.CtapTransportTest,
 
         /// <summary>
         /// Client device-specific transport.
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_INTERNAL.</remarks>
-        Internal = 0x00000010
+        Internal = ApiConstants.CtapTransportInternal
     }
 }

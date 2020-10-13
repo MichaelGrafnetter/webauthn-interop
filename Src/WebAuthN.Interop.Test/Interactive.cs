@@ -145,7 +145,7 @@ namespace WebAuthN.Interop.Test
                 );
 
             var webauthn = new WebAuthN();
-            var response = webauthn.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.CrossPlatform);
+            var response = webauthn.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.Platform);
 
             // Validate
             var fido2 = new Fido2(config);

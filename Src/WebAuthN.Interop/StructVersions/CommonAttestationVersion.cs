@@ -2,7 +2,9 @@
 {
     internal enum CommonAttestationVersion
     {
-        /// <remarks>Corresponds to WEBAUTHN_COMMON_ATTESTATION_CURRENT_VERSION.</remarks>
-        Current = 1
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_COMMON_ATTESTATION_CURRENT_VERSION.
+        /// </remarks>
+        Current = ApiConstants.CommonAttestationCurrentVersion
     }
 }

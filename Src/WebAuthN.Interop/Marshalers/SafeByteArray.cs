@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace WebAuthN.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal abstract class SafeByteArrayOut : SafeArray
+    internal class SafeByteArrayOut : SafeArray
     {
         public byte[] Data
         {
