@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace WebAuthN.Interop
 {
@@ -23,6 +24,39 @@ namespace WebAuthN.Interop
         {
             _identifier = id;
             _data = new SafeByteArrayIn(data);
+        }
+
+        public static ExtensionIn CreateHmacSecret()
+        {
+            // Below type definitions is for WEBAUTHN_EXTENSIONS_IDENTIFIER_HMAC_SECRET
+            // MakeCredential Input Type:   BOOL.
+            //      - pvExtension must point to a BOOL with the value TRUE.
+            //      - cbExtension must contain the sizeof(BOOL).
+            // MakeCredential Output Type:  BOOL.
+            //      - pvExtension will point to a BOOL with the value TRUE if credential
+            //        was successfully created with HMAC_SECRET.
+            //      - cbExtension will contain the sizeof(BOOL).
+
+            byte[] binaryTrue = BitConverter.GetBytes((int)1);
+            return new ExtensionIn(ApiConstants.ExtensionsIdentifierHmacSecret, binaryTrue);
+        }
+
+        public static ExtensionIn CreateCredProtect(UserVerification uv, bool requireSupport)
+        {
+            // Below type definitions is for WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_PROTECT
+            // MakeCredential Input Type:   WEBAUTHN_CRED_PROTECT_EXTENSION_IN.
+            //      - pvExtension must point to a WEBAUTHN_CRED_PROTECT_EXTENSION_IN struct
+            //      - cbExtension will contain the sizeof(WEBAUTHN_CRED_PROTECT_EXTENSION_IN).
+            // MakeCredential Output Type:  DWORD.
+            //      - pvExtension will point to a DWORD with one of the above WEBAUTHN_USER_VERIFICATION_* values
+            //        if credential was successfully created with CRED_PROTECT.
+            //      - cbExtension will contain the sizeof(DWORD).
+
+            int structSize = sizeof(UserVerification) + sizeof(int);
+            byte[] extensionData = new byte[structSize];
+            BitConverter.GetBytes((int)uv).CopyTo(extensionData, 0);
+            BitConverter.GetBytes(requireSupport ? (int)1 : (int)0).CopyTo(extensionData, sizeof(UserVerification));
+            return new ExtensionIn(ApiConstants.ExtensionsIdentifierCredProtect, extensionData);
         }
     }
 
