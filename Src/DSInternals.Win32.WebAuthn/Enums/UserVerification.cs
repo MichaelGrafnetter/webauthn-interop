@@ -1,16 +1,19 @@
 ﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Defines the credential protection policy.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum UserVerification : int
     {
         /// <summary>
         /// Extension is not set.
         /// </summary>
-        [EnumMember(Value = "userVerificationOptional")]
+        [EnumMember(Value = "NULL")]
         Any = ApiConstants.UserVerificationAny,
 
         /// <summary>

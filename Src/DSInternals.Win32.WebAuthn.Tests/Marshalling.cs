@@ -11,10 +11,12 @@ namespace DSInternals.Win32.WebAuthn.Tests
         public void Marshalling_UserInformation_Marshal()
         {
             // Init
-            var info = new UserInformation();
-            info.Name = "test@contoso.com";
-            info.DisplayName = "Test";
-            info.Id = new byte[] { 0, 1, 2, 3 };
+            var info = new UserInformation
+            {
+                Name = "test@contoso.com",
+                DisplayName = "Test",
+                Id = new byte[] { 0, 1, 2, 3 }
+            };
 
             // Marshal
             int structSize = Marshal.SizeOf<UserInformation>();

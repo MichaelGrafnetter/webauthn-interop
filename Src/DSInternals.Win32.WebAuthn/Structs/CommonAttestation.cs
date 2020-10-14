@@ -48,7 +48,7 @@ namespace DSInternals.Win32.WebAuthn
 
         public byte[] Signature => _signature?.Data;
 
-        public Certificate[] Certificates => _certificates?.Data;
+        public Certificate[] Certificates => _certificates?.Items;
         // TODO: Decode CertificateInfo
         public byte[] TPMCertificate => _certificateInfo?.Data;
         // TODO: Rename TPMPubArea to something more meaningful

@@ -64,7 +64,7 @@ namespace DSInternals.Win32.WebAuthn
         public byte[] Attestation => _attestation?.Data;
         public byte[] AttestationObject => _attestationObject?.Data;
         public byte[] CredentialId => _credentialId?.Data;
-        public ExtensionOut[] Extensions => _extensions?.Data;
+        public ExtensionOut[] Extensions => _extensions?.Items;
 
         public CommonAttestation AttestationDecoded
         {

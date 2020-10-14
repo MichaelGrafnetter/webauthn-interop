@@ -101,9 +101,11 @@ namespace DSInternals.Win32.WebAuthn
                 // Null pointer is allowed in the parent structure.
                 return null;
             }
-            // TODO: Test null Extensions
-            // TODO: Test null Excluderedentials
+            // TODO: Test with null Extensions
+            // TODO: Test with null Excluderedentials
             var nativeExtensions = new DisposableList<ExtensionIn>();
+
+            // TODO: Process the AppID extension
 
             if (extensions is WinExtensionsIn winExtensions)
             {
@@ -180,10 +182,10 @@ namespace DSInternals.Win32.WebAuthn
                 AuthenticatorAttachment = Translate(authenticatorAttachment),
                 AllowCredentials = allowCreds,
                 AllowCredentialsEx = allowCredsEx,
-                // TODO: Extensions = ApiMapper.Translate(options.Extensions),
+                // TODO: Add support for extensions in AuthenticatorGetAssertion
                 UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
                 // TODO: CancellationId
-                // TODO: U2fAppId
+                // TODO: Add support for U2fAppId
             };
         }
 
@@ -328,29 +330,35 @@ namespace DSInternals.Win32.WebAuthn
 
         public static void Validate(HResult result)
         {
+            if(result == HResult.Success)
+            {
+                // No error, so countinue with code execution.
+                return;
+            }
+
+            var win32Exception = new Win32Exception(unchecked((int)result));
+
+            // Try to wrap the generic Win32Exception with a more specific .NET exception type.
             switch (result)
             {
-                case HResult.Success:
-                    break;
                 case HResult.ActionCancelled:
                 case HResult.OperationCancelled:
-                    throw new OperationCanceledException();
+                    throw new OperationCanceledException(win32Exception.Message, win32Exception);
                 case HResult.OperationTimeout:
-                    throw new TimeoutException();
+                    throw new TimeoutException(win32Exception.Message, win32Exception);
                 case HResult.RequestNotSupported:
                 case HResult.OperationNotSupported:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException(win32Exception.Message, win32Exception);
                 case HResult.ParameterInvalid:
                 case HResult.InvalidData:
-                    throw new ArgumentException();
+                    throw new ArgumentException(win32Exception.Message, win32Exception);
                 case HResult.ObjectAlreadyExists:
                 case HResult.KeyStorageFull:
                 case HResult.DeviceNotFound:
                 case HResult.ObjectNotFound:
                 default:
                     // TODO: Differentiate between more error states using custom exception types.
-                    // TODO: Check that translation from HRESULT to int works.
-                    throw new Win32Exception((int)result);
+                    throw win32Exception;
             }
         }
     }

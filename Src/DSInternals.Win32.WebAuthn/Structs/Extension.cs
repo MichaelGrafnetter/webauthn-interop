@@ -32,11 +32,6 @@ namespace DSInternals.Win32.WebAuthn
             // MakeCredential Input Type:   BOOL.
             //      - pvExtension must point to a BOOL with the value TRUE.
             //      - cbExtension must contain the sizeof(BOOL).
-            // MakeCredential Output Type:  BOOL.
-            //      - pvExtension will point to a BOOL with the value TRUE if credential
-            //        was successfully created with HMAC_SECRET.
-            //      - cbExtension will contain the sizeof(BOOL).
-
             byte[] binaryTrue = BitConverter.GetBytes((int)1);
             return new ExtensionIn(ApiConstants.ExtensionsIdentifierHmacSecret, binaryTrue);
         }
@@ -47,11 +42,6 @@ namespace DSInternals.Win32.WebAuthn
             // MakeCredential Input Type:   WEBAUTHN_CRED_PROTECT_EXTENSION_IN.
             //      - pvExtension must point to a WEBAUTHN_CRED_PROTECT_EXTENSION_IN struct
             //      - cbExtension will contain the sizeof(WEBAUTHN_CRED_PROTECT_EXTENSION_IN).
-            // MakeCredential Output Type:  DWORD.
-            //      - pvExtension will point to a DWORD with one of the above WEBAUTHN_USER_VERIFICATION_* values
-            //        if credential was successfully created with CRED_PROTECT.
-            //      - cbExtension will contain the sizeof(DWORD).
-
             // TODO: Enforcement can only be done in API v2, so throw error if we only have API v1.
             int structSize = sizeof(UserVerification) + sizeof(int);
             byte[] extensionData = new byte[structSize];

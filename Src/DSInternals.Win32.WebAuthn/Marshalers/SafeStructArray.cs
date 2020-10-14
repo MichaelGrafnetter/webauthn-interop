@@ -10,7 +10,7 @@ namespace DSInternals.Win32.WebAuthn
         {
         }
 
-        public T[] Data
+        public T[] Items
         {
             get
             {
