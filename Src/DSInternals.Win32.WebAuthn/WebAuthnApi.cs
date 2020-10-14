@@ -11,19 +11,29 @@ namespace DSInternals.Win32.WebAuthn
     /// </remarks>
     public class WebAuthnApi
     {
+        private static ApiVersion? _apiVersionCache;
+
         // TODO: Async operations
         public static ApiVersion ApiVersion
         {
             get
             {
-                try
+                if(_apiVersionCache.HasValue)
                 {
-                    return NativeMethods.GetApiVersionNumber();
+                    return _apiVersionCache.Value;
                 }
-                catch(EntryPointNotFoundException)
+                else
                 {
-                    // The WebAuthNGetApiVersionNumber() function was added in Windows 10 1903.
-                    throw new NotSupportedException();
+                    try
+                    {
+                        _apiVersionCache = NativeMethods.GetApiVersionNumber();
+                        return _apiVersionCache.Value;
+                    }
+                    catch (EntryPointNotFoundException ex)
+                    {
+                        // The WebAuthNGetApiVersionNumber() function was added in Windows 10 1903.
+                        throw new NotSupportedException("Function WebAuthNGetApiVersionNumber has not been found. WebAuthn support was added in Windows Windows 10 1903.", ex);
+                    }
                 }
             }
         }
@@ -32,8 +42,15 @@ namespace DSInternals.Win32.WebAuthn
         {
             get
             {
-                // TODO: Check the real API availability: return is_bound_ && (api_version_ >= WEBAUTHN_API_VERSION_1);
-                return true;
+                try
+                { 
+                    return ApiVersion >= ApiVersion.Version1;
+                }
+                catch
+                {
+                    // If any error happens during API version retrieval, the API is definitely not supported.
+                    return false;
+                }
             }
         }
 
@@ -41,7 +58,16 @@ namespace DSInternals.Win32.WebAuthn
         {
             get
             {
-                return IsAvailable && ApiVersion >= ApiVersion.Version2;
+                try
+                {
+                    // Support for the credProtect extension was added in V2 API.
+                    return ApiVersion >= ApiVersion.Version2;
+                }
+                catch
+                {
+                    // If any error happens during API version retrieval, the feature is definitely not supported.
+                    return false;
+                }
             }
         }
 
@@ -49,9 +75,17 @@ namespace DSInternals.Win32.WebAuthn
         {
             get
             {
-                HResult result = NativeMethods.IsUserVerifyingPlatformAuthenticatorAvailable(out bool value);
-                ApiMapper.Validate(result);
-                return value;
+                try
+                {
+                    HResult result = NativeMethods.IsUserVerifyingPlatformAuthenticatorAvailable(out bool value);
+                    ApiMapper.Validate(result);
+                    return value;
+                }
+                catch(EntryPointNotFoundException)
+                {
+                    // If the IsUserVerifyingPlatformAuthenticatorAvailable function cannot be found, the feature is definitely not supported.
+                    return false;
+                }
             }
         }
 
