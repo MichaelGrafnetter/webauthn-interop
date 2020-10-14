@@ -12,7 +12,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected CoseCredentialParameterVersion Version = CoseCredentialParameterVersion.Current;
+        private CoseCredentialParameterVersion Version = CoseCredentialParameterVersion.Current;
 
         /// <summary>
         /// Well-known credential type specifying a credential to create.

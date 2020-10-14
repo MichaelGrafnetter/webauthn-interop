@@ -7,12 +7,12 @@ namespace DSInternals.Win32.WebAuthn
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_ASSERTION.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal class Assertion
+    internal sealed class Assertion
     {
         /// <summary>
         /// // Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected AssertionVersion Version = AssertionVersion.Current;
+        public AssertionVersion Version { get; private set; }
 
         /// <summary>
         /// Authenticator data that was created for this assertion.
@@ -35,7 +35,9 @@ namespace DSInternals.Win32.WebAuthn
         private SafeByteArrayOut _userId;
 
         public byte[] AuthenticatorData => _authenticatorData?.Data;
+
         public byte[] Signature => _signature?.Data;
+
         public byte[] UserId => _userId?.Data;
     }
 }

@@ -13,8 +13,8 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        // TODO: Configurable version
-        private protected AuthenticatorMakeCredentialOptionsVersion Version;
+        /// <remarks>This is a V3 struct. If V4 arrives, new fields will need to be added.</remarks>
+        private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version3;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -72,10 +72,7 @@ namespace DSInternals.Win32.WebAuthn
         /// </remarks>
         private IntPtr _excludeCredentialList = IntPtr.Zero;
 
-        public AuthenticatorMakeCredentialOptions()
-        {
-             Version = AuthenticatorMakeCredentialOptionsVersion.Current;
-        }
+        public AuthenticatorMakeCredentialOptions() { }
 
         public Guid? CancellationId
         {
@@ -140,6 +137,24 @@ namespace DSInternals.Win32.WebAuthn
                         _excludeCredentialList = IntPtr.Zero;
                     }
                 }
+            }
+        }
+
+        public AuthenticatorMakeCredentialOptionsVersion Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                if(value > AuthenticatorMakeCredentialOptionsVersion.Version3)
+                {
+                    // We only support older struct versions.
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                _version = value;
             }
         }
 

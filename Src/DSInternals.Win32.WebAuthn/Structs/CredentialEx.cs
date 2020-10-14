@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected CredentialExVersion Version = CredentialExVersion.Current;
+        private CredentialExVersion Version = CredentialExVersion.Current;
 
         /// <summary>
         /// Unique ID for this particular credential.

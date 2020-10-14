@@ -12,7 +12,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected RelyingPartyInformationVersion Version = RelyingPartyInformationVersion.Current;
+        private RelyingPartyInformationVersion Version = RelyingPartyInformationVersion.Current;
 
         /// <summary>
         /// Identifier for the RP.

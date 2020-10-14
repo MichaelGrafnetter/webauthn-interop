@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected CredentialAttestationVersion Version = CredentialAttestationVersion.Current;
+        public CredentialAttestationVersion Version { get; private set; }
 
         /// <summary>
         /// Attestation format type
@@ -52,7 +52,7 @@ namespace DSInternals.Win32.WebAuthn
         /// WebAuthn Extensions
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2.</remarks>
-        private ExtensionsOut _extensions;
+        public ExtensionsOut Extensions { get; private set; }
 
         /// <summary>
         /// The transport that was used.
@@ -61,10 +61,12 @@ namespace DSInternals.Win32.WebAuthn
         public CtapTransport UsedTransport { get; private set; }
 
         public byte[] AuthenticatorData => _authenticatorData?.Data;
+
         public byte[] Attestation => _attestation?.Data;
+
         public byte[] AttestationObject => _attestationObject?.Data;
+
         public byte[] CredentialId => _credentialId?.Data;
-        public ExtensionOut[] Extensions => _extensions?.Items;
 
         public CommonAttestation AttestationDecoded
         {

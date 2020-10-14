@@ -101,6 +101,7 @@ namespace DSInternals.Win32.WebAuthn
                 // Null pointer is allowed in the parent structure.
                 return null;
             }
+
             // TODO: Test with null Extensions
             // TODO: Test with null Excluderedentials
             var nativeExtensions = new DisposableList<ExtensionIn>();
@@ -123,6 +124,15 @@ namespace DSInternals.Win32.WebAuthn
             }
 
             return nativeExtensions;
+        }
+
+        internal static WinExtensionsOut Translate(ExtensionsOut extensions)
+        {
+            return new WinExtensionsOut()
+            {
+                HmacSecret = extensions.HmacSecret,
+                CredProtect = extensions.CredProtect
+            };
         }
 
         public static DisposableList<CredentialIn> Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
@@ -196,7 +206,7 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(options));
             }
 
-            return new AuthenticatorMakeCredentialOptions()
+            var nativeOptions = new AuthenticatorMakeCredentialOptions()
             {
                 TimeoutMilliseconds = checked((int)options.Timeout),
                 AuthenticatorAttachment = ApiMapper.Translate(options.AuthenticatorSelection?.AuthenticatorAttachment),
@@ -208,6 +218,8 @@ namespace DSInternals.Win32.WebAuthn
                 ExcludeCredentialsEx = excludeCredsEx,
                 // TODO: CancellationId
             };
+
+            return nativeOptions;
         }
 
         public static ClientData Translate(CredentialCreateOptions options, bool crossOrigin = false)

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="../webauthn/webauthn.h" Visible="true" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="CppAst" Version="0.7.3" />
   </ItemGroup>
 

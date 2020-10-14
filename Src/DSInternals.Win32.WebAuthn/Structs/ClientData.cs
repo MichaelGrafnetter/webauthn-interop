@@ -14,7 +14,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected ClientDataVersion _version = ClientDataVersion.Current;
+        private ClientDataVersion _version = ClientDataVersion.Current;
 
         /// <summary>
         /// UTF-8 encoded JSON serialization of the client data.
@@ -24,7 +24,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Hash algorithm ID used to hash the ClientDataJSON field.
         /// </summary>
-        public string HashAlgId;
+        public string HashAlgId { get; set; }
 
         /// <summary>
         /// JSON serialization of the client data.

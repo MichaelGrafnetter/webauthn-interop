@@ -13,7 +13,8 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected AuthenticatorGetAssertionOptionsVersion Version = AuthenticatorGetAssertionOptionsVersion.Current;
+        /// <remarks>This is a V4 struct. If V5 arrives, new fields will need to be added.</remarks>
+        private AuthenticatorGetAssertionOptionsVersion _version = AuthenticatorGetAssertionOptionsVersion.Version4;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -147,6 +148,24 @@ namespace DSInternals.Win32.WebAuthn
                         _allowCredentialList = IntPtr.Zero;
                     }
                 }
+            }
+        }
+
+        public AuthenticatorGetAssertionOptionsVersion Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                if (value > AuthenticatorGetAssertionOptionsVersion.Version4)
+                {
+                    // We only support older struct versions.
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                _version = value;
             }
         }
 

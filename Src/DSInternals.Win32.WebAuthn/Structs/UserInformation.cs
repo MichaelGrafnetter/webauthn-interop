@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected UserInformationVersion Version = UserInformationVersion.Current;
+        private UserInformationVersion Version = UserInformationVersion.Current;
 
         /// <summary>
         /// Identifier for the User.

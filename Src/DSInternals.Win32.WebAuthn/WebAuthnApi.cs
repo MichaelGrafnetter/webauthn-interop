@@ -91,10 +91,10 @@ namespace DSInternals.Win32.WebAuthn
                     var attestation = attestationHandle.ToManaged();
                     return new AuthenticatorAttestationRawResponse()
                     {
-                        // TODO: Extensions = attestation.Extensions.Data,
                         Id = attestation.CredentialId,
                         RawId = attestation.CredentialId,
                         Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
+                        Extensions = ApiMapper.Translate(attestation.Extensions),
                         Response = new AuthenticatorAttestationRawResponse.ResponseData()
                         {
                             AttestationObject = attestation.AttestationObject,
