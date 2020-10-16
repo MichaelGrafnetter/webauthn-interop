@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DSInternals.Win32.WebAuthn.Tests
+namespace DSInternals.Win32.WebAuthn.UITests
 {
     [TestClass]
-    public class Interactive
+    public class WebAuthnApiTester
     {
         [TestMethod]
         public void WebAuthN_MakeCredential_MSAccount()
@@ -63,8 +63,8 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
             options.PubKeyCredParams = new List<PubKeyCredParam>()
             {
-                new PubKeyCredParam() { Alg = ApiConstants.CoseAlgorithmEcdsaP256WithSha256, Type = PublicKeyCredentialType.PublicKey },
-                new PubKeyCredParam() { Alg = ApiConstants.CoseAlgorithmRsassaPkcs1V15WithSha256, Type = PublicKeyCredentialType.PublicKey }
+                new PubKeyCredParam() { Alg = -7, Type = PublicKeyCredentialType.PublicKey },
+                new PubKeyCredParam() { Alg = -256, Type = PublicKeyCredentialType.PublicKey }
             };
 
             var webauthn = new WebAuthnApi();
@@ -116,7 +116,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 Fido2NetLib.Objects.UserVerificationRequirement.Required,
                 null
             );
-           
+
             var webauthn = new WebAuthnApi();
             var response = webauthn.AuthenticatorGetAssertion(options);
 

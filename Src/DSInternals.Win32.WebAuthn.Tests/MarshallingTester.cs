@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DSInternals.Win32.WebAuthn.Tests
 {
     [TestClass]
-    public class Marshalling
+    public class MarshallingTester
     {
         [TestMethod]
         public void Marshalling_UserInformation_Marshal()

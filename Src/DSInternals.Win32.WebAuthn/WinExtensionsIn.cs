@@ -40,7 +40,7 @@ namespace DSInternals.Win32.WebAuthn
         {
             get
             {
-                // Threat Any as null, so that it is not serialized to JSON.
+                // Treat Any as null, so that it is not serialized to JSON.
                 return (_credProtect == UserVerification.Any) ? (UserVerification?)null : _credProtect;
             }
             set
