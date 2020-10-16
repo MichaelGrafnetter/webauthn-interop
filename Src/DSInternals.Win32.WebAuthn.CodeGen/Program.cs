@@ -31,6 +31,9 @@ namespace DSInternals.Win32.WebAuthn
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Input: {0}", InputFile);
+            Console.WriteLine("Output: {0}", OutputFile);
+
             var parserOptions = new CppParserOptions()
             {
                 ParseMacros = true,
@@ -67,6 +70,8 @@ namespace DSInternals.Win32.WebAuthn
 
                 writer.WriteLine(Footer);
             }
+
+            Console.WriteLine("Done!");
         }
 
         static void ProcessConstant(StreamWriter writer, string name, string type, string value)
