@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Fido2UI
+namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     /// <summary>
     /// Interaction logic for App.xaml

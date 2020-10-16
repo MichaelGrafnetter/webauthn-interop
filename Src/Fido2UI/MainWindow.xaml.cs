@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Fido2UI
+namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
