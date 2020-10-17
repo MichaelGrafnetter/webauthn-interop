@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Fido2NetLib;
 
 namespace DSInternals.Win32.WebAuthn
@@ -12,6 +14,7 @@ namespace DSInternals.Win32.WebAuthn
     public class WebAuthnApi
     {
         private static ApiVersion? _apiVersionCache;
+        private Guid? _cancellationId;
 
         /// <summary>
         /// Gets the API version information.
@@ -57,6 +60,11 @@ namespace DSInternals.Win32.WebAuthn
         public static bool IsCredProtectExtensionSupported => ApiVersion >= WebAuthn.ApiVersion.Version2;
 
         /// <summary>
+        /// Indicates whether operation cancellation is supported by the API.
+        /// </summary>
+        public bool IsCancellationSupported => _cancellationId.HasValue;
+
+        /// <summary>
         /// Indicates the availability of user-verifying platform authenticator (e.g. Windows Hello).
         /// </summary>
         public static bool IsUserVerifyingPlatformAuthenticatorAvailable
@@ -75,6 +83,17 @@ namespace DSInternals.Win32.WebAuthn
                     return false;
                 }
             }
+        }
+
+        public WebAuthnApi()
+        {
+            _cancellationId = GetCancellationId();
+        }
+
+        public async Task<AuthenticatorAttestationRawResponse> AuthenticatorMakeCredentialAsync(CredentialCreateOptions options, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            cancellationToken.Register(state => CancelCurrentOperation(), null, false);
+            return await Task.Run(() => AuthenticatorMakeCredential(options), cancellationToken);
         }
 
         /// <summary>
@@ -99,7 +118,7 @@ namespace DSInternals.Win32.WebAuthn
             using (var excludeCredListEx = new CredentialList(excludeCredsEx.ToArray()))
             using (var extensions = ApiMapper.Translate(options.Extensions))
             using (var extensionList = new ExtensionsIn(extensions.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, extensionList, excludeCredList, excludeCredListEx))
+            using (var nativeOptions = ApiMapper.Translate(options, _cancellationId, extensionList, excludeCredList, excludeCredListEx))
             {
                 var result = NativeMethods.AuthenticatorMakeCredential(
                     WindowHandle.ForegroundWindow,
@@ -136,6 +155,12 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            cancellationToken.Register(state => CancelCurrentOperation(), null, false);
+            return await Task.Run(() => AuthenticatorGetAssertion(options, authenticatorAttachment), cancellationToken);
+        }
+
         /// <summary>
         /// Signs a challenge and other collected data into an assertion, which is used as a credential.
         /// </summary>
@@ -154,7 +179,7 @@ namespace DSInternals.Win32.WebAuthn
             using (var allowCredsEx = ApiMapper.TranslateEx(options.AllowCredentials))
             using (var allowCredList = new Credentials(allowCreds.ToArray()))
             using (var allowCredListEx = new CredentialList(allowCredsEx.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, authenticatorAttachment, allowCredList, allowCredListEx))
+            using (var nativeOptions = ApiMapper.Translate(options, _cancellationId, authenticatorAttachment, allowCredList, allowCredListEx))
             {
                 HResult result = NativeMethods.AuthenticatorGetAssertion(
                     WindowHandle.ForegroundWindow,
@@ -200,27 +225,27 @@ namespace DSInternals.Win32.WebAuthn
         /// currently in progress in that authenticator session.
         /// The authenticator stops prompting for, or accepting, any user input related to authorizing the canceled operation. The client ignores any further responses from the authenticator for the canceled operation.
         /// </remarks>
-        public void CancelCurrentOperation()
+        private void CancelCurrentOperation()
         {
-            // TODO: Implement cancellation
-            // Note: WebAuthNCancelCurrentOperation and WebAuthNGetCancellationId are only available in newer systems.
+            if(_cancellationId.HasValue)
+            {
+                HResult result = NativeMethods.CancelCurrentOperation(_cancellationId.Value);
+                ApiMapper.Validate(result);
+            }
         }
 
-        protected static Guid? CancellationId
+        private static Guid? GetCancellationId()
         {
-            get
+            try
             {
-                try
-                {
-                    HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
-                    ApiMapper.Validate(result);
-                    return cancelationId;
-                }
-                catch(EntryPointNotFoundException)
-                {
-                    // Async support is not present in earlier versions of Windows 10.
-                    return null;
-                }
+                HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
+                ApiMapper.Validate(result);
+                return cancelationId;
+            }
+            catch(EntryPointNotFoundException)
+            {
+                // Async support is not present in earlier versions of Windows 10.
+                return null;
             }
         }
     }

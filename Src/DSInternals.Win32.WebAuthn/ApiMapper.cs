@@ -96,16 +96,7 @@ namespace DSInternals.Win32.WebAuthn
 
         public static DisposableList<ExtensionIn> Translate(AuthenticationExtensionsClientInputs extensions)
         {
-            if (extensions == null)
-            {
-                // Null pointer is allowed in the parent structure.
-                return null;
-            }
-
-            // TODO: Test with null Extensions
-            // TODO: Test with null Excluderedentials
             var nativeExtensions = new DisposableList<ExtensionIn>();
-
             // TODO: Process the AppID extension
 
             if (extensions is WinExtensionsIn winExtensions)
@@ -143,25 +134,25 @@ namespace DSInternals.Win32.WebAuthn
 
         public static DisposableList<CredentialIn> Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
         {
-            if (credentials == null)
+            var result = new DisposableList<CredentialIn>();
+
+            if (credentials != null)
             {
-                return null;
+                result.AddRange(credentials.Select(item => Translate(item)));
             }
 
-            var result = new DisposableList<CredentialIn>();
-            result.AddRange(credentials.Select(item => Translate(item)));
             return result;
         }
 
         public static DisposableList<CredentialEx> TranslateEx(IEnumerable<PublicKeyCredentialDescriptor> credentials)
         {
-            if (credentials == null)
-            {
-                return null;
-            }
-
             var result = new DisposableList<CredentialEx>();
-            result.AddRange(credentials.Select(item => TranslateEx(item)));
+
+            if (credentials != null)
+            {
+                result.AddRange(credentials.Select(item => TranslateEx(item)));
+            }
+            
             return result;
         }
 
@@ -185,7 +176,7 @@ namespace DSInternals.Win32.WebAuthn
             return new CredentialEx(credential.Id, Translate(credential.Type), Translate(credential.Transports));
         }
 
-        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment, Credentials allowCreds, CredentialList allowCredsEx)
+        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, Guid? cancellationId, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment, Credentials allowCreds, CredentialList allowCredsEx)
         {
             if (options == null)
             {
@@ -199,13 +190,13 @@ namespace DSInternals.Win32.WebAuthn
                 AllowCredentials = allowCreds,
                 AllowCredentialsEx = allowCredsEx,
                 // TODO: Add support for extensions in AuthenticatorGetAssertion
-                UserVerificationRequirement = ApiMapper.Translate(options.UserVerification)
-                // TODO: CancellationId
+                UserVerificationRequirement = ApiMapper.Translate(options.UserVerification),
+                CancellationId = cancellationId
                 // TODO: Add support for U2fAppId
             };
         }
 
-        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, ExtensionsIn extensions, Credentials excludeCreds, CredentialList excludeCredsEx)
+        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, Guid? cancellationId, ExtensionsIn extensions, Credentials excludeCreds, CredentialList excludeCredsEx)
         {
             if (options == null)
             {
@@ -222,7 +213,7 @@ namespace DSInternals.Win32.WebAuthn
                 Extensions = extensions,
                 ExcludeCredentials = excludeCreds,
                 ExcludeCredentialsEx = excludeCredsEx,
-                // TODO: CancellationId
+                CancellationId = cancellationId
             };
 
             return nativeOptions;

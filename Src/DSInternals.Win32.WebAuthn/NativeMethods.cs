@@ -25,7 +25,7 @@ namespace DSInternals.Win32.WebAuthn
             UserInformation userInformation,
             CoseCredentialParameters pubKeyCredParams,
             ClientData clientData,
-            [Optional] AuthenticatorMakeCredentialOptions makeCredentialOptions,
+            AuthenticatorMakeCredentialOptions makeCredentialOptions,
             out CredentialAttestationSafeHandle credentialAttestation
         );
 
@@ -34,7 +34,7 @@ namespace DSInternals.Win32.WebAuthn
             WindowHandle windowHandle,
             string rpId,
             ClientData clientData,
-            [Optional] AuthenticatorGetAssertionOptions getAssertionOptions,
+            AuthenticatorGetAssertionOptions getAssertionOptions,
             out AssertionSafeHandle assertion
         );
 
