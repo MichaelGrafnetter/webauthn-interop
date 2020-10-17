@@ -42,7 +42,6 @@ namespace DSInternals.Win32.WebAuthn
             // MakeCredential Input Type:   WEBAUTHN_CRED_PROTECT_EXTENSION_IN.
             //      - pvExtension must point to a WEBAUTHN_CRED_PROTECT_EXTENSION_IN struct
             //      - cbExtension will contain the sizeof(WEBAUTHN_CRED_PROTECT_EXTENSION_IN).
-            // TODO: Enforcement can only be done in API v2, so throw error if we only have API v1.
             int structSize = sizeof(UserVerification) + sizeof(int);
             byte[] extensionData = new byte[structSize];
             BitConverter.GetBytes((int)uv).CopyTo(extensionData, 0);

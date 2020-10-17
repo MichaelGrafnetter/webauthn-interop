@@ -13,8 +13,7 @@ namespace DSInternals.Win32.WebAuthn.CodeGen
         private const string OutputFile = @"..\..\..\..\DSInternals.Win32.WebAuthn\ApiConstants.cs";
         private const string MacroPrefix = "WEBAUTHN_";
         private const char WordSeparator = '_';
-        private const string Header = @"
-/* This file has been automatically generated. Do not modify it! */
+        private const string Header = @"/* This file has been automatically generated. Do not modify it! */
 
 namespace DSInternals.Win32.WebAuthn
 {

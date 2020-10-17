@@ -112,6 +112,12 @@ namespace DSInternals.Win32.WebAuthn
             {
                 if (winExtensions.CredProtect.HasValue)
                 {
+                    if(!WebAuthnApi.IsCredProtectExtensionSupported)
+                    {
+                        // This extension is only supported in API V2.
+                        throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
+                    }
+
                     nativeExtensions.Add(ExtensionIn.CreateCredProtect(
                         winExtensions.CredProtect.Value,
                         winExtensions.EnforceCredProtect == true));
