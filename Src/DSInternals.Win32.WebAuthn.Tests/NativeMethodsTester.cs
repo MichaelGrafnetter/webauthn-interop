@@ -10,7 +10,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
         public void NativeMethods_GetForegroundWindow()
         {
             var hwnd = NativeMethods.GetForegroundWindow();
-            Assert.AreNotEqual(IntPtr.Zero, hwnd);
+            Assert.IsTrue(hwnd.IsValid);
         }
 
         [TestMethod]
@@ -19,6 +19,50 @@ namespace DSInternals.Win32.WebAuthn.Tests
             try
             {
                 HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
+                Assert.AreEqual(HResult.Success, result);
+            }
+            catch (EntryPointNotFoundException ex)
+            {
+                throw new AssertInconclusiveException("Async operations are not supported on this OS.", ex);
+            }
+        }
+
+        [TestMethod]
+        public void NativeMethods_CancelCurrentOperation_EmptyInput()
+        {
+            try
+            {
+                HResult result = NativeMethods.CancelCurrentOperation(Guid.Empty);
+                Assert.AreEqual(HResult.Success, result);
+            }
+            catch (EntryPointNotFoundException ex)
+            {
+                throw new AssertInconclusiveException("Async operations are not supported on this OS.", ex);
+            }
+        }
+
+        [TestMethod]
+        public void NativeMethods_CancelCurrentOperation_RandomInput()
+        {
+            try
+            {
+                HResult result = NativeMethods.CancelCurrentOperation(Guid.NewGuid());
+                Assert.AreEqual(HResult.Success, result);
+            }
+            catch (EntryPointNotFoundException ex)
+            {
+                throw new AssertInconclusiveException("Async operations are not supported on this OS.", ex);
+            }
+        }
+
+        [TestMethod]
+        public void NativeMethods_CancelCurrentOperation_CorrectInput()
+        {
+            try
+            {
+                NativeMethods.GetCancellationId(out Guid cancellationId);
+                HResult result = NativeMethods.CancelCurrentOperation(cancellationId);
+                Assert.AreEqual(HResult.Success, result);
             }
             catch (EntryPointNotFoundException ex)
             {

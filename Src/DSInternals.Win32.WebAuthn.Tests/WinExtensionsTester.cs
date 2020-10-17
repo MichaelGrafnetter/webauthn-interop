@@ -21,7 +21,6 @@ namespace DSInternals.Win32.WebAuthn.Tests
             // Serialize
             string jsonRequest2 = JsonConvert.SerializeObject(request);
             Assert.AreEqual(jsonRequest, jsonRequest2);
-
         }
 
         [TestMethod]

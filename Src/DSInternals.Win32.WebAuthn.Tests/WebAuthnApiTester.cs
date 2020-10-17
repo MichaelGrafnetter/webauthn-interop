@@ -7,27 +7,25 @@ namespace DSInternals.Win32.WebAuthn.Tests
     public class WebAuthnApiTester
     {
         [TestMethod]
-        public void WebAuthN_ApiVersion()
+        public void WebAuthnApi_ApiVersion()
         {
-            try
+            var version = WebAuthnApi.ApiVersion;
+            if (version == null)
             {
-                var version = WebAuthnApi.ApiVersion;
-            }
-            catch(NotSupportedException ex)
-            {
-                throw new AssertInconclusiveException("WebAuthn API does not seem to be supported on this system.", ex);
+                // The API is apparently not supported on this OS.
+                throw new AssertInconclusiveException();
             }
         }
 
         [TestMethod]
-        public void WebAuthN_IsAvailable()
+        public void WebAuthnApi_IsAvailable()
         {
             // Should not throw
             var version = WebAuthnApi.IsAvailable;
         }
 
         [TestMethod]
-        public void WebAuthN_IsCredProtectExtensionSupported()
+        public void WebAuthnApi_IsCredProtectExtensionSupported()
         {
             // Should not throw
             bool result = WebAuthnApi.IsCredProtectExtensionSupported;
@@ -35,9 +33,17 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
 
         [TestMethod]
-        public void WebAuthN_IsPlatformAuthenticatorAvailable()
+        public void WebAuthnApi_IsPlatformAuthenticatorAvailable()
         {
+            // Should not throw
             bool helloAvailable = WebAuthnApi.IsUserVerifyingPlatformAuthenticatorAvailable;
+        }
+
+        [TestMethod]
+        public void WebAuthnApi_CancelCurrentOperation()
+        {
+            // Should not throw
+            new WebAuthnApi().CancelCurrentOperation();
         }
     }
 }
