@@ -13,14 +13,19 @@ namespace DSInternals.Win32.WebAuthn
     {
         private static ApiVersion? _apiVersionCache;
 
-        // TODO: Async operations
-        public static ApiVersion ApiVersion
+        /// <summary>
+        /// Gets the API version information.
+        /// </summary>
+        /// <remarks>
+        /// Indicates the presence of APIs and features.
+        /// </remarks>
+        public static ApiVersion? ApiVersion
         {
             get
             {
                 if(_apiVersionCache.HasValue)
                 {
-                    return _apiVersionCache.Value;
+                    return _apiVersionCache;
                 }
                 else
                 {
@@ -29,49 +34,32 @@ namespace DSInternals.Win32.WebAuthn
                         _apiVersionCache = NativeMethods.GetApiVersionNumber();
                         return _apiVersionCache.Value;
                     }
-                    catch (EntryPointNotFoundException ex)
+                    catch (EntryPointNotFoundException)
                     {
                         // The WebAuthNGetApiVersionNumber() function was added in Windows 10 1903.
-                        throw new NotSupportedException("Function WebAuthNGetApiVersionNumber has not been found. WebAuthn support was added in Windows Windows 10 1903.", ex);
+                        return null;
                     }
                 }
             }
         }
 
-        public static bool IsAvailable
-        {
-            get
-            {
-                try
-                { 
-                    return ApiVersion >= ApiVersion.Version1;
-                }
-                catch
-                {
-                    // If any error happens during API version retrieval, the API is definitely not supported.
-                    return false;
-                }
-            }
-        }
+        /// <summary>
+        /// Indicates the availability of the WebAuthn API.
+        /// </summary>
+        public static bool IsAvailable => ApiVersion >= WebAuthn.ApiVersion.Version1;
 
-        public static bool IsCredProtectExtensionSupported
-        {
-            get
-            {
-                try
-                {
-                    // Support for the credProtect extension was added in V2 API.
-                    return ApiVersion >= ApiVersion.Version2;
-                }
-                catch
-                {
-                    // If any error happens during API version retrieval, the feature is definitely not supported.
-                    return false;
-                }
-            }
-        }
+        /// <summary>
+        /// Indicates the availability of the Credential Protection extension.
+        /// </summary>
+        /// <remarks>
+        /// Support for the credProtect extension was added in V2 API.
+        /// </remarks>
+        public static bool IsCredProtectExtensionSupported => ApiVersion >= WebAuthn.ApiVersion.Version2;
 
-        public static bool IsPlatformAuthenticatorAvailable
+        /// <summary>
+        /// Indicates the availability of user-verifying platform authenticator (e.g. Windows Hello).
+        /// </summary>
+        public static bool IsUserVerifyingPlatformAuthenticatorAvailable
         {
             get
             {
@@ -89,6 +77,11 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Creates a public key credential source bound to a managing authenticator.
+        /// </summary>
+        /// <param name="options">Options for credential creation.</param>
+        /// <returns>The credential public key associated with the credential private key.</returns>
         public AuthenticatorAttestationRawResponse AuthenticatorMakeCredential(CredentialCreateOptions options)
         {
             if(options == null)
@@ -143,6 +136,12 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Signs a challenge and other collected data into an assertion, which is used as a credential.
+        /// </summary>
+        /// <param name="options">Assertion options.</param>
+        /// <param name="authenticatorAttachment">Optionally filters the eligible authenticators by their attachment.</param>
+        /// <returns>The cryptographically signed Authenticator Assertion Response object returned by an authenticator.</returns>
         public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null)
         {
             if (options == null)
@@ -192,6 +191,15 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Cancels the WebAuthn operation currently in progress.
+        /// </summary>
+        /// <remarks>
+        /// When this operation is invoked by the client in an authenticator session,
+        /// it has the effect of terminating any AuthenticatorMakeCredential or AuthenticatorGetAssertion operation
+        /// currently in progress in that authenticator session.
+        /// The authenticator stops prompting for, or accepting, any user input related to authorizing the canceled operation. The client ignores any further responses from the authenticator for the canceled operation.
+        /// </remarks>
         public void CancelCurrentOperation()
         {
             // TODO: Implement cancellation

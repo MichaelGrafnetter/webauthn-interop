@@ -37,7 +37,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
         [TestMethod]
         public void WebAuthN_IsPlatformAuthenticatorAvailable()
         {
-            bool helloAvailable = WebAuthnApi.IsPlatformAuthenticatorAvailable;
+            bool helloAvailable = WebAuthnApi.IsUserVerifyingPlatformAuthenticatorAvailable;
         }
     }
 }
