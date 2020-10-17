@@ -13,7 +13,7 @@
             <Grid Background="#FFE5E5E5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="180"/>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25" />
@@ -46,7 +46,7 @@
         </TabItem>
         <TabItem Header="Authenticate">
             <Grid Background="#FFE5E5E5">
-                <Button Content="Authenticate" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <Button Content="Authenticate" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click" />
             </Grid>
         </TabItem>
     </TabControl>
