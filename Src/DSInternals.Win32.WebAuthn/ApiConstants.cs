@@ -4,7 +4,7 @@
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
-    /// Contains constants from <webauthn.h>.
+    /// Contains constants from "webauthn.h".
     /// </summary>
     internal static partial class ApiConstants
     {

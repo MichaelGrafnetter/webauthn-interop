@@ -85,12 +85,15 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        ///  Initializes a new instance of the <see cref="WebAuthnApi"/> class.
+        /// </summary>
         public WebAuthnApi()
         {
             _cancellationId = GetCancellationId();
         }
 
-        public async Task<AuthenticatorAttestationRawResponse> AuthenticatorMakeCredentialAsync(CredentialCreateOptions options, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<AuthenticatorAttestationRawResponse> AuthenticatorMakeCredentialAsync(CredentialCreateOptions options, CancellationToken cancellationToken = default)
         {
             cancellationToken.Register(state => CancelCurrentOperation(), null, false);
             return await Task.Run(() => AuthenticatorMakeCredential(options), cancellationToken);
@@ -155,7 +158,7 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
-        public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default)
         {
             cancellationToken.Register(state => CancelCurrentOperation(), null, false);
             return await Task.Run(() => AuthenticatorGetAssertion(options, authenticatorAttachment), cancellationToken);

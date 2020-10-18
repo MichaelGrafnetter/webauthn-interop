@@ -6,6 +6,7 @@ namespace DSInternals.Win32.WebAuthn
     /// <summary>
     /// Information about credential list with extra information.
     /// </summary>
+    /// <remarks>
     /// Corresponds to WEBAUTHN_CREDENTIAL_LIST.
     /// Contain an array of pointers to target structures.
     /// </remarks>

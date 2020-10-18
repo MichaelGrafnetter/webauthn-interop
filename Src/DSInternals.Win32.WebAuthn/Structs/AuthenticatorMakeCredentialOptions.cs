@@ -151,7 +151,7 @@ namespace DSInternals.Win32.WebAuthn
                 if(value > AuthenticatorMakeCredentialOptionsVersion.Version3)
                 {
                     // We only support older struct versions.
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(value), "The requested data structure version is not yet supported.");
                 }
 
                 _version = value;

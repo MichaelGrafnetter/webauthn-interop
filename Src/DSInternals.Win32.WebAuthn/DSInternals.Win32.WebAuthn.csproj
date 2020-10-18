@@ -1,47 +1,69 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net472</TargetFrameworks>
-    <PackageProjectUrl>https://github.com/MichaelGrafnetter/webauthn-interop</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MichaelGrafnetter/webauthn-interop.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageIcon>icon.png</PackageIcon>
-    <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
-    <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
-    <PackageId>DSInternals.Win32.WebAuthn</PackageId>
-    <Authors>Michael Grafnetter</Authors>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</Copyright>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop</PackageTags>
-    <Product>WebAuthn Interop Assembly</Product>
-    <Title>WebAuthn Interop Assembly</Title>
-    <Version>1.0</Version>
-    <AssemblyVersion>1.0</AssemblyVersion>
-    <ProductVersion>1.0</ProductVersion>
-    <FileVersion>1.0</FileVersion>
-    <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>Windows 10 1903 or newer is required.</PackageReleaseNotes>
-    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.1;net472</TargetFrameworks>
+        <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
+        <OutputPath>../../Build/bin/$(Configuration)/$(AssemblyName)/</OutputPath>
+        <PackageProjectUrl>https://github.com/MichaelGrafnetter/webauthn-interop</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/MichaelGrafnetter/webauthn-interop.git</RepositoryUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageIcon>icon.png</PackageIcon>
+        <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
+        <PackageId>DSInternals.Win32.WebAuthn</PackageId>
+        <Authors>Michael Grafnetter</Authors>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright (c) 2020 Michael Grafnetter. All rights reserved.</Copyright>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageTags>FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop</PackageTags>
+        <Product>WebAuthn Interop Assembly</Product>
+        <Title>WebAuthn Interop Assembly</Title>
+        <Version>1.0</Version>
+        <AssemblyVersion>1.0</AssemblyVersion>
+        <ProductVersion>1.0</ProductVersion>
+        <FileVersion>1.0</FileVersion>
+        <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
+        <PackageReleaseNotes>Windows 10 1903 or newer is required.</PackageReleaseNotes>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <!--<Nullable>enable</Nullable>-->
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
-    <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
-  </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Fido2.Models" Version="1.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1' And '$(Configuration)' == 'Release'">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
+        <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Fido2.Models" Version="1.1.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1' AND '$(Configuration)' == 'Release'">
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="docfx.console" Version="2.56.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 </Project>
