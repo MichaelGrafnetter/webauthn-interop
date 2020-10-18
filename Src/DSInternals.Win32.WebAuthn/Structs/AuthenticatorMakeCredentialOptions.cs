@@ -10,10 +10,6 @@ namespace DSInternals.Win32.WebAuthn
     [StructLayout(LayoutKind.Sequential)]
     internal class AuthenticatorMakeCredentialOptions : IDisposable
     {
-        /// <summary>
-        /// Version of this structure, to allow for modifications in the future.
-        /// </summary>
-        /// <remarks>This is a V3 struct. If V4 arrives, new fields will need to be added.</remarks>
         private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version3;
 
         /// <summary>
@@ -22,14 +18,8 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>This is used as guidance, and can be overridden by the platform.</remarks>
         public int TimeoutMilliseconds { get; set; } = ApiConstants.DefaultTimeoutMilliseconds;
 
-        /// <summary>
-        /// Credentials used for exclusion.
-        /// </summary>
         private Credentials _excludeCredentials;
 
-        /// <summary>
-        /// Extensions to parse when performing the operation. (Optional)
-        /// </summary>
         private ExtensionsIn _extensions;
 
         /// <summary>
@@ -57,23 +47,16 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         private int Flags { get; set; }
 
-        /// <summary>
-        /// Cancellation Id (Optional)
-        /// </summary>
-        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
         private IntPtr _cancellationId = IntPtr.Zero;
 
-        /// <summary>
-        /// Exclude Credential List. 
-        /// </summary>
-        /// <remarks>
-        /// If present, "CredentialList" will be ignored.
-        /// This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.
-        /// </remarks>
         private IntPtr _excludeCredentialList = IntPtr.Zero;
 
         public AuthenticatorMakeCredentialOptions() { }
 
+        /// <summary>
+        /// Cancellation Id (Optional)
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
         public Guid? CancellationId
         {
             set
@@ -98,6 +81,9 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Credentials used for exclusion.
+        /// </summary>
         public Credentials ExcludeCredentials
         {
             set
@@ -107,6 +93,9 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Extensions to parse when performing the operation. (Optional)
+        /// </summary>
         public ExtensionsIn Extensions
         {
             set
@@ -116,6 +105,13 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Exclude Credential List. 
+        /// </summary>
+        /// <remarks>
+        /// If present, "ExcludeCredentials" will be ignored.
+        /// This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.
+        /// </remarks>
         public CredentialList ExcludeCredentialsEx
         {
             set
@@ -140,6 +136,10 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Version of this structure, to allow for modifications in the future.
+        /// </summary>
+        /// <remarks>This is a V3 struct. If V4 arrives, new fields will need to be added.</remarks>
         public AuthenticatorMakeCredentialOptionsVersion Version
         {
             get

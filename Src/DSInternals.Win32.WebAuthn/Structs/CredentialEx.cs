@@ -13,12 +13,14 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private CredentialExVersion Version = CredentialExVersion.Current;
+        private CredentialExVersion Version { get; set; } = CredentialExVersion.Current;
+
+        private int _idLength;
 
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private SafeByteArrayIn _id;
+        private ByteArrayIn _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
@@ -32,7 +34,8 @@ namespace DSInternals.Win32.WebAuthn
 
         public CredentialEx(byte[] id, string type, CtapTransport transport)
         {
-            _id = new SafeByteArrayIn(id);
+            _id = new ByteArrayIn(id);
+            _idLength = id?.Length ?? 0;
             _type = type;
             _transport = transport;
         }

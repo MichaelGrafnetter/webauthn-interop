@@ -29,9 +29,11 @@ namespace DSInternals.Win32.WebAuthn
             switch(version)
             {
                 case CredentialAttestationVersion.Version1:
+                    // TODO: This calculation probably does not work on 64-bit platforms.
                     sourceStructSize = targetStructSize - (Marshal.SizeOf<ExtensionsOut>() + sizeof(CtapTransport));
                     break;
                 case CredentialAttestationVersion.Version2:
+                    // TODO: This calculation probably does not work on 64-bit platforms.
                     sourceStructSize = targetStructSize - sizeof(CtapTransport);
                     break;
                 case CredentialAttestationVersion.Version3:

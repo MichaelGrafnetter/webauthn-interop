@@ -12,21 +12,21 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private RelyingPartyInformationVersion Version = RelyingPartyInformationVersion.Current;
+        private RelyingPartyInformationVersion Version { get; set; } = RelyingPartyInformationVersion.Current;
 
         /// <summary>
         /// Identifier for the RP.
         /// </summary>
-        public string Id;
+        public string Id { get; set; }
 
         /// <summary>
         /// Contains the friendly name of the Relying Party, such as "Acme Corporation", "Widgets Inc" or "Awesome Site".
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
 
         /// <summary>
         /// Optional URL pointing to RP's logo.
         /// </summary>
-        public string Icon;
+        public string Icon { get; set; }
     }
 }

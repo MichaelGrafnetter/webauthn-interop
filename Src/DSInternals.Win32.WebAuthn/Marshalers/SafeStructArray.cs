@@ -4,8 +4,11 @@ using System.Runtime.InteropServices;
 namespace DSInternals.Win32.WebAuthn
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal abstract class SafeStructArrayOut<T> : SafeArray
+    internal abstract class SafeStructArrayOut<T>
     {
+        protected int _length;
+        protected IntPtr _nativeArray = IntPtr.Zero;
+
         protected SafeStructArrayOut()
         {
         }
@@ -36,8 +39,11 @@ namespace DSInternals.Win32.WebAuthn
 
 
     [StructLayout(LayoutKind.Sequential)]
-    internal class SafeStructArrayIn<T> : SafeArray, IDisposable
+    internal abstract class SafeStructArrayIn<T> : IDisposable
     {
+        protected int _length;
+        protected IntPtr _nativeArray = IntPtr.Zero;
+
         public SafeStructArrayIn(T[] items)
         {
             if ((items?.Length ?? 0) <= 0)

@@ -15,10 +15,12 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         private protected CredentialVersion Version = CredentialVersion.Current;
 
+        private int _idLength;
+
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private SafeByteArrayIn _id;
+        private ByteArrayIn _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
@@ -27,7 +29,8 @@ namespace DSInternals.Win32.WebAuthn
 
         public CredentialIn(byte[] id, string type)
         {
-            _id = new SafeByteArrayIn(id);
+            _id = new ByteArrayIn(id);
+            _idLength = id?.Length ?? 0;
             _type = type;
         }
 
@@ -48,19 +51,22 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected CredentialVersion Version = CredentialVersion.Current;
+        private protected CredentialVersion Version { get; set; } = CredentialVersion.Current;
 
-        /// <summary>
-        /// Unique ID for this particular credential.
-        /// </summary>
-        private SafeByteArrayOut _id;
+        private int _idLength;
+
+
+        private ByteArrayOut _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
         /// </summary>
         public string Type { get; private set; }
 
-        public byte[] Id => _id?.Data;
+        /// <summary>
+        /// Unique ID for this particular credential.
+        /// </summary>
+        public byte[] Id => _id?.Read(_idLength);
 
         private CredentialOut() { }
     }

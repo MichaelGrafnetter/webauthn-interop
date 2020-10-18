@@ -14,30 +14,36 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         public AssertionVersion Version { get; private set; }
 
-        /// <summary>
-        /// Authenticator data that was created for this assertion.
-        /// </summary>
-        private SafeByteArrayOut _authenticatorData;
+        private int _authenticatorDataLength;
 
-        /// <summary>
-        /// Signature that was generated for this assertion.
-        /// </summary>
-        private SafeByteArrayOut _signature;
+        private ByteArrayOut _authenticatorData;
+
+        private int _signatureLength;
+
+        private ByteArrayOut _signature;
 
         /// <summary>
         /// Credential that was used for this assertion.
         /// </summary>
         public CredentialOut Credential { get; private set; }
 
+        private int _userIdLength;
+
+        private ByteArrayOut _userId;
+
         /// <summary>
-        /// UserId
+        /// Authenticator data that was created for this assertion.
         /// </summary>
-        private SafeByteArrayOut _userId;
+        public byte[] AuthenticatorData => _authenticatorData?.Read(_authenticatorDataLength);
 
-        public byte[] AuthenticatorData => _authenticatorData?.Data;
+        /// <summary>
+        /// Signature that was generated for this assertion.
+        /// </summary>
+        public byte[] Signature => _signature?.Read(_signatureLength);
 
-        public byte[] Signature => _signature?.Data;
-
-        public byte[] UserId => _userId?.Data;
+        /// <summary>
+        /// User Idetifier
+        /// </summary>
+        public byte[] UserId => _userId?.Read(_userIdLength);
     }
 }

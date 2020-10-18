@@ -15,15 +15,18 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         public string Identifier { get; private set; }
 
+        private int _dataLength;
+
         /// <summary>
         /// Extension data.
         /// </summary>
-        private SafeByteArrayIn _data;
+        private ByteArrayIn _data;
 
         public ExtensionIn(string id, byte[] data)
         {
             Identifier = id;
-            _data = new SafeByteArrayIn(data);
+            _dataLength = data?.Length ?? 0;
+            _data = new ByteArrayIn(data);
         }
 
         public static ExtensionIn CreateHmacSecret()
@@ -68,12 +71,14 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         public string Identifier { get; private set; }
 
+        private int _dataLength;
+
+        private ByteArrayOut _data;
+
         /// <summary>
         /// Extension data.
         /// </summary>
-        private SafeByteArrayOut _data;
-
-        public byte[] Data => _data?.Data;
+        public byte[] Data => _data?.Read(_dataLength);
 
         private ExtensionOut() { }
     }

@@ -16,10 +16,9 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         private ClientDataVersion _version = ClientDataVersion.Current;
 
-        /// <summary>
-        /// UTF-8 encoded JSON serialization of the client data.
-        /// </summary>
-        private SafeByteArrayIn _clientData = new SafeByteArrayIn(null);
+        private int _clientDataLength;
+
+        private ByteArrayIn _clientData;
 
         /// <summary>
         /// Hash algorithm ID used to hash the ClientDataJSON field.
@@ -31,32 +30,29 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         public string ClientDataJson
         {
-            get
-            {
-                byte[] binaryData = ClientDataRaw;
-                return (binaryData != null) ? Encoding.UTF8.GetString(binaryData) : null;
-            }
-
             set
             {
                 ClientDataRaw = (value != null) ? Encoding.UTF8.GetBytes(value) : null;
             }
         }
 
+        /// <summary>
+        /// UTF-8 encoded JSON serialization of the client data.
+        /// </summary>
         public byte[] ClientDataRaw
         {
             get
             {
-                return _clientData?.Data;
+                return _clientData?.Read(_clientDataLength);
             }
-
             set
             {
                 // Get rid of any previous data first
-                Dispose();
+                _clientData?.Dispose();
 
                 // Now replace the previous value with a new one
-                _clientData = new SafeByteArrayIn(value);
+                _clientDataLength = value?.Length ?? 0;
+                _clientData = new ByteArrayIn(value);
             }
         }
 

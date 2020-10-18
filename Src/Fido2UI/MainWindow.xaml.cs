@@ -69,7 +69,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             options.PubKeyCredParams = new List<PubKeyCredParam>()
             {
                 new PubKeyCredParam() { Alg = -7, Type = PublicKeyCredentialType.PublicKey },
-                new PubKeyCredParam() { Alg = -256, Type = PublicKeyCredentialType.PublicKey }
+                new PubKeyCredParam() { Alg = -257, Type = PublicKeyCredentialType.PublicKey }
             };
 
             var webauthn = new WebAuthnApi();

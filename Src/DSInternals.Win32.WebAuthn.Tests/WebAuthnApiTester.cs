@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Win32.WebAuthn.Tests
 {
@@ -40,10 +39,10 @@ namespace DSInternals.Win32.WebAuthn.Tests
         }
 
         [TestMethod]
-        public void WebAuthnApi_CancelCurrentOperation()
+        public void WebAuthnApi_IsCancellationSupported()
         {
             // Should not throw
-            new WebAuthnApi().CancelCurrentOperation();
+            bool asyncSupported = new WebAuthnApi().IsCancellationSupported;
         }
     }
 }

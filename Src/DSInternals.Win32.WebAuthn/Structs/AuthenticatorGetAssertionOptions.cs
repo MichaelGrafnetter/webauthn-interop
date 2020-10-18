@@ -10,37 +10,27 @@ namespace DSInternals.Win32.WebAuthn
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal class AuthenticatorGetAssertionOptions : IDisposable
     {
-        /// <summary>
-        /// Version of this structure, to allow for modifications in the future.
-        /// </summary>
-        /// <remarks>This is a V4 struct. If V5 arrives, new fields will need to be added.</remarks>
         private AuthenticatorGetAssertionOptionsVersion _version = AuthenticatorGetAssertionOptionsVersion.Version4;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
         /// </summary>
         /// <remarks>This is used as guidance, and can be overridden by the platform.</remarks>
-        public int TimeoutMilliseconds;
+        public int TimeoutMilliseconds { get; set; } = ApiConstants.DefaultTimeoutMilliseconds;
 
-        /// <summary>
-        /// Allowed Credentials List.
-        /// </summary>
-        private Credentials _allowCredentials = new Credentials(null);
+        private Credentials _allowCredentials;
 
-        /// <summary>
-        /// Extensions to parse when performing the operation. (Optional)
-        /// </summary>
-        public ExtensionsIn Extensions = new ExtensionsIn(null);
+        private ExtensionsIn _extensions;
 
         /// <summary>
         /// Platform vs Cross-Platform Authenticators. (Optional)
         /// </summary>
-        public AuthenticatorAttachment AuthenticatorAttachment;
+        public AuthenticatorAttachment AuthenticatorAttachment { get; set; }
 
         /// <summary>
         /// User Verification Requirement.
         /// </summary>
-        public UserVerificationRequirement UserVerificationRequirement;
+        public UserVerificationRequirement UserVerificationRequirement { get; set; }
 
         /// <summary>
         /// Reserved for future Use.
@@ -49,9 +39,6 @@ namespace DSInternals.Win32.WebAuthn
 
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2
 
-        /// <summary>
-        /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower cased.
-        /// </summary>
         [MarshalAs(UnmanagedType.LPUTF8Str)]
         private string _u2fAppId;
 
@@ -62,20 +49,17 @@ namespace DSInternals.Win32.WebAuthn
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3
         //
 
-        /// <summary>
-        /// Cancellation Id (Optional)
-        /// </summary>
         private IntPtr _cancellationId = IntPtr.Zero;
 
         //
         // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4
         //
 
-        /// <summary>
-        /// Allow Credential List. If present, "CredentialList" will be ignored.
-        /// </summary>
         private IntPtr _allowCredentialList = IntPtr.Zero;
 
+        /// <summary>
+        /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower cased.
+        /// </summary>
         public string U2fAppId
         {
             get
@@ -94,6 +78,9 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Cancellation Id (Optional)
+        /// </summary>
         public Guid? CancellationId
         {
             set
@@ -118,6 +105,9 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Allowed Credentials List.
+        /// </summary>
         public Credentials AllowCredentials
         {
             set
@@ -127,6 +117,9 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Allow Credential List. If present, "AllowCredentials" will be ignored.
+        /// </summary>
         public CredentialList AllowCredentialsEx
         {
             set
@@ -151,6 +144,10 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Version of this structure, to allow for modifications in the future.
+        /// </summary>
+        /// <remarks>This is a V4 struct. If V5 arrives, new fields will need to be added.</remarks>
         public AuthenticatorGetAssertionOptionsVersion Version
         {
             get
@@ -169,10 +166,22 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
+        /// <summary>
+        /// Extensions to parse when performing the operation. (Optional)
+        /// </summary>
+        public ExtensionsIn Extensions
+        {
+            set
+            {
+                _extensions?.Dispose();
+                _extensions = value;
+            }
+        }
+
         public void Dispose()
         {
-            Extensions?.Dispose();
-            Extensions = null;
+            _extensions?.Dispose();
+            _extensions = null;
             
             _allowCredentials?.Dispose();
             _allowCredentials = null;

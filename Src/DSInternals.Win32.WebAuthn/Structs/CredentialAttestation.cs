@@ -20,33 +20,25 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         public string FormatType { get; private set; }
 
-        /// <summary>
-        /// Authenticator data that was created for this credential.
-        /// </summary>
-        private SafeByteArrayOut _authenticatorData;
+        private int _authenticatorDataLength;
 
-        /// <summary>
-        /// Encoded CBOR attestation information
-        /// </summary>
-        private SafeByteArrayOut _attestation;
+        private ByteArrayOut _authenticatorData;
+
+        private int _attestationLength;
+
+        private ByteArrayOut _attestation;
 
         private AttestationDecode _attestationDecodeType;
 
-        /// <summary>
-        /// CBOR attestation information.
-        /// </summary>
         private IntPtr _attestationDecoded;
 
-        /// <summary>
-        /// The CBOR encoded Attestation Object to be returned to the RP.
-        /// </summary>
-        private SafeByteArrayOut _attestationObject;
+        private int _attestationObjectLength;
 
-        /// <summary>
-        /// The CredentialId bytes extracted from the Authenticator Data.
-        /// </summary>
-        /// <remarks>Used by Edge to return to the RP.</remarks>
-        private SafeByteArrayOut _credentialId;
+        private ByteArrayOut _attestationObject;
+
+        private int _credentialIdLength;
+
+        private ByteArrayOut _credentialId;
 
         /// <summary>
         /// WebAuthn Extensions
@@ -60,14 +52,30 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
         public CtapTransport UsedTransport { get; private set; }
 
-        public byte[] AuthenticatorData => _authenticatorData?.Data;
+        /// <summary>
+        /// Authenticator data that was created for this credential.
+        /// </summary>
+        public byte[] AuthenticatorData => _authenticatorData?.Read(_authenticatorDataLength);
 
-        public byte[] Attestation => _attestation?.Data;
+        /// <summary>
+        /// Encoded CBOR attestation information
+        /// </summary>
+        public byte[] Attestation => _attestation?.Read(_attestationLength);
 
-        public byte[] AttestationObject => _attestationObject?.Data;
+        /// <summary>
+        /// The CBOR encoded Attestation Object to be returned to the RP.
+        /// </summary>
+        public byte[] AttestationObject => _attestationObject?.Read(_attestationObjectLength);
 
-        public byte[] CredentialId => _credentialId?.Data;
+        /// <summary>
+        /// The CredentialId bytes extracted from the Authenticator Data.
+        /// </summary>
+        /// <remarks>Used by Edge to return to the RP.</remarks>
+        public byte[] CredentialId => _credentialId?.Read(_credentialIdLength);
 
+        /// <summary>
+        /// CBOR attestation information.
+        /// </summary>
         public CommonAttestation AttestationDecoded
         {
             get

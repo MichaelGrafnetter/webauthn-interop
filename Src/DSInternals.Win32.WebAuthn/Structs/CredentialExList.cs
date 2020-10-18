@@ -10,11 +10,14 @@ namespace DSInternals.Win32.WebAuthn
     /// Contain an array of pointers to target structures.
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal sealed class CredentialList : SafeArray, IDisposable
+    internal sealed class CredentialList : IDisposable
     {
+        private int _length;
+        private IntPtr _nativeArray = IntPtr.Zero;
+
         public CredentialList(CredentialEx[] credentials) : base()
         {
-            if ((credentials?.Length ?? 0) > 0)
+            if ((credentials?.Length ?? 0) <= 0)
             {
                 // Nothing to initialize
                 return;

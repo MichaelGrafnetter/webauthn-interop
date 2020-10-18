@@ -15,10 +15,9 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         private UserInformationVersion Version = UserInformationVersion.Current;
 
-        /// <summary>
-        /// Identifier for the User.
-        /// </summary>
-        private SafeByteArrayIn _id;
+        private int _idLength;
+
+        private ByteArrayIn _id;
 
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
@@ -40,14 +39,11 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         public byte[] Id
         {
-            get
-            {
-                return _id?.Data;
-            }
             set
             {
                 _id?.Dispose();
-                _id = new SafeByteArrayIn(value);
+                _idLength = value?.Length ?? 0;
+                _id = new ByteArrayIn(value);
             }
         }
 

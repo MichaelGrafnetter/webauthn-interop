@@ -20,6 +20,27 @@ namespace DSInternals.Win32.WebAuthn.Tests
             {
                 HResult result = NativeMethods.GetCancellationId(out Guid cancelationId);
                 Assert.AreEqual(HResult.Success, result);
+                Assert.AreNotEqual(Guid.Empty, cancelationId);
+            }
+            catch (EntryPointNotFoundException ex)
+            {
+                throw new AssertInconclusiveException("Async operations are not supported on this OS.", ex);
+            }
+        }
+
+        [TestMethod]
+        public void NativeMethods_GetCancellationId_RepeatedCalls()
+        {
+            try
+            {
+                HResult result = NativeMethods.GetCancellationId(out Guid cancelationId1);
+                Assert.AreEqual(HResult.Success, result);
+
+                result = NativeMethods.GetCancellationId(out Guid cancelationId2);
+                Assert.AreEqual(HResult.Success, result);
+
+                // We are always getting a different cancellation id.
+                Assert.AreNotEqual(cancelationId1, cancelationId2);
             }
             catch (EntryPointNotFoundException ex)
             {

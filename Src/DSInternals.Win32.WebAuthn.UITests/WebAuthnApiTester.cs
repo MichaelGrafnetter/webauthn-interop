@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
@@ -64,7 +66,7 @@ namespace DSInternals.Win32.WebAuthn.UITests
             options.PubKeyCredParams = new List<PubKeyCredParam>()
             {
                 new PubKeyCredParam() { Alg = -7, Type = PublicKeyCredentialType.PublicKey },
-                new PubKeyCredParam() { Alg = -256, Type = PublicKeyCredentialType.PublicKey }
+                new PubKeyCredParam() { Alg = -257, Type = PublicKeyCredentialType.PublicKey }
             };
 
             var webauthn = new WebAuthnApi();
@@ -156,6 +158,33 @@ namespace DSInternals.Win32.WebAuthn.UITests
             var pubKey = new byte[] { 0, 0, 0 };
             uint counter = 25;
             var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, _ => Task.FromResult(true)).GetAwaiter().GetResult();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(OperationCanceledException))]
+        public void WebAuthN_GetAssertion_Cancel()
+        {
+            var config = new Fido2Configuration()
+            {
+                Origin = "login.microsoft.com",
+                ServerDomain = "login.microsoft.com",
+                ServerName = "Microsoft"
+            };
+
+            byte[] challenge = Encoding.ASCII.GetBytes("O.eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImtnMkxZczJUMENUaklmajRydDZKSXluZW4zOCJ9.eyJhdWQiOiJ1cm46bWljcm9zb2Z0OmZpZG86Y2hhbGxlbmdlIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnQuY29tIiwiaWF0IjoxNjAyNDQ1NDI0LCJuYmYiOjE2MDI0NDU0MjQsImV4cCI6MTYwMjQ0NTcyNH0.KMarezIE6LW3NG99LemMpYHLeiiFJe2NLz04z2Q5hsJLx6hbHpXzhoEfElZi4NaNgvBvv37vv7BqdWbUa6iYWaKI73eXhPuj42IddNE2nqdLzjSX-PCiAeBSi7xMNapW9feAj8zjg9pfCluS8ly_mgYlhBUVMlulL5bR40JQU2bQ6m9PMt1-eFO9A55KbJ_BFSwrsFSJxS612wxceM4cjepEZEGj7QO1bZYLOROnmTk8wcojqWjVpvXnCRocbhFp8CEqM4ucFVsTXiQ4X66aykHbUdKOxCmvB_a20N1fPKhKrS-Hh50jCOPNpwbNVJN7AOhMRyrMiTW2qQb8suihRw");
+
+            var options = AssertionOptions.Create(
+                config,
+                challenge,
+                null,
+                Fido2NetLib.Objects.UserVerificationRequirement.Required,
+                null
+                );
+
+            var webauthn = new WebAuthnApi();
+
+            var source = new CancellationTokenSource(5000);
+            var response = webauthn.AuthenticatorGetAssertionAsync(options, null, source.Token).GetAwaiter().GetResult();
         }
     }
 }
