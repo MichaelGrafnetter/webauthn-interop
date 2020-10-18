@@ -4,9 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <UseWPF>true</UseWPF>
-    <StartupObject></StartupObject>
     <RootNamespace>DSInternals.Win32.WebAuthn.Fido2UI</RootNamespace>
-    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fido2.Models" Version="2.0.0-preview2" />
+    <PackageReference Include="Fido2.Models" Version="1.1.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1' And '$(Configuration)' == 'Release'">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

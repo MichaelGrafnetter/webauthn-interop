@@ -41,12 +41,12 @@
                     <ColumnDefinition Width="55*"/>
                     <ColumnDefinition Width="207*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Register_Button_Click"/>
             </Grid>
         </TabItem>
         <TabItem Header="Authenticate">
             <Grid Background="#FFE5E5E5">
-                <Button Content="Authenticate" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click" />
+                <Button Content="Authenticate" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Authenticate_Button_Click" />
             </Grid>
         </TabItem>
     </TabControl>
