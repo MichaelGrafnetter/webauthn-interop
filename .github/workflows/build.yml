@@ -1,0 +1,30 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: 'Release Build'
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET Core CLI
+      uses: actions/setup-dotnet@v1
+      with:
+          dotnet-version: '3.1.x'
+
+    - name: Build
+      working-directory: Src
+      run: dotnet build --configuration Release
+    
+    - name: Upload NuGet Package
+      uses: actions/upload-artifact@v2
+      with:
+        name: NuGet
+        path: Build/bin/Release/DSInternals.Win32.WebAuthn/*nupkg
+
