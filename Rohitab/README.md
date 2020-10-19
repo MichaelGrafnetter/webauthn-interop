@@ -3,7 +3,7 @@
 ## Description
 The [WebAuthn.xml](WebAuthn.xml) file contains WebAuthn API definitions for the [Rohitab API Monitor](http://www.rohitab.com/apimonitor).
 This allows capturing the entire communication between a browser (i.e. Microsoft Edge, Google Chrome, or Mizilla Firefox) and Windows 10 WebAuthn API.
-The file was created by analyzing all definitions in the [webauthn.h](../Src/webauthn/webauthn.h) C header file.
+The file was created by analyzing all definitions in the [webauthn.h](https://github.com/microsoft/webauthn/blob/master/webauthn.h) C header file.
 
 Note that most calls used by the Immersive Control Panel for FIDO2 Security Key management are undocumented.
 

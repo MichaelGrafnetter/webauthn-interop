@@ -124,7 +124,7 @@ See the [full API documentation](../Documentation/API/DSInternals.Win32.WebAuthn
 
 ## Code Generation
 
-The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/APiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](../Src/webauthn/webauthn.h).
+The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/ApiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](https://github.com/microsoft/webauthn/blob/master/webauthn.h).
 This is performed in the [DSInternals.Win32.WebAuthn.CodeGen](../Src/DSInternals.Win32.WebAuthn.CodeGen/Program.cs) helper application by leveraging the [CppAst.NET project](https://github.com/xoofx/CppAst.NET).
 
 ## Microsoft's Documentation
