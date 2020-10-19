@@ -27,4 +27,9 @@ jobs:
       with:
         name: NuGet
         path: Build/bin/Release/DSInternals.Win32.WebAuthn/*nupkg
-
+    
+    - name: Upload Desktop App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Fido2UI
+        path: Build/bin/Release/Fido2UI/net472/*
