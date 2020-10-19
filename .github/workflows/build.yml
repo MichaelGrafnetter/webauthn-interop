@@ -29,6 +29,7 @@ jobs:
     - name: Run Unit Tests
       working-directory: Src
       run: dotnet test DSInternals.Win32.WebAuthn.Tests --configuration Release
+      continue-on-error: true
     
     - name: Install Coverage Report Generator
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
