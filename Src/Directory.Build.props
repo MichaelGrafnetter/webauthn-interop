@@ -8,7 +8,8 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release' AND Exists('..\Keys\DSInternals.Private.snk')">
         <!-- Configure strong name signing -->
-        <SignAssembly>true</SignAssembly>
+        <!-- TODO: Fido2.Models and CppAst are currently not signed. -->
+        <SignAssembly>false</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
         <DelaySign>false</DelaySign>
     </PropertyGroup>
