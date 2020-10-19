@@ -36,7 +36,7 @@ jobs:
 
     - name: Generate Code Coverage Reports
       working-directory: Build/TestResults
-      run: reportgenerator -reports:*/coverage.cobertura.xml -targetdir:. -reporttypes:HtmlSummary;MHtml -title:"WebAuthn Interop Assembly"
+      run: reportgenerator -reports:*/coverage.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary;MHtml" -title:"WebAuthn Interop Assembly"
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v2
