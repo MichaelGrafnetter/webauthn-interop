@@ -9,8 +9,6 @@ namespace DSInternals.Win32.WebAuthn.CodeGen
 {
     class Program
     {
-        private const string InputFile = @"..\..\..\CodeGen.h";
-        private const string OutputFile = @"..\..\..\..\DSInternals.Win32.WebAuthn\ApiConstants.cs";
         private const string MacroPrefix = "WEBAUTHN_";
         private const char WordSeparator = '_';
         private const string Header = @"/* This file has been automatically generated. Do not modify it! */
@@ -18,7 +16,7 @@ namespace DSInternals.Win32.WebAuthn.CodeGen
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
-    /// Contains constants from <webauthn.h>.
+    /// Contains constants from ""webauthn.h"".
     /// </summary>
     internal static partial class ApiConstants
     {";
@@ -30,8 +28,17 @@ namespace DSInternals.Win32.WebAuthn
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Input: {0}", InputFile);
-            Console.WriteLine("Output: {0}", OutputFile);
+            if(args?.Length != 2)
+            {
+                Console.WriteLine("Usage: CodeGen.exe <Path to input CodeGen.h> <Path to output ApiConstants.cs>");
+                return;
+            }
+
+            string inputFile = args[0];
+            string outputFile = args[1];
+
+            Console.WriteLine("Input: {0}", inputFile);
+            Console.WriteLine("Output: {0}", outputFile);
 
             var parserOptions = new CppParserOptions()
             {
@@ -39,9 +46,9 @@ namespace DSInternals.Win32.WebAuthn
                 ParseSystemIncludes = false
             };
 
-            var compilation = CppParser.ParseFile(InputFile, parserOptions);
+            var compilation = CppParser.ParseFile(inputFile, parserOptions);
 
-            using (var writer = new StreamWriter(OutputFile))
+            using (var writer = new StreamWriter(outputFile))
             {
                 writer.WriteLine(Header);
 

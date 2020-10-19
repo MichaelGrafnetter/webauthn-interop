@@ -1,4 +1,3 @@
-
 /* This file has been automatically generated. Do not modify it! */
 
 namespace DSInternals.Win32.WebAuthn
