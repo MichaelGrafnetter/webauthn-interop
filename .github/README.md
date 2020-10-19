@@ -4,11 +4,11 @@
 [![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
 [![.NET Core 3+](https://img.shields.io/badge/.NET%20Core-3%2B-007FFF.svg)](#)
 
-FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications
+**FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications**
 
 ## Introduction
 
-This library allows .NET applications to directly interact with FIDO2 security keys (e.g. YubiKey, Feitian, or Crayonic) and with Windows Hello / Windows Hello for Business. 
+This library allows .NET applications to directly interact with FIDO2 security keys (e.g. [YubiKey](https://www.yubico.com/products/), [Feitian](https://www.ftsafe.com/products/FIDO), or [Crayonic](https://www.crayonic.com/)) and with [Windows Hello](https://support.microsoft.com/en-us/windows/learn-about-windows-hello-and-set-it-up-dae28983-8242-bb2a-d3d1-87c9d265a5f0) / [Windows Hello for Business](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/hello-identity-verification). 
 It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
 (exposed through the `webauthn.dll` system library). This API is mainly used by browsers
 (see the source code of [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
@@ -26,12 +26,14 @@ The `DSInternals.Win32.WebAuthn` library is published in the [NuGet Gallery](htt
 
 ### Overview
 
-The WebAuthn API is only supported on Windows 10 1903 and newer. It is exposed in the `DSInternals.Win32.WebAuthn` namespace, with the `WebAuthnApi` class being the main entry point.
+The WebAuthn API is only supported on Windows 10 1903 and newer. It is exposed in the [DSInternals.Win32.WebAuthn](../Documentation/API/DSInternals.Win32.WebAuthn.md) namespace, with the [WebAuthnApi](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi.md) class being the main entry point.
 
-Following are code samples that mimic the behavior of [login.microsoftonline.com](https://login.microsoftonline.com), with the exception of WebAuthn Extensions. 
+Following are code samples that mimic the behavior of [login.microsoftonline.com](https://login.microsoftonline.com). 
 The samples are not ready for production use, as they are missing validation and contain many hardcoded values. Especially the `challenge` must be randomly generated in a cryptographically safe way.
 
 ### Registration (Attestation)
+
+Credential registration is performed by calling the [AuthenticatorMakeCredential](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorMakeCredential.md) or [AuthenticatorMakeCredentialAsync](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorMakeCredentialAsync.md) method:
 
 ```cs
 var config = new Fido2Configuration()
@@ -86,6 +88,9 @@ var response = webauthn.AuthenticatorMakeCredential(options);
 
 ### Authentication (Assertion)
 
+Authentication using a previously registered credential is performed by calling the [AuthenticatorGetAssertion](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorGetAssertion.md) or [AuthenticatorGetAssertionAsync](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorGetAssertionAsync.md) method:
+
+
 ```cs
 var config = new Fido2Configuration()
 {
@@ -115,10 +120,12 @@ var webauthn = new WebAuthnApi();
 var response = webauthn.AuthenticatorGetAssertion(options);
 ```
 
+See the [full API documentation](../Documentation/API/DSInternals.Win32.WebAuthn.md) for more information about using this library.
+
 ## Code Generation
 
-The `APiConstants.cs` file is automatically generated from `#define` statements in `webauthn.h`.
-This is performed in the `DSInternals.Win32.WebAuthn.CodeGen` helper application by leveraging the [CppAst.NET project](https://github.com/xoofx/CppAst.NET).
+The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/APiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](../Src/webauthn/webauthn.h).
+This is performed in the [DSInternals.Win32.WebAuthn.CodeGen](../Src/DSInternals.Win32.WebAuthn.CodeGen/Program.cs) helper application by leveraging the [CppAst.NET project](https://github.com/xoofx/CppAst.NET).
 
 ## Microsoft's Documentation
 - [WebAuthn APIs for password-less authentication on Windows 10](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthnapis)
