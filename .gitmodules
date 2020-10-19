@@ -1,0 +1,3 @@
+[submodule "Src/webauthn"]
+	path = Src/webauthn
+	url = https://github.com/microsoft/webauthn.git

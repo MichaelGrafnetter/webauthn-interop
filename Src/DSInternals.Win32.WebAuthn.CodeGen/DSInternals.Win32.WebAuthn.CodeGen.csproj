@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AssemblyName>CodeGen</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../webauthn/webauthn.h" Visible="true" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CppAst" Version="0.7.3" />        <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    </ItemGroup>
+
+</Project>

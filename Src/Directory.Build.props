@@ -1,0 +1,16 @@
+<Project>
+    <PropertyGroup>
+        <!-- Redirect output directories -->
+        <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+        <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
+        <OutputPath>..\..\Build\bin\$(Configuration)\$(MSBuildProjectName)</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' AND Exists('..\Keys\DSInternals.Private.snk')">
+        <!-- Configure strong name signing -->
+        <!-- TODO: Fido2.Models and CppAst are currently not signed. -->
+        <SignAssembly>false</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
+        <DelaySign>false</DelaySign>
+    </PropertyGroup>
+</Project>
