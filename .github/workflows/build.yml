@@ -28,7 +28,7 @@ jobs:
 
     - name: Run Unit Tests
       working-directory: Src
-      run: dotnet test DSInternals.Win32.WebAuthn.Tests --configuration Release
+      run: dotnet test DSInternals.Win32.WebAuthn.Tests --configuration Debug
       continue-on-error: true
     
     - name: Install Coverage Report Generator
@@ -43,7 +43,7 @@ jobs:
       with:
         name: TestResults
         path: |
-            Build/TestResults/*
+            Build/TestResults/*.*
             !**/*.htm
 
     - name: Upload NuGet Package
