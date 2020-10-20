@@ -21,8 +21,4 @@
         <ProjectReference Include="..\DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
 </Project>

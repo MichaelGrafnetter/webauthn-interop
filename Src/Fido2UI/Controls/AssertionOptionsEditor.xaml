@@ -18,16 +18,16 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
-                <RowDefinition Height="30" />
+                <RowDefinition Height="60" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
-            <Label Name="RpIdLabel" Content="Relying Party:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+            <Label Name="RpIdLabel" Content="Relying party:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
             <TextBox x:Name="RpIdTextBox" Text="{Binding RpId, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
-            <Label Name="ChallengeLabel" Content="Challenge:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-            <TextBox x:Name="ChallengeTextBox" Text="ABCD" Grid.Row="1"  Grid.Column="1" VerticalAlignment="Center"/>
-            <Label Name="UserVerificationLabel" Content="User Verification:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
+            <Label Name="ChallengeLabel" Content="Challenge:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" />
+            <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" Text="ABCD" Grid.Row="1"  Grid.Column="1" />
+            <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
             <local:EnumComboBox x:Name="UserVerificationComboBox" EnumTypeName="Fido2NetLib.Objects.UserVerificationRequirement, Fido2.Models" NullDisplayName="Any" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
             <Label Name="TimeoutLabel" Content="Timeout (s):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
             <local:TimeoutEditor x:Name="TimeoutEditor" Grid.Row="3" Grid.Column="1" Timeout="{Binding Timeout, Mode=TwoWay}" />

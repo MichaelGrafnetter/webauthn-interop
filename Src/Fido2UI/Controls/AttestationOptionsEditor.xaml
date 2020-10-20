@@ -6,7 +6,104 @@
              xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <GroupBox Header="Attestation Options" Margin="0, 0, 0, 0">
+        <WrapPanel>
+            <GroupBox Header="User">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Name:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                    <TextBox Name="UserNameTextBox" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+                    <Label Content="Display name:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <TextBox Name="UserDusplayNameTextBox" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" />
+                    <Label Content="Credential ID:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
+                    <TextBox Name="UserCredentialIdTextBox" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Relying Party">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="160"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Domain name:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                    <TextBox Name="RpDomainNameTextBox" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+                    <Label Content="Display name:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <TextBox Name="RpDismlayNameTextBox" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Authenticator Requirements">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Name="AttachmentLabel" Content="Attachment:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                    <ComboBox Name="AttachmentComboBox" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+                    <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                    <ComboBox Name="UserVerificationRequirementComboBox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
+                    <CheckBox Name="RequireResidentKeyCheckBox" Grid.Row="2" Grid.ColumnSpan="2" Content=" Require resident key" VerticalAlignment="Center" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Extensions">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Name="HmacSecretLabel" Content="HMAC Secret:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" />
+                    <CheckBox Name="HmacSecretCheckBox" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
+                    <Label Name="CredProtectLabel" Content="Credential Protection:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <CheckBox Name="CredProtectCheckBox" Content="Use" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" />
+                    <CheckBox Name="CredProtectEnforceCheckBox" Content="Enforce" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Public Key Algorithms">
+                <WrapPanel>
+                    <CheckBox Content="Alg1" />
+                    <CheckBox Content="Alg2" />
+                </WrapPanel>
+            </GroupBox>
+            <GroupBox Header="Request">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="200"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Name="ChallengeLabel" Content="Challenge:" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
+                    <TextBox Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1" />
+                    <Label Name="TimeoutLabel" Content="Timeout (s):" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
+                    <local:TimeoutEditor x:Name="TimeoutEditor" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
+                    <Label Name="AttestationLabel" Content="Attestation:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" />
+                    <ComboBox Name="AttestationComboBox" VerticalAlignment="Center"  Grid.Row="2" Grid.Column="1" />
+                </Grid>
+            </GroupBox>
+        </WrapPanel>
+    </GroupBox>
 </UserControl>

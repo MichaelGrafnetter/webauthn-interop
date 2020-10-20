@@ -23,7 +23,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         private void Authenticate_Button_Click(object sender, RoutedEventArgs e)
         {
             var options = AssertionOptionsEditor.Options;
-            // var options = CreateAssertionRequest();
+
             try
             {
                 var response = Api.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.Platform);

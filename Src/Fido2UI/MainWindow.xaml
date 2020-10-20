@@ -10,39 +10,40 @@
         Title="FIDO2 UI" Height="600" Width="800">
     <TabControl Padding="2">
         <TabItem Header="Information">
-            <Grid Background="#FFE5E5E5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="180"/>
-                    <ColumnDefinition Width="60"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25" />
-                    <RowDefinition Height="25" />
-                    <RowDefinition Height="25" />
-                    <RowDefinition Height="25" />
-                </Grid.RowDefinitions>
-                <!-- FIDO2 Support -->
-                <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API Support:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
-                <CheckBox x:Name="FIDOSupportedCheckBox" IsChecked="{Binding Source={x:Static WebAuthn:WebAuthnApi.IsAvailable}, Mode=OneWay}" IsEnabled="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
-                <!-- API Version -->
-                <Label Name="ApiVersionLabel" Content="WebAuthn API Version:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
-                <TextBox x:Name="ApiVersionTextBox" TextWrapping="Wrap" Text="{Binding Source={x:Static WebAuthn:WebAuthnApi.ApiVersion}, Mode=OneWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
-                <!-- Platform Authenticator Support -->
-                <Label Name="PlatformAuthenticatorLabel" Content="Platform Authenticator:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
-                <CheckBox x:Name="PlatformAuthenticatorCheckBox" IsChecked="{Binding Source={x:Static WebAuthn:WebAuthnApi.IsUserVerifyingPlatformAuthenticatorAvailable}, Mode=OneWay}" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
-                <!-- CredProtect Support -->
-                <Label Name="CredProtectSupportedLabel" Content="Credential Protection Support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3"/>
-                <CheckBox x:Name="CredProtectSupportedCheckBox" IsChecked="{Binding Source={x:Static WebAuthn:WebAuthnApi.IsCredProtectExtensionSupported}, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="3"/>
-            </Grid>
+            <StackPanel>
+                <GroupBox Header="Operating System Information" Margin="0, 0, 0, 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <!-- FIDO2 Support -->
+                        <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API support:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="FIDOSupportedCheckBox" IsChecked="{Binding Source={x:Static WebAuthn:WebAuthnApi.IsAvailable}, Mode=OneWay}" IsEnabled="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
+                        <!-- API Version -->
+                        <Label Name="ApiVersionLabel" Content="WebAuthn API version:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
+                        <TextBox x:Name="ApiVersionTextBox" TextWrapping="Wrap" Text="{Binding Source={x:Static WebAuthn:WebAuthnApi.ApiVersion}, Mode=OneWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
+                        <!-- Platform Authenticator Support -->
+                        <Label Name="PlatformAuthenticatorLabel" Content="Platform authenticator:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="PlatformAuthenticatorCheckBox" IsChecked="{Binding Source={x:Static WebAuthn:WebAuthnApi.IsUserVerifyingPlatformAuthenticatorAvailable}, Mode=OneWay}" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
+                        <!-- CredProtect Support -->
+                        <Label Name="CredProtectSupportedLabel" Content="Credential protection support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3"/>
+                        <CheckBox x:Name="CredProtectSupportedCheckBox" IsChecked="{Binding Source={x:Static WebAuthn:WebAuthnApi.IsCredProtectExtensionSupported}, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="3"/>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
         </TabItem>
         <TabItem Header="Register">
-            <Grid Background="#FFE5E5E5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="55*"/>
-                    <ColumnDefinition Width="207*"/>
-                </Grid.ColumnDefinitions>
+            <StackPanel>
+                <local:AttestationOptionsEditor x:Name="AttestationOptionsEditor" />
                 <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Register_Button_Click"/>
-            </Grid>
+            </StackPanel>
         </TabItem>
         <TabItem Header="Authenticate">
             <StackPanel>

@@ -8,8 +8,6 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public class AssertionOptionsModel : BindableBase
     {
-        private const string NoValue = "None";
-
         public AssertionOptions Options
         {
             get
@@ -55,23 +53,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             get
             {
-                return _userVerification?.ToString() ?? NoValue;
+                return null; // _userVerification?.ToString() ?? NoValue;
             }
             set
             {
-                UserVerificationRequirement? convertedValue = value != NoValue ? (UserVerificationRequirement?)Enum.Parse(typeof(UserVerificationRequirement), value) : null;
-                SetProperty(ref _userVerification, convertedValue);
-                RaisePropertyChanged(nameof(Options));
-            }
-        }
-
-        public Collection<string> UserVerificationRequirementOptions
-        {
-            get
-            {
-                var reqs = new Collection<string>() { NoValue };
-                reqs.AddRange(Enum.GetNames(typeof(UserVerificationRequirement)));
-                return reqs;
+                //UserVerificationRequirement? convertedValue = value != NoValue ? (UserVerificationRequirement?)Enum.Parse(typeof(UserVerificationRequirement), value) : null;
+                //SetProperty(ref _userVerification, convertedValue);
+                //RaisePropertyChanged(nameof(Options));
             }
         }
 
