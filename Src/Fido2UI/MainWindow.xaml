@@ -45,9 +45,10 @@
             </Grid>
         </TabItem>
         <TabItem Header="Authenticate">
-            <Grid Background="#FFE5E5E5">
-                <Button Content="Authenticate" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Authenticate_Button_Click" />
-            </Grid>
+            <StackPanel>
+                <local:AssertionOptionsEditor x:Name="AssertionOptionsEditor" />
+                <Button Content="Authenticate" Width="200" Click="Authenticate_Button_Click" />
+            </StackPanel>
         </TabItem>
     </TabControl>
 </Window>
