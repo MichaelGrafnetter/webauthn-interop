@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="DSInternals.Win32.WebAuthn.Fido2UI.AttestationOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
+             xmlns:prism="http://prismlibrary.com/"
+             mc:Ignorable="d"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <GroupBox Header="Attestation Options" Margin="0, 0, 0, 0">
+        <WrapPanel>
+            <GroupBox Header="User">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Name:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                    <TextBox Name="UserNameTextBox" Text="{Binding UserName, Mode=TwoWay}" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+                    <Label Content="Display name:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <TextBox Name="UserDusplayNameTextBox" Text="{Binding UserDisplayName, Mode=TwoWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" />
+                    <Label Content="Credential ID:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
+                    <TextBox Name="UserCredentialIdTextBox" Text="{Binding UserId, Mode=TwoWay}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Relying Party">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="160"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Domain name:"  Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                    <TextBox Name="RpDomainNameTextBox" Text="{Binding RpId, Mode=TwoWay}" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+                    <Label Content="Display name:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <TextBox Name="RpDismlayNameTextBox" Text="{Binding RpName, Mode=TwoWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Request">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="200"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Name="ChallengeLabel" Content="Challenge:" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
+                    <TextBox Name="ChallengeTextBox" Text="{Binding Challenge, Mode=TwoWay}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1" />
+                    <Label Name="TimeoutLabel" Content="Timeout (s):" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
+                    <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
+                    <Label Name="AttestationLabel" Content="Attestation:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" />
+                    <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding SelectedAttestation, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center"  Grid.Row="2" Grid.Column="1" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Authenticator Requirements">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Name="AttachmentLabel" Content="Attachment:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                    <ComboBox Name="AttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding SelectedAuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+                    <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                    <ComboBox Name="UserVerificationRequirementComboBox"  ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding SelectedUserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
+                    <CheckBox Name="RequireResidentKeyCheckBox" IsChecked="{Binding RequireResidentKey, Mode=TwoWay}" Grid.Row="2" Grid.ColumnSpan="2" Content=" Require resident key" VerticalAlignment="Center" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Public Key Algorithms">
+                <UniformGrid Columns="3">
+                    <CheckBox x:Name="ES256CheckBox" Content="ES256 (ECDSA P-256 with SHA-256)" IsChecked="{Binding AlgorithmES256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="RS256CheckBox" Content="RS256 (RSASSA-PKCS1-v1_5 with SHA-256)" IsChecked="{Binding AlgorithmRS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="PS256CheckBox" Content="PS256 (RSASSA-PSS with SHA-256)" IsChecked="{Binding AlgorithmPS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="ES384CheckBox" Content="ES384 (ECDSA P-384 with SHA-384)" IsChecked="{Binding AlgorithmES384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="RS384CheckBox" Content="RS384 (RSASSA-PKCS1-v1_5 with SHA-384)" IsChecked="{Binding AlgorithmRS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="PS384CheckBox" Content="PS384 (RSASSA-PSS with SHA-384)" IsChecked="{Binding AlgorithmPS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="ES512CheckBox" Content="ES512 (ECDSA P-521 with SHA-512)" IsChecked="{Binding AlgorithmES512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="RS512CheckBox" Content="RS512 (RSASSA-PKCS1-v1_5 with SHA-512)" IsChecked="{Binding AlgorithmRS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                    <CheckBox x:Name="PS512CheckBox" Content="PS512 (RSASSA-PSS with SHA-512)" IsChecked="{Binding AlgorithmPS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                </UniformGrid>
+            </GroupBox>
+            <GroupBox Header="Extensions">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Name="HmacSecretLabel" Content="HMAC Secret:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" />
+                    <CheckBox Name="HmacSecretCheckBox"  IsChecked="{Binding HmacSecret, Mode=TwoWay}" Content="Enabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
+                    <Label Name="CredProtectLabel" Content="Credential Protection:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <ComboBox Name="CredProtectComboBox" ItemsSource="{Binding CredProtectPolicies, Mode=OneTime}" SelectedValue="{Binding SelectedCredProtectPolicy, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" /> 
+                    <CheckBox Name="CredProtectEnforceCheckBox" IsChecked="{Binding EnforceCredProtect, Mode=TwoWay}" IsEnabled="{Binding EnforceCredProtectEnabled, Mode=OneWay}" Content="Enforced" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
+                </Grid>
+            </GroupBox>
+        </WrapPanel>
+    </GroupBox>
+</UserControl>

@@ -1,9 +1,5 @@
-﻿<Application x:Class="DSInternals.Win32.WebAuthn.Fido2UI.App"
+﻿<prism:PrismApplication x:Class="DSInternals.Win32.WebAuthn.Fido2UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
+             xmlns:prism="http://prismlibrary.com/" />

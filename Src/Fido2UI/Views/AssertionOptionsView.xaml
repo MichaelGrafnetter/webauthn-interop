@@ -1,24 +1,23 @@
-﻿<UserControl x:Class="DSInternals.Win32.WebAuthn.Fido2UI.AssertionOptionsEditor"
+﻿<UserControl x:Class="DSInternals.Win32.WebAuthn.Fido2UI.AssertionOptionsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
+             xmlns:prism="http://prismlibrary.com/"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="350">
-    <UserControl.DataContext>
-        <local:AssertionOptionsModel/>
-    </UserControl.DataContext>
     <GroupBox Header="Assertion Options" Margin="0, 0, 0, 0">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
-                <RowDefinition Height="60" />
+                <RowDefinition Height="100" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
@@ -26,13 +25,13 @@
             <Label Name="RpIdLabel" Content="Relying party:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
             <TextBox x:Name="RpIdTextBox" Text="{Binding RpId, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
             <Label Name="ChallengeLabel" Content="Challenge:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" />
-            <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" Text="ABCD" Grid.Row="1"  Grid.Column="1" />
+            <TextBox x:Name="ChallengeTextBox" Text="{Binding Challenge, Mode=TwoWay}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" />
             <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
-            <local:EnumComboBox x:Name="UserVerificationComboBox" EnumTypeName="Fido2NetLib.Objects.UserVerificationRequirement, Fido2.Models" NullDisplayName="Any" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
-            <Label Name="TimeoutLabel" Content="Timeout (s):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
-            <local:TimeoutEditor x:Name="TimeoutEditor" Grid.Row="3" Grid.Column="1" Timeout="{Binding Timeout, Mode=TwoWay}" />
-            <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
-            <local:EnumComboBox x:Name="AuthenticatorAttachmentComboBox" EnumTypeName="Fido2NetLib.Objects.AuthenticatorAttachment, Fido2.Models" NullDisplayName="Any Type" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" />
+            <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding SelectedUserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
+            <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
+            <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding SelectedAuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
+            <Label Name="TimeoutLabel" Content="Timeout (s):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
+            <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" Grid.Row="4" Grid.Column="4" />
         </Grid>
     </GroupBox>
 </UserControl>
