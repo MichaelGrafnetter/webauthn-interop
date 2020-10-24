@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
@@ -11,11 +10,6 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void ShowError(Exception ex)
-        {
-            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

@@ -24,9 +24,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<ApiInformationViewModel, ApiInformationViewModel>();
+            containerRegistry.RegisterSingleton<IAssertionOptionsViewModel, AssertionOptionsViewModel>();
             containerRegistry.RegisterSingleton<AssertionOptionsViewModel, AssertionOptionsViewModel>();
+            containerRegistry.RegisterSingleton<IAttestationOptionsViewModel, AttestationOptionsViewModel>();
             containerRegistry.RegisterSingleton<AttestationOptionsViewModel, AttestationOptionsViewModel>();
             containerRegistry.RegisterSingleton<WebAuthnApi, WebAuthnApi>();
+
+            containerRegistry.RegisterDialog<NotificationDialog, NotificationDialogViewModel>();
         }
     }
 }

@@ -7,7 +7,7 @@ using Prism.Mvvm;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
-    public class AttestationOptionsViewModel : BindableBase
+    public class AttestationOptionsViewModel : BindableBase, IAttestationOptionsViewModel
     {
         private const UserVerificationRequirement DefaultUserVerification = UserVerificationRequirement.Preferred;
         public AttestationOptionsViewModel()
@@ -24,7 +24,6 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             {
                 return new CredentialCreateOptions()
                 {
-                    // TODO: Test null challenge?
                     Challenge = string.IsNullOrEmpty(Challenge) ? null : Encoding.ASCII.GetBytes(Challenge),
                     Timeout = Timeout,
                     Rp = RelyingParty,
@@ -391,7 +390,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     DisplayName = UserDisplayName,
                     Name = UserName,
                     // TODO: Validator
-                    Id = Base64Url.Decode(UserId),
+                    Id = string.IsNullOrEmpty(UserId) ? null : Base64Url.Decode(UserId),
                 };
             }
             set

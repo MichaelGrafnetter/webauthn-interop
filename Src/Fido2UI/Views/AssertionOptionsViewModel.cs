@@ -6,7 +6,7 @@ using Prism.Mvvm;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
-    public class AssertionOptionsViewModel : BindableBase
+    public class AssertionOptionsViewModel : BindableBase, IAssertionOptionsViewModel
     {
         public AssertionOptionsViewModel()
         {
@@ -20,11 +20,10 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             {
                 return new AssertionOptions()
                 {
-                    // TODO: Test null challenge?
-                    Challenge = Encoding.ASCII.GetBytes(_challenge),
-                    RpId = _rpId,
-                    Timeout = _timeout,
-                    UserVerification = _userVerification
+                    Challenge = string.IsNullOrEmpty(Challenge) ? null : Encoding.ASCII.GetBytes(Challenge),
+                    RpId = RpId,
+                    Timeout = Timeout,
+                    UserVerification = SelectedUserVerificationRequirement
                 };
             }
             set

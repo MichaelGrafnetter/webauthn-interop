@@ -4,23 +4,32 @@ using System.Text;
 using System.Windows.Input;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
+using Microsoft.Xaml.Behaviors;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public class MainWindowViewModel : BindableBase
     {
         private WebAuthnApi Api { get; set; }
-        private AttestationOptionsViewModel AttestationOptionsViewModel { get; set; }
-        private AssertionOptionsViewModel AssertionOptionsViewModel { get; set; }
+        private IAttestationOptionsViewModel AttestationOptionsViewModel { get; set; }
+        private IAssertionOptionsViewModel AssertionOptionsViewModel { get; set; }
+        private IDialogService DialogService { get; set; }
 
-        public MainWindowViewModel(WebAuthnApi api, AttestationOptionsViewModel attestationOptionsViewModel, AssertionOptionsViewModel assertionOptionsViewModel)
+        public MainWindowViewModel(
+            WebAuthnApi api,
+            IAttestationOptionsViewModel attestationOptionsViewModel,
+            IAssertionOptionsViewModel assertionOptionsViewModel,
+            IDialogService dialogService)
         {
             // Save dependencies
-                Api = api;
+            Api = api;
             AttestationOptionsViewModel = attestationOptionsViewModel;
             AssertionOptionsViewModel = assertionOptionsViewModel;
+            DialogService = dialogService;
 
             // Initialize commands
             RegisterCommand = new DelegateCommand(OnRegister);
@@ -42,7 +51,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             }
             catch (Exception ex)
             {
-                // ShowError(ex);
+                var parameters = new DialogParameters($"Message={ex.Message}");
+                DialogService.ShowDialog(nameof(NotificationDialog), parameters, null);
             }
         }
 
@@ -54,7 +64,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             }
             catch (Exception ex)
             {
-                // ShowError(ex);
+                var parameters = new DialogParameters($"Message={ex.Message}");
+                DialogService.ShowDialog(nameof(NotificationDialog), parameters, null);
             }
         }
 

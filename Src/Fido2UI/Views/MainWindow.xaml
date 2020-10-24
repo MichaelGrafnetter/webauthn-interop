@@ -1,11 +1,11 @@
 ﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
-        xmlns:prism="http://prismlibrary.com/"
-        prism:ViewModelLocator.AutoWireViewModel="True"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
+    prism:ViewModelLocator.AutoWireViewModel="True"
         x:Class="DSInternals.Win32.WebAuthn.Fido2UI.MainWindow"
         mc:Ignorable="d"
         Title="FIDO2 UI" Height="600" Width="800">
@@ -15,19 +15,19 @@
             <MenuItem Header="_Authenticate" Command="{Binding AuthenticateCommand}" Padding="5" />
             <MenuItem Header="_Load Options" Padding="5">
                 <MenuItem Header="_Microsoft" Command="{Binding LoadOptionsCommand}" />
-                <MenuItem Header="_Google" Command="{Binding LoadOptionsCommand}" />
+                <!-- TODO: <MenuItem Header="_Google" Command="{Binding LoadOptionsCommand}" />-->
             </MenuItem>
         </Menu>
         <TabControl Padding="2">
             <TabItem Header="Information">
                 <local:ApiInformationView x:Name="ApiInformationView" />
             </TabItem>
-            <TabItem Header="Registration Options">
+            <TabItem Header="Registration">
                 <StackPanel>
                     <local:AttestationOptionsView x:Name="AttestationOptionsEditor" />
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Authentication Options">
+            <TabItem Header="Authentication">
                 <StackPanel>
                     <local:AssertionOptionsView x:Name="AssertionOptionsEditor" />
                 </StackPanel>
