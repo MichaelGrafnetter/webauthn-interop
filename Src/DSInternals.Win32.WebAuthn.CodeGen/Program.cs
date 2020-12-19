@@ -26,12 +26,12 @@ namespace DSInternals.Win32.WebAuthn
 ";
         private const string Padding = "        ";
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             if(args?.Length != 2)
             {
                 Console.WriteLine("Usage: CodeGen.exe <Path to input CodeGen.h> <Path to output ApiConstants.cs>");
-                return;
+                return 1;
             }
 
             string inputFile = args[0];
@@ -47,6 +47,16 @@ namespace DSInternals.Win32.WebAuthn
             };
 
             var compilation = CppParser.ParseFile(inputFile, parserOptions);
+
+            if(compilation.HasErrors)
+            {
+                foreach(var message in compilation.Diagnostics.Messages)
+                {
+                    Console.WriteLine("{0}: {1}", message.Type, message.Text);
+                }
+
+                return 2;
+            }
 
             using (var writer = new StreamWriter(outputFile))
             {
@@ -78,6 +88,7 @@ namespace DSInternals.Win32.WebAuthn
             }
 
             Console.WriteLine("Done!");
+            return 0;
         }
 
         static void ProcessConstant(StreamWriter writer, string name, string type, string value)
