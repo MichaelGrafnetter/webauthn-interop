@@ -56,7 +56,8 @@ namespace DSInternals.Win32.WebAuthn
             {
                 Id = user.Id,
                 Name = user.Name,
-                DisplayName = user.DisplayName
+                DisplayName = user.DisplayName,
+                Icon = String.Empty // Browser implementations typically use an empty string instead of null
             };
         }
 
@@ -191,8 +192,8 @@ namespace DSInternals.Win32.WebAuthn
                 AllowCredentialsEx = allowCredsEx,
                 // TODO: Add support for extensions in AuthenticatorGetAssertion
                 UserVerificationRequirement = ApiMapper.Translate(options.UserVerification),
-                CancellationId = cancellationId
-                // TODO: Add support for U2fAppId
+                CancellationId = cancellationId,
+                U2fAppId = options.Extensions?.AppID,
             };
         }
 
@@ -250,18 +251,38 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var clientDataJson = JsonConvert.SerializeObject(new
+            if (options.RpId == null)
             {
-                Type = ApiConstants.ClientDataCredentialGet,
-                Challenge = options.Challenge,
-                Origin = options.RpId,
-                CrossOrigin = crossOrigin
-                // TODO: Add support for TokenBinding
-            });
+                throw new ArgumentException("RpId must be specified.", nameof(options));
+            }
+
+            // Add "https://" to RpId if missing
+            var origin = new UriBuilder(options.RpId);
+            origin.Scheme = Uri.UriSchemeHttps;
+
+            // TODO: Create a wrapper object for ClientData properties
+            var clientData = new Dictionary<string, object>
+            {
+                { "Type" , ApiConstants.ClientDataCredentialGet },
+                { "Challenge", options.Challenge },
+                { "Origin", origin.Uri.ToString() },
+                { "HashAlgorithm", ApiConstants.HashAlgorithmSha256 },
+                { "CrossOrigin", crossOrigin }
+            };
+
+            if(options.Extensions?.AppID != null)
+            {
+                clientData.Add("ClientExtensions", new
+                {
+                    AppId = options.Extensions.AppID
+                });
+            }
+
+            // TODO: Add support for TokenBinding
 
             return new ClientData()
             {
-                ClientDataJson = clientDataJson,
+                ClientDataJson = JsonConvert.SerializeObject(clientData),
                 HashAlgId = ApiConstants.HashAlgorithmSha256
             };
         }

@@ -43,6 +43,7 @@ namespace DSInternals.Win32.WebAuthn
         private string _u2fAppId;
 
         // If the following is non-NULL, then, set to TRUE if the above U2fAppid was used instead of RpId
+        // Note that this value is modified by WebAuthNAuthenticatorGetAssertion
         private IntPtr _isU2fAppIdUsed;
 
         //

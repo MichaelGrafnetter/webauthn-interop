@@ -14,8 +14,9 @@
             <MenuItem Header="_Register" Command="{Binding RegisterCommand}" Padding="5" />
             <MenuItem Header="_Authenticate" Command="{Binding AuthenticateCommand}" Padding="5" />
             <MenuItem Header="_Load Options" Padding="5">
-                <MenuItem Header="_Microsoft" Command="{Binding LoadOptionsCommand}" />
-                <!-- TODO: <MenuItem Header="_Google" Command="{Binding LoadOptionsCommand}" />-->
+                <MenuItem Header="_Microsoft FIDO2" Command="{Binding LoadMicrosoftOptionsCommand}" />
+                <MenuItem Header="_Facebook U2F" Command="{Binding LoadFacebookOptionsCommand}" />
+                <MenuItem Header="_Google U2F" Command="{Binding LoadGoogleOptionsCommand}" />
             </MenuItem>
         </Menu>
         <TabControl Padding="2">
