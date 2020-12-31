@@ -14,11 +14,13 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DO_SIGN: true
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
     
     - name: Setup .NET Core 2 ## Required by AzureSignTool
+      if: ${{ env.DO_SIGN }}
       uses: actions/setup-dotnet@v1
       with:
           dotnet-version: '2.1.x'
@@ -33,6 +35,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Install Azure Code Signing Tool
+      if: ${{ env.DO_SIGN }}
       run: dotnet tool install --global AzureSignTool
 
     - name: Sign Binaries
@@ -44,7 +47,7 @@ jobs:
         SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
       working-directory: Build/bin/Release
-      if: ${{ secrets.SIGNING_CERTIFICATE_NAME != '' }}
+      if: ${{ env.DO_SIGN }}
       timeout-minutes: 1
       continue-on-error: true
       run: |
@@ -64,10 +67,12 @@ jobs:
         xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/net472/" /Y /I /F
 
     - name: Install Azure NuGet Signing Tool
+      if: ${{ env.DO_SIGN }}
       run: dotnet tool install --global NuGetKeyVaultSignTool
 
     - name: Sign NuGet Package
       shell: cmd
+      if: ${{ env.DO_SIGN }}
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
         SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
@@ -88,6 +93,7 @@ jobs:
 
     - name: Sign Symbol Package
       shell: cmd
+      if: ${{ env.DO_SIGN }}
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
         SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
