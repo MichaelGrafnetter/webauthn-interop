@@ -10,6 +10,7 @@ jobs:
   build:
     name: 'Release Build'
     runs-on: windows-latest
+    timeout-minutes: 10
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -17,7 +18,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
     
-    - name: Setup .NET Core CLI
+    - name: Setup .NET Core 2 ## Required by AzureSignTool
+      uses: actions/setup-dotnet@v1
+      with:
+          dotnet-version: '2.1.x'
+
+    - name: Setup .NET Core 3
       uses: actions/setup-dotnet@v1
       with:
           dotnet-version: '3.1.x'
@@ -38,6 +44,9 @@ jobs:
         SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
       working-directory: Build/bin/Release
+      if: ${{ secrets.SIGNING_CERTIFICATE_NAME != '' }}
+      timeout-minutes: 1
+      continue-on-error: true
       run: |
         AzureSignTool sign ^
         "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" ^
