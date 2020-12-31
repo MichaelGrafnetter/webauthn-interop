@@ -62,6 +62,9 @@ jobs:
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
         xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/net472/" /Y /I /F
 
+    - name: Create NuGet Package
+      run: dotnet pack --configuration Release --no-build --nologo
+
     - name: Install Azure NuGet Signing Tool
       if: ${{ env.DO_SIGN }}
       run: dotnet tool install --global NuGetKeyVaultSignTool
@@ -110,7 +113,7 @@ jobs:
 
     - name: Run Unit Tests
       working-directory: Src
-      run: dotnet test DSInternals.Win32.WebAuthn.Tests --configuration Debug
+      run: dotnet test DSInternals.Win32.WebAuthn.Tests --configuration Debug --nologo
       continue-on-error: true
     
     - name: Install Coverage Report Generator

@@ -5,6 +5,7 @@
         <TargetFramework>net472</TargetFramework>
         <UseWPF>true</UseWPF>
         <RootNamespace>DSInternals.Win32.WebAuthn.Fido2UI</RootNamespace>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Release'">

@@ -38,6 +38,8 @@
     <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
         <!-- Enable Source Link on CI builds -->
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <!-- DLLs need to be digitally signed first before a NuGet package is created. -->
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
