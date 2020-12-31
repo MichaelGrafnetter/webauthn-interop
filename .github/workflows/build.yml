@@ -63,6 +63,7 @@ jobs:
         xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/net472/" /Y /I /F
 
     - name: Create NuGet Package
+      working-directory: Src
       run: dotnet pack --configuration Release --no-build --nologo
 
     - name: Install Azure NuGet Signing Tool
