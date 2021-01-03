@@ -8,7 +8,7 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
         x:Class="DSInternals.Win32.WebAuthn.Fido2UI.MainWindow"
         mc:Ignorable="d"
-        Title="FIDO2 UI" Height="600" Width="800">
+        Title="FIDO2 UI" MinHeight="600" MinWidth="1150">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Register" Command="{Binding RegisterCommand}" Padding="5" />
