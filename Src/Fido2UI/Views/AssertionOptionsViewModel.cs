@@ -23,7 +23,11 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     Challenge = string.IsNullOrEmpty(Challenge) ? null : Encoding.ASCII.GetBytes(Challenge),
                     RpId = RpId,
                     Timeout = Timeout,
-                    UserVerification = SelectedUserVerificationRequirement
+                    UserVerification = SelectedUserVerificationRequirement,
+                    Extensions = new AuthenticationExtensionsClientInputs()
+                    {
+                        AppID = AppId
+                    },
                 };
             }
             set
@@ -32,6 +36,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                 Challenge = Encoding.ASCII.GetString(value.Challenge);
                 SelectedUserVerificationRequirement = value.UserVerification;
                 Timeout = value.Timeout;
+                AppId = value.Extensions?.AppID;
                 // TODO: Implement AllowCredentials in UI
             }
         }
@@ -76,6 +81,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             get => _rpId;
             set => SetProperty(ref _rpId, value);
+        }
+
+        private string _appId;
+        public string AppId
+        {
+            get => _appId;
+            set => SetProperty(ref _appId, value);
         }
     }
 }

@@ -8,30 +8,29 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="350">
+             d:DesignHeight="400" d:DesignWidth="600">
     <GroupBox Header="Assertion Options" Margin="0, 0, 0, 0">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="300"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-                <RowDefinition Height="100" />
-                <RowDefinition Height="30" />
-                <RowDefinition Height="30" />
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <Label Name="RpIdLabel" Content="Relying party:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-            <TextBox x:Name="RpIdTextBox" Text="{Binding RpId, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
-            <Label Name="ChallengeLabel" Content="Challenge:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" />
-            <TextBox x:Name="ChallengeTextBox" Text="{Binding Challenge, Mode=TwoWay}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" />
-            <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
-            <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding SelectedUserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
-            <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
-            <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding SelectedAuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
-            <Label Name="TimeoutLabel" Content="Timeout (s):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
-            <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" Grid.Row="4" Grid.Column="4" />
-        </Grid>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <Label Name="RpIdLabel" Content="Relying party:" Width="100" />
+                <TextBox x:Name="RpIdTextBox" Text="{Binding RpId, Mode=TwoWay}" VerticalAlignment="Center" />
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <Label x:Name="AppIdLabel" Content="U2F AppID:" Width="100" />
+                <TextBox x:Name="AppIdTextbox" Text="{Binding AppId, Mode=TwoWay}" VerticalAlignment="Center" />
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <Label Name="UserVerificationLabel" Content="User verification:" Width="100" />
+                <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding SelectedUserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="110" VerticalAlignment="Center" />
+                <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" />
+                <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding SelectedAuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="110" VerticalAlignment="Center" />
+                <Label Name="TimeoutLabel" Content="Timeout (s):" />
+                <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}"  VerticalAlignment="Center" />
+            </DockPanel>
+            <DockPanel Margin="0,5,0,0">
+                <Label Name="ChallengeLabel" Content="Challenge:" Width="100" />
+                <TextBox x:Name="ChallengeTextBox" Text="{Binding Challenge, Mode=TwoWay}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+            </DockPanel>
+        </DockPanel>
     </GroupBox>
 </UserControl>

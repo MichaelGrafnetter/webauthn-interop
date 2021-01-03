@@ -24,14 +24,10 @@
                 <local:ApiInformationView x:Name="ApiInformationView" />
             </TabItem>
             <TabItem Header="Registration">
-                <StackPanel>
-                    <local:AttestationOptionsView x:Name="AttestationOptionsEditor" />
-                </StackPanel>
+                <local:AttestationOptionsView x:Name="AttestationOptionsEditor" />
             </TabItem>
             <TabItem Header="Authentication">
-                <StackPanel>
-                    <local:AssertionOptionsView x:Name="AssertionOptionsEditor" />
-                </StackPanel>
+                <local:AssertionOptionsView x:Name="AssertionOptionsEditor" />
             </TabItem>
         </TabControl>
     </DockPanel>
