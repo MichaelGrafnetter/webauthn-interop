@@ -22,6 +22,7 @@ See the [project site](https://github.com/abergs/fido2-net-lib) for more details
 ## FIDO2 UI
 
 The project also contains a simple Windows GUI tool called `FIDO2 UI`, which is built on top of the `DSInternals.Win32.WebAuthn` library:
+
 ![](../Documentation/Screenshots/fido2_ui.png)
 
 he only purpose of this tool is to demonstrate the usage of the WebAuthn API.
@@ -136,7 +137,7 @@ See the [full API documentation](../Documentation/API/DSInternals.Win32.WebAuthn
 
 ## Code Generation
 
-The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/ApiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](https://github.com/microsoft/webauthn/blob/master/webauthn.h).
+The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/Interop/ApiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](https://github.com/microsoft/webauthn/blob/master/webauthn.h).
 This is performed in the [DSInternals.Win32.WebAuthn.CodeGen](../Src/DSInternals.Win32.WebAuthn.CodeGen/Program.cs) helper application by leveraging the [CppAst.NET project](https://github.com/xoofx/CppAst.NET).
 
 ## Troubleshooting
@@ -144,6 +145,7 @@ This is performed in the [DSInternals.Win32.WebAuthn.CodeGen](../Src/DSInternals
 ### Rohitab API Monitor
 
 Rohitab API Monitor can be used to [analyze WebAuthn API calls made by browsers](../Documentation/Rohitab/README.md):
+
 ![API Monitor Screenshot](../Documentation/Screenshots/api_monitor.png)
 
 ### Windows Event Viewer

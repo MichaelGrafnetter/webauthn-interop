@@ -11,14 +11,16 @@
              d:DesignHeight="400" d:DesignWidth="600">
     <GroupBox Header="Assertion Options" Margin="0, 0, 0, 0">
         <DockPanel>
-            <DockPanel DockPanel.Dock="Top">
-                <Label Name="RpIdLabel" Content="Relying party:" Width="100" />
-                <TextBox x:Name="RpIdTextBox" Text="{Binding RpId, Mode=TwoWay}" VerticalAlignment="Center" />
-            </DockPanel>
-            <DockPanel DockPanel.Dock="Top">
-                <Label x:Name="AppIdLabel" Content="U2F AppID:" Width="100" />
-                <TextBox x:Name="AppIdTextbox" Text="{Binding AppId, Mode=TwoWay}" VerticalAlignment="Center" />
-            </DockPanel>
+            <UniformGrid Rows="1" DockPanel.Dock="Top">
+                <DockPanel>
+                    <Label Name="RpIdLabel" Content="Relying party:" Width="100" />
+                    <TextBox x:Name="RpIdTextBox" Text="{Binding RpId, Mode=TwoWay}" VerticalAlignment="Center" />
+                </DockPanel>
+                <DockPanel>
+                    <Label x:Name="AppIdLabel" Content="U2F AppID:" />
+                    <TextBox x:Name="AppIdTextbox" Text="{Binding AppId, Mode=TwoWay}" VerticalAlignment="Center" />
+                </DockPanel>
+            </UniformGrid>
             <DockPanel DockPanel.Dock="Top">
                 <Label Name="UserVerificationLabel" Content="User verification:" Width="100" />
                 <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding SelectedUserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="110" VerticalAlignment="Center" />

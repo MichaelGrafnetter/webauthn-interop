@@ -16,6 +16,7 @@ The [WebAuthn.xml](WebAuthn.xml) file just needs to be copied to the API Monitor
 The API Monitor then needs to be re-launched.
 
 It is also recommended to increase the maximum size of the captured data, as [clientDataJSON](https://www.w3.org/TR/webauthn/#dom-authenticatorresponse-clientdatajson) can be quite big:
+
 ![API Monitor Options](../Screenshots/api_monitor_options.png)
 
 ## DLL Injection
