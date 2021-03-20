@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal class AssertionSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {

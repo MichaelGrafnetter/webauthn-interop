@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal class PtrToConstStringMarshaler : ICustomMarshaler
     {

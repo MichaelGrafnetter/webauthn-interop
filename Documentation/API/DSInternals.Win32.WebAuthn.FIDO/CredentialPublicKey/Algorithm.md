@@ -1,7 +1,7 @@
-# CredentialPublicKey.Algorithm field
+# CredentialPublicKey.Algorithm property
 
 ```csharp
-public Algorithm Algorithm;
+public Algorithm Algorithm { get; }
 ```
 
 ## See Also

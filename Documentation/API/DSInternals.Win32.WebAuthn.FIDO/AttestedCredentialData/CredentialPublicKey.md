@@ -1,6 +1,6 @@
 # AttestedCredentialData.CredentialPublicKey property
 
-The credential public key encoded in COSE_Key format, as defined in Section 7 of RFC8152, using the CTAP2 canonical CBOR encoding form. !:https://www.w3.org/TR/webauthn/#credential-public-key
+The credential public key encoded in COSE_Key format, as defined in Section 7 of RFC8152, using the CTAP2 canonical CBOR encoding form.
 
 ```csharp
 public CredentialPublicKey CredentialPublicKey { get; }

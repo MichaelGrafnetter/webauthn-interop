@@ -1,4 +1,4 @@
-﻿namespace DSInternals.Win32.WebAuthn
+﻿namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal enum CredentialAttestationVersion
     {

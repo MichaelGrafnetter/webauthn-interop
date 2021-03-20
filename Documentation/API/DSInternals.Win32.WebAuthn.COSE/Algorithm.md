@@ -10,17 +10,17 @@ public enum Algorithm
 
 | name | value | description |
 | --- | --- | --- |
-| RS1 | `-65535` | RSASSA-PKCS1-v1_5 w/ SHA-1 |
-| RS512 | `-259` | RSASSA-PKCS1-v1_5 w/ SHA-512 |
-| RS384 | `-258` | RSASSA-PKCS1-v1_5 w/ SHA-384 |
-| RS256 | `-257` | RSASSA-PKCS1-v1_5 w/ SHA-256 |
-| PS512 | `-39` | RSASSA-PSS w/ SHA-512 |
-| PS384 | `-38` | RSASSA-PSS w/ SHA-384 |
-| PS256 | `-37` | RSASSA-PSS w/ SHA-256 |
-| ES512 | `-36` | ECDSA w/ SHA-512 |
-| ES384 | `-35` | ECDSA w/ SHA-384 |
+| ES256 | `-7` | ECDSA with SHA-256 |
+| ES384 | `-35` | ECDSA with SHA-384 |
+| ES512 | `-36` | ECDSA with SHA-512 |
+| RS256 | `-257` | RSASSA-PKCS1-v1_5 with SHA-256 |
+| RS384 | `-258` | RSASSA-PKCS1-v1_5 with SHA-384 |
+| RS512 | `-259` | RSASSA-PKCS1-v1_5 with SHA-512 |
+| PS256 | `-37` | RSASSA-PSS with SHA-256 |
+| PS384 | `-38` | RSASSA-PSS with SHA-384 |
+| PS512 | `-39` | RSASSA-PSS with SHA-512 |
+| RS1 | `-65535` | RSASSA-PKCS1-v1_5 with SHA-1 |
 | EdDSA | `-8` | EdDSA |
-| ES256 | `-7` | ECDSA w/ SHA-256 |
 
 ## See Also
 

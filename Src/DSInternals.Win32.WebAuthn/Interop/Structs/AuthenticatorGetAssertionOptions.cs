@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.FIDO;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Options.
@@ -74,7 +75,7 @@ namespace DSInternals.Win32.WebAuthn
                 {
                     _isU2fAppIdUsed = Marshal.AllocHGlobal(sizeof(int));
                 }
-                
+
                 Marshal.WriteInt32(_isU2fAppIdUsed, Convert.ToInt32(value != null));
             }
         }
@@ -183,7 +184,7 @@ namespace DSInternals.Win32.WebAuthn
         {
             _extensions?.Dispose();
             _extensions = null;
-            
+
             _allowCredentials?.Dispose();
             _allowCredentials = null;
 

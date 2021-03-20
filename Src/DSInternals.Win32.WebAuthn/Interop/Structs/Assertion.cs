@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Assertion
@@ -42,7 +42,7 @@ namespace DSInternals.Win32.WebAuthn
         public byte[] Signature => _signature?.Read(_signatureLength);
 
         /// <summary>
-        /// User Idetifier
+        /// User Identifier
         /// </summary>
         public byte[] UserId => _userId?.Read(_userIdLength);
     }

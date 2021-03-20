@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.FIDO;
 using Microsoft.Win32.SafeHandles;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal class CredentialAttestationSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
@@ -30,11 +31,11 @@ namespace DSInternals.Win32.WebAuthn
             {
                 case CredentialAttestationVersion.Version1:
                     // TODO: This calculation probably does not work on 64-bit platforms.
-                    sourceStructSize = targetStructSize - (Marshal.SizeOf<ExtensionsOut>() + sizeof(CtapTransport));
+                    sourceStructSize = targetStructSize - (Marshal.SizeOf<ExtensionsOut>() + sizeof(AuthenticatorTransport));
                     break;
                 case CredentialAttestationVersion.Version2:
                     // TODO: This calculation probably does not work on 64-bit platforms.
-                    sourceStructSize = targetStructSize - sizeof(CtapTransport);
+                    sourceStructSize = targetStructSize - sizeof(AuthenticatorTransport);
                     break;
                 case CredentialAttestationVersion.Version3:
                 default:

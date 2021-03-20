@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DSInternals.Win32.WebAuthn.Interop;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

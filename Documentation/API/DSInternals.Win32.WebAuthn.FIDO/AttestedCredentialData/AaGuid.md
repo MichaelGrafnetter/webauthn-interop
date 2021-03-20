@@ -1,6 +1,6 @@
 # AttestedCredentialData.AaGuid property
 
-The AAGUID of the authenticator. Can be used to identify the make and model of the authenticator. !:https://www.w3.org/TR/webauthn/#aaguid
+The AAGUID of the authenticator. Can be used to identify the make and model of the authenticator.
 
 ```csharp
 public Guid AaGuid { get; }

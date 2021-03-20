@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSInternals.Win32.WebAuthn.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fido2UI", "Fido2UI\Fido2UI.csproj", "{2F479568-EC8B-4076-9076-2B4D10B686FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.Win32.WebAuthn.Adapter", "DSInternals.Win32.WebAuthn.Adapter\DSInternals.Win32.WebAuthn.Adapter.csproj", "{67F72ABC-1B7C-4632-94EA-23E12E28A813}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.Win32.WebAuthn.Adaper.Tests", "DSInternals.Win32.WebAuthn.Adapter.Tests\DSInternals.Win32.WebAuthn.Adaper.Tests.csproj", "{D96F5E49-EE79-4B70-ABB4-4F59B5EACCF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,14 @@ Global
 		{2F479568-EC8B-4076-9076-2B4D10B686FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F479568-EC8B-4076-9076-2B4D10B686FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F479568-EC8B-4076-9076-2B4D10B686FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F72ABC-1B7C-4632-94EA-23E12E28A813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F72ABC-1B7C-4632-94EA-23E12E28A813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F72ABC-1B7C-4632-94EA-23E12E28A813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67F72ABC-1B7C-4632-94EA-23E12E28A813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D96F5E49-EE79-4B70-ABB4-4F59B5EACCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D96F5E49-EE79-4B70-ABB4-4F59B5EACCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D96F5E49-EE79-4B70-ABB4-4F59B5EACCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D96F5E49-EE79-4B70-ABB4-4F59B5EACCF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

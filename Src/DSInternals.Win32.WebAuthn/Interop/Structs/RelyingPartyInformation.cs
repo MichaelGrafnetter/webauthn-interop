@@ -1,13 +1,13 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Information about an RP Entity
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class RelyingPartyInformation
+    public class RelyingPartyInformation
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.

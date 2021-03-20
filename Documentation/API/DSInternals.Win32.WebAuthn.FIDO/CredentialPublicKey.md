@@ -9,12 +9,12 @@ public class CredentialPublicKey
 | name | description |
 | --- | --- |
 | [CredentialPublicKey](CredentialPublicKey/CredentialPublicKey.md)(…) |  |
+| [Algorithm](CredentialPublicKey/Algorithm.md) { get; } |  |
 | [ECDsa](CredentialPublicKey/ECDsa.md) { get; } |  |
 | [EdDSAPublicKey](CredentialPublicKey/EdDSAPublicKey.md) { get; } |  |
 | [Padding](CredentialPublicKey/Padding.md) { get; } |  |
 | [RSA](CredentialPublicKey/RSA.md) { get; } |  |
-| [Algorithm](CredentialPublicKey/Algorithm.md) |  |
-| [Type](CredentialPublicKey/Type.md) |  |
+| [Type](CredentialPublicKey/Type.md) { get; } |  |
 | [GetBytes](CredentialPublicKey/GetBytes.md)() |  |
 | override [ToString](CredentialPublicKey/ToString.md)() |  |
 

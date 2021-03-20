@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn.CodeGen
         private const char WordSeparator = '_';
         private const string Header = @"/* This file has been automatically generated. Do not modify it! */
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Contains constants from ""webauthn.h"".

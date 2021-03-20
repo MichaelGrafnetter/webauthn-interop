@@ -8,6 +8,20 @@ namespace DSInternals.Win32.WebAuthn.FIDO
 {
     public class CredentialPublicKey
     {
+        private CBORObject _cpk;
+
+        public KeyType Type
+        {
+            get;
+            private set;
+        }
+
+        public Algorithm Algorithm
+        {
+            get;
+            private set;
+        }
+
         public RSACng RSA
         {
             get
@@ -140,20 +154,6 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                 return null;
             }
         }
-
-        public KeyType Type
-        {
-            get;
-            private set;
-        }
-
-        public Algorithm Algorithm
-        {
-            get;
-            private set;
-        }
-
-        private CBORObject _cpk;
 
         public CredentialPublicKey(CBORObject cpk)
         {

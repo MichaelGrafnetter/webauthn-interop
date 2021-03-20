@@ -1,7 +1,7 @@
-# CredentialPublicKey.Type field
+# CredentialPublicKey.Type property
 
 ```csharp
-public KeyType Type;
+public KeyType Type { get; }
 ```
 
 ## See Also

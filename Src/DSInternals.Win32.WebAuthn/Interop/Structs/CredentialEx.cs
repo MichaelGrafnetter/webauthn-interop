@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.FIDO;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Information about credential with extra information, such as, Transports.
@@ -30,9 +31,9 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Transports.
         /// </summary>
-        private CtapTransport _transport;
+        private AuthenticatorTransport _transport;
 
-        public CredentialEx(byte[] id, string type, CtapTransport transport)
+        public CredentialEx(byte[] id, string type, AuthenticatorTransport transport)
         {
             _id = new ByteArrayIn(id);
             _idLength = id?.Length ?? 0;

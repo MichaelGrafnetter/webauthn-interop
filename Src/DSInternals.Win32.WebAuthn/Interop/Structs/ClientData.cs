@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using DSInternals.Win32.WebAuthn.FIDO;
+using Newtonsoft.Json;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Information about client data.
@@ -54,6 +56,27 @@ namespace DSInternals.Win32.WebAuthn
                 _clientDataLength = value?.Length ?? 0;
                 _clientData = new ByteArrayIn(value);
             }
+        }
+
+        public ClientData(CollectedClientData clientData)
+        {
+            this.ClientDataJson = JsonConvert.SerializeObject(clientData);
+            // Note that SHA-256 is currently hardcoded in Chromium and Firefox.
+            this.HashAlgId = clientData.HashAlgorithm ?? ApiConstants.HashAlgorithmSha256;
+        }
+
+        public ClientData(byte[] clientDataJson)
+        {
+            this.ClientDataRaw = clientDataJson;
+            // Note that SHA-256 is currently hardcoded in Chromium and Firefox.
+            this.HashAlgId = ApiConstants.HashAlgorithmSha256;
+        }
+
+        public ClientData(string clientDataJson)
+        {
+            this.ClientDataJson = clientDataJson;
+            // Note that SHA-256 is currently hardcoded in Chromium and Firefox.
+            this.HashAlgId = ApiConstants.HashAlgorithmSha256;
         }
 
         public void Dispose()

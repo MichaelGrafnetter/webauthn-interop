@@ -1,6 +1,6 @@
 # AttestedCredentialData.CredentialID property
 
-A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions. !:https://www.w3.org/TR/webauthn/#credential-id
+A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions.
 
 ```csharp
 public byte[] CredentialID { get; }

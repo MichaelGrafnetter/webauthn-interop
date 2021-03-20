@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal class DisposableList<T> : List<T>, IDisposable where T : IDisposable
     {
@@ -10,7 +10,7 @@ namespace DSInternals.Win32.WebAuthn
             foreach (var item in this)
             {
                 item?.Dispose();
-            }  
+            }
         }
     }
 }

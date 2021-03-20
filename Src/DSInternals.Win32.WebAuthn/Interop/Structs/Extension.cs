@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.FIDO;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Information about Extension.

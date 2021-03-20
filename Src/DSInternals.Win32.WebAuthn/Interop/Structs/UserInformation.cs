@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Information about a User Entity
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION.</remarks>
+    /// <see>https://www.w3.org/TR/webauthn-2/#dictdef-publickeycredentialuserentity</see>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal class UserInformation : IDisposable
+    public class UserInformation : IDisposable
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -39,6 +40,10 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         public byte[] Id
         {
+            get
+            {
+                return _id?.Read(_idLength);
+            }
             set
             {
                 _id?.Dispose();

@@ -1,11 +1,14 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.COSE;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Information about credential parameter.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_COSE_CREDENTIAL_PARAMETER.</remarks>
+    /// <see>https://www.w3.org/TR/webauthn-2/#dictionary-credential-params</see>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal class CoseCredentialParameter
     {
@@ -22,9 +25,9 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Well-known COSE algorithm specifying the algorithm to use for the credential.
         /// </summary>
-        private CoseAlgorithm _algorithm;
+        private Algorithm _algorithm;
 
-        public CoseCredentialParameter(CoseAlgorithm algorithm, string credentialType)
+        public CoseCredentialParameter(Algorithm algorithm, string credentialType = ApiConstants.CredentialTypePublicKey)
         {
             _algorithm = algorithm;
             _credentialType = credentialType;
@@ -40,7 +43,10 @@ namespace DSInternals.Win32.WebAuthn
     {
         public CoseCredentialParameters(CoseCredentialParameter[] data) : base(data) { }
 
-        public CoseCredentialParameters(CoseAlgorithm algorithm) :
-            base(new CoseCredentialParameter[] { new CoseCredentialParameter(algorithm, ApiConstants.CredentialTypePublicKey) }) { }
+        public CoseCredentialParameters(Algorithm[] algorithms) :
+            base(algorithms.Select(alg => new CoseCredentialParameter(alg)).ToArray()) { }
+
+        public CoseCredentialParameters(Algorithm algorithm) :
+            base(new [] { new CoseCredentialParameter(algorithm) }) { }
     }
 }

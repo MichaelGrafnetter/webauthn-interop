@@ -1,6 +1,6 @@
 # KeyTypeParameter enumeration
 
-COSE Key Type Parameters https://www.iana.org/assignments/cose/cose.xhtml#key-type-parameters
+COSE Key Type Parameters
 
 ```csharp
 public enum KeyTypeParameter

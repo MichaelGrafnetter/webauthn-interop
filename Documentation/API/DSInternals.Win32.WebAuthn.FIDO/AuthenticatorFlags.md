@@ -1,6 +1,6 @@
 # AuthenticatorFlags enumeration
 
-Authenticator data flags !:https://www.w3.org/TR/webauthn/#flags
+Authenticator data flags
 
 ```csharp
 [Flags]
@@ -11,14 +11,14 @@ public enum AuthenticatorFlags : byte
 
 | name | value | description |
 | --- | --- | --- |
-| UserPresent | `0x1` | User Present indicates that the user presence test has completed successfully. !:https://www.w3.org/TR/webauthn/#up |
+| UserPresent | `0x1` | User Present indicates that the user presence test has completed successfully. |
 | RFU1 | `0x2` | Reserved for future use (RFU1) |
-| UserVerified | `0x4` | User Verified indicates that the user verification process has completed successfully. !:https://www.w3.org/TR/webauthn/#uv |
+| UserVerified | `0x4` | User Verified indicates that the user verification process has completed successfully. |
 | RFU2 | `0x8` | Reserved for future use (RFU2) |
 | RFU3 | `0x10` | Reserved for future use (RFU3) |
 | RFU4 | `0x20` | Reserved for future use (RFU4) |
-| AttestationData | `0x40` | Attested credential data included indicates that the authenticator added attested credential data to the authenticator data. !:https://www.w3.org/TR/webauthn/#attested-credential-data |
-| ExtensionData | `0x80` | Extension data included indicates that the authenticator added extension data to the authenticator data. !:https://www.w3.org/TR/webauthn/#authdataextensions |
+| AttestationData | `0x40` | Attested credential data included indicates that the authenticator added attested credential data to the authenticator data. |
+| ExtensionData | `0x80` | Extension data included indicates that the authenticator added extension data to the authenticator data. |
 
 ## See Also
 

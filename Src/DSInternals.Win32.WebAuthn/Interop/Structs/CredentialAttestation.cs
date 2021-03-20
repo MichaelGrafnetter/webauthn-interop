@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.FIDO;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Attestation Info
@@ -50,7 +51,7 @@ namespace DSInternals.Win32.WebAuthn
         /// The transport that was used.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
-        public CtapTransport UsedTransport { get; private set; }
+        public AuthenticatorTransport UsedTransport { get; private set; }
 
         /// <summary>
         /// Authenticator data that was created for this credential.

@@ -48,8 +48,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <!-- TODO: Export dependent files to a different library. -->
-        <PackageReference Include="Fido2.Models" Version="1.1.0" />
         <!-- TODO: Replace with System.Text.Json -->
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <!-- TODO: Replace with System.Formats.Cbor -->
@@ -75,7 +73,7 @@
     </ItemGroup>
     <ItemGroup Condition="$(SignAssembly) != 'true'">
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>$(AssemblyName).Tests</_Parameter1>            
+            <_Parameter1>$(AssemblyName).Tests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
 </Project>

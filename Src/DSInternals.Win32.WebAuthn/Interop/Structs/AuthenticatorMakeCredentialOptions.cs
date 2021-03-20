@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.FIDO;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Options.
@@ -106,7 +107,7 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Exclude Credential List. 
+        /// Exclude Credential List.
         /// </summary>
         /// <remarks>
         /// If present, "ExcludeCredentials" will be ignored.

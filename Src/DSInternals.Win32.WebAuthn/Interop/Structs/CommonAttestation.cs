@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.COSE;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Attestation Info
@@ -24,7 +25,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// COSE algorithm
         /// </summary>
-        public CoseAlgorithm CoseAlgorithm { get; private set; }
+        public Algorithm CoseAlgorithm { get; private set; }
 
         private int _signatureLength;
 

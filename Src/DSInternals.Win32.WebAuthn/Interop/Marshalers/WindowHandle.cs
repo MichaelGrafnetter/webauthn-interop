@@ -2,14 +2,14 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct WindowHandle
+    public struct WindowHandle
     {
         private IntPtr _handle;
 
-        private WindowHandle(IntPtr handle)
+        public WindowHandle(IntPtr handle)
         {
             _handle = handle;
         }
