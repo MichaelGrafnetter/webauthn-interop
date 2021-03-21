@@ -5,7 +5,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
     /// <summary>
     /// Contains constants from "webauthn.h".
     /// </summary>
-    internal static partial class ApiConstants
+    partial class ApiConstants
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_API_VERSION_1.
@@ -352,7 +352,5 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </remarks>
         public const int AssertionCurrentVersion = 1;
 
-
     }
 }
-

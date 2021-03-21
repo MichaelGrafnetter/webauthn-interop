@@ -14,7 +14,7 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
-      DO_SIGN: true
+      DO_SIGN: true ## Controls code signing
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
         }
         else
         {
-            Write-Host 'The STRONG_NAME_KEY secret is not available. Skipping SNK file creation.'
+            Write-Warning 'The STRONG_NAME_KEY secret is not available. Skipping SNK file creation.'
         }
 
     - name: Setup .NET Core 2 ## Required by AzureSignTool
@@ -131,7 +131,7 @@ jobs:
 
     - name: Run Unit Tests
       working-directory: Src
-      run: dotnet test DSInternals.Win32.WebAuthn.Tests --configuration Debug --nologo
+      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --nologo
       continue-on-error: true
     
     - name: Install Coverage Report Generator

@@ -2,8 +2,6 @@
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {
-
-    // TODO: Perform serialization tests based on https://www.w3.org/TR/webauthn/#clientdatajson-verification
     public class CollectedClientData
     {
         /// <summary>
@@ -53,7 +51,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// <summary>
         /// This member contains the inverse of the sameOriginWithAncestors argument value that was passed into the internal method.
         /// </summary>
-        [JsonProperty("origin", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("crossOrigin", NullValueHandling = NullValueHandling.Ignore)]
         public bool? CrossOrigin
         {
             get;

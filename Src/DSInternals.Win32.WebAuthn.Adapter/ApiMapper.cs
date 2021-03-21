@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
-using Fido2NetLib;
-using Fido2NetLib.Objects;
 using Newtonsoft.Json;
 
 namespace DSInternals.Win32.WebAuthn.Adapter
@@ -11,26 +11,9 @@ namespace DSInternals.Win32.WebAuthn.Adapter
     /// <summary>
     /// Performs mapping between Fido2NetLib objects and low-level data structures.
     /// </summary>
-    internal static class ApiMapper
+    public static class ApiMapper
     {
-        public static AttestationConveyancePreference Translate(Fido2NetLib.Objects.AttestationConveyancePreference? attestation)
-        {
-            switch (attestation)
-            {
-                case Fido2NetLib.Objects.AttestationConveyancePreference.None:
-                    return AttestationConveyancePreference.None;
-                case Fido2NetLib.Objects.AttestationConveyancePreference.Direct:
-                    return AttestationConveyancePreference.Direct;
-                case Fido2NetLib.Objects.AttestationConveyancePreference.Indirect:
-                    return AttestationConveyancePreference.Indirect;
-                case null:
-                    return AttestationConveyancePreference.Any;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        public static RelyingPartyInformation Translate(PublicKeyCredentialRpEntity relyingParty)
+        public static RelyingPartyInformation Translate(Fido2NetLib.PublicKeyCredentialRpEntity relyingParty)
         {
             if (relyingParty == null)
             {
@@ -45,7 +28,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             };
         }
 
-        public static UserInformation Translate(Fido2User user)
+        public static UserInformation Translate(Fido2NetLib.Fido2User user)
         {
             if (user == null)
             {
@@ -61,81 +44,24 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             };
         }
 
-        public static CoseCredentialParameters Translate(List<PubKeyCredParam> credParams)
+        public static Algorithm[] Translate(IList<Fido2NetLib.PubKeyCredParam> credParams)
         {
             if (credParams == null)
             {
                 throw new ArgumentNullException(nameof(credParams));
             }
 
-            var convertedParams = credParams.Select(item => Translate(item)).ToArray();
-            return new CoseCredentialParameters(convertedParams);
+            return credParams.Select(item => Translate(item.Alg)).ToArray();
         }
 
-        public static CoseCredentialParameter Translate(PubKeyCredParam credParam)
+        public static Algorithm Translate(long algorithm)
         {
-            if (credParam == null)
-            {
-                throw new ArgumentNullException(nameof(credParam));
-            }
-
-            return new CoseCredentialParameter(Translate(credParam.Alg), Translate(credParam.Type));
+            return checked((Algorithm)algorithm);
         }
 
-        public static string Translate(PublicKeyCredentialType? credentialType)
+        public static IList<PublicKeyCredentialDescriptor> Translate(IEnumerable<Fido2NetLib.Objects.PublicKeyCredentialDescriptor> credentials)
         {
-            switch (credentialType)
-            {
-                case PublicKeyCredentialType.PublicKey:
-                    return ApiConstants.CredentialTypePublicKey;
-                case null:
-                    return null;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        public static DisposableList<ExtensionIn> Translate(AuthenticationExtensionsClientInputs extensions)
-        {
-            var nativeExtensions = new DisposableList<ExtensionIn>();
-            // TODO: Process the AppID extension
-
-            if (extensions is WinExtensionsIn winExtensions)
-            {
-                if (winExtensions.CredProtect.HasValue)
-                {
-                    if(!WebAuthnApi.IsCredProtectExtensionSupported)
-                    {
-                        // This extension is only supported in API V2.
-                        throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
-                    }
-
-                    nativeExtensions.Add(ExtensionIn.CreateCredProtect(
-                        winExtensions.CredProtect.Value,
-                        winExtensions.EnforceCredProtect == true));
-                }
-
-                if (winExtensions.HmacSecret.HasValue)
-                {
-                    nativeExtensions.Add(ExtensionIn.CreateHmacSecret());
-                }
-            }
-
-            return nativeExtensions;
-        }
-
-        internal static WinExtensionsOut Translate(ExtensionsOut extensions)
-        {
-            return new WinExtensionsOut()
-            {
-                HmacSecret = extensions.HmacSecret,
-                CredProtect = extensions.CredProtect
-            };
-        }
-
-        public static DisposableList<CredentialIn> Translate(IEnumerable<PublicKeyCredentialDescriptor> credentials)
-        {
-            var result = new DisposableList<CredentialIn>();
+            var result = new List<PublicKeyCredentialDescriptor>();
 
             if (credentials != null)
             {
@@ -145,184 +71,46 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             return result;
         }
 
-        public static DisposableList<CredentialEx> TranslateEx(IEnumerable<PublicKeyCredentialDescriptor> credentials)
+        public static PublicKeyCredentialDescriptor Translate(Fido2NetLib.Objects.PublicKeyCredentialDescriptor credential)
         {
-            var result = new DisposableList<CredentialEx>();
-
-            if (credentials != null)
-            {
-                result.AddRange(credentials.Select(item => TranslateEx(item)));
-            }
-
-            return result;
+            return new PublicKeyCredentialDescriptor(credential.Id, Translate(credential.Transports), Translate(credential.Type));
         }
 
-        public static CredentialIn Translate(PublicKeyCredentialDescriptor credential)
-        {
-            if (credential == null)
-            {
-                throw new ArgumentNullException(nameof(credential));
-            }
-
-            return new CredentialIn(credential.Id, Translate(credential.Type));
-        }
-
-        public static CredentialEx TranslateEx(PublicKeyCredentialDescriptor credential)
-        {
-            if (credential == null)
-            {
-                throw new ArgumentNullException(nameof(credential));
-            }
-
-            return new CredentialEx(credential.Id, Translate(credential.Type), Translate(credential.Transports));
-        }
-
-        public static AuthenticatorGetAssertionOptions Translate(AssertionOptions options, Guid? cancellationId, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment, Credentials allowCreds, CredentialList allowCredsEx)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            return new AuthenticatorGetAssertionOptions()
-            {
-                TimeoutMilliseconds = checked((int)options.Timeout),
-                AuthenticatorAttachment = Translate(authenticatorAttachment),
-                AllowCredentials = allowCreds,
-                AllowCredentialsEx = allowCredsEx,
-                // TODO: Add support for extensions in AuthenticatorGetAssertion
-                UserVerificationRequirement = ApiMapper.Translate(options.UserVerification),
-                CancellationId = cancellationId,
-                U2fAppId = options.Extensions?.AppID,
-            };
-        }
-
-        public static AuthenticatorMakeCredentialOptions Translate(CredentialCreateOptions options, Guid? cancellationId, ExtensionsIn extensions, Credentials excludeCreds, CredentialList excludeCredsEx)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            var nativeOptions = new AuthenticatorMakeCredentialOptions()
-            {
-                TimeoutMilliseconds = checked((int)options.Timeout),
-                AuthenticatorAttachment = ApiMapper.Translate(options.AuthenticatorSelection?.AuthenticatorAttachment),
-                RequireResidentKey = options.AuthenticatorSelection?.RequireResidentKey ?? false,
-                AttestationConveyancePreference = ApiMapper.Translate(options.Attestation),
-                UserVerificationRequirement = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification),
-                Extensions = extensions,
-                ExcludeCredentials = excludeCreds,
-                ExcludeCredentialsEx = excludeCredsEx,
-                CancellationId = cancellationId
-            };
-
-            return nativeOptions;
-        }
-
-        public static ClientData Translate(CredentialCreateOptions options, bool crossOrigin = false)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            var clientDataJson = JsonConvert.SerializeObject(new
-            {
-                Type = ApiConstants.ClientDataCredentialCreate,
-                Challenge = options.Challenge,
-                Origin = options.Rp?.Id,
-                CrossOrigin = crossOrigin
-                // TODO: Add support for TokenBinding
-            });
-
-            return new ClientData()
-            {
-                ClientDataJson = clientDataJson,
-                // Note that SHA-256 is currently also hardcoded in Chromium and Firefox.
-                HashAlgId = ApiConstants.HashAlgorithmSha256
-            };
-        }
-
-        public static ClientData Translate(AssertionOptions options, bool crossOrigin = false)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            if (options.RpId == null)
-            {
-                throw new ArgumentException("RpId must be specified.", nameof(options));
-            }
-
-            // Add "https://" to RpId if missing
-            var origin = new UriBuilder(options.RpId);
-            origin.Scheme = Uri.UriSchemeHttps;
-
-            // TODO: Create a wrapper object for ClientData properties
-            var clientData = new Dictionary<string, object>
-            {
-                { "Type" , ApiConstants.ClientDataCredentialGet },
-                { "Challenge", options.Challenge },
-                { "Origin", origin.Uri.ToString() },
-                { "HashAlgorithm", ApiConstants.HashAlgorithmSha256 },
-                { "CrossOrigin", crossOrigin }
-            };
-
-            if(options.Extensions?.AppID != null)
-            {
-                clientData.Add("ClientExtensions", new
-                {
-                    AppId = options.Extensions.AppID
-                });
-            }
-
-            // TODO: Add support for TokenBinding
-
-            return new ClientData()
-            {
-                ClientDataJson = JsonConvert.SerializeObject(clientData),
-                HashAlgId = ApiConstants.HashAlgorithmSha256
-            };
-        }
-
-        public static CtapTransport Translate(AuthenticatorTransport[] transports)
+        public static AuthenticatorTransport Translate(Fido2NetLib.Objects.AuthenticatorTransport[] transports)
         {
             if (transports == null)
             {
-                return CtapTransport.NoRestrictions;
+                return AuthenticatorTransport.NoRestrictions;
             }
 
             return transports.Aggregate(
-                CtapTransport.NoRestrictions,
+                AuthenticatorTransport.NoRestrictions,
                 (transportFlags, transport) => transportFlags | Translate(transport));
         }
 
-        public static CtapTransport Translate(AuthenticatorTransport? transport)
+        public static AuthenticatorTransport Translate(Fido2NetLib.Objects.AuthenticatorTransport? transport)
         {
             switch (transport)
             {
-                case AuthenticatorTransport.Ble:
-                    return CtapTransport.BLE;
-                case AuthenticatorTransport.Internal:
-                    return CtapTransport.Internal;
-                case AuthenticatorTransport.Nfc:
-                    return CtapTransport.NFC;
-                case AuthenticatorTransport.Usb:
-                    return CtapTransport.USB;
+                case Fido2NetLib.Objects.AuthenticatorTransport.Ble:
+                    return AuthenticatorTransport.BLE;
+                case Fido2NetLib.Objects.AuthenticatorTransport.Internal:
+                    return AuthenticatorTransport.Internal;
+                case Fido2NetLib.Objects.AuthenticatorTransport.Nfc:
+                    return AuthenticatorTransport.NFC;
+                case Fido2NetLib.Objects.AuthenticatorTransport.Usb:
+                    return AuthenticatorTransport.USB;
                 case null:
-                    return CtapTransport.NoRestrictions;
-                case AuthenticatorTransport.Lightning:
+                    return AuthenticatorTransport.NoRestrictions;
+                case Fido2NetLib.Objects.AuthenticatorTransport.Lightning:
                 default:
-                    // Lightning is not supported on Windows.
-                    throw new NotSupportedException();
+                    throw new NotSupportedException("The Lightning transport is not supported on Windows.");
             }
         }
 
-        public static CoseAlgorithm Translate(long algorithm)
+        public static string Translate(Fido2NetLib.Objects.PublicKeyCredentialType? credentialType)
         {
-            return checked((CoseAlgorithm)algorithm);
+            return JsonConvert.SerializeObject(credentialType);
         }
 
         public static AuthenticatorAttachment Translate(Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment)
@@ -358,6 +146,21 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             }
         }
 
-
+        public static AttestationConveyancePreference Translate(Fido2NetLib.Objects.AttestationConveyancePreference? attestation)
+        {
+            switch (attestation)
+            {
+                case Fido2NetLib.Objects.AttestationConveyancePreference.None:
+                    return AttestationConveyancePreference.None;
+                case Fido2NetLib.Objects.AttestationConveyancePreference.Direct:
+                    return AttestationConveyancePreference.Direct;
+                case Fido2NetLib.Objects.AttestationConveyancePreference.Indirect:
+                    return AttestationConveyancePreference.Indirect;
+                case null:
+                    return AttestationConveyancePreference.Any;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
     }
 }

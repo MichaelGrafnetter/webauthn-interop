@@ -8,9 +8,11 @@ namespace DSInternals.Win32.WebAuthn.FIDO
     /// </summary>
     public class Base64UrlConverter : JsonConverter<byte[]>
     {
-        private readonly Required _required;
+        private readonly Required _required = Required.DisallowNull;
 
-        public Base64UrlConverter(Required required = Required.DisallowNull)
+        public Base64UrlConverter() { }
+
+        public Base64UrlConverter(Required required)
         {
             _required = required;
         }

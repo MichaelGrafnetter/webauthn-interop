@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DSInternals.Win32.WebAuthn.Interop;
+using DSInternals.Win32.WebAuthn.Adapter;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Win32.WebAuthn.UITests
 {
+    /// <summary>
+    /// These tests require user interaction and should not be executed as part of CI.
+    /// </summary>
     [TestClass]
-    public class WebAuthnApiTester
+    [TestCategory("Interactive")]
+    public class WebAuthnApiUITester
     {
         [TestMethod]
         public void WebAuthN_MakeCredential_MSAccount()
@@ -34,9 +38,9 @@ namespace DSInternals.Win32.WebAuthn.UITests
 
             var authenticator = new AuthenticatorSelection
             {
-                AuthenticatorAttachment = Fido2NetLib.Objects.AuthenticatorAttachment.CrossPlatform,
+                AuthenticatorAttachment = AuthenticatorAttachment.CrossPlatform,
                 RequireResidentKey = true,
-                UserVerification = Fido2NetLib.Objects.UserVerificationRequirement.Required,
+                UserVerification = UserVerificationRequirement.Required,
             };
 
             byte[] challenge = Encoding.ASCII.GetBytes("CbWTU93Ppbgok1glyka*K9sZSWkqpK3qS1ldeLJxsI4k3jMLIi3dl8VDx10siTGd8U5SNj8yyMIbqXQH!apXGnrhWmYlg2GNdEGddIkO03cql!kKVgKi*MqEIl9aPqmJdYuRMjrEYlIyzi4*wP0YSyA$");
@@ -48,20 +52,21 @@ namespace DSInternals.Win32.WebAuthn.UITests
                 new PublicKeyCredentialDescriptor(Base64Url.Decode("sx2P4XkPO6TUoSf0pMEm3zi5gdwVrIRjiYvuTFRAkNMe_jVsntSgkyG5aV8er5GCA_G1X2idph-8lhhMFX3aaAyBCQIAAA="))
             };
 
-            var extensions = new WinExtensionsIn()
-            {
-                HmacSecret = true,
-                CredProtect = UserVerification.Optional
-            };
+            // TODO: Test extensions
+            //var extensions = new WinExtensionsIn()
+            //{
+            //    HmacSecret = true,
+            //    CredProtect = UserVerification.Optional
+            //};
 
             var options = CredentialCreateOptions.Create(
                 config,
                 challenge,
                 user,
                 authenticator,
-                Fido2NetLib.Objects.AttestationConveyancePreference.Direct,
+                AttestationConveyancePreference.Direct,
                 excludedCredentials,
-                extensions
+                null
             );
 
             options.PubKeyCredParams = new List<PubKeyCredParam>()
@@ -70,7 +75,7 @@ namespace DSInternals.Win32.WebAuthn.UITests
                 new PubKeyCredParam() { Alg = -257, Type = PublicKeyCredentialType.PublicKey }
             };
 
-            var webauthn = new WebAuthnApi();
+            var webauthn = new WebAuthnApiAdapter();
             var response = webauthn.AuthenticatorMakeCredential(options);
 
             // Validate
@@ -120,7 +125,7 @@ namespace DSInternals.Win32.WebAuthn.UITests
                 null
             );
 
-            var webauthn = new WebAuthnApi();
+            var webauthn = new WebAuthnApiAdapter();
             var response = webauthn.AuthenticatorGetAssertion(options);
 
             // Validate
@@ -151,8 +156,8 @@ namespace DSInternals.Win32.WebAuthn.UITests
                 null
                 );
 
-            var webauthn = new WebAuthnApi();
-            var response = webauthn.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.Platform);
+            var webauthn = new WebAuthnApiAdapter();
+            var response = webauthn.AuthenticatorGetAssertion(options, AuthenticatorAttachment.Platform);
 
             // Validate
             var fido2 = new Fido2(config);
@@ -182,7 +187,7 @@ namespace DSInternals.Win32.WebAuthn.UITests
                 null
                 );
 
-            var webauthn = new WebAuthnApi();
+            var webauthn = new WebAuthnApiAdapter();
 
             var source = new CancellationTokenSource(5000);
             var response = webauthn.AuthenticatorGetAssertionAsync(options, null, source.Token).GetAwaiter().GetResult();

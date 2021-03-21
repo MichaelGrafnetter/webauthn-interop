@@ -8,7 +8,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
     public class ApiHelperTester
     {
         [TestMethod]
-        public void ApiMapper_Validate_Success()
+        public void ApiHelper_Validate_Success()
         {
             // Should not throw
             ApiHelper.Validate(HResult.Success);
@@ -16,14 +16,14 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
 
         [TestMethod]
         [ExpectedException(typeof(OperationCanceledException))]
-        public void ApiMapper_Validate_Cancelled()
+        public void ApiHelper_Validate_Cancelled()
         {
             ApiHelper.Validate(HResult.ActionCancelled);
         }
 
         [TestMethod]
         [ExpectedException(typeof(Win32Exception))]
-        public void ApiMapper_Validate_OtherError()
+        public void ApiHelper_Validate_OtherError()
         {
             ApiHelper.Validate(HResult.KeyStorageFull);
         }

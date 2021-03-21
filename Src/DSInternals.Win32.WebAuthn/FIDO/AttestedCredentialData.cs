@@ -26,7 +26,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions.
         /// </summary>
         /// <see>https://www.w3.org/TR/webauthn/#credential-id</see>
-        public byte[] CredentialID
+        public byte[] CredentialId
         {
             get;
             private set;
@@ -66,7 +66,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             ushort credentialIDLen = credentialIDLenBytes.ToUInt16BigEndian();
 
             // Read the credential ID bytes
-            this.CredentialID = reader.ReadBytes(credentialIDLen);
+            this.CredentialId = reader.ReadBytes(credentialIDLen);
 
             // "Determining attested credential data's length, which is variable, involves determining 
             // credentialPublicKey's beginning location given the preceding credentialId's length, and 
@@ -86,7 +86,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         {
             return string.Format(CultureInfo.InvariantCulture, "AAGUID: {0}, CredentialID: {1}, CredentialPublicKey: {2}",
                 AaGuid.ToString(),
-                CredentialID.ToHex(true),
+                CredentialId.ToHex(true),
                 CredentialPublicKey.ToString());
         }
     }

@@ -18,12 +18,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
     /// <summary>
     /// Contains constants from ""webauthn.h"".
     /// </summary>
-    internal static partial class ApiConstants
+    partial class ApiConstants
     {";
-        private const string Footer = @"
-    }
-}
-";
+        private const string Footer = @"    }
+}";
         private const string Padding = "        ";
 
         static void Main(string[] args)

@@ -3,7 +3,7 @@
     /// <summary>
     /// Contains WebAuthn API constants. Most of them are auto-generated from webauthn.h.
     /// </summary>
-    partial class ApiConstants
+    public static partial class ApiConstants
     {
         public const string ClientDataCredentialCreate = "webauthn.create";
         public const string ClientDataCredentialCreateU2F = "navigator.id.finishEnrollment";

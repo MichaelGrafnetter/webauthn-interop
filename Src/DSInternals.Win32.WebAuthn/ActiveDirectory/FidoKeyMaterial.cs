@@ -21,14 +21,13 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             private set;
         }
 
-        // TODO: Ba64 converter attribute
-
         /// <summary>
         /// AuthData is a WebAuthn authenticator data structure.
         /// <see>https://www.w3.org/TR/webauthn/#sec-authenticator-data</see>
         /// </summary>
         [JsonProperty("authData")]
-        public string AuthenticatorDataRaw
+        [JsonConverter(typeof(Base64UrlConverter))]
+        public byte[] AuthenticatorDataRaw
         {
             get;
             private set;
@@ -81,7 +80,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         {
             get
             {
-                return new AuthenticatorData(Convert.FromBase64String(this.AuthenticatorDataRaw));
+                return new AuthenticatorData(this.AuthenticatorDataRaw);
             }
         }
     }

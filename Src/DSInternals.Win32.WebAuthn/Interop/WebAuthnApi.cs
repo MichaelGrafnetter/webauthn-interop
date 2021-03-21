@@ -108,7 +108,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
-            WindowHandle windowHandle = new WindowHandle()
+            WindowHandle windowHandle = default
         )
         {
             if(rpEntity == null)
@@ -171,7 +171,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
-            WindowHandle windowHandle = new WindowHandle()
+            WindowHandle windowHandle = default
             )
         {
             if(rpEntity == null)
@@ -187,6 +187,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
             if (clientData == null)
             {
                 throw new ArgumentNullException(nameof(clientData));
+            }
+
+            if (clientData.ClientExtensions?.CredProtect.HasValue == true && WebAuthnApi.IsCredProtectExtensionSupported == false)
+            {
+                // This extension is only supported in API V2.
+                throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
             if (pubKeyCredParams == null)
@@ -279,7 +285,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> allowCredentials = null,
-            WindowHandle windowHandle = new WindowHandle()
+            WindowHandle windowHandle = default
         )
         {
             if (rpId == null)
@@ -329,7 +335,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> allowCredentials = null,
-            WindowHandle windowHandle = new WindowHandle()
+            WindowHandle windowHandle = default
             )
         {
             if (rpId == null)

@@ -2,11 +2,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Fido2NetLib;
+using Fido2NetLib.Objects;
 
 namespace DSInternals.Win32.WebAuthn.Adapter
 {
     public class WebAuthnApiAdapter
     {
+        private Interop.WebAuthnApi _api;
+
+        public WebAuthnApiAdapter()
+        {
+            _api = new Interop.WebAuthnApi();
+        }
+
         /// <summary>
         /// Creates a public key credential source bound to a managing authenticator.
         /// </summary>
@@ -20,49 +28,41 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             }
 
             var rp = ApiMapper.Translate(options.Rp);
+            var credParams = ApiMapper.Translate(options.PubKeyCredParams);
+            var excludeCreds = ApiMapper.Translate(options.ExcludeCredentials);
+            int timeout = checked((int)options.Timeout);
+            var uv = ApiMapper.Translate(options.AuthenticatorSelection?.UserVerification);
+            bool rk = options.AuthenticatorSelection?.RequireResidentKey ?? false;
+            var attachment = ApiMapper.Translate(options.AuthenticatorSelection?.AuthenticatorAttachment);
+            var attestationPref = ApiMapper.Translate(options.Attestation);
+
             using (var user = ApiMapper.Translate(options.User))
-            using (var credParams = ApiMapper.Translate(options.PubKeyCredParams))
-            using (var clientData = ApiMapper.Translate(options, false))
-            using (var excludeCreds = ApiMapper.Translate(options.ExcludeCredentials))
-            using (var excludeCredsEx = ApiMapper.TranslateEx(options.ExcludeCredentials))
-            using (var excludeCredList = new Credentials(excludeCreds.ToArray()))
-            using (var excludeCredListEx = new CredentialList(excludeCredsEx.ToArray()))
-            using (var extensions = ApiMapper.Translate(options.Extensions))
-            using (var extensionList = new ExtensionsIn(extensions.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, _cancellationId, extensionList, excludeCredList, excludeCredListEx))
             {
-                var result = NativeMethods.AuthenticatorMakeCredential(
-                    WindowHandle.ForegroundWindow,
+                var attestation = _api.AuthenticatorMakeCredential(
                     rp,
                     user,
+                    options.Challenge,
+                    uv,
+                    attachment,
+                    rk,
                     credParams,
-                    clientData,
-                    nativeOptions,
-                    out var attestationHandle
+                    attestationPref,
+                    timeout,
+                    excludeCreds
                 );
 
-                ApiMapper.Validate(result);
-
-                try
+                return new AuthenticatorAttestationRawResponse()
                 {
-                    var attestation = attestationHandle.ToManaged();
-                    return new AuthenticatorAttestationRawResponse()
+                    // TODO: Id = attestation.CredentialId,
+                    // TODO: RawId = attestation.CredentialId,
+                    Type = PublicKeyCredentialType.PublicKey,
+                    // TODO: Extensions = ApiMapper.Translate(attestation.Extensions),
+                    Response = new AuthenticatorAttestationRawResponse.ResponseData()
                     {
-                        Id = attestation.CredentialId,
-                        RawId = attestation.CredentialId,
-                        Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
-                        Extensions = ApiMapper.Translate(attestation.Extensions),
-                        Response = new AuthenticatorAttestationRawResponse.ResponseData()
-                        {
-                            AttestationObject = attestation.AttestationObject,
-                            ClientDataJson = clientData.ClientDataRaw
-                        }
-                    };
-                }
-                finally
-                {
-                    attestationHandle.Dispose();
-                }
+                        AttestationObject = attestation.AttestationObject,
+                        ClientDataJson = attestation.ClientDataJson
+                    }
+                };
             }
         }
 
@@ -78,59 +78,59 @@ namespace DSInternals.Win32.WebAuthn.Adapter
         /// <param name="options">Assertion options.</param>
         /// <param name="authenticatorAttachment">Optionally filters the eligible authenticators by their attachment.</param>
         /// <returns>The cryptographically signed Authenticator Assertion Response object returned by an authenticator.</returns>
-        public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null)
+        public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options, AuthenticatorAttachment? authenticatorAttachment = null)
         {
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            using (var clientData = ApiMapper.Translate(options, false))
-            using (var allowCreds = ApiMapper.Translate(options.AllowCredentials))
-            using (var allowCredsEx = ApiMapper.TranslateEx(options.AllowCredentials))
-            using (var allowCredList = new Credentials(allowCreds.ToArray()))
-            using (var allowCredListEx = new CredentialList(allowCredsEx.ToArray()))
-            using (var nativeOptions = ApiMapper.Translate(options, _cancellationId, authenticatorAttachment, allowCredList, allowCredListEx))
+            var allowCreds = ApiMapper.Translate(options.AllowCredentials);
+            int timeout = checked((int)options.Timeout);
+            var attachment = ApiMapper.Translate(authenticatorAttachment);
+            var uv = ApiMapper.Translate(options.UserVerification);
+            // TODO: U2fAppId = options.Extensions?.AppID
+            //    if(options.Extensions?.AppID != null)
+            //    {
+            //        clientData.Add("ClientExtensions", new
+            //        {
+            //            AppId = options.Extensions.AppID
+            //        });
+            //    }
+
+            var assertion = _api.AuthenticatorGetAssertion(
+                options.RpId,
+                options.Challenge,
+                uv,
+                attachment,
+                timeout,
+                allowCreds
+            );
+            
+            return new AuthenticatorAssertionRawResponse()
             {
-                HResult result = NativeMethods.AuthenticatorGetAssertion(
-                    WindowHandle.ForegroundWindow,
-                    options.RpId,
-                    clientData,
-                    nativeOptions,
-                    out var assertionHandle
-                );
-
-                ApiMapper.Validate(result);
-
-                try
+                // TODO: Id = assertion..Credential.Id,
+                // TODO: RawId = assertion.Credential.Id,
+                Type = PublicKeyCredentialType.PublicKey,
+                Response = new AuthenticatorAssertionRawResponse.AssertionResponse()
                 {
-                    var assertion = assertionHandle.ToManaged();
-                    return new AuthenticatorAssertionRawResponse()
-                    {
-                        Id = assertion.Credential.Id,
-                        RawId = assertion.Credential.Id,
-                        Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
-                        Response = new AuthenticatorAssertionRawResponse.AssertionResponse()
-                        {
-                            AuthenticatorData = assertion.AuthenticatorData,
-                            Signature = assertion.Signature,
-                            UserHandle = assertion.UserId,
-                            ClientDataJson = clientData.ClientDataRaw
-                        },
-                        // TODO: Translate Extensions
-                    };
-                }
-                finally
-                {
-                    assertionHandle.Dispose();
-                }
-            }
+                    AuthenticatorData = assertion.AuthenticatorData,
+                    Signature = assertion.Signature,
+                    UserHandle = assertion.UserHandle,
+                    ClientDataJson = assertion.ClientDataJson
+                },
+            };
         }
 
-        public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default)
+        public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default)
         {
             cancellationToken.Register(state => CancelCurrentOperation(), null, false);
             return await Task.Run(() => AuthenticatorGetAssertion(options, authenticatorAttachment), cancellationToken).ConfigureAwait(false);
+        }
+
+        public void CancelCurrentOperation()
+        {
+            _api.CancelCurrentOperation();
         }
     }
 }
