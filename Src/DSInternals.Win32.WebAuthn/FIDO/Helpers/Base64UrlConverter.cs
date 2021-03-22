@@ -57,7 +57,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// </summary>
         /// <param name="input">The byte array to convert</param>
         /// <returns>The Base64Url encoded form of the input</returns>
-        private static string ToBase64UrlString(byte[] input)
+        public static string ToBase64UrlString(byte[] input)
         {
             if (input == null)
             {
@@ -75,7 +75,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// </summary>
         /// <param name="input">The Base64Url encoded string</param>
         /// <returns>The byte array represented by the encoded string</returns>
-        private static byte[] FromBase64UrlString(string input)
+        public static byte[] FromBase64UrlString(string input)
         {
             if (string.IsNullOrEmpty(input))
             {

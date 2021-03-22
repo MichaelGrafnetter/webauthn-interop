@@ -8,14 +8,14 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
     /// </summary>
     public partial class TimeoutEditor : UserControl
     {
-        public uint Timeout
+        public int Timeout
         {
-            get { return (uint)GetValue(TimeoutProperty); }
+            get { return (int)GetValue(TimeoutProperty); }
             set { SetValue(TimeoutProperty, value); }
         }
 
         public static readonly DependencyProperty TimeoutProperty =
-            DependencyProperty.Register(nameof(Timeout), typeof(uint), typeof(TimeoutEditor), new PropertyMetadata(uint.MinValue));
+            DependencyProperty.Register(nameof(Timeout), typeof(int), typeof(TimeoutEditor), new PropertyMetadata(0));
 
 
         public TimeoutEditor()

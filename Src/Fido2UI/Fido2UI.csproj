@@ -15,14 +15,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Fido2.Models" Version="1.1.0" />
-        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
         <PackageReference Include="Prism.Unity" Version="8.0.0.1909" />
         <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj" />
+      <ProjectReference Include="..\DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj" />
     </ItemGroup>
 
 </Project>

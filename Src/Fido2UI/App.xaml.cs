@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Prism;
+﻿using System.Windows;
+using DSInternals.Win32.WebAuthn.Interop;
 using Prism.Ioc;
-using Prism.Modularity;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {

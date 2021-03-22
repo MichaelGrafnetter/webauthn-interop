@@ -107,6 +107,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             Algorithm[] pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
+            AuthenticationExtensionsClientInputs extensions = null,
             IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
             WindowHandle windowHandle = default
         )
@@ -139,7 +140,8 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 Type = ApiConstants.ClientDataCredentialCreate,
                 Challenge = challenge,
                 Origin = origin.Uri.ToString(),
-                CrossOrigin = false
+                CrossOrigin = false,
+                ClientExtensions = extensions
             };
 
             return AuthenticatorMakeCredential(
@@ -195,7 +197,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
-            if (pubKeyCredParams == null)
+            if (pubKeyCredParams == null || pubKeyCredParams.Length == 0)
             {
                 pubKeyCredParams = new[] { Algorithm.ES256 };
             }
@@ -285,6 +287,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            AuthenticationExtensionsClientInputs extensions = null,
             WindowHandle windowHandle = default
         )
         {
@@ -311,7 +314,8 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 Type = ApiConstants.ClientDataCredentialGet,
                 Challenge = challenge,
                 Origin = origin.Uri.ToString(),
-                CrossOrigin = false
+                CrossOrigin = false,
+                ClientExtensions = extensions
             };
 
             return AuthenticatorGetAssertion(
