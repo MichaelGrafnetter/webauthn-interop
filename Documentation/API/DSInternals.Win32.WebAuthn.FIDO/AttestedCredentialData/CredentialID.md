@@ -1,9 +1,9 @@
-# AttestedCredentialData.CredentialID property
+# AttestedCredentialData.CredentialId property
 
 A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions.
 
 ```csharp
-public byte[] CredentialID { get; }
+public byte[] CredentialId { get; }
 ```
 
 ## See Also

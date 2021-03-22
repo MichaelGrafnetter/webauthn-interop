@@ -69,6 +69,8 @@ jobs:
         AzureSignTool sign ^
         DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll ^
         DSInternals.Win32.WebAuthn/netcoreapp3.1/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn.Adapter/net472/DSInternals.Win32.WebAuthn.Adapter.dll ^
+        DSInternals.Win32.WebAuthn.Adapter/netcoreapp3.1/DSInternals.Win32.WebAuthn.Adapter.dll ^
         Fido2UI/net472/Fido2UI.exe ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
@@ -87,7 +89,7 @@ jobs:
       if: ${{ env.DO_SIGN }}
       run: dotnet tool install --global NuGetKeyVaultSignTool
 
-    - name: Sign NuGet Package
+    - name: Sign NuGet Packages
       shell: cmd
       if: ${{ env.DO_SIGN }}
       env:
@@ -108,7 +110,7 @@ jobs:
         --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
 
-    - name: Sign Symbol Package
+    - name: Sign Symbol Packages
       shell: cmd
       if: ${{ env.DO_SIGN }}
       env:

@@ -46,6 +46,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <!-- Additional files to include in NuGet package -->
         <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
         <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
     </ItemGroup>

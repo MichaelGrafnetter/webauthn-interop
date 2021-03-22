@@ -1,10 +1,7 @@
-/* This file has been automatically generated. Do not modify it! */
+/* This file has been automatically generated from "webauthn.h" by CodeGen.exe. Do not modify it! */
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
-    /// <summary>
-    /// Contains constants from "webauthn.h".
-    /// </summary>
     partial class ApiConstants
     {
         /// <remarks>

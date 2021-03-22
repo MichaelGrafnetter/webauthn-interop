@@ -53,6 +53,7 @@
 
 | public type | description |
 | --- | --- |
+| static class [ApiConstants](DSInternals.Win32.WebAuthn.Interop/ApiConstants.md) | Contains constants from "webauthn.h". |
 | enum [ApiVersion](DSInternals.Win32.WebAuthn.Interop/ApiVersion.md) | WebAuthn API Version Information. |
 | class [RelyingPartyInformation](DSInternals.Win32.WebAuthn.Interop/RelyingPartyInformation.md) | Information about an RP Entity |
 | class [UserInformation](DSInternals.Win32.WebAuthn.Interop/UserInformation.md) | Information about a User Entity |

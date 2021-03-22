@@ -6,9 +6,16 @@
         <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
         <OutputPath>..\..\Build\bin\$(Configuration)\$(MSBuildProjectName)</OutputPath>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release' AND Exists('..\Keys\DSInternals.Private.snk') AND '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn'">
+    <PropertyGroup Condition="
+                   '$(Configuration)' == 'Release' AND
+                   Exists('..\Keys\DSInternals.Private.snk') AND
+                   (
+                    '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn' OR
+                    '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn.Tests' OR
+                    '$(MSBuildProjectName)' == 'Fido2UI'
+                   )">
         <!-- Configure strong name signing -->
-        <!-- Note: Fido2.Models and CppAst are currently not signed, so only selected assemblies can be signed. -->
+        <!-- Note: Fido2.Models and CppAst are currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
         <DelaySign>false</DelaySign>

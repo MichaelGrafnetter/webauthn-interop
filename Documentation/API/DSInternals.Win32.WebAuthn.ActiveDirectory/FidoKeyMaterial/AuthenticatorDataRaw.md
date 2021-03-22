@@ -3,7 +3,7 @@
 AuthData is a WebAuthn authenticator data structure. https://www.w3.org/TR/webauthn/#sec-authenticator-data
 
 ```csharp
-public string AuthenticatorDataRaw { get; }
+public byte[] AuthenticatorDataRaw { get; }
 ```
 
 ## See Also

@@ -50,11 +50,6 @@
         <!-- Additional files to include in NuGet package -->
         <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
         <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
-
-        <!-- Grouping of partial classes -->
-        <Compile Update="Interop/ApiConstants.cs">
-          <DependentUpon>Interop/ApiConstants.Extra.cs</DependentUpon>
-        </Compile>
     </ItemGroup>
 
     <ItemGroup>

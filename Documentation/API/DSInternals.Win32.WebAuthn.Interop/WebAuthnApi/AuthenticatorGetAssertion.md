@@ -3,30 +3,6 @@
 Signs a challenge and other collected data into an assertion, which is used as a credential.
 
 ```csharp
-public AuthenticatorAssertionResponse AuthenticatorGetAssertion(string rpId, byte[] challenge, 
-    UserVerificationRequirement userVerificationRequirement, 
-    AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, 
-    int timeoutMilliseconds = 60000, IList<PublicKeyCredentialDescriptor> allowCredentials = null, 
-    WindowHandle windowHandle = default(WindowHandle))
-```
-
-## See Also
-
-* class [AuthenticatorAssertionResponse](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAssertionResponse.md)
-* enum [UserVerificationRequirement](../../DSInternals.Win32.WebAuthn.FIDO/UserVerificationRequirement.md)
-* enum [AuthenticatorAttachment](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttachment.md)
-* class [PublicKeyCredentialDescriptor](../../DSInternals.Win32.WebAuthn.FIDO/PublicKeyCredentialDescriptor.md)
-* struct [WindowHandle](../WindowHandle.md)
-* class [WebAuthnApi](../WebAuthnApi.md)
-* namespace [DSInternals.Win32.WebAuthn.Interop](../../DSInternals.Win32.WebAuthn.md)
-
----
-
-# WebAuthnApi.AuthenticatorGetAssertion method (2 of 2)
-
-Signs a challenge and other collected data into an assertion, which is used as a credential.
-
-```csharp
 public AuthenticatorAssertionResponse AuthenticatorGetAssertion(string rpId, 
     CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, 
     AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, 
@@ -41,6 +17,32 @@ public AuthenticatorAssertionResponse AuthenticatorGetAssertion(string rpId,
 * enum [UserVerificationRequirement](../../DSInternals.Win32.WebAuthn.FIDO/UserVerificationRequirement.md)
 * enum [AuthenticatorAttachment](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttachment.md)
 * class [PublicKeyCredentialDescriptor](../../DSInternals.Win32.WebAuthn.FIDO/PublicKeyCredentialDescriptor.md)
+* struct [WindowHandle](../WindowHandle.md)
+* class [WebAuthnApi](../WebAuthnApi.md)
+* namespace [DSInternals.Win32.WebAuthn.Interop](../../DSInternals.Win32.WebAuthn.md)
+
+---
+
+# WebAuthnApi.AuthenticatorGetAssertion method (2 of 2)
+
+Signs a challenge and other collected data into an assertion, which is used as a credential.
+
+```csharp
+public AuthenticatorAssertionResponse AuthenticatorGetAssertion(string rpId, byte[] challenge, 
+    UserVerificationRequirement userVerificationRequirement, 
+    AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, 
+    int timeoutMilliseconds = 60000, IList<PublicKeyCredentialDescriptor> allowCredentials = null, 
+    AuthenticationExtensionsClientInputs extensions = null, 
+    WindowHandle windowHandle = default(WindowHandle))
+```
+
+## See Also
+
+* class [AuthenticatorAssertionResponse](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAssertionResponse.md)
+* enum [UserVerificationRequirement](../../DSInternals.Win32.WebAuthn.FIDO/UserVerificationRequirement.md)
+* enum [AuthenticatorAttachment](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttachment.md)
+* class [PublicKeyCredentialDescriptor](../../DSInternals.Win32.WebAuthn.FIDO/PublicKeyCredentialDescriptor.md)
+* class [AuthenticationExtensionsClientInputs](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticationExtensionsClientInputs.md)
 * struct [WindowHandle](../WindowHandle.md)
 * class [WebAuthnApi](../WebAuthnApi.md)
 * namespace [DSInternals.Win32.WebAuthn.Interop](../../DSInternals.Win32.WebAuthn.md)

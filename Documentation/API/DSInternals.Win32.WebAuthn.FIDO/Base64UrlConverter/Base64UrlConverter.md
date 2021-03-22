@@ -1,7 +1,9 @@
 # Base64UrlConverter constructor
 
+The default constructor.
+
 ```csharp
-public Base64UrlConverter(Required required = Required.DisallowNull)
+public Base64UrlConverter()
 ```
 
 ## See Also

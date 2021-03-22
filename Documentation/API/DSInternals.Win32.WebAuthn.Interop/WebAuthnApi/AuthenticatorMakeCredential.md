@@ -4,38 +4,6 @@ Creates a public key credential source bound to a managing authenticator.
 
 ```csharp
 public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
-    RelyingPartyInformation rpEntity, UserInformation userEntity, byte[] challenge, 
-    UserVerificationRequirement userVerificationRequirement, 
-    AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, 
-    bool requireResidentKey = false, Algorithm[] pubKeyCredParams = null, 
-    AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, 
-    int timeoutMilliseconds = 60000, 
-    IList<PublicKeyCredentialDescriptor> excludeCredentials = null, 
-    WindowHandle windowHandle = default(WindowHandle))
-```
-
-## See Also
-
-* class [AuthenticatorAttestationResponse](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttestationResponse.md)
-* class [RelyingPartyInformation](../RelyingPartyInformation.md)
-* class [UserInformation](../UserInformation.md)
-* enum [UserVerificationRequirement](../../DSInternals.Win32.WebAuthn.FIDO/UserVerificationRequirement.md)
-* enum [AuthenticatorAttachment](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttachment.md)
-* enum [Algorithm](../../DSInternals.Win32.WebAuthn.COSE/Algorithm.md)
-* enum [AttestationConveyancePreference](../../DSInternals.Win32.WebAuthn.FIDO/AttestationConveyancePreference.md)
-* class [PublicKeyCredentialDescriptor](../../DSInternals.Win32.WebAuthn.FIDO/PublicKeyCredentialDescriptor.md)
-* struct [WindowHandle](../WindowHandle.md)
-* class [WebAuthnApi](../WebAuthnApi.md)
-* namespace [DSInternals.Win32.WebAuthn.Interop](../../DSInternals.Win32.WebAuthn.md)
-
----
-
-# WebAuthnApi.AuthenticatorMakeCredential method (2 of 2)
-
-Creates a public key credential source bound to a managing authenticator.
-
-```csharp
-public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
     RelyingPartyInformation rpEntity, UserInformation userEntity, CollectedClientData clientData, 
     UserVerificationRequirement userVerificationRequirement, 
     AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, 
@@ -56,6 +24,39 @@ public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
 * enum [AuthenticatorAttachment](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttachment.md)
 * enum [Algorithm](../../DSInternals.Win32.WebAuthn.COSE/Algorithm.md)
 * enum [AttestationConveyancePreference](../../DSInternals.Win32.WebAuthn.FIDO/AttestationConveyancePreference.md)
+* class [PublicKeyCredentialDescriptor](../../DSInternals.Win32.WebAuthn.FIDO/PublicKeyCredentialDescriptor.md)
+* struct [WindowHandle](../WindowHandle.md)
+* class [WebAuthnApi](../WebAuthnApi.md)
+* namespace [DSInternals.Win32.WebAuthn.Interop](../../DSInternals.Win32.WebAuthn.md)
+
+---
+
+# WebAuthnApi.AuthenticatorMakeCredential method (2 of 2)
+
+Creates a public key credential source bound to a managing authenticator.
+
+```csharp
+public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
+    RelyingPartyInformation rpEntity, UserInformation userEntity, byte[] challenge, 
+    UserVerificationRequirement userVerificationRequirement, 
+    AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, 
+    bool requireResidentKey = false, Algorithm[] pubKeyCredParams = null, 
+    AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, 
+    int timeoutMilliseconds = 60000, AuthenticationExtensionsClientInputs extensions = null, 
+    IList<PublicKeyCredentialDescriptor> excludeCredentials = null, 
+    WindowHandle windowHandle = default(WindowHandle))
+```
+
+## See Also
+
+* class [AuthenticatorAttestationResponse](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttestationResponse.md)
+* class [RelyingPartyInformation](../RelyingPartyInformation.md)
+* class [UserInformation](../UserInformation.md)
+* enum [UserVerificationRequirement](../../DSInternals.Win32.WebAuthn.FIDO/UserVerificationRequirement.md)
+* enum [AuthenticatorAttachment](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticatorAttachment.md)
+* enum [Algorithm](../../DSInternals.Win32.WebAuthn.COSE/Algorithm.md)
+* enum [AttestationConveyancePreference](../../DSInternals.Win32.WebAuthn.FIDO/AttestationConveyancePreference.md)
+* class [AuthenticationExtensionsClientInputs](../../DSInternals.Win32.WebAuthn.FIDO/AuthenticationExtensionsClientInputs.md)
 * class [PublicKeyCredentialDescriptor](../../DSInternals.Win32.WebAuthn.FIDO/PublicKeyCredentialDescriptor.md)
 * struct [WindowHandle](../WindowHandle.md)
 * class [WebAuthnApi](../WebAuthnApi.md)

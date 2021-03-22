@@ -10,9 +10,11 @@ public class Base64UrlConverter : JsonConverter<byte[]>
 
 | name | description |
 | --- | --- |
-| [Base64UrlConverter](Base64UrlConverter/Base64UrlConverter.md)(…) |  |
+| [Base64UrlConverter](Base64UrlConverter/Base64UrlConverter.md)() | The default constructor. |
 | override [ReadJson](Base64UrlConverter/ReadJson.md)(…) |  |
 | override [WriteJson](Base64UrlConverter/WriteJson.md)(…) |  |
+| static [FromBase64UrlString](Base64UrlConverter/FromBase64UrlString.md)(…) | Converts a Base64Url encoded string to a byte array |
+| static [ToBase64UrlString](Base64UrlConverter/ToBase64UrlString.md)(…) | Converts a byte array to a Base64Url encoded string |
 
 ## See Also
 
