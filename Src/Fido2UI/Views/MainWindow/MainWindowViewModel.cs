@@ -93,6 +93,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AssertionOptionsViewModel.Challenge = Base64UrlConverter.FromBase64UrlString("Ty5leUowZVhBaU9pSktWMVFpTENKaGJHY2lPaUpTVXpJMU5pSXNJbmcxZENJNklqVlBaamxRTlVZNVowTkRkME50UmpKQ1QwaEllRVJFVVMxRWF5SjkuZXlKaGRXUWlPaUoxY200NmJXbGpjbTl6YjJaME9tWnBaRzg2WTJoaGJHeGxibWRsSWl3aWFYTnpJam9pYUhSMGNITTZMeTlzYjJkcGJpNXRhV055YjNOdlpuUXVZMjl0SWl3aWFXRjBJam94TmpBNU1qYzNOVFE0TENKdVltWWlPakUyTURreU56YzFORGdzSW1WNGNDSTZNVFl3T1RJM056ZzBPSDAubDNyeF9JTnNLT0hsZTR5azdvSmk3MG0yMUNsV2lWWklJMGxRdVhJbWZ0N1RMX0ppcTRpc0Uza05vRjR6X0cyYlFhdDdaOG55dVRZamNkTmsxSm5OT0k1ZXBMMUIwNkR4N21OU05sZ3ZlWWhKR05faVB4RC1lOVJkVXJvNjlPLWx1cHRPUjVQX3B6dUpWU0dGTFEwLXBZUHE5NzlEVmI2ZF9pMHYxbjBKakd3bkxIMVE5b3ZRSEJzR1E1YzFvMUhNSDNBdEltZjI0Zk9McHBOT2s3WXM5OXlIdFM5VkFwcTNmbG5vT3VxWVpXQzBDMnJjNXpsdzAwR3p5OGV6NWZra010SDNKRGpmbWZ1aWxfb1RCc20yQUIwX1Y5NjZxRlJuMGxsWXcteXlBTDlISU1LelM1TU01aDhpb1lFakxrZlRGblpJandUVERpOHV3SG1LMkVueFpn");
             AssertionOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Required;
             AssertionOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.Any;
+            AssertionOptionsViewModel.ClientExtensions = null;
             AssertionOptionsViewModel.Timeout = 120000;
 
             // Attestation:
@@ -104,8 +105,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
             AttestationOptionsViewModel.RelyingPartyEntity = new RelyingPartyInformation()
             {
-                Name = "login.microsoft.com",
-                Id = "Microsoft",
+                Name = "Microsoft",
+                Id = "login.microsoft.com",
                 Icon = String.Empty
             };
 
@@ -148,8 +149,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
             AttestationOptionsViewModel.RelyingPartyEntity = new RelyingPartyInformation()
             {
-                Name = "facebook.com",
-                Id = "Facebook",
+                Name = "Facebook",
+                Id = "facebook.com",
                 Icon = String.Empty
             };
 
@@ -187,7 +188,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
             AttestationOptionsViewModel.RelyingPartyEntity = new RelyingPartyInformation()
             {
-                Name = "https://www.gstatic.com/securitykey/origins.json"
+                Id = "https://www.gstatic.com/securitykey/origins.json"
             };
 
             AttestationOptionsViewModel.Challenge = Base64UrlConverter.FromBase64UrlString("YnFQclh3QUFBQUFpRUZtN1BBSFpURkR1TFlBeFJldzVPdEtWOHY3Y24xV0JUQ0puRVhvN0FSMVN6eVktNGNrSmU3Z1h1NXZPaVJjX2lpUGU2ZzNMaDAySURaQTlQeXVSbVcwUQ");

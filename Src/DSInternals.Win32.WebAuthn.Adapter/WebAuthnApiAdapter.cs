@@ -48,6 +48,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                     credParams,
                     attestationPref,
                     timeout,
+                    null,
                     excludeCreds
                 );
 

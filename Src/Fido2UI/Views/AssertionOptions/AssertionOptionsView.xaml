@@ -10,11 +10,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
     <GroupBox Header="Assertion Options" Margin="0, 0, 0, 0">
+        <GroupBox.Resources>
+            <local:ByteArrayConverter x:Key="ByteArrayConverter" />
+        </GroupBox.Resources>
         <DockPanel>
             <UniformGrid Rows="1" DockPanel.Dock="Top">
                 <DockPanel>
                     <Label Name="RpIdLabel" Content="Relying party:" Width="100" />
-                    <TextBox x:Name="RpIdTextBox" Text="{Binding RpId, Mode=TwoWay}" VerticalAlignment="Center" />
+                    <TextBox x:Name="RpIdTextBox" Text="{Binding RelyingPartyId, Mode=TwoWay}" VerticalAlignment="Center" />
                 </DockPanel>
                 <DockPanel>
                     <Label x:Name="AppIdLabel" Content="U2F AppID:" />
@@ -23,15 +26,15 @@
             </UniformGrid>
             <DockPanel DockPanel.Dock="Top">
                 <Label Name="UserVerificationLabel" Content="User verification:" Width="100" />
-                <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding SelectedUserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="110" VerticalAlignment="Center" />
+                <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="110" VerticalAlignment="Center" />
                 <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" />
-                <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding SelectedAuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="110" VerticalAlignment="Center" />
+                <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="110" VerticalAlignment="Center" />
                 <Label Name="TimeoutLabel" Content="Timeout (s):" />
                 <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}"  VerticalAlignment="Center" />
             </DockPanel>
             <DockPanel Margin="0,5,0,0">
                 <Label Name="ChallengeLabel" Content="Challenge:" Width="100" />
-                <TextBox x:Name="ChallengeTextBox" Text="{Binding Challenge, Mode=TwoWay}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+                <TextBox x:Name="ChallengeTextBox" Text="{Binding Path=Challenge, Mode=TwoWay, Converter={StaticResource ByteArrayConverter}}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
             </DockPanel>
         </DockPanel>
     </GroupBox>

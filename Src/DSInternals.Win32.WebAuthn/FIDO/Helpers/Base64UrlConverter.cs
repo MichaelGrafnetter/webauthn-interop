@@ -8,28 +8,14 @@ namespace DSInternals.Win32.WebAuthn.FIDO
     /// </summary>
     public class Base64UrlConverter : JsonConverter<byte[]>
     {
-        private readonly Required _required = Required.DisallowNull;
-
         public Base64UrlConverter() { }
-
-        public Base64UrlConverter(Required required)
-        {
-            _required = required;
-        }
 
         public override byte[] ReadJson(JsonReader reader, Type objectType, byte[] existingValue, bool hasExistingValue,
             JsonSerializer serializer)
         {
             if (reader.Value == null)
             {
-                if (_required == Required.AllowNull)
-                {
-                    return null;
-                }
-                else
-                {
-                    throw new JsonReaderException("A non-empty byte array is required.");
-                }
+                throw new JsonReaderException("A non-empty byte array is required.");
             }
 
             if (reader.ValueType != typeof(string))

@@ -11,9 +11,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public AttestationOptionsViewModel()
         {
             // Configure default values
-            // TODO: Fix default values
             SelectDefaultAlgorithms();
-            UserVerificationRequirement = UserVerificationRequirement.Preferred;
             Timeout = ApiConstants.DefaultTimeoutMilliseconds;
         }
 
