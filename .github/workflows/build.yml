@@ -1,4 +1,4 @@
-name: CI
+name: 'Build and Release'
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: 'Release Build'
+    name: 'Build'
     runs-on: windows-latest
     timeout-minutes: 10
     env:
@@ -51,9 +51,11 @@ jobs:
       working-directory: Src
       run: dotnet build --configuration Release
 
-    - name: Install Azure Code Signing Tool
+    - name: Install Azure KeyVault Code Signing Tools
       if: ${{ env.DO_SIGN }}
-      run: dotnet tool install --global AzureSignTool
+      run: |
+        dotnet tool install --global AzureSignTool
+        dotnet tool install --global NuGetKeyVaultSignTool
 
     - name: Sign Binaries
       shell: cmd
@@ -87,10 +89,6 @@ jobs:
       working-directory: Src
       run: dotnet pack --configuration Release --no-build --nologo
 
-    - name: Install Azure NuGet Signing Tool
-      if: ${{ env.DO_SIGN }}
-      run: dotnet tool install --global NuGetKeyVaultSignTool
-
     - name: Sign NuGet Packages
       shell: cmd
       if: ${{ env.DO_SIGN }}
@@ -102,7 +100,16 @@ jobs:
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
       working-directory: Build/bin/Release/Packages
       run: |
-        NuGetKeyVaultSignTool sign *.* ^
+        NuGetKeyVaultSignTool sign *.nupkg ^
+        --file-digest sha256 ^
+        --timestamp-digest sha256 ^
+        --timestamp-rfc3161 http://timestamp.digicert.com ^
+        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
+        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
+        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
+        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
+        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
+        NuGetKeyVaultSignTool sign *.snupkg ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
         --timestamp-rfc3161 http://timestamp.digicert.com ^
