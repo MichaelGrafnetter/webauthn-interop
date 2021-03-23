@@ -1,12 +1,41 @@
 <Project>
-    <PropertyGroup>
-        <!-- Redirect output directories -->
-        <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-        <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-        <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
-        <OutputPath>..\..\Build\bin\$(Configuration)\$(MSBuildProjectName)</OutputPath>
-    </PropertyGroup>
-    <PropertyGroup Condition="
+  <PropertyGroup>
+    <!-- Redirect output directories -->
+    <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
+    <OutputPath>..\..\Build\bin\$(Configuration)\$(MSBuildProjectName)</OutputPath>
+    <PackageOutputPath>..\..\Build\bin\$(Configuration)\Packages</PackageOutputPath>
+    <VSTestResultsDirectory>..\..\Build\TestResults</VSTestResultsDirectory>
+
+    <!-- Configure NuGet package properties -->
+    <Authors>Michael Grafnetter</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright (c) 2021 Michael Grafnetter. All rights reserved.</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/MichaelGrafnetter/webauthn-interop</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MichaelGrafnetter/webauthn-interop.git</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageTags>FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop</PackageTags>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <IncludeSymbols>true</IncludeSymbols>
+
+    <!-- Configure MSTest properties -->
+    <VSTestLogger>html;trx</VSTestLogger>
+    <VSTestCollect>XPlat Code Coverage;Code Coverage</VSTestCollect>
+    <VSTestVerbosity>normal</VSTestVerbosity>
+
+    <!-- Turn off reference assembly generation -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <!-- Configure strong name signing -->
+  <!-- Note: Fido2.Models and CppAst are currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
+  <PropertyGroup Condition="
                    '$(Configuration)' == 'Release' AND
                    Exists('..\Keys\DSInternals.Private.snk') AND
                    (
@@ -14,10 +43,14 @@
                     '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn.Tests' OR
                     '$(MSBuildProjectName)' == 'Fido2UI'
                    )">
-        <!-- Configure strong name signing -->
-        <!-- Note: Fido2.Models and CppAst are currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
-        <DelaySign>false</DelaySign>
-    </PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <!-- Additional files to include in NuGet packages -->
+  <ItemGroup>
+    <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
+    <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
 </Project>

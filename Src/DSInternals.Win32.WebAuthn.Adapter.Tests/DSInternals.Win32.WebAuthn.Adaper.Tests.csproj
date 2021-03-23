@@ -2,11 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <IsPackable>false</IsPackable>
-    <VSTestLogger>html;trx</VSTestLogger>
-    <VSTestCollect>XPlat Code Coverage;Code Coverage</VSTestCollect>
-    <VSTestVerbosity>normal</VSTestVerbosity>
-    <VSTestResultsDirectory>..\..\Build\TestResults</VSTestResultsDirectory>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +15,7 @@
     <PackageReference Include="coverlet.collector" Version="3.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference> 
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

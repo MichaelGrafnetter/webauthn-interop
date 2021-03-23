@@ -1,79 +1,59 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>netcoreapp3.1;net472</TargetFrameworks>
-        <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
-        <PackageProjectUrl>https://github.com/MichaelGrafnetter/webauthn-interop</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/MichaelGrafnetter/webauthn-interop.git</RepositoryUrl>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageIcon>icon.png</PackageIcon>
-        <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
-        <PackageId>DSInternals.Win32.WebAuthn</PackageId>
-        <Authors>Michael Grafnetter</Authors>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Copyright>Copyright (c) 2021 Michael Grafnetter. All rights reserved.</Copyright>
-        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <PackageTags>FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop</PackageTags>
-        <Product>WebAuthn Interop Assembly</Product>
-        <Title>WebAuthn Interop Assembly</Title>
-        <Version>1.0</Version>
-        <AssemblyVersion>1.0</AssemblyVersion>
-        <ProductVersion>1.0</ProductVersion>
-        <FileVersion>1.0</FileVersion>
-        <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-        <PackageReleaseNotes>Windows 10 1903 or newer is required.</PackageReleaseNotes>
-        <NeutralLanguage>en-US</NeutralLanguage>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <!--TODO: <Nullable>enable</Nullable>-->
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net5.0;netcoreapp3.1;net472</TargetFrameworks>
+    <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
+    <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
+    <PackageId>DSInternals.Win32.WebAuthn</PackageId>
+    <Product>WebAuthn Interop Assembly</Product>
+    <Title>WebAuthn Interop Assembly</Title>
+    <Version>1.0</Version>
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <ProductVersion>1.0</ProductVersion>
+    <FileVersion>1.0</FileVersion>
+    <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
+    <PackageReleaseNotes>Windows 10 1903 or newer is required.</PackageReleaseNotes>
+    <!--TODO: <Nullable>enable</Nullable>-->
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-        <!-- Enable Source Link on CI builds -->
-        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-        <!-- DLLs need to be digitally signed first before a NuGet package is created. -->
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <!-- Enable Source Link on CI builds -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <!-- DLLs need to be digitally signed first before a NuGet package is created. -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.1' AND '$(Configuration)' == 'Release'">
-      <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0' AND '$(Configuration)' == 'Release'">
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <!-- Additional files to include in NuGet package -->
-        <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
-        <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
-    </ItemGroup>
+  <ItemGroup>
+    <!-- TODO: Replace with System.Text.Json -->
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <!-- TODO: Replace with System.Formats.Cbor -->
+    <PackageReference Include="PeterO.Cbor" Version="4.3.0" />
+    <!-- Note: Classes from this namespace are part of .NET 4.7 -->
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472'" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <!-- TODO: Replace with System.Text.Json -->
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <!-- TODO: Replace with System.Formats.Cbor -->
-        <PackageReference Include="PeterO.Cbor" Version="4.3.0" />
-        <!-- Note: Classes from this namespace are part of .NET 4.7 -->
-        <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472'" />
-    </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+  </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-    </ItemGroup>
-
-    <!-- Enable the test assembly to access internal members. -->
-    <ItemGroup Condition="$(SignAssembly) == 'true'">
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>$(AssemblyName).Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010077154b93d8084f0f30c52174d6c93d25ffdc65e11ba1b125383e55c6095061df3c2f765401c21434aa413aa264b6eb3039d95c5f33a9d4eb7deb695b55e434d8dd9b42e0e86f3287498732d3a30d0ee22d8d58b2361f033351d5c1a64a16324ac6c42b5a4b14c12483b52a98a43f7e934df86b92cc8a9c4ee0f408d7b6d987e3</_Parameter1>
-        </AssemblyAttribute>
-    </ItemGroup>
-    <ItemGroup Condition="$(SignAssembly) != 'true'">
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>$(AssemblyName).Tests</_Parameter1>
-        </AssemblyAttribute>
-    </ItemGroup>
+  <!-- Enable the test assembly to access internal members. -->
+  <ItemGroup Condition="$(SignAssembly) == 'true'">
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>$(AssemblyName).Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010077154b93d8084f0f30c52174d6c93d25ffdc65e11ba1b125383e55c6095061df3c2f765401c21434aa413aa264b6eb3039d95c5f33a9d4eb7deb695b55e434d8dd9b42e0e86f3287498732d3a30d0ee22d8d58b2361f033351d5c1a64a16324ac6c42b5a4b14c12483b52a98a43f7e934df86b92cc8a9c4ee0f408d7b6d987e3</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup Condition="$(SignAssembly) != 'true'">
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>

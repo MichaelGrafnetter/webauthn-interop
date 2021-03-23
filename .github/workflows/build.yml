@@ -42,10 +42,10 @@ jobs:
       with:
           dotnet-version: '2.1.x'
 
-    - name: Setup .NET Core 3
+    - name: Setup .NET 5.0
       uses: actions/setup-dotnet@v1
       with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '5.0.*'
 
     - name: Build
       working-directory: Src
@@ -69,9 +69,11 @@ jobs:
         AzureSignTool sign ^
         DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll ^
         DSInternals.Win32.WebAuthn/netcoreapp3.1/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/net5.0/DSInternals.Win32.WebAuthn.dll ^
         DSInternals.Win32.WebAuthn.Adapter/net472/DSInternals.Win32.WebAuthn.Adapter.dll ^
         DSInternals.Win32.WebAuthn.Adapter/netcoreapp3.1/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        Fido2UI/net472/Fido2UI.exe ^
+        DSInternals.Win32.WebAuthn.Adapter/net5.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
+        Fido2UI/Fido2UI.exe ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
         --timestamp-rfc3161 http://timestamp.digicert.com ^
@@ -79,9 +81,9 @@ jobs:
         --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
         --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
-        xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/net472/" /Y /I /F
+        xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/" /Y /I /F
 
-    - name: Create NuGet Package
+    - name: Create NuGet Packages
       working-directory: Src
       run: dotnet pack --configuration Release --no-build --nologo
 
@@ -98,30 +100,9 @@ jobs:
         SIGNING_CLIENT_ID: ${{ secrets.SIGNING_CLIENT_ID }}
         SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
-      working-directory: Build/bin/Release/DSInternals.Win32.WebAuthn
+      working-directory: Build/bin/Release/Packages
       run: |
-        NuGetKeyVaultSignTool sign *.nupkg ^
-        --file-digest sha256 ^
-        --timestamp-digest sha256 ^
-        --timestamp-rfc3161 http://timestamp.digicert.com ^
-        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
-        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
-        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
-        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
-        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
-
-    - name: Sign Symbol Packages
-      shell: cmd
-      if: ${{ env.DO_SIGN }}
-      env:
-        SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
-        SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
-        SIGNING_CLIENT_ID: ${{ secrets.SIGNING_CLIENT_ID }}
-        SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
-        SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
-      working-directory: Build/bin/Release/DSInternals.Win32.WebAuthn
-      run: |
-        NuGetKeyVaultSignTool sign *.snupkg ^
+        NuGetKeyVaultSignTool sign *.* ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
         --timestamp-rfc3161 http://timestamp.digicert.com ^
@@ -151,14 +132,14 @@ jobs:
             Build/TestResults/*.*
             !**/*.htm
 
-    - name: Upload NuGet Package
+    - name: Upload NuGet Packages
       uses: actions/upload-artifact@v2
       with:
         name: NuGet
-        path: Build/bin/Release/DSInternals.Win32.WebAuthn/*nupkg
+        path: Build/bin/Release/Packages/*nupkg
 
     - name: Upload Desktop App
       uses: actions/upload-artifact@v2
       with:
         name: Fido2UI
-        path: Build/bin/Release/Fido2UI/net472/*
+        path: Build/bin/Release/Fido2UI/*
