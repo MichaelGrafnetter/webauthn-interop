@@ -1,7 +1,5 @@
 # ApiConstants class
 
-Contains constants from "webauthn.h".
-
 Contains WebAuthn API constants. Most of them are auto-generated from webauthn.h.
 
 ```csharp

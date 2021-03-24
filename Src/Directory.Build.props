@@ -18,7 +18,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageTags>FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop</PackageTags>
+    <PackageTags>FIDO;FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop;2FA;MFA;Authentication;Identity</PackageTags>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -40,17 +40,20 @@
                    Exists('..\Keys\DSInternals.Private.snk') AND
                    (
                     '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn' OR
-                    '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn.Tests' OR
-                    '$(MSBuildProjectName)' == 'Fido2UI'
+                    '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn.Tests'
                    )">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
-  <!-- Additional files to include in NuGet packages -->
+  
   <ItemGroup>
+    <!-- Additional files to include in NuGet packages -->
     <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+
+    <!-- Most of the APIs require Windows 10 1903+ -->
+    <SupportedPlatform Include="windows10.0.1903" />
   </ItemGroup>
 </Project>
