@@ -63,7 +63,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// <returns>The byte array represented by the encoded string</returns>
         public static byte[] FromBase64UrlString(string input)
         {
-            if (string.IsNullOrEmpty(input))
+            if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
@@ -78,14 +78,27 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// <returns> the padded string </returns>
         private static string Pad(string input)
         {
-            var count = 3 - ((input.Length + 3) % 4);
-
-            if (count == 0 )
+            if (input.TrimEnd().EndsWith("="))
             {
-                return input;
+                throw new ArgumentException("Illegal Base64URL string!", nameof(input));
             }
 
-            return input + new string('=',count);
+            switch (input.Length % 4)
+            {
+                case 0:
+                    // Padding is not needed
+                    break;
+                case 2:
+                    input += "==";
+                    break;
+                case 3:
+                    input += "=";
+                    break;
+                default:
+                    throw new ArgumentException("Illegal Base64URL string!", nameof(input));
+            }
+
+            return input;
         }
     }
 }

@@ -43,6 +43,20 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public ICommand LoadGoogleOptionsCommand { get; private set; }
         public ICommand LoadFacebookOptionsCommand { get; private set; }
 
+        private string _attestationResponse;
+        public string AttestationResponse
+        {
+            get => _attestationResponse;
+            set => SetProperty(ref _attestationResponse, value);
+        }
+
+        private string _assertionResponse;
+        public string AssertionResponse
+        {
+            get => _assertionResponse;
+            set => SetProperty(ref _assertionResponse, value);
+        }
+
         private void OnRegister()
         {
             try

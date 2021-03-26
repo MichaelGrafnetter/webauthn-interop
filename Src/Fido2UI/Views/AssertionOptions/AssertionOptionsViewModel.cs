@@ -1,17 +1,31 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using System.Security.Cryptography;
+using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public class AssertionOptionsViewModel : BindableBase, IAssertionOptionsViewModel
     {
+        private const int RandomChallengeLength = 128;
+
         public AssertionOptionsViewModel()
         {
             // Configure default values
             Timeout = ApiConstants.DefaultTimeoutMilliseconds;
+
+            // Initialize commands
+            GenerateChallengeCommand = new DelegateCommand(OnGenerateChallenge);
+        }
+
+        public ICommand GenerateChallengeCommand { get; private set; }
+
+        private void OnGenerateChallenge()
+        {
+            Challenge = GetRandomBytes(RandomChallengeLength);
         }
 
         private string _relyingPartyId;
@@ -25,7 +39,30 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public byte[] Challenge
         {
             get => _challenge;
-            set => SetProperty(ref _challenge, value);
+            set
+            {
+                bool changed = SetProperty(ref _challenge, value, nameof(Challenge));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(ChallengeString));
+                }
+            }
+        }
+
+        public string ChallengeString
+        {
+            get => _challenge != null ? Base64UrlConverter.ToBase64UrlString(_challenge) : string.Empty;
+            set
+            {
+                byte[] binaryValue = value != null ? Base64UrlConverter.FromBase64UrlString(value) : null;
+                bool changed = SetProperty(ref _challenge, binaryValue, nameof(Challenge));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(ChallengeString));
+                }
+            }
         }
 
         private UserVerificationRequirement _userVerification;
@@ -72,6 +109,16 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set
             {
                 AppId = value?.AppID;
+            }
+        }
+
+        private static byte[] GetRandomBytes(int count)
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                byte[] randomBytes = new byte[count];
+                rng.GetBytes(randomBytes);
+                return randomBytes;
             }
         }
     }

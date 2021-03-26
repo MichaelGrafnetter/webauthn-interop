@@ -1,18 +1,41 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public class AttestationOptionsViewModel : BindableBase, IAttestationOptionsViewModel
     {
+        private const int RandomChallengeLength = 128;
+        private const int RandomUserIdLength = 32;
+
         public AttestationOptionsViewModel()
         {
             // Configure default values
             SelectDefaultAlgorithms();
             Timeout = ApiConstants.DefaultTimeoutMilliseconds;
+
+            // Initialize commands
+            GenerateChallengeCommand = new DelegateCommand(OnGenerateChallenge);
+            GenerateUserIdCommand = new DelegateCommand(OnGenerateUserId);
+        }
+
+        public ICommand GenerateChallengeCommand { get; private set; }
+        public ICommand GenerateUserIdCommand { get; private set; }
+
+        private void OnGenerateChallenge()
+        {
+            Challenge = GetRandomBytes(RandomChallengeLength);
+        }
+
+        private void OnGenerateUserId()
+        {
+            UserId = GetRandomBytes(RandomUserIdLength);
         }
 
         private string _rpId;
@@ -44,17 +67,64 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         }
 
         private byte[] _userId;
+
         public byte[] UserId
         {
             get => _userId;
-            set => SetProperty(ref _userId, value);
+            set
+            {
+                bool changed = SetProperty(ref _userId, value, nameof(UserId));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(UserIdString));
+                }
+            }
+        }
+
+        public string UserIdString
+        {
+            get => _userId != null ? Base64UrlConverter.ToBase64UrlString(_userId) : string.Empty;
+            set
+            {
+                byte[] binaryValue = value != null ? Base64UrlConverter.FromBase64UrlString(value) : null;
+                bool changed = SetProperty(ref _userId, binaryValue, nameof(UserId));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(UserIdString));
+                }
+            }
         }
 
         private byte[] _challenge;
         public byte[] Challenge
         {
             get => _challenge;
-            set => SetProperty(ref _challenge, value);
+            set
+            {
+                bool changed = SetProperty(ref _challenge, value, nameof(Challenge));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(ChallengeString));
+                }
+            }
+        }
+
+        public string ChallengeString
+        {
+            get => _challenge != null ? Base64UrlConverter.ToBase64UrlString(_challenge) : string.Empty;
+            set
+            {
+                byte[] binaryValue = value != null ? Base64UrlConverter.FromBase64UrlString(value) : null;
+                bool changed = SetProperty(ref _challenge, binaryValue, nameof(Challenge));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(ChallengeString));
+                }
+            }
         }
 
         private bool _requireResidentKey;
@@ -394,6 +464,16 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             ClearSelectedAlgorithms();
             AlgorithmRS256Enabled = true;
             AlgorithmES256Enabled = true;
+        }
+
+        private static byte[] GetRandomBytes(int count)
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                byte[] randomBytes = new byte[count];
+                rng.GetBytes(randomBytes);
+                return randomBytes;
+            }
         }
     }
 }

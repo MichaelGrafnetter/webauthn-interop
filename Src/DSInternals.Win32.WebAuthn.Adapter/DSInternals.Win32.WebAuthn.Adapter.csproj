@@ -4,15 +4,15 @@
     <AssemblyName>DSInternals.Win32.WebAuthn.Adapter</AssemblyName>
     <RootNamespace>DSInternals.Win32.WebAuthn.Adapter</RootNamespace>
     <PackageId>DSInternals.Win32.WebAuthn.Adapter</PackageId>
-    <Product>WebAuthn Interop Assembly</Product>
-    <Title>WebAuthn Interop Assembly</Title>
+    <Product>WebAuthn Interop Assembly Adapter</Product>
+    <Title>WebAuthn Interop Assembly Adapter</Title>
     <Version>1.0</Version>
     <AssemblyVersion>1.0</AssemblyVersion>
     <ProductVersion>1.0</ProductVersion>
     <FileVersion>1.0</FileVersion>
-    <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>Windows 10 1903 or newer is required.</PackageReleaseNotes>
-    <!--TODO: <Nullable>enable</Nullable>-->
+    <Description>Bridge between Fido2.Models and DSInternals.Win32.WebAuthn packages</Description>
+    <PackageReleaseNotes>- Initial release.
+- Windows 10 1903 or newer is required.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

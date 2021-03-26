@@ -12,7 +12,9 @@
     <ProductVersion>1.0</ProductVersion>
     <FileVersion>1.0</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>Windows 10 1903 or newer is required.</PackageReleaseNotes>
+    <PackageReleaseNotes>-Initial release.
+- Windows 10 1903 or newer is required.
+- A standalone package providing an adapter for data model defined in Fido2.Models is also available.</PackageReleaseNotes>
     <!--TODO: <Nullable>enable</Nullable>-->
   </PropertyGroup>
 

@@ -9,9 +9,6 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="450" d:DesignWidth="800">
     <GroupBox Header="Attestation Options" Margin="0, 0, 0, 0">
-        <GroupBox.Resources>
-            <local:ByteArrayConverter x:Key="ByteArrayConverter" />
-        </GroupBox.Resources>
         <DockPanel>
             <DockPanel DockPanel.Dock="Top">
                 <GroupBox Header="Authenticator Requirements" DockPanel.Dock="Right">
@@ -29,7 +26,7 @@
                         <ComboBox Name="AttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
                         <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
                         <ComboBox Name="UserVerificationRequirementComboBox"  ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
-                        <CheckBox Name="RequireResidentKeyCheckBox" IsChecked="{Binding RequireResidentKey, Mode=TwoWay}" Grid.Row="2" Grid.ColumnSpan="2" Content=" Require resident key" VerticalAlignment="Center" />
+                        <CheckBox Name="RequireResidentKeyCheckBox" IsChecked="{Binding RequireResidentKey, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content=" Require resident key" VerticalAlignment="Center" />
                     </Grid>
                 </GroupBox>
                 <UniformGrid Rows="1">
@@ -37,15 +34,24 @@
                         <StackPanel>
                             <DockPanel>
                                 <Label Content="Name:" Width="100" />
-                                <TextBox Name="UserNameTextBox" Text="{Binding UserName, Mode=TwoWay}" VerticalAlignment="Center" />
+                                <TextBox Name="UserNameTextBox" Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Display name:" Width="100" />
-                                <TextBox Name="UserDusplayNameTextBox" Text="{Binding UserDisplayName, Mode=TwoWay}" VerticalAlignment="Center" />
+                                <TextBox Name="UserDisplayNameTextBox" Text="{Binding UserDisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Credential ID:" Width="100" />
-                                <TextBox Name="UserCredentialIdTextBox" Text="{Binding Path=UserId, Mode=TwoWay, Converter={StaticResource ByteArrayConverter}}" VerticalAlignment="Center" />
+                                <Button Name="GenerateUserIdButton" Content="Random" Command="{Binding GenerateUserIdCommand}" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="5,0,0,0" Padding="2" />
+                                <TextBox Name="UserCredentialIdTextBox" VerticalAlignment="Center">
+                                    <TextBox.Text>
+                                        <Binding Path="UserIdString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <ExceptionValidationRule />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
                             </DockPanel>
                         </StackPanel>
                     </GroupBox>
@@ -53,11 +59,11 @@
                         <StackPanel>
                             <DockPanel>
                                 <Label Content="Domain name:" Width="100" />
-                                <TextBox Name="RpDomainNameTextBox" Text="{Binding RpId, Mode=TwoWay}" VerticalAlignment="Center" />
+                                <TextBox Name="RpDomainNameTextBox" Text="{Binding RpId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Display name:" Width="100" />
-                                <TextBox Name="RpDisplayNameTextBox" Text="{Binding RpName, Mode=TwoWay}" VerticalAlignment="Center" />
+                                <TextBox Name="RpDisplayNameTextBox" Text="{Binding RpName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                         </StackPanel>
                     </GroupBox>
@@ -99,6 +105,7 @@
             <GroupBox Header="Request">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
+                        <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" Padding="2" Margin="5,0,0,0" DockPanel.Dock="Right" />
                         <Label Name="AttestationLabel" Content="Attestation:" Width="80" />
                         <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="80" />
                         <Label Name="TimeoutLabel" Content="Timeout (s):" />
@@ -106,7 +113,15 @@
                     </DockPanel>
                     <DockPanel Margin="0,5,0,0">
                         <Label Name="ChallengeLabel" Content="Challenge:" Width="80" />
-                        <TextBox Name="ChallengeTextBox" Text="{Binding Path=Challenge, Mode=TwoWay, Converter={StaticResource ByteArrayConverter}}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+                        <TextBox Name="ChallengeTextBox"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100">
+                            <TextBox.Text>
+                                <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </DockPanel>
                 </DockPanel>
             </GroupBox>

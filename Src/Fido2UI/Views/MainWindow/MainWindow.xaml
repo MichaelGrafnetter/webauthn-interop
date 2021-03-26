@@ -6,9 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
     prism:ViewModelLocator.AutoWireViewModel="True"
-        x:Class="DSInternals.Win32.WebAuthn.Fido2UI.MainWindow"
-        mc:Ignorable="d"
-        Title="FIDO2 UI" MinHeight="600" MinWidth="1150">
+    x:Class="DSInternals.Win32.WebAuthn.Fido2UI.MainWindow"
+    mc:Ignorable="d"
+    Title="FIDO2 UI" MinHeight="700" MinWidth="1150">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Register" Command="{Binding RegisterCommand}" Padding="5" />
@@ -24,10 +24,20 @@
                 <local:ApiInformationView x:Name="ApiInformationView" />
             </TabItem>
             <TabItem Header="Registration">
-                <local:AttestationOptionsView x:Name="AttestationOptionsEditor" />
+                <DockPanel>
+                    <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" />
+                    <GroupBox Name="AttestationResponseGroupBox" Header="Response">
+                        <TextBox Name="AttestationResponseTextBox" IsEnabled="False" Text="{Binding AttestationResponse, Mode=OneWay}" />
+                    </GroupBox>
+                </DockPanel>
             </TabItem>
             <TabItem Header="Authentication">
-                <local:AssertionOptionsView x:Name="AssertionOptionsEditor" />
+                <DockPanel>
+                    <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" />
+                    <GroupBox Name="AssertionResponseGroupBox" Header="Response">
+                        <TextBox Name="AssertionResponseTextBox" IsEnabled="False" Text="{Binding AssertionResponse, Mode=OneWay}" />
+                    </GroupBox>
+                </DockPanel>
             </TabItem>
         </TabControl>
     </DockPanel>
