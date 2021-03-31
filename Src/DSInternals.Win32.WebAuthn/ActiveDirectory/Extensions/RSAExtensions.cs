@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
@@ -30,6 +31,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// <summary>
         /// BCRYPT_PUBLIC_KEY_BLOB Format
         /// </summary>
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         private static readonly CngKeyBlobFormat BCryptRSAPublicKeyFormat = new CngKeyBlobFormat("RSAPUBLICBLOB");
 
         private static readonly BigInteger[] WeakKeyMarkers = {
@@ -117,6 +121,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// <summary>
         /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
         /// </summary>
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         public static byte[] ExportRSAPublicKeyBCrypt(this X509Certificate2 certificate)
         {
             if (certificate == null)
@@ -136,6 +143,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// <summary>
         /// Decodes a public key from a BCRYPT_RSAKEY_BLOB structure.
         /// </summary>
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         public static RSAParameters ImportRSAPublicKeyBCrypt(this byte[] blob)
         {
             if (blob == null)

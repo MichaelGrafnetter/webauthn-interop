@@ -1,5 +1,9 @@
 <Project>
   <PropertyGroup>
+    <!-- Configure the supported C# language version -->
+    <LangVersion>latest</LangVersion>
+    <!--TODO: <Nullable>enable</Nullable>-->
+
     <!-- Redirect output directories -->
     <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
@@ -47,13 +51,9 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
-  
   <ItemGroup>
     <!-- Additional files to include in NuGet packages -->
     <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
-
-    <!-- Most of the APIs require Windows 10 1903+ -->
-    <SupportedPlatform Include="windows10.0.1903" />
   </ItemGroup>
 </Project>

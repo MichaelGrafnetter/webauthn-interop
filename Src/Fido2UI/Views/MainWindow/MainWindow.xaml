@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.Fido2UI"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    ui:WindowHelper.UseModernWindowStyle="True"
     prism:ViewModelLocator.AutoWireViewModel="True"
     x:Class="DSInternals.Win32.WebAuthn.Fido2UI.MainWindow"
     mc:Ignorable="d"

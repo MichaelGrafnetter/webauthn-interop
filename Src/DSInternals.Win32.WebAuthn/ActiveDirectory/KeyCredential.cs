@@ -1,9 +1,8 @@
-﻿#pragma warning disable CA1308 // Normalize strings to uppercase
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
@@ -60,6 +59,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             private set;
         }
 
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         public bool IsWeak
         {
             get
@@ -133,6 +135,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             }
         }
 
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         public RSAParameters? RSAPublicKey
         {
             get
@@ -176,6 +181,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             }
         }
 
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         public string RSAModulus
         {
             get
@@ -283,6 +291,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             }
         }
 
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         public KeyCredential(X509Certificate2 certificate, Guid? deviceId, string owner, DateTime? currentTime = null, bool isComputerKey = false)
         {
             if (certificate == null)

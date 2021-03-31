@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using DSInternals.Win32.WebAuthn.FIDO;
 using Newtonsoft.Json;
 
@@ -8,8 +7,8 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class FidoKeyMaterial
     {
-        // All PEM certificates that are less than 16,383B long start with MII.
-        private const string X509CertificateHeader = "MII";
+        // Certificates must contain at least a 1024-bit RSA key.
+        private const int MinCertificateSize = 128;
 
         /// <summary>
         /// Version is an integer that specifies the version of the structure.
@@ -26,7 +25,6 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// <see>https://www.w3.org/TR/webauthn/#sec-authenticator-data</see>
         /// </summary>
         [JsonProperty("authData")]
-        [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] AuthenticatorDataRaw
         {
             get;
@@ -37,7 +35,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// X5c is an array of attestation certificates associated with the authenticator.
         /// </summary>
         [JsonProperty("x5c")]
-        public string[] AttestationCertificatesRaw
+        public byte[][] AttestationCertificatesRaw
         {
             get;
             private set;
@@ -60,16 +58,19 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         {
             get
             {
-                X509Certificate2Collection certs = new X509Certificate2Collection();
-                foreach (string s in this.AttestationCertificatesRaw)
+                X509Certificate2Collection certificates = new X509Certificate2Collection();
+
+                foreach (byte[] binaryCertificate in this.AttestationCertificatesRaw)
                 {
                     // In AAD, some x5c values are not really certificates, so we need to filter them out.
-                    if(s.StartsWith(X509CertificateHeader, StringComparison.InvariantCulture))
+                    // These invalid values typically have 32 bytes (SHA-256?), which is far less than the expected certificate size.
+                    if (binaryCertificate?.Length > MinCertificateSize)
                     {
-                        certs.Add(new X509Certificate2(Convert.FromBase64String(s)));
+                        certificates.Add(new X509Certificate2(binaryCertificate));
                     }
                 }
-                return certs;
+
+                return certificates;
             }
         }
 

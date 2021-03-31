@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using DSInternals.Win32.WebAuthn.COSE;
-using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
+using Fido2NetLib.Objects;
 using Newtonsoft.Json;
+using AttestationConveyancePreference = DSInternals.Win32.WebAuthn.FIDO.AttestationConveyancePreference;
+using AuthenticatorAttachment = DSInternals.Win32.WebAuthn.FIDO.AuthenticatorAttachment;
+using AuthenticatorTransport = DSInternals.Win32.WebAuthn.FIDO.AuthenticatorTransport;
+using PublicKeyCredentialDescriptor = DSInternals.Win32.WebAuthn.FIDO.PublicKeyCredentialDescriptor;
+using UserVerificationRequirement = DSInternals.Win32.WebAuthn.FIDO.UserVerificationRequirement;
 
 namespace DSInternals.Win32.WebAuthn.Adapter
 {
@@ -110,7 +115,13 @@ namespace DSInternals.Win32.WebAuthn.Adapter
 
         public static string Translate(Fido2NetLib.Objects.PublicKeyCredentialType? credentialType)
         {
-            return JsonConvert.SerializeObject(credentialType);
+            switch (credentialType)
+            {
+                case PublicKeyCredentialType.PublicKey:
+                    return ApiConstants.CredentialTypePublicKey;
+                default:
+                    return null;
+            }
         }
 
         public static AuthenticatorAttachment Translate(Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment)

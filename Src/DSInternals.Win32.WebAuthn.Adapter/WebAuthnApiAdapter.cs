@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 using Fido2NetLib;
@@ -6,6 +7,9 @@ using Fido2NetLib.Objects;
 
 namespace DSInternals.Win32.WebAuthn.Adapter
 {
+#if NET5_0
+    [SupportedOSPlatform("windows")]
+#endif
     public class WebAuthnApiAdapter
     {
         private Interop.WebAuthnApi _api;

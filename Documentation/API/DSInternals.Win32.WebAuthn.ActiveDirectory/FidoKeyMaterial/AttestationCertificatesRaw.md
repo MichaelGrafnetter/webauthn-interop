@@ -3,7 +3,7 @@
 X5c is an array of attestation certificates associated with the authenticator.
 
 ```csharp
-public string[] AttestationCertificatesRaw { get; }
+public byte[][] AttestationCertificatesRaw { get; }
 ```
 
 ## See Also

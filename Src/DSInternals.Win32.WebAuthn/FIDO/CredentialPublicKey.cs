@@ -3,6 +3,7 @@ using PeterO.Cbor;
 using System.Security.Cryptography;
 using System.Globalization;
 using DSInternals.Win32.WebAuthn.COSE;
+using System.Runtime.Versioning;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {
@@ -22,6 +23,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             private set;
         }
 
+#if NET5_0
+        [SupportedOSPlatform("windows")]
+#endif
         public RSACng RSA
         {
             get

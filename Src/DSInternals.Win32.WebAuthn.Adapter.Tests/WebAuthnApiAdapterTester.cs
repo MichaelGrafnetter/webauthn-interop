@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DSInternals.Win32.WebAuthn.Adapter;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DSInternals.Win32.WebAuthn.UITests
+namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 {
     /// <summary>
     /// These tests require user interaction and should not be executed as part of CI.
     /// </summary>
     [TestClass]
     [TestCategory("Interactive")]
-    public class WebAuthnApiUITester
+    public class WebAuthnApiAdapterTester
     {
         [TestMethod]
         public void WebAuthN_MakeCredential_MSAccount()
@@ -190,7 +189,7 @@ namespace DSInternals.Win32.WebAuthn.UITests
             var webauthn = new WebAuthnApiAdapter();
 
             var source = new CancellationTokenSource(5000);
-            var response = webauthn.AuthenticatorGetAssertionAsync(options, null, source.Token).GetAwaiter().GetResult();
+            webauthn.AuthenticatorGetAssertionAsync(options, null, source.Token).GetAwaiter().GetResult();
         }
     }
 }

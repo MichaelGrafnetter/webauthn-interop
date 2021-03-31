@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
+#if NET5_0
+    [SupportedOSPlatform("windows")]
+#endif
     public struct WindowHandle
     {
         private IntPtr _handle;

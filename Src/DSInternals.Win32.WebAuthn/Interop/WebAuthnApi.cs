@@ -13,6 +13,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
     /// <remarks>
     /// Requires Windows 10 1903+ to work.
     /// </remarks>
+#if NET5_0
+    [SupportedOSPlatform("windows")]
+#endif
     public class WebAuthnApi
     {
         private static ApiVersion? _apiVersionCache;

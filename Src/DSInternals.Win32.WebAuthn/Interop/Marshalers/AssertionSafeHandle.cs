@@ -1,8 +1,12 @@
 ﻿using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using Microsoft.Win32.SafeHandles;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
+#if NET5_0
+    [SupportedOSPlatform("windows")]
+#endif
     internal class AssertionSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         private AssertionSafeHandle() : base(true) { }
