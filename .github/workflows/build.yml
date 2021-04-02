@@ -41,11 +41,15 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
           dotnet-version: '2.1.x'
+      env:
+        DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
     - name: Setup .NET 5.0
       uses: actions/setup-dotnet@v1
       with:
           dotnet-version: '5.0.x'
+      env:
+        DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
     - name: Build
       working-directory: Src

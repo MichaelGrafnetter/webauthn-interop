@@ -27,10 +27,9 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0' AND '$(Configuration)' == 'Release'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0' AND '$(Configuration)' == 'Debug'">
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Fido2.Models" Version="1.1.0" />
