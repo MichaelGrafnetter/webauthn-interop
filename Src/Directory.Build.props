@@ -54,6 +54,6 @@
   <ItemGroup>
     <!-- Additional files to include in NuGet packages -->
     <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
-    <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" Visible="false" />
   </ItemGroup>
 </Project>

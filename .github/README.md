@@ -1,5 +1,5 @@
 # WebAuthn Interop Assembly
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.txt)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 [![Windows 10 1903+](https://img.shields.io/badge/Windows%2010-1903%2B-007bb8.svg?logo=Windows)](#)
 [![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
 [![.NET Core 3+](https://img.shields.io/badge/.NET%20Core-3%2B-007FFF.svg)](#)
