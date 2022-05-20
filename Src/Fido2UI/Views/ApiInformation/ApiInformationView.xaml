@@ -12,8 +12,8 @@
         <GroupBox Header="Operating System Information" Margin="0, 0, 0, 0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="180"/>
-                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />

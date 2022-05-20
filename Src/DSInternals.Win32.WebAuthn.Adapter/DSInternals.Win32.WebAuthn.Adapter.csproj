@@ -32,9 +32,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fido2.Models" Version="1.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="PeterO.Cbor" Version="4.3.0" />
+    <PackageReference Include="Fido2.Models" Version="2.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="PeterO.Cbor" Version="4.4.4" />
     <!-- Note: Classes from this namespace are part of .NET 4.7 -->
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472'" />
   </ItemGroup>

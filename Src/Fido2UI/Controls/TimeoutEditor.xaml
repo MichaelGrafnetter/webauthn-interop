@@ -10,10 +10,10 @@
              x:Name="TimeoutEditorControl">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBox Name="TimeoutTextBox" IsEnabled="False" Text="{Binding ElementName=TimeoutSlider, Mode=OneWay, StringFormat='{}{0:###0,}', Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Column="0" />
+        <TextBox Name="TimeoutTextBox" IsEnabled="False" Text="{Binding ElementName=TimeoutSlider, Mode=OneWay, StringFormat='{}{0:###0,} s', Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Column="0" />
         <Slider Name="TimeoutSlider" Value="{Binding Path=Timeout, ElementName=TimeoutEditorControl, Mode=TwoWay}" Minimum="5000" Maximum="300000" IsSnapToTickEnabled="True" TickFrequency="1000" Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="1" />
     </Grid>
 </UserControl>

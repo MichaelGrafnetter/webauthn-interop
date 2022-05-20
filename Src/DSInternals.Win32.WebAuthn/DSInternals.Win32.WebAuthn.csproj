@@ -35,9 +35,9 @@
 
   <ItemGroup>
     <!-- TODO: Replace with System.Text.Json -->
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <!-- TODO: Replace with System.Formats.Cbor -->
-    <PackageReference Include="PeterO.Cbor" Version="4.3.0" />
+    <PackageReference Include="PeterO.Cbor" Version="4.4.4" />
     <!-- Note: Classes from this namespace are part of .NET 4.7 -->
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472'" />
   </ItemGroup>

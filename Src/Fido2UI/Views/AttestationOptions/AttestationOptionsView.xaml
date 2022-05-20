@@ -15,7 +15,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="110"/>
-                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
@@ -33,15 +33,15 @@
                     <GroupBox Header="User">
                         <StackPanel>
                             <DockPanel>
-                                <Label Content="Name:" Width="100" />
+                                <Label Content="Name:" Width="100" VerticalAlignment="Center" />
                                 <TextBox Name="UserNameTextBox" Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                             <DockPanel>
-                                <Label Content="Display name:" Width="100" />
+                                <Label Content="Display name:" Width="100" VerticalAlignment="Center" />
                                 <TextBox Name="UserDisplayNameTextBox" Text="{Binding UserDisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                             <DockPanel>
-                                <Label Content="Credential ID:" Width="100" />
+                                <Label Content="Credential ID:" Width="100" VerticalAlignment="Center" />
                                 <Button Name="GenerateUserIdButton" Content="Random" Command="{Binding GenerateUserIdCommand}" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="5,0,0,0" Padding="2" />
                                 <TextBox Name="UserCredentialIdTextBox" VerticalAlignment="Center">
                                     <TextBox.Text>
@@ -58,11 +58,11 @@
                     <GroupBox Header="Relying Party">
                         <StackPanel>
                             <DockPanel>
-                                <Label Content="Domain name:" Width="100" />
+                                <Label Content="Domain name:" Width="100" VerticalAlignment="Center" />
                                 <TextBox Name="RpDomainNameTextBox" Text="{Binding RpId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                             <DockPanel>
-                                <Label Content="Display name:" Width="100" />
+                                <Label Content="Display name:" Width="100" VerticalAlignment="Center" />
                                 <TextBox Name="RpDisplayNameTextBox" Text="{Binding RpName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
                             </DockPanel>
                         </StackPanel>
@@ -74,7 +74,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="140"/>
-                            <ColumnDefinition Width="190"/>
+                            <ColumnDefinition Width="230"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
@@ -106,9 +106,9 @@
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" Padding="2" Margin="5,0,0,0" DockPanel.Dock="Right" />
-                        <Label Name="AttestationLabel" Content="Attestation:" Width="80" />
-                        <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="80" />
-                        <Label Name="TimeoutLabel" Content="Timeout (s):" />
+                        <Label Name="AttestationLabel" Content="Attestation:" Width="80" VerticalAlignment="Center" />
+                        <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="90" />
+                        <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
                         <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" />
                     </DockPanel>
                     <DockPanel Margin="0,5,0,0">
