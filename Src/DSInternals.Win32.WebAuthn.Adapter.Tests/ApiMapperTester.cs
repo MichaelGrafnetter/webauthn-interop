@@ -29,8 +29,8 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
         {
             var input = new List<PubKeyCredParam>()
             {
-                new PubKeyCredParam() { Alg = -7, Type = PublicKeyCredentialType.PublicKey },
-                new PubKeyCredParam() { Alg = -257, Type = PublicKeyCredentialType.PublicKey }
+                new PubKeyCredParam() { Alg = Fido2NetLib.Objects.COSE.Algorithm.ES256, Type = PublicKeyCredentialType.PublicKey },
+                new PubKeyCredParam() { Alg = Fido2NetLib.Objects.COSE.Algorithm.RS256, Type = PublicKeyCredentialType.PublicKey }
             };
 
             var expected = new[] { Algorithm.ES256, Algorithm.RS256 };
@@ -44,7 +44,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
         {
             var input = new List<PubKeyCredParam>()
             {
-                new PubKeyCredParam() { Alg = -7, Type = PublicKeyCredentialType.PublicKey }
+                new PubKeyCredParam() { Alg = Fido2NetLib.Objects.COSE.Algorithm.ES256, Type = PublicKeyCredentialType.PublicKey }
             };
 
             var expected = new[] { Algorithm.ES256 };

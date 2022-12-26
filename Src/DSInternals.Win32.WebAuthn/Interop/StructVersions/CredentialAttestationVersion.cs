@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.Win32.WebAuthn.Interop
 {
+    /// <summary>
+    /// The version of the WEBAUTHN_CREDENTIAL_ATTESTATION structure, to allow for modifications in the future.
+    /// </summary>
     internal enum CredentialAttestationVersion
     {
         /// <remarks>
@@ -16,6 +19,11 @@
         /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.
         /// </remarks>
         Version3 = ApiConstants.CredentialAttestationVersion3,
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4.
+        /// </remarks>
+        Version4 = ApiConstants.CredentialAttestationVersion4,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_CURRENT_VERSION.

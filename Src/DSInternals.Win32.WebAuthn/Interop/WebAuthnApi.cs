@@ -42,7 +42,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                         _apiVersionCache = NativeMethods.GetApiVersionNumber();
                         return _apiVersionCache.Value;
                     }
-                    catch (EntryPointNotFoundException)
+                    catch (TypeLoadException)
                     {
                         // The WebAuthNGetApiVersionNumber() function was added in Windows 10 1903.
                         return null;
@@ -82,7 +82,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     ApiHelper.Validate(result);
                     return value;
                 }
-                catch(EntryPointNotFoundException)
+                catch (TypeLoadException)
                 {
                     // If the IsUserVerifyingPlatformAuthenticatorAvailable function cannot be found, the feature is definitely not supported.
                     return false;
@@ -445,7 +445,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 ApiHelper.Validate(result);
                 return cancellationId;
             }
-            catch(EntryPointNotFoundException)
+            catch(TypeLoadException)
             {
                 // Async support is not present in earlier versions of Windows 10.
                 return null;

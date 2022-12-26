@@ -3,7 +3,7 @@
 namespace DSInternals.Win32.WebAuthn.COSE
 {
     /// <summary>
-    /// COSE Algorithms https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+    /// Well-known COSE algorithm specifying the algorithm to use for the credential. https://www.iana.org/assignments/cose/cose.xhtml#algorithms
     /// </summary>
     public enum Algorithm : int
     {

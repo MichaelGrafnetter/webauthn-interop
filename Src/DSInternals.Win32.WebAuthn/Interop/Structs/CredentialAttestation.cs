@@ -53,6 +53,15 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
         public AuthenticatorTransport UsedTransport { get; private set; }
 
+        //
+        // Following fields have been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4
+        //
+
+        BOOL bEpAtt;
+        BOOL bLargeBlobSupported;
+        BOOL bResidentKey;
+
+
         /// <summary>
         /// Authenticator data that was created for this credential.
         /// </summary>

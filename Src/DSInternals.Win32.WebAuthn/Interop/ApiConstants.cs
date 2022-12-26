@@ -15,9 +15,19 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int ApiVersion2 = 2;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_API_VERSION_3.
+        /// </remarks>
+        public const int ApiVersion3 = 3;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_API_VERSION_4.
+        /// </remarks>
+        public const int ApiVersion4 = 4;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_API_CURRENT_VERSION.
         /// </remarks>
-        public const int ApiCurrentVersion = ApiVersion2;
+        public const int ApiCurrentVersion = ApiVersion4;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION.
@@ -150,6 +160,31 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int CredentialExCurrentVersion = 1;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_DETAILS_VERSION_1.
+        /// </remarks>
+        public const int CredentialDetailsVersion1 = 1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_DETAILS_CURRENT_VERSION.
+        /// </remarks>
+        public const int CredentialDetailsCurrentVersion = CredentialDetailsVersion1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_GET_CREDENTIALS_OPTIONS_VERSION_1.
+        /// </remarks>
+        public const int GetCredentialsOptionsVersion1 = 1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_GET_CREDENTIALS_OPTIONS_CURRENT_VERSION.
+        /// </remarks>
+        public const int GetCredentialsOptionsCurrentVersion = GetCredentialsOptionsVersion1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_ONE_HMAC_SECRET_LENGTH.
+        /// </remarks>
+        public const int CtapOneHmacSecretLength = 32;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_EXTENSIONS_IDENTIFIER_HMAC_SECRET.
         /// </remarks>
         public const string ExtensionsIdentifierHmacSecret = "hmac-secret";
@@ -178,6 +213,16 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Corresponds to WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_PROTECT.
         /// </remarks>
         public const string ExtensionsIdentifierCredProtect = "credProtect";
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_BLOB.
+        /// </remarks>
+        public const string ExtensionsIdentifierCredBlob = "credBlob";
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_EXTENSIONS_IDENTIFIER_MIN_PIN_LENGTH.
+        /// </remarks>
+        public const string ExtensionsIdentifierMinPinLength = "minPinLength";
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY.
@@ -240,6 +285,36 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AttestationConveyancePreferenceDirect = 3;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_ENTERPRISE_ATTESTATION_NONE.
+        /// </remarks>
+        public const int EnterpriseAttestationNone = 0;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ENTERPRISE_ATTESTATION_VENDOR_FACILITATED.
+        /// </remarks>
+        public const int EnterpriseAttestationVendorFacilitated = 1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ENTERPRISE_ATTESTATION_PLATFORM_MANAGED.
+        /// </remarks>
+        public const int EnterpriseAttestationPlatformManaged = 2;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_NONE.
+        /// </remarks>
+        public const int LargeBlobSupportNone = 0;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_REQUIRED.
+        /// </remarks>
+        public const int LargeBlobSupportRequired = 1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_PREFERRED.
+        /// </remarks>
+        public const int LargeBlobSupportPreferred = 2;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_1.
         /// </remarks>
         public const int AuthenticatorMakeCredentialOptionsVersion1 = 1;
@@ -255,9 +330,39 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AuthenticatorMakeCredentialOptionsVersion3 = 3;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_4.
+        /// </remarks>
+        public const int AuthenticatorMakeCredentialOptionsVersion4 = 4;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_5.
+        /// </remarks>
+        public const int AuthenticatorMakeCredentialOptionsVersion5 = 5;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION.
         /// </remarks>
-        public const int AuthenticatorMakeCredentialOptionsCurrentVersion = AuthenticatorMakeCredentialOptionsVersion3;
+        public const int AuthenticatorMakeCredentialOptionsCurrentVersion = AuthenticatorMakeCredentialOptionsVersion5;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_NONE.
+        /// </remarks>
+        public const int CredLargeBlobOperationNone = 0;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_GET.
+        /// </remarks>
+        public const int CredLargeBlobOperationGet = 1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_SET.
+        /// </remarks>
+        public const int CredLargeBlobOperationSet = 2;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_DELETE.
+        /// </remarks>
+        public const int CredLargeBlobOperationDelete = 3;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_1.
@@ -280,9 +385,24 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AuthenticatorGetAssertionOptionsVersion4 = 4;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_5.
+        /// </remarks>
+        public const int AuthenticatorGetAssertionOptionsVersion5 = 5;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6.
+        /// </remarks>
+        public const int AuthenticatorGetAssertionOptionsVersion6 = 6;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION.
         /// </remarks>
-        public const int AuthenticatorGetAssertionOptionsCurrentVersion = AuthenticatorGetAssertionOptionsVersion4;
+        public const int AuthenticatorGetAssertionOptionsCurrentVersion = AuthenticatorGetAssertionOptionsVersion6;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_HMAC_SECRET_VALUES_FLAG.
+        /// </remarks>
+        public const int AuthenticatorHmacSecretValuesFlag = 0x00100000;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_DECODE_NONE.
@@ -340,14 +460,84 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int CredentialAttestationVersion3 = 3;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4.
+        /// </remarks>
+        public const int CredentialAttestationVersion4 = 4;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_CURRENT_VERSION.
         /// </remarks>
-        public const int CredentialAttestationCurrentVersion = CredentialAttestationVersion3;
+        public const int CredentialAttestationCurrentVersion = CredentialAttestationVersion4;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NONE.
+        /// </remarks>
+        public const int CredLargeBlobStatusNone = 0;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_SUCCESS.
+        /// </remarks>
+        public const int CredLargeBlobStatusSuccess = 1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NOT_SUPPORTED.
+        /// </remarks>
+        public const int CredLargeBlobStatusNotSupported = 2;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_INVALID_DATA.
+        /// </remarks>
+        public const int CredLargeBlobStatusInvalidData = 3;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_INVALID_PARAMETER.
+        /// </remarks>
+        public const int CredLargeBlobStatusInvalidParameter = 4;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NOT_FOUND.
+        /// </remarks>
+        public const int CredLargeBlobStatusNotFound = 5;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_MULTIPLE_CREDENTIALS.
+        /// </remarks>
+        public const int CredLargeBlobStatusMultipleCredentials = 6;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_LACK_OF_SPACE.
+        /// </remarks>
+        public const int CredLargeBlobStatusLackOfSpace = 7;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_PLATFORM_ERROR.
+        /// </remarks>
+        public const int CredLargeBlobStatusPlatformError = 8;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_AUTHENTICATOR_ERROR.
+        /// </remarks>
+        public const int CredLargeBlobStatusAuthenticatorError = 9;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ASSERTION_VERSION_1.
+        /// </remarks>
+        public const int AssertionVersion1 = 1;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ASSERTION_VERSION_2.
+        /// </remarks>
+        public const int AssertionVersion2 = 2;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ASSERTION_VERSION_3.
+        /// </remarks>
+        public const int AssertionVersion3 = 3;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.
         /// </remarks>
-        public const int AssertionCurrentVersion = 1;
+        public const int AssertionCurrentVersion = AssertionVersion3;
 
     }
 }

@@ -14,22 +14,75 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         public AssertionVersion Version { get; private set; }
 
+        /// <summary>
+        /// The size of the authenticator data.
+        /// </summary>
         private int _authenticatorDataLength;
 
+        /// <summary>
+        /// A pointer to the authenticator data.
+        /// </summary>
         private ByteArrayOut _authenticatorData;
 
+        /// <summary>
+        /// The size of the signature that was generated for this assertion.
+        /// </summary>
         private int _signatureLength;
 
+        /// <summary>
+        /// A pointer to the signature that was generated for this assertion.
+        /// </summary>
         private ByteArrayOut _signature;
 
         /// <summary>
-        /// Credential that was used for this assertion.
+        /// The credential that was used for this assertion.
         /// </summary>
         public CredentialOut Credential { get; private set; }
 
+        /// <summary>
+        /// The size of the user Id.
+        /// </summary>
         private int _userIdLength;
 
+        /// <summary>
+        /// A pointer to the user Id.
+        /// </summary>
         private ByteArrayOut _userId;
+
+        //
+        // Following fields have been added in WEBAUTHN_ASSERTION_VERSION_2
+        //
+
+        /// <summary>
+        /// A CBOR map from extension identifiers to their authenticator extension inputs,
+        /// created by the client based on the extensions requested by the Relying Party, if any.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_2.</remarks>
+        public ExtensionsOut Extensions { get; private set; }
+
+        /// <summary>
+        /// Size of the Large Blob
+        /// </summary>
+        private int _largeBlobLength;
+
+        /// <summary>
+        /// A pointer to the credential blob.
+        /// </summary>
+        private ByteArrayOut _largeBlob;
+
+        /// <summary>
+        /// Status of the credential blob.
+        /// </summary>
+        public CredentialLargeBlobStatus LargeBlobStatus { get; private set; }
+
+        //
+        // Following fields have been added in WEBAUTHN_ASSERTION_VERSION_3
+        //
+
+        /// <summary>
+        /// A salt used to generate the HMAC secret.
+        /// </summary>
+        public HmacSecretSaltOut HmacSecret;
 
         /// <summary>
         /// Authenticator data that was created for this assertion.
@@ -45,5 +98,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// User Identifier
         /// </summary>
         public byte[] UserId => _userId?.Read(_userIdLength);
+
+        /// <summary>
+        /// Credential Large Blob
+        /// </summary>
+        public byte[] LargeBlob => _largeBlob?.Read(_largeBlobLength);
     }
 }

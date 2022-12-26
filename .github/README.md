@@ -10,8 +10,8 @@
 ## Introduction
 
 This library allows .NET applications to directly interact with FIDO2 security keys (e.g. [YubiKey](https://www.yubico.com/products/), [Feitian](https://www.ftsafe.com/products/FIDO), or [Crayonic](https://www.crayonic.com/)) and with [Windows Hello](https://support.microsoft.com/en-us/windows/learn-about-windows-hello-and-set-it-up-dae28983-8242-bb2a-d3d1-87c9d265a5f0) / [Windows Hello for Business](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/hello-identity-verification). 
-It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
-(exposed through the `webauthn.dll` system library). This API is mainly used by browsers
+It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://learn.microsoft.com/en-us/windows/win32/api/_webauthn/)
+(defined in the [`webauthn.h`](https://github.com/microsoft/webauthn/blob/master/webauthn.h) header file and implemented in the `webauthn.dll` system library). This API is mainly used by browsers
 (see the source code of [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
 and [Firefox](https://searchfox.org/mozilla-central/source/dom/webauthn/WinWebAuthnManager.cpp)) to implement passwordless web authentication,
 but it can also be used by any .NET desktop or CLI application.

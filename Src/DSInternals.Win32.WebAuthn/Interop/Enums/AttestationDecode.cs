@@ -7,6 +7,8 @@
         /// </remarks>
         None = ApiConstants.AttestationDecodeNone,
 
+        /// <summary>
+        /// Supports the packed and fido-u2f format types.
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_DECODE_COMMON.
         /// </remarks>

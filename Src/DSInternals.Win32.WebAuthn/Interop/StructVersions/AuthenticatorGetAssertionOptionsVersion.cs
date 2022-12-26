@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.Win32.WebAuthn.Interop
 {
+    /// <summary>
+    /// The version of the WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS structure, to allow for modifications in the future.
+    /// </summary>
     internal enum AuthenticatorGetAssertionOptionsVersion : int
     {
         /// <remarks>
@@ -21,6 +24,16 @@
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4.
         /// </remarks>
         Version4 = ApiConstants.AuthenticatorGetAssertionOptionsVersion4,
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_5.
+        /// </remarks>
+        Version5 = ApiConstants.AuthenticatorGetAssertionOptionsVersion5,
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6.
+        /// </remarks>
+        Version6 = ApiConstants.AuthenticatorGetAssertionOptionsVersion6,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION.

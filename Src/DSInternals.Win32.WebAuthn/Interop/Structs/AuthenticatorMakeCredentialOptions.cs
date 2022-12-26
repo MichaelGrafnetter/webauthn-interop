@@ -5,13 +5,16 @@ using DSInternals.Win32.WebAuthn.FIDO;
 namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
-    /// Options.
+    /// The options for the WebAuthNAuthenticatorMakeCredential operation.
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS.</remarks>
     [StructLayout(LayoutKind.Sequential)]
     internal class AuthenticatorMakeCredentialOptions : IDisposable
     {
-        private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version3;
+        /// <summary>
+        /// Version of this structure.
+        /// </summary>
+        private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version5;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -19,8 +22,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <remarks>This is used as guidance, and can be overridden by the platform.</remarks>
         public int TimeoutMilliseconds { get; set; } = ApiConstants.DefaultTimeoutMilliseconds;
 
+        /// <summary>
+        /// Credentials used for exclusion.
+        /// </summary>
         private Credentials _excludeCredentials;
 
+        /// <summary>
+        /// Optional extensions to parse when performing the operation.
+        /// </summary>
         private ExtensionsIn _extensions;
 
         /// <summary>
@@ -48,9 +57,47 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         private int Flags { get; set; }
 
+        /// <summary>
+        /// Optional cancellation Id.
+        /// </summary>
         private IntPtr _cancellationId = IntPtr.Zero;
 
+        /// <summary>
+        /// The exclude credential list. If present, CredentialList will be ignored.
+        /// </summary>
         private IntPtr _excludeCredentialList = IntPtr.Zero;
+
+        //
+        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_4
+        //
+
+        /// <summary>
+        /// Enterprise Attestation
+        /// </summary>
+        public EnterpriseAttestationType EnterpriseAttestation { get; set; }
+
+        // Large Blob Support: none, required or preferred
+        //
+        // NTE_INVALID_PARAMETER when large blob required or preferred and
+        //   bRequireResidentKey isn't set to TRUE
+        /// <summary>
+        /// The requested large blob support.
+        /// </summary>
+        public LargeBlobSupport LargeBlobSupport { get; set; }
+
+        // Optional. Prefer key to be resident. Defaulting to FALSE. When TRUE,
+        // overrides the above bRequireResidentKey.
+        public bool PreferResidentKey { get; set; }
+
+        //
+        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_5
+        //
+
+        /// <summary>
+        /// Indicates whether the browser is in private mode. Defaulting to false.
+        /// </summary>
+        public bool BrowserInPrivateMode { get; set; }
+
 
         public AuthenticatorMakeCredentialOptions() { }
 
@@ -140,7 +187,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        /// <remarks>This is a V3 struct. If V4 arrives, new fields will need to be added.</remarks>
+        /// <remarks>This is a V5 struct. If V6 arrives, new fields will need to be added.</remarks>
         public AuthenticatorMakeCredentialOptionsVersion Version
         {
             get
@@ -149,7 +196,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
             set
             {
-                if(value > AuthenticatorMakeCredentialOptionsVersion.Version3)
+                if(value > AuthenticatorMakeCredentialOptionsVersion.Version5)
                 {
                     // We only support older struct versions.
                     throw new ArgumentOutOfRangeException(nameof(value), "The requested data structure version is not yet supported.");
