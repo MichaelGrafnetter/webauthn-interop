@@ -79,7 +79,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 
             // Validate
             var fido2 = new Fido2(config);
-            var result = fido2.MakeNewCredentialAsync(response, options, _ => Task.FromResult(true)).GetAwaiter().GetResult();
+            var result = fido2.MakeNewCredentialAsync(response, options, (_,_) => Task.FromResult(true)).GetAwaiter().GetResult();
             Assert.AreEqual(user.Name, result.Result.User.Name);
         }
 
@@ -131,7 +131,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             var fido2 = new Fido2(config);
             var pubKey = new byte[] { 0, 0, 0 };
             uint counter = 25;
-            var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, _ => Task.FromResult(true)).GetAwaiter().GetResult();
+            var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, (_, _) => Task.FromResult(true)).GetAwaiter().GetResult();
         }
 
         [TestMethod]
@@ -162,7 +162,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             var fido2 = new Fido2(config);
             var pubKey = new byte[] { 0, 0, 0 };
             uint counter = 25;
-            var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, _ => Task.FromResult(true)).GetAwaiter().GetResult();
+            var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, (_, _) => Task.FromResult(true)).GetAwaiter().GetResult();
         }
 
         [TestMethod]
