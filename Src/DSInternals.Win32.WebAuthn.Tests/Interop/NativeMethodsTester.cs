@@ -116,11 +116,12 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         public void NativeMethods_StructVersions()
         {
             // Check that all structure definitions are in sync with the current winauthn.h
-            Assert.AreEqual(CredentialAttestationVersion.Version4, CredentialAttestationVersion.Current);
-            Assert.AreEqual(AuthenticatorMakeCredentialOptionsVersion.Version5, AuthenticatorMakeCredentialOptionsVersion.Current);
+            Assert.AreEqual(CredentialAttestationVersion.Version5, CredentialAttestationVersion.Current);
+            Assert.AreEqual(AuthenticatorMakeCredentialOptionsVersion.Version6, AuthenticatorMakeCredentialOptionsVersion.Current);
             Assert.AreEqual(AuthenticatorGetAssertionOptionsVersion.Version6, AuthenticatorGetAssertionOptionsVersion.Current);
-            Assert.AreEqual(CredentialDetailtVersion.Version1, CredentialDetailtVersion.Current);
+            Assert.AreEqual(CredentialDetailtVersion.Version2, CredentialDetailtVersion.Current);
             Assert.AreEqual(GetCredentialOptionsVersion.Version1, GetCredentialOptionsVersion.Current);
+            Assert.AreEqual(AssertionVersion.Version4, AssertionVersion.Current);
 
             Assert.AreEqual(1, (int)UserInformationVersion.Current);
             Assert.AreEqual(1, (int)RelyingPartyInformationVersion.Current);
@@ -129,10 +130,9 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             Assert.AreEqual(1, (int)CoseCredentialParameterVersion.Current);
             Assert.AreEqual(1, (int)CommonAttestationVersion.Current);
             Assert.AreEqual(1, (int)ClientDataVersion.Current);
-            Assert.AreEqual(1, (int)AssertionVersion.Current);
 
             // Also check the API itself
-            Assert.AreEqual(ApiVersion.Version4, ApiVersion.Current);
+            Assert.AreEqual(ApiVersion.Version6, ApiVersion.Current);
         }
     }
 }
