@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netcoreapp3.1;net472</TargetFrameworks>
+    <TargetFrameworks>net7.0;net6.0;net5.0;netcoreapp3.1;net48;net472</TargetFrameworks>
     <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
     <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
@@ -29,15 +29,15 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0' AND '$(Configuration)' == 'Debug'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net7.0' AND '$(Configuration)' == 'Debug'">
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- TODO: Replace with System.Text.Json -->
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <!-- TODO: Replace with System.Formats.Cbor -->
-    <PackageReference Include="PeterO.Cbor" Version="4.4.4" />
+    <PackageReference Include="PeterO.Cbor" Version="4.5.2" />
     <!-- Note: Classes from this namespace are part of .NET 4.7 -->
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472'" />
   </ItemGroup>

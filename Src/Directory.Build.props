@@ -5,10 +5,12 @@
     <!--TODO: <Nullable>enable</Nullable>-->
 
     <!-- Redirect output directories -->
-    <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <!-- TODO: Remove this WPF directory name fix (*_[0-9a-z]{8}_wpftmp$ suffix) once the compiler issue is resolved. -->
+    <SanitizedProjectDirectoryName>$([System.Text.RegularExpressions.Regex]::Replace($(MSBuildProjectName), '_[0-9a-z]{8}_wpftmp$', ''))</SanitizedProjectDirectoryName>
+    <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(SanitizedProjectDirectoryName)</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
     <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
-    <OutputPath>..\..\Build\bin\$(Configuration)\$(MSBuildProjectName)</OutputPath>
+    <OutputPath>..\..\Build\bin\$(Configuration)\$(SanitizedProjectDirectoryName)</OutputPath>
     <PackageOutputPath>..\..\Build\bin\$(Configuration)\Packages</PackageOutputPath>
     <VSTestResultsDirectory>..\..\Build\TestResults</VSTestResultsDirectory>
 
@@ -22,7 +24,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageTags>FIDO;FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop;2FA;MFA;Authentication;Identity</PackageTags>
+    <PackageTags>PassKeys;FIDO;FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop;2FA;MFA;Authentication;Identity</PackageTags>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -37,7 +39,6 @@
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
 
-  <!-- Configure strong name signing -->
   <!-- Note: Fido2.Models and CppAst are currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
   <PropertyGroup Condition="
                    '$(Configuration)' == 'Release' AND
