@@ -282,11 +282,8 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 _allowCredentialList = IntPtr.Zero;
             }
 
-            if (_hmacSecretSaltValues != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(_hmacSecretSaltValues);
-                _hmacSecretSaltValues = IntPtr.Zero;
-            }
+            _hmacSecretSaltValues?.Dispose();
+            _hmacSecretSaltValues = null;
 
             if (_isU2fAppIdUsed != IntPtr.Zero)
             {

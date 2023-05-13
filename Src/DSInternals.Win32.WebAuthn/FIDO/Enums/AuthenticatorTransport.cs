@@ -38,6 +38,13 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         [EnumMember(Value = "ble")]
         BLE = ApiConstants.CtapTransportBle,
 
+        /// <summary>
+        /// Hybrid Transport (QR Code).
+        /// </summary>
+        /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_HYBRID.</remarks>
+        [EnumMember(Value = "hybrid")]
+        Hybrid = ApiConstants.CtapTransportHybrid,
+
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_TEST.</remarks>
         Test = ApiConstants.CtapTransportTest,
 

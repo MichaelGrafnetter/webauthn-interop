@@ -30,6 +30,18 @@
         Version4 = ApiConstants.ApiVersion4,
 
         /// <summary>
+        /// Delta From V4.
+        /// </summary>
+        /// <remarks>Corresponds to WEBAUTHN_API_VERSION_5.</remarks>
+        Version5 = ApiConstants.ApiVersion5,
+
+        /// <summary>
+        /// Delta From V5.
+        /// </summary>
+        /// <remarks>Corresponds to WEBAUTHN_API_VERSION_6.</remarks>
+        Version6 = ApiConstants.ApiVersion6,
+
+        /// <summary>
         /// Current Version
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_API_CURRENT_VERSION.</remarks>

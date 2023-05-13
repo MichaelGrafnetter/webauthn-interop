@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Net;
+using System.Runtime.InteropServices;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -82,7 +83,16 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// A salt used to generate the HMAC secret.
         /// </summary>
-        public HmacSecretSaltOut HmacSecret;
+        public HmacSecretSaltOut HmacSecret { get; private set; }
+
+        //
+        // Following fields have been added in WEBAUTHN_ASSERTION_VERSION_4
+        //
+
+        /// <summary>
+        /// The transport that was used.
+        /// </summary>
+        public TransportContext UsedTransport { get; private set; }
 
         /// <summary>
         /// Authenticator data that was created for this assertion.

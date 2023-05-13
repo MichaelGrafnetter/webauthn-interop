@@ -26,6 +26,11 @@
         Version4 = ApiConstants.CredentialAttestationVersion4,
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_5.
+        /// </remarks>
+        Version5 = ApiConstants.CredentialAttestationVersion5,
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_CURRENT_VERSION.
         /// </remarks>
 #pragma warning disable CA1069 // Enums values should not be duplicated

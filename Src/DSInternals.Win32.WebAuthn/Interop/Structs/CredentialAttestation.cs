@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Xml;
 using DSInternals.Win32.WebAuthn.FIDO;
 
 namespace DSInternals.Win32.WebAuthn.Interop
@@ -57,10 +59,23 @@ namespace DSInternals.Win32.WebAuthn.Interop
         // Following fields have been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4
         //
 
-        BOOL bEpAtt;
-        BOOL bLargeBlobSupported;
-        BOOL bResidentKey;
+        /// <summary>
+        /// Indicates whether the attestation statement contains uniquely identifying information (epAtt).
+        /// </summary>
+        public bool ContainsUniquelyIdentifyingInformation { get; private set; }
 
+        public bool LargeBlobSupported { get; private set; }
+
+        public bool ResidentKey { get; private set; }
+
+        //
+        // Following fields have been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_5
+        //
+
+        /// <summary>
+        /// Indicates whether the Pseudo-random function (PRF) extension is enabled.
+        /// </summary>
+        public bool PseudoRandomFunctionEnabled { get; private set; }
 
         /// <summary>
         /// Authenticator data that was created for this credential.

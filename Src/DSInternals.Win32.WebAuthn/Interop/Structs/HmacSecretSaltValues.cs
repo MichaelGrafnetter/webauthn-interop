@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.Interop.Structs;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -23,13 +24,21 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// List of credentials with HMAC secret SALT.
         /// </summary>
-        private PWEBAUTHN_CRED_WITH_HMAC_SECRET_SALT _credWithHmacSecretSaltList;
+        private CredentialsWithHmacSecretSaltIn _credWithHmacSecretSaltList;
 
-        public HmacSecretSaltValuesIn() { }
+        public HmacSecretSaltValuesIn(HmacSecretSaltIn globalHmacSalt, CredentialWithHmacSecretSaltIn[] credsWithHmacSecretSalt) {
+            this._globalHmacSalt = globalHmacSalt;
+            this._credWithHmacSecretSaltListSize = credsWithHmacSecretSalt?.Length ?? 0;
+            this._credWithHmacSecretSaltList = new CredentialsWithHmacSecretSaltIn(credsWithHmacSecretSalt);
+        }
 
         public void Dispose()
         {
+            _globalHmacSalt?.Dispose();
+            _globalHmacSalt = null;
 
+            _credWithHmacSecretSaltList?.Dispose();
+            _credWithHmacSecretSaltList = null;
         }
     }
 }

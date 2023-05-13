@@ -54,6 +54,33 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
+        //TODO: Add support for the credBlob extension.
+        // Below type definitions is for WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_BLOB
+        // MakeCredential Input Type:   WEBAUTHN_CRED_BLOB_EXTENSION.
+        //      - pvExtension must point to a WEBAUTHN_CRED_BLOB_EXTENSION struct
+        //      - cbExtension must contain the sizeof(WEBAUTHN_CRED_BLOB_EXTENSION).
+        // MakeCredential Output Type:  BOOL.
+        //      - pvExtension will point to a BOOL with the value TRUE if credBlob was successfully created
+        //      - cbExtension will contain the sizeof(BOOL).
+        // GetAssertion Input Type:     BOOL.
+        //      - pvExtension must point to a BOOL with the value TRUE to request the credBlob.
+        //      - cbExtension must contain the sizeof(BOOL).
+        // GetAssertion Output Type:    WEBAUTHN_CRED_BLOB_EXTENSION.
+        //      - pvExtension will point to a WEBAUTHN_CRED_BLOB_EXTENSION struct if the authenticator
+        //        returns the credBlob in the signed extensions
+        //      - cbExtension will contain the sizeof(WEBAUTHN_CRED_BLOB_EXTENSION).
+
+        //TODO: Add support for the minPinLength extension
+        // Below type definitions is for WEBAUTHN_EXTENSIONS_IDENTIFIER_MIN_PIN_LENGTH
+        // MakeCredential Input Type:   BOOL.
+        //      - pvExtension must point to a BOOL with the value TRUE to request the minPinLength.
+        //      - cbExtension must contain the sizeof(BOOL).
+        // MakeCredential Output Type:  DWORD.
+        //      - pvExtension will point to a DWORD with the minimum pin length if returned by the authenticator
+        //      - cbExtension will contain the sizeof(DWORD).
+        // GetAssertion Input Type:     Not Supported
+        // GetAssertion Output Type:    Not Supported
+
         private ExtensionsOut() : base() { }
     }
 

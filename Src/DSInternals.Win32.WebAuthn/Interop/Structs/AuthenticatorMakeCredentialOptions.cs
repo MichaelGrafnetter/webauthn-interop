@@ -14,7 +14,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Version of this structure.
         /// </summary>
-        private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version5;
+        private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version6;
 
         /// <summary>
         /// Time that the operation is expected to complete within.

@@ -32,6 +32,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
         public HmacSecretSaltIn(byte[] first, byte[] second)
         {
+            // TODO: Check if the length of the values is WEBAUTHN_CTAP_ONE_HMAC_SECRET_LENGTH.
             _first = new ByteArrayIn(first);
             _firstLength = first?.Length ?? 0;
 

@@ -10,6 +10,11 @@
         /// </remarks>
         Version1 = ApiConstants.CredentialDetailsVersion1,
 
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_DETAILS_VERSION_2.
+        /// </remarks>
+        Version2 = ApiConstants.CredentialDetailsVersion2,
+
         /// <summary>
         /// Current version
         /// </summary>

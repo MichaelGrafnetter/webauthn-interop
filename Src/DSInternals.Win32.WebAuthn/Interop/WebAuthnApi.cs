@@ -258,6 +258,8 @@ namespace DSInternals.Win32.WebAuthn.Interop
                         {
                             HmacSecret = attestation.Extensions?.HmacSecret,
                             CredProtect = attestation.Extensions?.CredProtect
+                            // TODO: Add support for the large blob extension
+                            // TODO: Add support for the min pin length extension
                         };
 
                         return new AuthenticatorAttestationResponse()

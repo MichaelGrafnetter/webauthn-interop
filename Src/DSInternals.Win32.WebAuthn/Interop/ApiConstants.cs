@@ -25,9 +25,19 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int ApiVersion4 = 4;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_API_VERSION_5.
+        /// </remarks>
+        public const int ApiVersion5 = 5;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_API_VERSION_6.
+        /// </remarks>
+        public const int ApiVersion6 = 6;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_API_CURRENT_VERSION.
         /// </remarks>
-        public const int ApiCurrentVersion = ApiVersion4;
+        public const int ApiCurrentVersion = ApiVersion6;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION.
@@ -150,9 +160,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int CtapTransportInternal = 0x00000010;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_HYBRID.
+        /// </remarks>
+        public const int CtapTransportHybrid = 0x00000020;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_FLAGS_MASK.
         /// </remarks>
-        public const int CtapTransportFlagsMask = 0x0000001F;
+        public const int CtapTransportFlagsMask = 0x0000002F;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_EX_CURRENT_VERSION.
@@ -165,9 +180,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int CredentialDetailsVersion1 = 1;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_DETAILS_VERSION_2.
+        /// </remarks>
+        public const int CredentialDetailsVersion2 = 2;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_DETAILS_CURRENT_VERSION.
         /// </remarks>
-        public const int CredentialDetailsCurrentVersion = CredentialDetailsVersion1;
+        public const int CredentialDetailsCurrentVersion = CredentialDetailsVersion2;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_GET_CREDENTIALS_OPTIONS_VERSION_1.
@@ -340,9 +360,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AuthenticatorMakeCredentialOptionsVersion5 = 5;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_6.
+        /// </remarks>
+        public const int AuthenticatorMakeCredentialOptionsVersion6 = 6;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION.
         /// </remarks>
-        public const int AuthenticatorMakeCredentialOptionsCurrentVersion = AuthenticatorMakeCredentialOptionsVersion5;
+        public const int AuthenticatorMakeCredentialOptionsCurrentVersion = AuthenticatorMakeCredentialOptionsVersion6;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_NONE.
@@ -465,9 +490,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int CredentialAttestationVersion4 = 4;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_5.
+        /// </remarks>
+        public const int CredentialAttestationVersion5 = 5;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_CURRENT_VERSION.
         /// </remarks>
-        public const int CredentialAttestationCurrentVersion = CredentialAttestationVersion4;
+        public const int CredentialAttestationCurrentVersion = CredentialAttestationVersion5;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NONE.
@@ -535,9 +565,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AssertionVersion3 = 3;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_ASSERTION_VERSION_4.
+        /// </remarks>
+        public const int AssertionVersion4 = 4;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.
         /// </remarks>
-        public const int AssertionCurrentVersion = AssertionVersion3;
+        public const int AssertionCurrentVersion = AssertionVersion4;
 
     }
 }

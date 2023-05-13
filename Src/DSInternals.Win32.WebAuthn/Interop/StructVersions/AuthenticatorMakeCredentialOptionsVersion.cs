@@ -31,6 +31,11 @@
         Version5 = ApiConstants.AuthenticatorMakeCredentialOptionsVersion5,
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_6.
+        /// </remarks>
+        Version6 = ApiConstants.AuthenticatorMakeCredentialOptionsVersion6,
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION.
         /// </remarks>
 #pragma warning disable CA1069 // Enums values should not be duplicated

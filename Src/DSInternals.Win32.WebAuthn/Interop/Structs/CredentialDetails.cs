@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private protected CredentialDetailtVersion Version = CredentialDetailtVersion.Version1;
+        private protected CredentialDetailtVersion Version = CredentialDetailtVersion.Version2;
 
         private int _credentialIdLength;
 
@@ -34,6 +34,15 @@ namespace DSInternals.Win32.WebAuthn.Interop
         ///  Removable or not.
         /// </summary>
         public bool Removable { get; set; }
+
+        //
+        // The following fields have been added in WEBAUTHN_CREDENTIAL_DETAILS_VERSION_2
+        //
+
+        /// <summary>
+        /// Backed Up or not.
+        /// </summary>
+        public bool BackedUp { get; private set; }
 
         /// <summary>
         /// CredentialId bytes.

@@ -21,6 +21,11 @@
         Version3 = ApiConstants.AssertionVersion3,
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_ASSERTION_VERSION_4.
+        /// </remarks>
+        Version4 = ApiConstants.AssertionVersion4,
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.
         /// </remarks>
 #pragma warning disable CA1069 // Enums values should not be duplicated
