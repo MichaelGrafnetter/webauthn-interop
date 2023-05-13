@@ -55,8 +55,9 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             {
                 throw new ArgumentNullException(nameof(credParams));
             }
-
-            return credParams.Select(item => Translate(item.Alg)).ToArray();
+            //TODO: Fix this ex
+            throw new NotImplementedException();
+            // return credParams.Select(item => Translate(item.Alg)).ToArray();
         }
 
         public static Algorithm Translate(long algorithm)
@@ -107,9 +108,8 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                     return AuthenticatorTransport.USB;
                 case null:
                     return AuthenticatorTransport.NoRestrictions;
-                case Fido2NetLib.Objects.AuthenticatorTransport.Lightning:
                 default:
-                    throw new NotSupportedException("The Lightning transport is not supported on Windows.");
+                    throw new NotSupportedException("This transport type is not currently supported.");
             }
         }
 

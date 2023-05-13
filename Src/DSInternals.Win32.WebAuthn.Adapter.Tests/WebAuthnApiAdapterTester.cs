@@ -70,8 +70,8 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 
             options.PubKeyCredParams = new List<PubKeyCredParam>()
             {
-                new PubKeyCredParam() { Alg = Fido2NetLib.Objects.COSE.Algorithm.ES256, Type = PublicKeyCredentialType.PublicKey },
-                new PubKeyCredParam() { Alg = Fido2NetLib.Objects.COSE.Algorithm.RS256, Type = PublicKeyCredentialType.PublicKey }
+                new PubKeyCredParam(Fido2NetLib.Objects.COSE.Algorithm.ES256, PublicKeyCredentialType.PublicKey),
+                new PubKeyCredParam(Fido2NetLib.Objects.COSE.Algorithm.RS256, PublicKeyCredentialType.PublicKey)
             };
 
             var webauthn = new WebAuthnApiAdapter();
