@@ -17,7 +17,7 @@ jobs:
       DO_SIGN: true ## Controls code signing
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     
     - name: Restore Strong Name Key
       working-directory: Keys
@@ -36,18 +36,11 @@ jobs:
             Write-Warning 'The STRONG_NAME_KEY secret is not available. Skipping SNK file creation.'
         }
 
-    - name: Setup .NET Core 2 ## Required by AzureSignTool
-      if: ${{ env.DO_SIGN }}
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
       with:
-          dotnet-version: '2.1.x'
-      env:
-        DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
-
-    - name: Setup .NET 5.0
-      uses: actions/setup-dotnet@v1
-      with:
-          dotnet-version: '5.0.x'
+          dotnet-version: |
+            '7.0.x'
       env:
         DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
@@ -136,7 +129,7 @@ jobs:
       run: reportgenerator -reports:*/coverage.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary" -title:"WebAuthn Interop Assembly"
 
     - name: Upload Test Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: TestResults
         path: |
@@ -144,13 +137,13 @@ jobs:
             !**/*.htm
 
     - name: Upload NuGet Packages
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: NuGet
         path: Build/bin/Release/Packages/*nupkg
 
     - name: Upload Desktop App
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Fido2UI
         path: Build/bin/Release/Fido2UI/*
