@@ -86,6 +86,8 @@ jobs:
   analyze:
     name: CodeQL
     runs-on: windows-latest
+    ## Not licensed
+    if: false
     permissions:
       actions: read
       contents: read
