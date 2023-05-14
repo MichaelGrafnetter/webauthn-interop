@@ -1,10 +1,18 @@
 name: 'Build and Release'
 
 on:
-  push:
-    paths:    
-    - 'Src/**'
-    - '.github/workflows/**'
+  workflow_dispatch:
+    inputs:
+      certificate_sign:
+        description: 'Sign the binaries and packages using a certificate stored in Azure Key Vault?'
+        required: true
+        type: boolean
+        default: false
+      strong_name_sign:
+        description: 'Sign the assemblies using a strong name key stored in GitHub Secrets?'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -14,18 +22,18 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
-      DO_SIGN: true ## Controls code signing
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
     
     - name: Restore Strong Name Key
+      if: ${{ github.event.inputs.strong_name_sign }}
       working-directory: Keys
       shell: powershell
       env:
         STRONG_NAME_KEY: ${{ secrets.STRONG_NAME_KEY }}
       run: |
-        if($env:STRONG_NAME_KEY -ne $null)
+        if($null -ne $env:STRONG_NAME_KEY)
         {
             Write-Host 'Creating file Keys/DSInternals.Private.snk...'
             [byte[]] $privateKey = [System.Convert]::FromBase64String($env:STRONG_NAME_KEY)
@@ -49,12 +57,13 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Install Azure KeyVault Code Signing Tools
-      if: ${{ env.DO_SIGN }}
+      if: ${{ github.event.inputs.certificate_sign }}
       run: |
         dotnet tool install --global AzureSignTool
         dotnet tool install --global NuGetKeyVaultSignTool
 
     - name: Sign Binaries
+      if: ${{ github.event.inputs.certificate_sign }}  
       shell: cmd
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
@@ -63,7 +72,6 @@ jobs:
         SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
       working-directory: Build/bin/Release
-      if: ${{ env.DO_SIGN }}
       timeout-minutes: 1
       run: |
         AzureSignTool sign ^
@@ -91,8 +99,8 @@ jobs:
       run: dotnet pack --configuration Release --no-build --nologo
 
     - name: Sign NuGet Packages
+      if: ${{ github.event.inputs.certificate_sign }}  
       shell: cmd
-      if: ${{ env.DO_SIGN }}
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
         SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
@@ -119,26 +127,6 @@ jobs:
         --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
         --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
-
-    - name: Run Unit Tests
-      working-directory: Src
-      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --nologo
-      continue-on-error: true
-    
-    - name: Install Coverage Report Generator
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool
-
-    - name: Generate Code Coverage Reports
-      working-directory: Build/TestResults
-      run: reportgenerator -reports:*/coverage.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary" -title:"WebAuthn Interop Assembly"
-
-    - name: Upload Test Results
-      uses: actions/upload-artifact@v3
-      with:
-        name: TestResults
-        path: |
-            Build/TestResults/*.*
-            !**/*.htm
 
     - name: Upload NuGet Packages
       uses: actions/upload-artifact@v3
