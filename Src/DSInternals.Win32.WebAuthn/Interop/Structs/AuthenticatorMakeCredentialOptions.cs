@@ -60,44 +60,44 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Optional cancellation Id.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
         private IntPtr _cancellationId = IntPtr.Zero;
 
         /// <summary>
         /// The exclude credential list. If present, CredentialList will be ignored.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.</remarks>
         private IntPtr _excludeCredentialList = IntPtr.Zero;
-
-        //
-        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_4
-        //
 
         /// <summary>
         /// Enterprise Attestation
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_4.</remarks>
         public EnterpriseAttestationType EnterpriseAttestation { get; set; }
 
-        // Large Blob Support: none, required or preferred
-        //
-        // NTE_INVALID_PARAMETER when large blob required or preferred and
-        //   bRequireResidentKey isn't set to TRUE
         /// <summary>
         /// The requested large blob support.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_4.</remarks>
         public LargeBlobSupport LargeBlobSupport { get; set; }
 
-        // Optional. Prefer key to be resident. Defaulting to FALSE. When TRUE,
-        // overrides the above bRequireResidentKey.
+        /// <summary>
+        /// Prefer key to be resident. Defaulting to FALSE. When TRUE, overrides the RequireResidentKey option.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_4.</remarks>
         public bool PreferResidentKey { get; set; }
-
-        //
-        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_5
-        //
 
         /// <summary>
         /// Indicates whether the browser is in private mode. Defaulting to false.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_5.</remarks>
         public bool BrowserInPrivateMode { get; set; }
 
+        /// <summary>
+        /// Indicates whether the Pseudo-random function (PRF) extension should be enabled.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_6.</remarks>
+        public bool EnablePseudoRandomFunction { get; set; }
 
         public AuthenticatorMakeCredentialOptions() { }
 

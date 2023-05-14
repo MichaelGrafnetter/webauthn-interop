@@ -57,6 +57,8 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 {
                     nativeExtensions.Add(ExtensionIn.CreateHmacSecret());
                 }
+
+                // TODO: Add support for additional extensions
             }
 
             return nativeExtensions;

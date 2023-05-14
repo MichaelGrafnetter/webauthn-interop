@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using DSInternals.Win32.WebAuthn.FIDO;
 using Microsoft.Win32.SafeHandles;
 
 namespace DSInternals.Win32.WebAuthn.Interop

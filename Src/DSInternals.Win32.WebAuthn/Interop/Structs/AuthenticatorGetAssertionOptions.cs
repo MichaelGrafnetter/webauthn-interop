@@ -49,11 +49,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         private uint Flags;
 
-        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2
-
         /// <summary>
         /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower-cased.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2.</remarks>
         [MarshalAs(UnmanagedType.LPUTF8Str)]
         private string _u2fAppId;
 
@@ -61,58 +60,50 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// If the following is non-NULL, then, set to TRUE if the above U2fAppid was used instead of RpId
         /// Note that this value is modified by WebAuthNAuthenticatorGetAssertion
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2.</remarks>
         private IntPtr _isU2fAppIdUsed = IntPtr.Zero;
-
-        //
-        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3
-        //
 
         /// <summary>
         /// Cancellation Id (Optional).
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3.</remarks>
         private IntPtr _cancellationId = IntPtr.Zero;
-
-        //
-        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4
-        //
 
         /// <summary>
         /// An optional list of public key credential descriptors describing credentials acceptable to the Relying Party (possibly filtered by the client), if any.
         /// If present, CredentialList will be ignored.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4.</remarks>
         private IntPtr _allowCredentialList = IntPtr.Zero;
-
-        //
-        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_5
-        //
 
         /// <summary>
         /// The large blob operation.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_5.</remarks>
         public CredentialLargeBlobOperation LargeBlobOperation { get; set; }
 
         /// <summary>
         /// Size of _largeBlob.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_5.</remarks>
         private int _largeBlobLength;
 
         /// <summary>
         /// A pointer to the large credential blob.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_5.</remarks>
         private ByteArrayIn _largeBlob;
 
-        //
-        // The following fields have been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6
-        //
-
         /// <summary>
-        /// PRF values which will be converted into HMAC-SECRET values according to WebAuthn Spec.
+        /// PRF values which will be converted into HMAC-SECRET values according to WebAuthn Specification.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6.</remarks>
         private HmacSecretSaltValuesIn _hmacSecretSaltValues;
 
         /// <summary>
         /// Indicates whether the browser is in private mode. Defaulting to false.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6.</remarks>
         public bool BrowserInPrivateMode { get; set; }
 
         /// <summary>

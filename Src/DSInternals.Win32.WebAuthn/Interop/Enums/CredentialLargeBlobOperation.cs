@@ -3,7 +3,7 @@
     /// <summary>
     /// The operation to perform on the large blob.
     /// </summary>
-    internal enum CredentialLargeBlobOperation : int
+    public enum CredentialLargeBlobOperation : int
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_NONE.
@@ -24,5 +24,5 @@
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_DELETE.
         /// </remarks>
         Delete = ApiConstants.CredLargeBlobOperationDelete
-}
+    }
 }

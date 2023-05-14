@@ -50,10 +50,6 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         private ByteArrayOut _userId;
 
-        //
-        // Following fields have been added in WEBAUTHN_ASSERTION_VERSION_2
-        //
-
         /// <summary>
         /// A CBOR map from extension identifiers to their authenticator extension inputs,
         /// created by the client based on the extensions requested by the Relying Party, if any.
@@ -64,34 +60,31 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Size of the Large Blob
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_2.</remarks>
         private int _largeBlobLength;
 
         /// <summary>
         /// A pointer to the credential blob.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_2.</remarks>
         private ByteArrayOut _largeBlob;
 
         /// <summary>
         /// Status of the credential blob.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_2.</remarks>
         public CredentialLargeBlobStatus LargeBlobStatus { get; private set; }
-
-        //
-        // Following fields have been added in WEBAUTHN_ASSERTION_VERSION_3
-        //
 
         /// <summary>
         /// A salt used to generate the HMAC secret.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_3.</remarks>
         public HmacSecretSaltOut HmacSecret { get; private set; }
-
-        //
-        // Following fields have been added in WEBAUTHN_ASSERTION_VERSION_4
-        //
 
         /// <summary>
         /// The transport that was used.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_4.</remarks>
         public TransportContext UsedTransport { get; private set; }
 
         /// <summary>

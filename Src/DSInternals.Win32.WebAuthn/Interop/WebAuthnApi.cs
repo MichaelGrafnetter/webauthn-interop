@@ -113,6 +113,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             AuthenticationExtensionsClientInputs extensions = null,
             IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
+            LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
+            bool preferResidentKey = false,
+            bool browserInPrivateMode = false,
+            bool enablePseudoRandomFunction = false,
             WindowHandle windowHandle = default
         )
         {
@@ -159,6 +164,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 attestationConveyancePreference,
                 timeoutMilliseconds,
                 excludeCredentials,
+                enterpriseAttestation,
+                largeBlobSupport,
+                preferResidentKey,
+                browserInPrivateMode,
+                enablePseudoRandomFunction,
                 windowHandle
                 );
         }
@@ -177,6 +187,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
+            LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
+            bool preferResidentKey = false,
+            bool browserInPrivateMode = false,
+            bool enablePseudoRandomFunction = false,
             WindowHandle windowHandle = default
             )
         {
@@ -201,13 +216,43 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
+            if (enterpriseAttestation != EnterpriseAttestationType.None && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version4)
+            {
+                // This feature is only supported in API V4.
+                throw new NotSupportedException("The enterprise attestation requirement is not supported on this OS.");
+            }
+
+            if (browserInPrivateMode == true && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            {
+                // This feature is only supported in API V5.
+                throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
+            }
+
+            if (largeBlobSupport == LargeBlobSupport.Required && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            {
+                // This feature is only supported in API V5.
+                throw new NotSupportedException("Large blobs are not supported on this OS.");
+            }
+
+            if (enablePseudoRandomFunction == true && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version6)
+            {
+                // This feature is only supported in API V6.
+                throw new NotSupportedException("The PRF extension is not supported on this OS.");
+            }
+
+            // TODO: Add support for WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_BLOB (available since WEBAUTHN_API_VERSION_3)
+            // TODO: Add support for WEBAUTHN_EXTENSIONS_IDENTIFIER_MIN_PIN_LENGTH (available since WEBAUTHN_API_VERSION_3)
+            // TODO: Add support for LARGE_BLOB (available since WEBAUTHN_API_VERSION_5)
+
             if (pubKeyCredParams == null || pubKeyCredParams.Length == 0)
             {
+                // Provide a default algorithm
                 pubKeyCredParams = new[] { Algorithm.ES256 };
             }
 
             if (!windowHandle.IsValid)
             {
+                // Provide a default window handle
                 windowHandle = WindowHandle.ForegroundWindow;
             }
 
@@ -236,6 +281,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     options.ExcludeCredentials = excludeCredList;
                     options.ExcludeCredentialsEx = excludeCredListEx;
                     options.RequireResidentKey = requireResidentKey;
+                    options.PreferResidentKey = preferResidentKey;
+                    options.EnterpriseAttestation = enterpriseAttestation;
+                    options.LargeBlobSupport = largeBlobSupport;
+                    options.BrowserInPrivateMode = browserInPrivateMode;
+                    options.EnablePseudoRandomFunction = enablePseudoRandomFunction;
                     options.CancellationId = _cancellationId;
 
                     HResult result = NativeMethods.AuthenticatorMakeCredential(
@@ -294,6 +344,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> allowCredentials = null,
             AuthenticationExtensionsClientInputs extensions = null,
+            CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
+            byte[] largeBlob = null,
+            bool browserInPrivateMode = false,
             WindowHandle windowHandle = default
         )
         {
@@ -331,6 +384,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 authenticatorAttachment,
                 timeoutMilliseconds,
                 allowCredentials,
+                largeBlobOperation,
+                largeBlob,
+                browserInPrivateMode,
                 windowHandle
             );
         }
@@ -345,6 +401,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
+            byte[] largeBlob = null,
+            bool browserInPrivateMode = false,
             WindowHandle windowHandle = default
             )
         {
@@ -357,6 +416,20 @@ namespace DSInternals.Win32.WebAuthn.Interop
             {
                 throw new ArgumentNullException(nameof(clientData));
             }
+
+            if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            {
+                // This feature is only supported in API V5.
+                throw new NotSupportedException("Large blobs are not supported on this OS.");
+            }
+
+            if (browserInPrivateMode == true && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            {
+                // This feature is only supported in API V5.
+                throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
+            }
+
+            // TODO: Do a compatibility test for PRF / HMAC Secret.
 
             if (!windowHandle.IsValid)
             {
@@ -385,8 +458,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     options.UserVerificationRequirement = userVerificationRequirement;
                     options.AllowCredentials = allowCredList;
                     options.AllowCredentialsEx = allowCredListEx;
-                    options.CancellationId = _cancellationId;
                     options.U2fAppId = clientData.ClientExtensions?.AppID;
+                    options.LargeBlobOperation = largeBlobOperation;
+                    options.BrowserInPrivateMode = browserInPrivateMode;
+                    // TODO: Add support for the PRF extension / HmacSecretSaltValuesIn
+                    options.CancellationId = _cancellationId;
 
                     // Perform the Win32 API call
                     HResult result = NativeMethods.AuthenticatorGetAssertion(
@@ -402,7 +478,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     try
                     {
                         var assertion = assertionHandle.ToManaged();
-
+                        var test = assertion.Extensions.HmacSecret;
                         // Wrap the raw results
                         return new AuthenticatorAssertionResponse()
                         {

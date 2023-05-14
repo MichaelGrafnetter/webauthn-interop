@@ -55,26 +55,22 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3.</remarks>
         public AuthenticatorTransport UsedTransport { get; private set; }
 
-        //
-        // Following fields have been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4
-        //
-
         /// <summary>
         /// Indicates whether the attestation statement contains uniquely identifying information (epAtt).
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4.</remarks>
         public bool ContainsUniquelyIdentifyingInformation { get; private set; }
 
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4.</remarks>
         public bool LargeBlobSupported { get; private set; }
 
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4.</remarks>
         public bool ResidentKey { get; private set; }
-
-        //
-        // Following fields have been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_5
-        //
 
         /// <summary>
         /// Indicates whether the Pseudo-random function (PRF) extension is enabled.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_5.</remarks>
         public bool PseudoRandomFunctionEnabled { get; private set; }
 
         /// <summary>

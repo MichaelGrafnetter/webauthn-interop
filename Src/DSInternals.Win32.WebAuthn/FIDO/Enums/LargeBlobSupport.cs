@@ -10,7 +10,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// <remarks>
         /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_NONE.
         /// </remarks>
-        LargeBlobSupportNone = ApiConstants.LargeBlobSupportNone,
+        None = ApiConstants.LargeBlobSupportNone,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_REQUIRED.

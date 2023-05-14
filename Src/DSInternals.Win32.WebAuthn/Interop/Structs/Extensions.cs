@@ -21,7 +21,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 //      - pvExtension will point to a BOOL with the value TRUE if credential
                 //        was successfully created with HMAC_SECRET.
                 //      - cbExtension will contain the sizeof(BOOL).
-                var foundExtension = Items.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierHmacSecret);
+                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierHmacSecret);
 
                 if(foundExtension == null)
                 {
@@ -42,7 +42,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 //      - pvExtension will point to a DWORD with one of the above WEBAUTHN_USER_VERIFICATION_* values
                 //        if credential was successfully created with CRED_PROTECT.
                 //      - cbExtension will contain the sizeof(DWORD).
-                var foundExtension = Items.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierCredProtect);
+                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierCredProtect);
 
                 if (foundExtension == null)
                 {
