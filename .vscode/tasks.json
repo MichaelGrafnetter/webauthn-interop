@@ -9,7 +9,6 @@
                 "build",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary",
-                "--configuration Debug",
                 "--nologo"
             ],
             "options": {

@@ -11,6 +11,9 @@ trim_trailing_whitespace = true
 # XML files
 [*.{csproj,Build.props}]
 indent_size = 2
+# Config files
+[*.{json,yml}]
+indent_size = 2
 # Code files
 [*.{cs}]
 indent_size = 4
