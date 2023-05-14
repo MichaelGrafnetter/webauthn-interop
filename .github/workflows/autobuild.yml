@@ -57,7 +57,7 @@ jobs:
 
     - name: Install Coverage Report Generator
       if: ${{ steps.cache-dotnet-globaltools.cache-hit != 'true' }}
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool --nologo
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
     - name: Generate Code Coverage Reports
       working-directory: Build/TestResults
