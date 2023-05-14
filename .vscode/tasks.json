@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary",
+                "--configuration Debug",
+                "--nologo"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/Src"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

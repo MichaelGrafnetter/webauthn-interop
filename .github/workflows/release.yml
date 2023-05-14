@@ -62,7 +62,7 @@ jobs:
 
     - name: Build
       working-directory: Src
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --nologo
 
     - name: Cache DotNet Global Tools
       id: cache-dotnet-globaltools
@@ -75,8 +75,8 @@ jobs:
     - name: Install Azure KeyVault Code Signing Tools
       if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}
       run: |
-        dotnet tool install --global AzureSignTool
-        dotnet tool install --global NuGetKeyVaultSignTool
+        dotnet tool install --global AzureSignTool --nologo
+        dotnet tool install --global NuGetKeyVaultSignTool --nologo
 
     - name: Sign Binaries
       if: ${{ github.event.inputs.certificate_sign }}  

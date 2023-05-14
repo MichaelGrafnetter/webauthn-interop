@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug FIDO2 UI",
+            "type": "clr",
+            "request": "launch",
+            "program": "${workspaceFolder}/Build/bin/Debug/Fido2UI/Fido2UI.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}/Build/bin/Debug/Fido2UI",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "preLaunchTask": "build"
+        }
+    ]
+}
