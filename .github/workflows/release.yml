@@ -58,7 +58,7 @@ jobs:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          ${{ runner.os }}-DotNET-NuGet-
 
     - name: Build
       working-directory: Src
@@ -70,9 +70,7 @@ jobs:
       if: ${{ github.event.inputs.certificate_sign }}
       with:
         path: ~/.dotnet/tools
-        key: ${{ runner.os }}-dotnet-globaltools-release
-        restore-keys: |
-          ${{ runner.os }}-dotnet-globaltools-release
+        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ github.workflow.sha }}
 
     - name: Install Azure KeyVault Code Signing Tools
       if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}

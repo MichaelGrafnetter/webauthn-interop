@@ -30,9 +30,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        key: ${{ runner.os }}-DotNET-NuGet-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          ${{ runner.os }}-DotNET-NuGet-
 
     - name: Build
       working-directory: Src
@@ -52,9 +52,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.dotnet/tools
-        key: ${{ runner.os }}-dotnet-globaltools-build
-        restore-keys: |
-          ${{ runner.os }}-dotnet-globaltools-build
+        key: ${{ runner.os }}-DotNET-GlobalTools-Build-${{ github.workflow.sha }}
 
     - name: Install Coverage Report Generator
       if: ${{ steps.cache-dotnet-globaltools.cache-hit != 'true' }}
