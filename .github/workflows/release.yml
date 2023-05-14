@@ -52,6 +52,14 @@ jobs:
       env:
         DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
+    - name: Cache NuGet Packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
     - name: Build
       working-directory: Src
       run: dotnet build --configuration Release
