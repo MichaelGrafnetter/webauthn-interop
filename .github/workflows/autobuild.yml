@@ -47,7 +47,17 @@ jobs:
       run: dotnet test --filter TestCategory!=Interactive --configuration Debug --nologo
       continue-on-error: true
     
+    - name: Cache DotNet Global Tools
+      id: cache-dotnet-globaltools
+      uses: actions/cache@v3
+      with:
+        path: ~/.dotnet/tools
+        key: ${{ runner.os }}-dotnet-globaltools-build
+        restore-keys: |
+          ${{ runner.os }}-dotnet-globaltools-build
+
     - name: Install Coverage Report Generator
+      if: ${{ steps.cache-dotnet-globaltools.cache-hit != 'true' }}
       run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
     - name: Generate Code Coverage Reports

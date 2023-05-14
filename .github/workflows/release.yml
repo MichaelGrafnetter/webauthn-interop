@@ -64,8 +64,18 @@ jobs:
       working-directory: Src
       run: dotnet build --configuration Release
 
-    - name: Install Azure KeyVault Code Signing Tools
+    - name: Cache DotNet Global Tools
+      id: cache-dotnet-globaltools
+      uses: actions/cache@v3
       if: ${{ github.event.inputs.certificate_sign }}
+      with:
+        path: ~/.dotnet/tools
+        key: ${{ runner.os }}-dotnet-globaltools-release
+        restore-keys: |
+          ${{ runner.os }}-dotnet-globaltools-release
+
+    - name: Install Azure KeyVault Code Signing Tools
+      if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}
       run: |
         dotnet tool install --global AzureSignTool
         dotnet tool install --global NuGetKeyVaultSignTool
