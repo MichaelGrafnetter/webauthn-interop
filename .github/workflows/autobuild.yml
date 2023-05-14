@@ -52,7 +52,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.dotnet/tools
-        key: ${{ runner.os }}-DotNET-GlobalTools-Build-${{ github.workflow.sha }}
+        key: ${{ runner.os }}-DotNET-GlobalTools-Build-${{ github.workflow_sha }}
 
     - name: Install Coverage Report Generator
       if: ${{ steps.cache-dotnet-globaltools.cache-hit != 'true' }}
