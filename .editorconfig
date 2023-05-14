@@ -10,7 +10,10 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 # XML files
 [*.{csproj,Build.props}]
-indent_size = 2
+indent_size = 4
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+tab_width = 4
+end_of_line = crlf
 # Config files
 [*.{json,yml}]
 indent_size = 2
@@ -60,7 +63,7 @@ dotnet_naming_style.pascal_case_style.capitalization             = pascal_case
 # Use PascalCase for constant fields  
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols  = constant_fields
-dotnet_naming_rule.constant_fields_should_be_pascal_case.style    = pascal_case_style
+dotnet_naming_rule.constant_fields_should_be_pascal_case.style = pascal_case_style
 dotnet_naming_symbols.constant_fields.applicable_kinds            = field
 dotnet_naming_symbols.constant_fields.applicable_accessibilities  = *
 dotnet_naming_symbols.constant_fields.required_modifiers          = const

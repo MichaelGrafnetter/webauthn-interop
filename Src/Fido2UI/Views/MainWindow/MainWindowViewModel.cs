@@ -32,6 +32,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             // Initialize commands
             RegisterCommand = new DelegateCommand(OnRegister);
             AuthenticateCommand = new DelegateCommand(OnAuthenticate);
+            ListPlatformCredentialsCommand = new DelegateCommand(OnListCredentials);
             LoadMicrosoftOptionsCommand = new DelegateCommand(OnLoadMicrosoftOptions);
             LoadGoogleOptionsCommand = new DelegateCommand(OnLoadGoogleOptions);
             LoadFacebookOptionsCommand = new DelegateCommand(OnLoadFacebookOptions);
@@ -39,6 +40,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
         public ICommand RegisterCommand { get; private set; }
         public ICommand AuthenticateCommand { get; private set; }
+        public ICommand ListPlatformCredentialsCommand { get; private set; }
         public ICommand LoadMicrosoftOptionsCommand { get; private set; }
         public ICommand LoadGoogleOptionsCommand { get; private set; }
         public ICommand LoadFacebookOptionsCommand { get; private set; }
@@ -92,6 +94,19 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AssertionOptionsViewModel.AuthenticatorAttachment,
                     AssertionOptionsViewModel.Timeout
                     );
+            }
+            catch (Exception ex)
+            {
+                var parameters = new DialogParameters($"Message={ex.Message}");
+                DialogService.ShowDialog(nameof(NotificationDialog), parameters, null);
+            }
+        }
+
+        private void OnListCredentials()
+        {
+            try
+            {
+                var response = Api.GetPlatformCredentialList();
             }
             catch (Exception ex)
             {
