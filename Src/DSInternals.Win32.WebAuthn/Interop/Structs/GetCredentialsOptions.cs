@@ -17,6 +17,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Optional relying party ID.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPWStr)]
         public string RpId;
 
         /// <summary>

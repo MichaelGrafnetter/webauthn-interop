@@ -35,13 +35,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         public bool Removable { get; set; }
 
-        //
-        // The following fields have been added in WEBAUTHN_CREDENTIAL_DETAILS_VERSION_2
-        //
-
         /// <summary>
         /// Backed Up or not.
         /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_DETAILS_VERSION_2.</remarks>
         public bool BackedUp { get; private set; }
 
         /// <summary>

@@ -95,6 +95,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         public WebAuthnApi()
         {
+            if(!WebAuthnApi.IsAvailable)
+            {
+                throw new NotSupportedException("The WebAuthN API is not supported on this OS.");
+            }
+
             _cancellationId = GetCancellationId();
         }
 
@@ -478,7 +483,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     try
                     {
                         var assertion = assertionHandle.ToManaged();
-                        var test = assertion.Extensions.HmacSecret;
+
                         // Wrap the raw results
                         return new AuthenticatorAssertionResponse()
                         {
@@ -495,6 +500,72 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the list of stored credentials.
+        /// </summary>
+        /// <param name="rpId">Optional Id of the relying party that is making the request.</param>
+        /// <param name="browserInPrivateMode">Indicates whether the browser is in private mode.</param>
+        /// <exception cref="NotSupportedException"></exception>
+        public string GetPlatformCredentialList(string rpId = null, bool browserInPrivateMode = false)
+        {
+            if (WebAuthnApi.ApiVersion < Interop.ApiVersion.Version4)
+            {
+                // This feature is only supported in API V4.
+                throw new NotSupportedException("Credential API is not supported on this OS.");
+            }
+
+            var options = new GetCredentialsOptions()
+            {
+                RpId = rpId,
+                BrowserInPrivateMode = browserInPrivateMode
+            };
+
+            // TODO: Fix the credential management API
+            throw new NotImplementedException("This API still has some issues.");
+
+            // Perform the Win32 API call
+            HResult result = NativeMethods.GetPlatformCredentialList(options, out var credentialListHandle);
+
+            ApiHelper.Validate(result);
+
+            try
+            {
+                var credentialList = credentialListHandle.ToManaged();
+                // Wrap the raw results
+                return null;
+            }
+            finally
+            {
+                // Release native buffers.
+                credentialListHandle.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Removes a Public Key Credential Source stored on a Virtual Authenticator.
+        /// </summary>
+        /// <param name="credentialId">The ID of the credential to be removed.</param>
+        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void DeletePlatformCredential(byte[] credentialId)
+        {
+            if (WebAuthnApi.ApiVersion < Interop.ApiVersion.Version4)
+            {
+                // This feature is only supported in API V4.
+                throw new NotSupportedException("Credential API is not supported on this OS.");
+            }
+
+            if (credentialId == null)
+            {
+                throw new ArgumentNullException(nameof(credentialId));
+            }
+
+            // Perform the Win32 API call
+            HResult result = NativeMethods.DeletePlatformCredential(credentialId.Length, credentialId);
+
+            ApiHelper.Validate(result);
         }
 
         /// <summary>
@@ -515,6 +586,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
+        /// <summary>
+        /// Gets the cancellation ID for a canceled operation.
+        /// </summary>
+        /// <returns>ID of the cancelled operation.</returns>
         private static Guid? GetCancellationId()
         {
             try

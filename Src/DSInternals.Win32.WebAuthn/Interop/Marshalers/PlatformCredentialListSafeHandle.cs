@@ -16,16 +16,15 @@ namespace DSInternals.Win32.WebAuthn.Interop
             NativeMethods.FreePlatformCredentialList(this.handle);
             return true;
         }
-        /*
-        internal Assertion ToManaged()
+
+        internal CredentialDetailsList ToManaged()
         {
             if (this.IsInvalid)
             {
                 return null;
             }
 
-            return Marshal.PtrToStructure<Assertion>(this.handle);
+            return Marshal.PtrToStructure<CredentialDetailsList>(handle);
         }
-        */
     }
 }
