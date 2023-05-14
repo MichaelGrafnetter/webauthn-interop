@@ -1,0 +1,141 @@
+name: 'Build and Release'
+
+on:
+  workflow_dispatch:
+    inputs:
+      certificate_sign:
+        description: 'Sign the binaries and packages using a certificate stored in Azure Key Vault?'
+        required: true
+        type: boolean
+        default: false
+      strong_name_sign:
+        description: 'Sign the assemblies using a strong name key stored in GitHub Secrets?'
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: 'Build'
+    runs-on: windows-latest
+    timeout-minutes: 10
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    
+    - name: Restore Strong Name Key
+      if: ${{ github.event.inputs.strong_name_sign }}
+      working-directory: Keys
+      shell: powershell
+      env:
+        STRONG_NAME_KEY: ${{ secrets.STRONG_NAME_KEY }}
+      run: |
+        if($null -ne $env:STRONG_NAME_KEY)
+        {
+            Write-Host 'Creating file Keys/DSInternals.Private.snk...'
+            [byte[]] $privateKey = [System.Convert]::FromBase64String($env:STRONG_NAME_KEY)
+            [System.IO.File]::WriteAllBytes('DSInternals.Private.snk', $privateKey)
+        }
+        else
+        {
+            Write-Warning 'The STRONG_NAME_KEY secret is not available. Skipping SNK file creation.'
+        }
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+          dotnet-version: |
+            7.0.x
+      env:
+        DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
+
+    - name: Build
+      working-directory: Src
+      run: dotnet build --configuration Release
+
+    - name: Install Azure KeyVault Code Signing Tools
+      if: ${{ github.event.inputs.certificate_sign }}
+      run: |
+        dotnet tool install --global AzureSignTool
+        dotnet tool install --global NuGetKeyVaultSignTool
+
+    - name: Sign Binaries
+      if: ${{ github.event.inputs.certificate_sign }}  
+      shell: cmd
+      env:
+        SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
+        SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
+        SIGNING_CLIENT_ID: ${{ secrets.SIGNING_CLIENT_ID }}
+        SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
+        SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
+      working-directory: Build/bin/Release
+      timeout-minutes: 1
+      run: |
+        AzureSignTool sign ^
+        DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/net48/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/netcoreapp3.1/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/net5.0/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/net6.0/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/net7.0/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn.Adapter/net6.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
+        DSInternals.Win32.WebAuthn.Adapter/net7.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
+        Fido2UI/Fido2UI.exe ^
+        --file-digest sha256 ^
+        --timestamp-digest sha256 ^
+        --timestamp-rfc3161 http://timestamp.digicert.com ^
+        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
+        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
+        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
+        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
+        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
+        xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/" /Y /I /F
+
+    - name: Create NuGet Packages
+      working-directory: Src
+      run: dotnet pack --configuration Release --no-build --nologo
+
+    - name: Sign NuGet Packages
+      if: ${{ github.event.inputs.certificate_sign }}  
+      shell: cmd
+      env:
+        SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
+        SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
+        SIGNING_CLIENT_ID: ${{ secrets.SIGNING_CLIENT_ID }}
+        SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
+        SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
+      working-directory: Build/bin/Release/Packages
+      run: |
+        NuGetKeyVaultSignTool sign *.nupkg ^
+        --file-digest sha256 ^
+        --timestamp-digest sha256 ^
+        --timestamp-rfc3161 http://timestamp.digicert.com ^
+        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
+        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
+        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
+        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
+        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
+        NuGetKeyVaultSignTool sign *.snupkg ^
+        --file-digest sha256 ^
+        --timestamp-digest sha256 ^
+        --timestamp-rfc3161 http://timestamp.digicert.com ^
+        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
+        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
+        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
+        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
+        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
+
+    - name: Upload NuGet Packages
+      uses: actions/upload-artifact@v3
+      with:
+        name: NuGet
+        path: Build/bin/Release/Packages/*nupkg
+
+    - name: Upload Desktop App
+      uses: actions/upload-artifact@v3
+      with:
+        name: Fido2UI
+        path: Build/bin/Release/Fido2UI/*

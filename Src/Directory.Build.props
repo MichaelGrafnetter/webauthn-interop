@@ -1,16 +1,60 @@
 <Project>
-    <PropertyGroup>
-        <!-- Redirect output directories -->
-        <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-        <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-        <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
-        <OutputPath>..\..\Build\bin\$(Configuration)\$(MSBuildProjectName)</OutputPath>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release' AND Exists('..\Keys\DSInternals.Private.snk')">
-        <!-- Configure strong name signing -->
-        <!-- TODO: Fido2.Models and CppAst are currently not signed. -->
-        <SignAssembly>false</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
-        <DelaySign>false</DelaySign>
-    </PropertyGroup>
+  <PropertyGroup>
+    <!-- Configure the supported C# language version -->
+    <LangVersion>latest</LangVersion>
+    <!--TODO: <Nullable>enable</Nullable>-->
+
+    <!-- Redirect output directories -->
+    <!-- TODO: Remove this WPF directory name fix (*_[0-9a-z]{8}_wpftmp$ suffix) once the compiler issue is resolved. -->
+    <SanitizedProjectDirectoryName>$([System.Text.RegularExpressions.Regex]::Replace($(MSBuildProjectName), '_[0-9a-z]{8}_wpftmp$', ''))</SanitizedProjectDirectoryName>
+    <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(SanitizedProjectDirectoryName)</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
+    <OutputPath>..\..\Build\bin\$(Configuration)\$(SanitizedProjectDirectoryName)</OutputPath>
+    <PackageOutputPath>..\..\Build\bin\$(Configuration)\Packages</PackageOutputPath>
+    <VSTestResultsDirectory>..\..\Build\TestResults</VSTestResultsDirectory>
+
+    <!-- Configure NuGet package properties -->
+    <Authors>Michael Grafnetter</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright (c) 2021-2023 Michael Grafnetter. All rights reserved.</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/MichaelGrafnetter/webauthn-interop</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MichaelGrafnetter/webauthn-interop.git</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageTags>PassKeys;FIDO;FIDO2;CTAP2;U2F;WebAuthn;Passwordless;Security;Windows;Hello;WHfB;Interop;2FA;MFA;Authentication;Identity</PackageTags>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <IncludeSymbols>true</IncludeSymbols>
+
+    <!-- Configure MSTest properties -->
+    <VSTestLogger>html;trx</VSTestLogger>
+    <VSTestCollect>XPlat Code Coverage;Code Coverage</VSTestCollect>
+    <VSTestVerbosity>normal</VSTestVerbosity>
+
+    <!-- Turn off reference assembly generation -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <!-- Note: Fido2.Models and CppAst are currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
+  <PropertyGroup Condition="
+                   '$(Configuration)' == 'Release' AND
+                   Exists('..\Keys\DSInternals.Private.snk') AND
+                   (
+                    '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn' OR
+                    '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn.Tests'
+                   )">
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Additional files to include in NuGet packages -->
+    <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
 </Project>

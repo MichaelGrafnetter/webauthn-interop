@@ -1,16 +1,17 @@
 # WebAuthn Interop Assembly
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.txt)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 [![Windows 10 1903+](https://img.shields.io/badge/Windows%2010-1903%2B-007bb8.svg?logo=Windows)](#)
 [![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
 [![.NET Core 3+](https://img.shields.io/badge/.NET%20Core-3%2B-007FFF.svg)](#)
+[![Continuous Integration Status](https://github.com/MichaelGrafnetter/webauthn-interop/workflows/CI/badge.svg)](https://github.com/MichaelGrafnetter/webauthn-interop/actions)
 
 **FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications**
 
 ## Introduction
 
 This library allows .NET applications to directly interact with FIDO2 security keys (e.g. [YubiKey](https://www.yubico.com/products/), [Feitian](https://www.ftsafe.com/products/FIDO), or [Crayonic](https://www.crayonic.com/)) and with [Windows Hello](https://support.microsoft.com/en-us/windows/learn-about-windows-hello-and-set-it-up-dae28983-8242-bb2a-d3d1-87c9d265a5f0) / [Windows Hello for Business](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/hello-identity-verification). 
-It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
-(exposed through the `webauthn.dll` system library). This API is mainly used by browsers
+It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://learn.microsoft.com/en-us/windows/win32/api/_webauthn/)
+(defined in the [`webauthn.h`](https://github.com/microsoft/webauthn/blob/master/webauthn.h) header file and implemented in the `webauthn.dll` system library). This API is mainly used by browsers
 (see the source code of [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
 and [Firefox](https://searchfox.org/mozilla-central/source/dom/webauthn/WinWebAuthnManager.cpp)) to implement passwordless web authentication,
 but it can also be used by any .NET desktop or CLI application.
@@ -18,9 +19,21 @@ but it can also be used by any .NET desktop or CLI application.
 As a front-end, this library uses classes defined in the [Fido2.Models](https://www.nuget.org/packages/Fido2.Models/) package, which it then translates to native C structures.
 See the [project site](https://github.com/abergs/fido2-net-lib) for more details.
 
+## FIDO2 UI
+
+The project also contains a simple Windows GUI tool called `FIDO2 UI`, which is built on top of the `DSInternals.Win32.WebAuthn` library:
+
+![](../Documentation/Screenshots/fido2_ui.png)
+
+he only purpose of this tool is to demonstrate the usage of the WebAuthn API.
+
 ## Downloads
 
-The `DSInternals.Win32.WebAuthn` library is published in the [NuGet Gallery](https://www.nuget.org/profiles/DSInternals).
+[![GitHub Downloads](https://img.shields.io/github/downloads/MichaelGrafnetter/webauthn-interop/total.svg?label=GitHub%20Downloads&logo=GitHub)](https://github.com/MichaelGrafnetter/webauthn-interop/releases)
+[![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Win32.WebAuthn.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn/)
+
+- The latest version of the `FIDO2 UI` can be downloaded from the [Releases section](https://github.com/MichaelGrafnetter/webauthn-interop/releases/latest).
+- The `DSInternals.Win32.WebAuthn` library is published in the [NuGet Gallery](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn/).
 
 ## Usage
 
@@ -120,12 +133,27 @@ var webauthn = new WebAuthnApi();
 var response = webauthn.AuthenticatorGetAssertion(options);
 ```
 
-See the [full API documentation](../Documentation/API/DSInternals.Win32.WebAuthn.md) for more information about using this library.
+See the [full API documentation](../Documentation/API/DSInternals.Win32.WebAuthn.md) for more information on using this library.
 
 ## Code Generation
 
-The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/ApiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](https://github.com/microsoft/webauthn/blob/master/webauthn.h).
+The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/Interop/ApiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](https://github.com/microsoft/webauthn/blob/master/webauthn.h).
 This is performed in the [DSInternals.Win32.WebAuthn.CodeGen](../Src/DSInternals.Win32.WebAuthn.CodeGen/Program.cs) helper application by leveraging the [CppAst.NET project](https://github.com/xoofx/CppAst.NET).
+
+## Troubleshooting
+
+### Rohitab API Monitor
+
+Rohitab API Monitor can be used to [analyze WebAuthn API calls made by browsers](../Documentation/Rohitab/README.md):
+
+![API Monitor Screenshot](../Documentation/Screenshots/api_monitor.png)
+
+### Windows Event Viewer
+
+Windows 10 creates very detailed logs of WebAuthn API calls and CTAP commands. The logs can be displayed in the built-in 
+**Event Viewer** console under **Applications and Services Logs &rarr; Microsoft &rarr; Windows &rarr; WebAuthN &rarr; Operational**:
+
+![WebAuthn Event Viewer Screenshot](../Documentation/Screenshots/webauthn_event_viewer.png)
 
 ## Microsoft's Documentation
 - [WebAuthn APIs for password-less authentication on Windows 10](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthnapis)

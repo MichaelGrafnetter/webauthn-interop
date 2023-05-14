@@ -1,23 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
-    <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>net472</TargetFramework>
-        <UseWPF>true</UseWPF>
-        <RootNamespace>DSInternals.Win32.WebAuthn.Fido2UI</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>DSInternals.Win32.WebAuthn.Fido2UI</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <ApplicationIcon>../Icons/app.ico</ApplicationIcon>
+    <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <DebugType>None</DebugType>
-        <AllowedReferenceRelatedFileExtensions>.dll</AllowedReferenceRelatedFileExtensions>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>None</DebugType>
+    <AllowedReferenceRelatedFileExtensions>.dll</AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Fido2.Models" Version="1.1.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="Prism.Unity" Version="8.1.97" />
+    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj" />
+  </ItemGroup>
 
 </Project>
