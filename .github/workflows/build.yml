@@ -68,11 +68,13 @@ jobs:
       run: |
         AzureSignTool sign ^
         DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/net48/DSInternals.Win32.WebAuthn.dll ^
         DSInternals.Win32.WebAuthn/netcoreapp3.1/DSInternals.Win32.WebAuthn.dll ^
         DSInternals.Win32.WebAuthn/net5.0/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/net472/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/netcoreapp3.1/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/net5.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
+        DSInternals.Win32.WebAuthn/net6.0/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn/net7.0/DSInternals.Win32.WebAuthn.dll ^
+        DSInternals.Win32.WebAuthn.Adapter/net6.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
+        DSInternals.Win32.WebAuthn.Adapter/net7.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
         Fido2UI/Fido2UI.exe ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
