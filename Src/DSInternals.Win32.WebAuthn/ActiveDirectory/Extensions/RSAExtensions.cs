@@ -31,7 +31,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// <summary>
         /// BCRYPT_PUBLIC_KEY_BLOB Format
         /// </summary>
-#if NET5_0
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         private static readonly CngKeyBlobFormat BCryptRSAPublicKeyFormat = new CngKeyBlobFormat("RSAPUBLICBLOB");
@@ -121,7 +121,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// <summary>
         /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
         /// </summary>
-#if NET5_0
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         public static byte[] ExportRSAPublicKeyBCrypt(this X509Certificate2 certificate)
@@ -143,7 +143,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
         /// <summary>
         /// Decodes a public key from a BCRYPT_RSAKEY_BLOB structure.
         /// </summary>
-#if NET5_0
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         public static RSAParameters ImportRSAPublicKeyBCrypt(this byte[] blob)
@@ -187,10 +187,15 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
 
             var asn1Key = new AsnEncodedData(blob);
             var publicKey = new PublicKey(RsaOid, Asn1Null, asn1Key);
-            using (var rsaKey = (RSACryptoServiceProvider)publicKey.Key)
+
+#if NET6_0_OR_GREATER
+            return publicKey.GetRSAPublicKey().ExportParameters(false);
+#else
+            using (var rsaKey = (RSACryptoServiceProvider) publicKey.Key)
             {
                 return rsaKey.ExportParameters(false);
             }
+#endif
         }
 
         /// <summary>

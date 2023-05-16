@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
-using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.FIDO;
+using DSInternals.Win32.WebAuthn.Interop;
 
-namespace DSInternals.Win32.WebAuthn.Interop
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Windows WebAuthn API
@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
     /// <remarks>
     /// Requires Windows 10 1903+ to work.
     /// </remarks>
-#if NET5_0
+#if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
 #endif
     public class WebAuthnApi
@@ -31,7 +31,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         {
             get
             {
-                if(_apiVersionCache.HasValue)
+                if (_apiVersionCache.HasValue)
                 {
                     return _apiVersionCache;
                 }
@@ -78,7 +78,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             {
                 try
                 {
-                    HResult result = NativeMethods.IsUserVerifyingPlatformAuthenticatorAvailable(out bool value);
+                    var result = NativeMethods.IsUserVerifyingPlatformAuthenticatorAvailable(out var value);
                     ApiHelper.Validate(result);
                     return value;
                 }
@@ -95,7 +95,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         public WebAuthnApi()
         {
-            if(!WebAuthnApi.IsAvailable)
+            if (!IsAvailable)
             {
                 throw new NotSupportedException("The WebAuthN API is not supported on this OS.");
             }
@@ -113,7 +113,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             bool requireResidentKey = false,
-            Algorithm[] pubKeyCredParams = null,
+            COSE.Algorithm[] pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             AuthenticationExtensionsClientInputs extensions = null,
@@ -126,12 +126,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
             WindowHandle windowHandle = default
         )
         {
-            if(rpEntity == null)
+            if (rpEntity == null)
             {
                 throw new ArgumentNullException(nameof(rpEntity));
             }
 
-            if(rpEntity.Id == null)
+            if (rpEntity.Id == null)
             {
                 throw new ArgumentException("Relying party ID must be provided.", nameof(rpEntity));
             }
@@ -188,7 +188,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             bool requireResidentKey = false,
-            Algorithm[] pubKeyCredParams = null,
+            COSE.Algorithm[] pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
@@ -200,12 +200,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
             WindowHandle windowHandle = default
             )
         {
-            if(rpEntity == null)
+            if (rpEntity == null)
             {
                 throw new ArgumentNullException(nameof(rpEntity));
             }
 
-            if(userEntity == null)
+            if (userEntity == null)
             {
                 throw new ArgumentNullException(nameof(userEntity));
             }
@@ -215,31 +215,31 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 throw new ArgumentNullException(nameof(clientData));
             }
 
-            if (clientData.ClientExtensions?.CredProtect.HasValue == true && WebAuthnApi.IsCredProtectExtensionSupported == false)
+            if (clientData.ClientExtensions?.CredProtect.HasValue == true && IsCredProtectExtensionSupported == false)
             {
                 // This extension is only supported in API V2.
                 throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
-            if (enterpriseAttestation != EnterpriseAttestationType.None && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version4)
+            if (enterpriseAttestation != EnterpriseAttestationType.None && ApiVersion < Interop.ApiVersion.Version4)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("The enterprise attestation requirement is not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            if (browserInPrivateMode == true && ApiVersion < Interop.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
             }
 
-            if (largeBlobSupport == LargeBlobSupport.Required && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            if (largeBlobSupport == LargeBlobSupport.Required && ApiVersion < Interop.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
             }
 
-            if (enablePseudoRandomFunction == true && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version6)
+            if (enablePseudoRandomFunction == true && ApiVersion < Interop.ApiVersion.Version6)
             {
                 // This feature is only supported in API V6.
                 throw new NotSupportedException("The PRF extension is not supported on this OS.");
@@ -252,7 +252,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             if (pubKeyCredParams == null || pubKeyCredParams.Length == 0)
             {
                 // Provide a default algorithm
-                pubKeyCredParams = new[] { Algorithm.ES256 };
+                pubKeyCredParams = new[] { COSE.Algorithm.ES256 };
             }
 
             if (!windowHandle.IsValid)
@@ -293,7 +293,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     options.EnablePseudoRandomFunction = enablePseudoRandomFunction;
                     options.CancellationId = _cancellationId;
 
-                    HResult result = NativeMethods.AuthenticatorMakeCredential(
+                    var result = NativeMethods.AuthenticatorMakeCredential(
                         windowHandle,
                         rpEntity,
                         userEntity,
@@ -422,13 +422,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 throw new ArgumentNullException(nameof(clientData));
             }
 
-            if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && ApiVersion < Interop.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && WebAuthnApi.ApiVersion < Interop.ApiVersion.Version5)
+            if (browserInPrivateMode == true && ApiVersion < Interop.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
@@ -470,7 +470,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     options.CancellationId = _cancellationId;
 
                     // Perform the Win32 API call
-                    HResult result = NativeMethods.AuthenticatorGetAssertion(
+                    var result = NativeMethods.AuthenticatorGetAssertion(
                         windowHandle,
                         rpId,
                         clientDataNative,
@@ -508,9 +508,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <param name="rpId">Optional Id of the relying party that is making the request.</param>
         /// <param name="browserInPrivateMode">Indicates whether the browser is in private mode.</param>
         /// <exception cref="NotSupportedException"></exception>
-        public string GetPlatformCredentialList(string rpId = null, bool browserInPrivateMode = false)
+        public static string GetPlatformCredentialList(string rpId = null, bool browserInPrivateMode = false)
         {
-            if (WebAuthnApi.ApiVersion < Interop.ApiVersion.Version4)
+            if (ApiVersion < Interop.ApiVersion.Version4)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("Credential API is not supported on this OS.");
@@ -522,11 +522,8 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 BrowserInPrivateMode = browserInPrivateMode
             };
 
-            // TODO: Fix the credential management API
-            throw new NotImplementedException("This API still has some issues.");
-
             // Perform the Win32 API call
-            HResult result = NativeMethods.GetPlatformCredentialList(options, out var credentialListHandle);
+            var result = NativeMethods.GetPlatformCredentialList(options, out var credentialListHandle);
 
             ApiHelper.Validate(result);
 
@@ -549,9 +546,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <param name="credentialId">The ID of the credential to be removed.</param>
         /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
-        public void DeletePlatformCredential(byte[] credentialId)
+        public static void DeletePlatformCredential(byte[] credentialId)
         {
-            if (WebAuthnApi.ApiVersion < Interop.ApiVersion.Version4)
+            if (ApiVersion < Interop.ApiVersion.Version4)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("Credential API is not supported on this OS.");
@@ -563,7 +560,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
 
             // Perform the Win32 API call
-            HResult result = NativeMethods.DeletePlatformCredential(credentialId.Length, credentialId);
+            var result = NativeMethods.DeletePlatformCredential(credentialId.Length, credentialId);
 
             ApiHelper.Validate(result);
         }
@@ -579,9 +576,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </remarks>
         public void CancelCurrentOperation()
         {
-            if(_cancellationId.HasValue)
+            if (_cancellationId.HasValue)
             {
-                HResult result = NativeMethods.CancelCurrentOperation(_cancellationId.Value);
+                var result = NativeMethods.CancelCurrentOperation(_cancellationId.Value);
                 ApiHelper.Validate(result);
             }
         }
@@ -594,11 +591,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
         {
             try
             {
-                HResult result = NativeMethods.GetCancellationId(out Guid cancellationId);
+                var result = NativeMethods.GetCancellationId(out var cancellationId);
                 ApiHelper.Validate(result);
                 return cancellationId;
             }
-            catch(TypeLoadException)
+            catch (TypeLoadException)
             {
                 // Async support is not present in earlier versions of Windows 10.
                 return null;

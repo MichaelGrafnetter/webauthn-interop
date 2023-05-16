@@ -8,13 +8,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
     /// This class exposes native WebAuthn API implemented in webauthn.dll in Windows 10.
     /// </summary>
     /// <see>https://github.com/microsoft/webauthn/blob/master/webauthn.h</see>
-#if NET5_0
+#if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
 #endif
     internal static class NativeMethods
     {
         private const string WebAuthn = "webauthn.dll";
         private const string User32 = "user32.dll";
+        private const string Kernel32 = "kernel32.dll";
 
         /// <summary>
         /// Gets the version number of the WebAuthN API.
@@ -194,5 +195,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
         [DllImport(User32)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         public static extern WindowHandle GetForegroundWindow();
+
+        /// <summary>
+        /// Retrieves the window handle used by the console associated with the calling process.
+        /// </summary>
+        /// <returns>The return value is a handle to the window used by the console associated with the calling process or NULL if there is no such associated console.</returns>
+        [DllImport(Kernel32)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        public static extern WindowHandle GetConsoleWindow();
     }
 }

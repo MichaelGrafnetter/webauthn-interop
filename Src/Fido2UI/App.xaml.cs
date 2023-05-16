@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using DSInternals.Win32.WebAuthn.Interop;
 using Prism.Ioc;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
@@ -21,6 +20,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             containerRegistry.RegisterSingleton<AssertionOptionsViewModel, AssertionOptionsViewModel>();
             containerRegistry.RegisterSingleton<IAttestationOptionsViewModel, AttestationOptionsViewModel>();
             containerRegistry.RegisterSingleton<AttestationOptionsViewModel, AttestationOptionsViewModel>();
+            containerRegistry.RegisterSingleton<ICredentialManagementViewModel, CredentialManagementViewModel>();
+            containerRegistry.RegisterSingleton<CredentialManagementViewModel, CredentialManagementViewModel>();
             containerRegistry.RegisterSingleton<WebAuthnApi, WebAuthnApi>();
 
             containerRegistry.RegisterDialog<NotificationDialog, NotificationDialogViewModel>();

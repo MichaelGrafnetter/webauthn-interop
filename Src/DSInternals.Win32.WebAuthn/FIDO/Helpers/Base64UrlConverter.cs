@@ -43,7 +43,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// </summary>
         /// <param name="input">The byte array to convert</param>
         /// <returns>The Base64Url encoded form of the input</returns>
+#pragma warning disable CA1055 // URI-like return values should not be strings
         public static string ToBase64UrlString(byte[] input)
+#pragma warning restore CA1055 // URI-like return values should not be strings
         {
             if (input == null)
             {
@@ -78,7 +80,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// <returns> the padded string </returns>
         private static string Pad(string input)
         {
-            if (input.TrimEnd().EndsWith("="))
+            if (input.TrimEnd().EndsWith("=", StringComparison.InvariantCulture))
             {
                 throw new ArgumentException("Illegal Base64URL string!", nameof(input));
             }

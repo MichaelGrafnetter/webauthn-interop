@@ -7,16 +7,16 @@ using Fido2NetLib.Objects;
 
 namespace DSInternals.Win32.WebAuthn.Adapter
 {
-#if NET5_0
+#if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
 #endif
     public class WebAuthnApiAdapter
     {
-        private Interop.WebAuthnApi _api;
+        private WebAuthnApi _api;
 
         public WebAuthnApiAdapter()
         {
-            _api = new Interop.WebAuthnApi();
+            _api = new WebAuthnApi();
         }
 
         /// <summary>

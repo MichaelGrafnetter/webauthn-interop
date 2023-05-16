@@ -9,7 +9,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
     /// <remarks>Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION.</remarks>
     /// <see>https://www.w3.org/TR/webauthn-2/#dictdef-publickeycredentialuserentity</see>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public class UserInformation : IDisposable
+    public sealed class UserInformation : IDisposable
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
@@ -52,6 +52,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
+        /// <summary>
+        /// Deallocates unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             _id?.Dispose();

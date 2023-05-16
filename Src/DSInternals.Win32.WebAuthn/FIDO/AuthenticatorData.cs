@@ -4,6 +4,9 @@ using PeterO.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {
+    /// <summary>
+    /// Contains information from the authenticator about the processing of a credential creation or authentication request.
+    /// </summary>
     public class AuthenticatorData
     {
         /// <summary>
@@ -61,6 +64,12 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             private set;
         }
 
+        /// <summary>
+        /// Parses the binary form of the authenticator data.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public AuthenticatorData(byte[] authData)
         {
             // Input validation

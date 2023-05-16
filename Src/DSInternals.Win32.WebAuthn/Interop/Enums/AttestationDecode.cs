@@ -9,6 +9,7 @@
 
         /// <summary>
         /// Supports the packed and fido-u2f format types.
+        /// </summary>
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_DECODE_COMMON.
         /// </remarks>

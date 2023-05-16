@@ -4,10 +4,10 @@ using Microsoft.Win32.SafeHandles;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
-#if NET5_0
+#if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
 #endif
-    internal class AssertionSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
+    internal sealed class AssertionSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         private AssertionSafeHandle() : base(true) { }
 

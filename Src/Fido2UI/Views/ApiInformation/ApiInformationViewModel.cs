@@ -1,5 +1,4 @@
-﻿using DSInternals.Win32.WebAuthn.Interop;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {

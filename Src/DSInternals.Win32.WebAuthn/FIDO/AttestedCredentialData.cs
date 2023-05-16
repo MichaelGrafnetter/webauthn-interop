@@ -82,6 +82,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             this.CredentialPublicKey = new CredentialPublicKey(cpk);
         }
 
+        /// <summary>
+        /// Displays the data in a human-readable form.
+        /// </summary>
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "AAGUID: {0}, CredentialID: {1}, CredentialPublicKey: {2}",

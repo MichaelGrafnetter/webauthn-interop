@@ -15,7 +15,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// No transport restrictions.
         /// </summary>
         [EnumMember(Value = "NULL")]
+#pragma warning disable CA1008 // Enums should have zero value
         NoRestrictions = 0,
+#pragma warning restore CA1008 // Enums should have zero value
 
         /// <summary>
         /// Universal Serial Bus (USB).

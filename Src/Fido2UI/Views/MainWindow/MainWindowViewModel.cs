@@ -12,21 +12,24 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public class MainWindowViewModel : BindableBase
     {
-        private WebAuthnApi Api { get; set; }
+        private WebAuthnApi _api { get; set; }
         private IAttestationOptionsViewModel AttestationOptionsViewModel { get; set; }
         private IAssertionOptionsViewModel AssertionOptionsViewModel { get; set; }
+        private ICredentialManagementViewModel CredentialManagementViewModel { get; set; }
         private IDialogService DialogService { get; set; }
 
         public MainWindowViewModel(
             WebAuthnApi api,
             IAttestationOptionsViewModel attestationOptionsViewModel,
             IAssertionOptionsViewModel assertionOptionsViewModel,
+            ICredentialManagementViewModel credentialManagementViewModel,
             IDialogService dialogService)
         {
             // Save dependencies
-            Api = api;
+            _api = api;
             AttestationOptionsViewModel = attestationOptionsViewModel;
             AssertionOptionsViewModel = assertionOptionsViewModel;
+            CredentialManagementViewModel = credentialManagementViewModel;
             DialogService = dialogService;
 
             // Initialize commands
@@ -59,11 +62,18 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set => SetProperty(ref _assertionResponse, value);
         }
 
+        private string _credentialManagerResponse;
+        public string CredentialManagerResponse
+        {
+            get => _credentialManagerResponse;
+            set => SetProperty(ref _credentialManagerResponse, value);
+        }
+
         private void OnRegister()
         {
             try
             {
-                var response = Api.AuthenticatorMakeCredential(
+                var response = _api.AuthenticatorMakeCredential(
                     AttestationOptionsViewModel.RelyingPartyEntity,
                     AttestationOptionsViewModel.UserEntity,
                     AttestationOptionsViewModel.Challenge,
@@ -87,7 +97,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             try
             {
-                var response = Api.AuthenticatorGetAssertion(
+                var response = _api.AuthenticatorGetAssertion(
                     AssertionOptionsViewModel.RelyingPartyId,
                     AssertionOptionsViewModel.Challenge,
                     AssertionOptionsViewModel.UserVerificationRequirement,
@@ -106,7 +116,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             try
             {
-                var response = Api.GetPlatformCredentialList();
+                var response = WebAuthnApi.GetPlatformCredentialList();
             }
             catch (Exception ex)
             {
@@ -152,6 +162,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.Direct;
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256, Algorithm.RS256 };
             AttestationOptionsViewModel.Timeout = 120000;
+
+            // Credential Management
+            CredentialManagementViewModel.RelyingPartyId = "login.microsoft.com";
         }
 
         private void OnLoadFacebookOptions()
@@ -191,6 +204,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 60000;
+
+            // Credential Management
+            CredentialManagementViewModel.RelyingPartyId = "facebook.com";
         }
 
         private void OnLoadGoogleOptions()
@@ -228,6 +244,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 30000;
+
+            // Credential Management
+            CredentialManagementViewModel.RelyingPartyId = "google.com";
         }
     }
 }

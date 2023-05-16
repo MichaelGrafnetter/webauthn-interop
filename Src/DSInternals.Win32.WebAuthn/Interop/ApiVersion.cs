@@ -3,7 +3,11 @@
     /// <summary>
     /// WebAuthn API Version Information.
     /// </summary>
+#pragma warning disable CA1027 // Mark enums with FlagsAttribute
+#pragma warning disable CA1008 // Enums should have zero value
     public enum ApiVersion : int
+#pragma warning restore CA1027 // Mark enums with FlagsAttribute
+#pragma warning restore CA1008 // Enums should have zero value
     {
         /// <summary>
         /// Baseline Version

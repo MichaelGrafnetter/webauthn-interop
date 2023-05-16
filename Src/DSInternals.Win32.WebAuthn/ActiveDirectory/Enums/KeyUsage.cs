@@ -6,7 +6,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
     /// Key Usage
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/mt220501.aspx</see>
+#pragma warning disable CA1027 // Mark enums with FlagsAttribute
     public enum KeyUsage : byte
+#pragma warning restore CA1027 // Mark enums with FlagsAttribute
     {
         /// <summary>
         /// Admin key (pin-reset key)

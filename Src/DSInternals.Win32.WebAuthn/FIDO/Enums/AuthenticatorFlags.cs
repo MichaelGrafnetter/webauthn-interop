@@ -8,7 +8,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO
     /// </summary>
     /// <see>https://www.w3.org/TR/webauthn/#flags</see>
     [Flags]
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
     public enum AuthenticatorFlags : byte
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
     {
         /// <summary>
         /// User Present indicates that the user presence test has completed successfully.

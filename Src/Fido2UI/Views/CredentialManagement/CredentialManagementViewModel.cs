@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Windows.Input;
-using DSInternals.Win32.WebAuthn.FIDO;
-using DSInternals.Win32.WebAuthn.Interop;
+﻿using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -10,10 +6,18 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public class CredentialManagementViewModel : BindableBase, ICredentialManagementViewModel
     {
-        private const int RandomChallengeLength = 128;
-
         public CredentialManagementViewModel()
         {
+            // Initialize commands
+            ResetFilterCommand = new DelegateCommand(OnResetFilter);
+        }
+
+        public ICommand ResetFilterCommand { get; private set; }
+
+        private void OnResetFilter()
+        {
+            this.RelyingPartyId = null;
+            this.IsBrowserPrivateMode = false;
         }
 
         private string _relyingPartyId;
