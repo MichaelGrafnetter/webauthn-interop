@@ -1,5 +1,7 @@
 # KeyCredential.DeviceId property
 
+Identifier of the device with which this key credential is associated.
+
 ```csharp
 public Guid? DeviceId { get; }
 ```

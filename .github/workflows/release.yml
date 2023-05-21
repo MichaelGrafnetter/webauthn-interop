@@ -56,16 +56,24 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        key: ${{ runner.os }}-DotNET-NuGet-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          ${{ runner.os }}-DotNET-NuGet-
 
     - name: Build
       working-directory: Src
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --nologo
+
+    - name: Cache DotNet Global Tools
+      id: cache-dotnet-globaltools
+      uses: actions/cache@v3
+      if: ${{ github.event.inputs.certificate_sign }}
+      with:
+        path: ~/.dotnet/tools
+        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ github.workflow_sha }}
 
     - name: Install Azure KeyVault Code Signing Tools
-      if: ${{ github.event.inputs.certificate_sign }}
+      if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}
       run: |
         dotnet tool install --global AzureSignTool
         dotnet tool install --global NuGetKeyVaultSignTool

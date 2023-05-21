@@ -7,7 +7,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
     /// </summary>
     /// <remarks>Describes the data stored in the Value field.</remarks>
     /// <see>https://msdn.microsoft.com/en-us/library/mt220499.aspx</see>
+#pragma warning disable CA1008 // Enums should have zero value
     public enum KeyCredentialEntryType : byte
+#pragma warning restore CA1008 // Enums should have zero value
     {
         /// <summary>
         /// A SHA256 hash of the Value field of the KeyMaterial entry.

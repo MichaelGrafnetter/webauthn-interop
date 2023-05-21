@@ -1,5 +1,4 @@
-﻿using DSInternals.Win32.WebAuthn.FIDO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
 namespace DSInternals.Win32.WebAuthn.Interop.Tests
@@ -107,7 +106,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
                 CredProtect = UserVerification.Optional
             };
 
-            using (var nativeExtensionList = ApiHelper.TranslateAttestationExtensions(extensions))
+            using (var nativeExtensionList = ApiHelper.Translate(extensions))
             using (var nativeExtensions = new ExtensionsIn(nativeExtensionList.ToArray()))
             {
                 Assert.AreEqual(2, nativeExtensionList.Count);

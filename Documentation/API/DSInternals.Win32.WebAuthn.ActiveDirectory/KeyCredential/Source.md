@@ -1,5 +1,7 @@
 # KeyCredential.Source property
 
+Indicates whether the key was registered using ADFS or AAD.
+
 ```csharp
 public KeySource Source { get; }
 ```

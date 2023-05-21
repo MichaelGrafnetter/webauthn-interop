@@ -9,7 +9,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/mt220496.aspx</see>
     [Flags]
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
     public enum KeyFlags : byte
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
     {
         /// <summary>
         /// No flags specified.

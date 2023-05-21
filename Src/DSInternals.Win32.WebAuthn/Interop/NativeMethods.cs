@@ -8,13 +8,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
     /// This class exposes native WebAuthn API implemented in webauthn.dll in Windows 10.
     /// </summary>
     /// <see>https://github.com/microsoft/webauthn/blob/master/webauthn.h</see>
-#if NET5_0
+#if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
 #endif
     internal static class NativeMethods
     {
         private const string WebAuthn = "webauthn.dll";
         private const string User32 = "user32.dll";
+        private const string Kernel32 = "kernel32.dll";
 
         /// <summary>
         /// Gets the version number of the WebAuthN API.
@@ -52,7 +53,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public static extern HResult AuthenticatorMakeCredential(
             WindowHandle windowHandle,
             RelyingPartyInformation rpInformation,
-            UserInformation userInformation,
+            UserInformationIn userInformation,
             CoseCredentialParameters pubKeyCredParams,
             ClientData clientData,
             AuthenticatorMakeCredentialOptions makeCredentialOptions,
@@ -133,7 +134,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetPlatformCredentialList", CharSet = CharSet.Unicode)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult GetPlatformCredentialList(in GetCredentialsOptions getCredentialsOptions, out PlatformCredentialListSafeHandle credentialDetailsList);
+        public static extern HResult GetPlatformCredentialList(GetCredentialsOptions getCredentialsOptions, [Out] out PlatformCredentialListSafeHandle credentialDetailsList);
 
         /// <summary>
         /// Frees the allocation for the WEBAUTHN_CREDENTIAL_DETAILS_LIST.
@@ -151,7 +152,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNDeletePlatformCredential")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult DeletePlatformCredential(in int credentialIdLength, in byte[] credentialId);
+        public static extern HResult DeletePlatformCredential(int credentialIdLength, in byte[] credentialId);
 
 
         /// <summary>
@@ -194,5 +195,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
         [DllImport(User32)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         public static extern WindowHandle GetForegroundWindow();
+
+        /// <summary>
+        /// Retrieves the window handle used by the console associated with the calling process.
+        /// </summary>
+        /// <returns>The return value is a handle to the window used by the console associated with the calling process or NULL if there is no such associated console.</returns>
+        [DllImport(Kernel32)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        public static extern WindowHandle GetConsoleWindow();
     }
 }

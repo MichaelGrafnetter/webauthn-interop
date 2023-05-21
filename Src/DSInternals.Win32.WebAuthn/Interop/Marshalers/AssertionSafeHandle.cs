@@ -4,10 +4,10 @@ using Microsoft.Win32.SafeHandles;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
-#if NET5_0
+#if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
 #endif
-    internal class AssertionSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
+    internal sealed class AssertionSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         private AssertionSafeHandle() : base(true) { }
 
@@ -24,7 +24,28 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 return null;
             }
 
-            return Marshal.PtrToStructure<Assertion>(this.handle);
+            // Handle possible older structure versions
+            var version = (AssertionVersion) Marshal.ReadInt32(this.handle);
+            int sourceStructSize;
+
+            switch(version)
+            {
+                case AssertionVersion.Version1:
+                    sourceStructSize = Marshal.SizeOf<AssertionV1>();
+                    break;
+                case AssertionVersion.Version2:
+                    sourceStructSize = Marshal.SizeOf<AssertionV2>();
+                    break;
+                case AssertionVersion.Version3:
+                    sourceStructSize = Marshal.SizeOf<AssertionV3>();
+                    break;
+                case AssertionVersion.Version4:
+                default:
+                    sourceStructSize = Marshal.SizeOf<Assertion>();
+                    break;
+            }
+
+            return VersionedStructMarshaler.PtrToStructure<Assertion>(handle, sourceStructSize);
         }
     }
 }

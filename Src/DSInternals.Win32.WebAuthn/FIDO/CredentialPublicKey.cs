@@ -23,7 +23,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             private set;
         }
 
-#if NET5_0
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         public RSACng RSA

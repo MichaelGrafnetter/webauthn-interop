@@ -1,5 +1,7 @@
 # AuthenticatorData class
 
+Contains information from the authenticator about the processing of a credential creation or authentication request.
+
 ```csharp
 public class AuthenticatorData
 ```
@@ -8,7 +10,7 @@ public class AuthenticatorData
 
 | name | description |
 | --- | --- |
-| [AuthenticatorData](AuthenticatorData/AuthenticatorData.md)(…) |  |
+| [AuthenticatorData](AuthenticatorData/AuthenticatorData.md)(…) | Parses the binary form of the authenticator data. |
 | [AttestedCredentialData](AuthenticatorData/AttestedCredentialData.md) { get; } | Attested credential data is a variable-length byte array added to the authenticator data when generating an attestation object for a given credential. |
 | [Extensions](AuthenticatorData/Extensions.md) { get; } | Optional extensions to suit particular use cases. |
 | [Flags](AuthenticatorData/Flags.md) { get; } | Flags contains information from the authenticator about the authentication and whether or not certain data is present in the authenticator data. |

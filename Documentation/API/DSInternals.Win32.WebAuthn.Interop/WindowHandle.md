@@ -1,5 +1,7 @@
 # WindowHandle structure
 
+Represents a window handle.
+
 ```csharp
 public struct WindowHandle
 ```
@@ -9,9 +11,14 @@ public struct WindowHandle
 | name | description |
 | --- | --- |
 | [WindowHandle](WindowHandle/WindowHandle.md)(…) |  |
-| static [ForegroundWindow](WindowHandle/ForegroundWindow.md) { get; } |  |
-| static [MainWindow](WindowHandle/MainWindow.md) { get; } |  |
-| [IsValid](WindowHandle/IsValid.md) { get; } |  |
+| static [ConsoleWindow](WindowHandle/ConsoleWindow.md) { get; } | Retrieves the window handle used by the console associated with the calling process. |
+| static [ForegroundWindow](WindowHandle/ForegroundWindow.md) { get; } | Gets the window handle of the foreground window associated with the calling process. |
+| static [MainWindow](WindowHandle/MainWindow.md) { get; } | Gets the window handle of the main window of the calling process. |
+| [IsValid](WindowHandle/IsValid.md) { get; } | Indicates whether the window handle is valid. |
+| override [Equals](WindowHandle/Equals.md)(…) |  |
+| override [GetHashCode](WindowHandle/GetHashCode.md)() |  |
+| [operator ==](WindowHandle/op_Equality.md) |  |
+| [operator !=](WindowHandle/op_Inequality.md) |  |
 
 ## See Also
 

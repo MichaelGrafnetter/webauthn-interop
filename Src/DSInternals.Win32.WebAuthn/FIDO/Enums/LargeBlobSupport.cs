@@ -5,12 +5,12 @@ namespace DSInternals.Win32.WebAuthn.FIDO
     /// <summary>
     /// Large blob support options.
     /// </summary>
-    public enum LargeBlobSupport
+    public enum LargeBlobSupport :int
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_NONE.
         /// </remarks>
-        LargeBlobSupportNone = ApiConstants.LargeBlobSupportNone,
+        None = ApiConstants.LargeBlobSupportNone,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_REQUIRED.

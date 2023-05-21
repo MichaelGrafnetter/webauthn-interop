@@ -28,7 +28,7 @@
                 <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="155" VerticalAlignment="Center" />
                 <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" Padding="2" Margin="5,0,0,0" DockPanel.Dock="Right" />
                 <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
-                <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}"  VerticalAlignment="Center" />
+                <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" />
             </DockPanel>
             <DockPanel Margin="0,5,0,0">
                 <Label Name="ChallengeLabel" Content="Challenge:" Width="110" />

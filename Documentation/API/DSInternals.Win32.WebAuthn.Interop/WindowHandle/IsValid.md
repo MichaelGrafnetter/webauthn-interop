@@ -1,5 +1,7 @@
 # WindowHandle.IsValid property
 
+Indicates whether the window handle is valid.
+
 ```csharp
 public bool IsValid { get; }
 ```

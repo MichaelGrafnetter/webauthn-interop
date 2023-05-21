@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.COSE;
-using DSInternals.Win32.WebAuthn.FIDO;
-using DSInternals.Win32.WebAuthn.Interop;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -12,26 +12,30 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public class MainWindowViewModel : BindableBase
     {
-        private WebAuthnApi Api { get; set; }
+        private WebAuthnApi _api { get; set; }
         private IAttestationOptionsViewModel AttestationOptionsViewModel { get; set; }
         private IAssertionOptionsViewModel AssertionOptionsViewModel { get; set; }
+        private ICredentialManagementViewModel CredentialManagementViewModel { get; set; }
         private IDialogService DialogService { get; set; }
 
         public MainWindowViewModel(
             WebAuthnApi api,
             IAttestationOptionsViewModel attestationOptionsViewModel,
             IAssertionOptionsViewModel assertionOptionsViewModel,
+            ICredentialManagementViewModel credentialManagementViewModel,
             IDialogService dialogService)
         {
             // Save dependencies
-            Api = api;
+            _api = api;
             AttestationOptionsViewModel = attestationOptionsViewModel;
             AssertionOptionsViewModel = assertionOptionsViewModel;
+            CredentialManagementViewModel = credentialManagementViewModel;
             DialogService = dialogService;
 
             // Initialize commands
             RegisterCommand = new DelegateCommand(OnRegister);
             AuthenticateCommand = new DelegateCommand(OnAuthenticate);
+            ListPlatformCredentialsCommand = new DelegateCommand(OnListCredentials);
             LoadMicrosoftOptionsCommand = new DelegateCommand(OnLoadMicrosoftOptions);
             LoadGoogleOptionsCommand = new DelegateCommand(OnLoadGoogleOptions);
             LoadFacebookOptionsCommand = new DelegateCommand(OnLoadFacebookOptions);
@@ -39,6 +43,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
         public ICommand RegisterCommand { get; private set; }
         public ICommand AuthenticateCommand { get; private set; }
+        public ICommand ListPlatformCredentialsCommand { get; private set; }
         public ICommand LoadMicrosoftOptionsCommand { get; private set; }
         public ICommand LoadGoogleOptionsCommand { get; private set; }
         public ICommand LoadFacebookOptionsCommand { get; private set; }
@@ -57,11 +62,21 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set => SetProperty(ref _assertionResponse, value);
         }
 
+        private string _credentialManagerResponse;
+        public string CredentialManagerResponse
+        {
+            get => _credentialManagerResponse;
+            set => SetProperty(ref _credentialManagerResponse, value);
+        }
+
         private void OnRegister()
         {
             try
             {
-                var response = Api.AuthenticatorMakeCredential(
+                // Clear the results window first
+                this.AttestationResponse = null;
+
+                var response = _api.AuthenticatorMakeCredential(
                     AttestationOptionsViewModel.RelyingPartyEntity,
                     AttestationOptionsViewModel.UserEntity,
                     AttestationOptionsViewModel.Challenge,
@@ -73,6 +88,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AttestationOptionsViewModel.Timeout,
                     AttestationOptionsViewModel.ClientExtensions
                     );
+
+                this.AttestationResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -85,13 +102,38 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             try
             {
-                var response = Api.AuthenticatorGetAssertion(
+                // Clear the results window first
+                this.AssertionResponse = null;
+
+                var response = _api.AuthenticatorGetAssertion(
                     AssertionOptionsViewModel.RelyingPartyId,
                     AssertionOptionsViewModel.Challenge,
                     AssertionOptionsViewModel.UserVerificationRequirement,
                     AssertionOptionsViewModel.AuthenticatorAttachment,
                     AssertionOptionsViewModel.Timeout
-                    );
+                );
+
+                this.AssertionResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+            }
+            catch (Exception ex)
+            {
+                var parameters = new DialogParameters($"Message={ex.Message}");
+                DialogService.ShowDialog(nameof(NotificationDialog), parameters, null);
+            }
+        }
+
+        private void OnListCredentials()
+        {
+            try
+            {
+                // Clear the results window first
+                this.CredentialManagerResponse = null;
+
+                var credentials = WebAuthnApi.GetPlatformCredentialList(
+                    CredentialManagementViewModel.RelyingPartyId,
+                    CredentialManagementViewModel.IsBrowserPrivateMode);
+
+                this.CredentialManagerResponse = JsonConvert.SerializeObject(credentials, Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -137,6 +179,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.Direct;
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256, Algorithm.RS256 };
             AttestationOptionsViewModel.Timeout = 120000;
+
+            // Credential Management
+            CredentialManagementViewModel.RelyingPartyId = "login.microsoft.com";
         }
 
         private void OnLoadFacebookOptions()
@@ -176,6 +221,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 60000;
+
+            // Credential Management
+            CredentialManagementViewModel.RelyingPartyId = "facebook.com";
         }
 
         private void OnLoadGoogleOptions()
@@ -213,6 +261,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 30000;
+
+            // Credential Management
+            CredentialManagementViewModel.RelyingPartyId = "google.com";
         }
     }
 }

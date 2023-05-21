@@ -8,7 +8,9 @@
         /// <summary> 
         /// This value is reserved
         /// </summary>
+#pragma warning disable CA1700 // Do not name enum values 'Reserved'
         Reserved = 0,
+#pragma warning restore CA1700 // Do not name enum values 'Reserved'
 
         /// <summary> 
         /// Identification of the key type	

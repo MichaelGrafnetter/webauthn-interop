@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace DSInternals.Win32.WebAuthn.ActiveDirectory
 {
+    /// <summary>
+    /// Represents a FIDO2 key stored in AAD.
+    /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class FidoKeyMaterial
     {

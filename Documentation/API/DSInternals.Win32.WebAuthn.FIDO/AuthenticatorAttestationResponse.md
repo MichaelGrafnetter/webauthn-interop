@@ -15,7 +15,7 @@ public class AuthenticatorAttestationResponse : AuthenticatorResponse
 
 ## See Also
 
-* class [AuthenticatorResponse](AuthenticatorResponse.md)
+* class [AuthenticatorResponse](./AuthenticatorResponse.md)
 * namespace [DSInternals.Win32.WebAuthn.FIDO](../DSInternals.Win32.WebAuthn.md)
 * [AuthenticatorAttestationResponse.cs](https://github.com/MichaelGrafnetter/webauthn-interop/tree/master/Src/DSInternals.Win32.WebAuthn/FIDO/AuthenticatorAttestationResponse.cs)
 

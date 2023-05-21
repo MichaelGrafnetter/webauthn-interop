@@ -14,6 +14,7 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
@@ -30,13 +31,13 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        key: ${{ runner.os }}-DotNET-NuGet-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          ${{ runner.os }}-DotNET-NuGet-
 
     - name: Build
       working-directory: Src
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release  --nologo
 
     - name: Create NuGet Packages
       working-directory: Src
@@ -47,7 +48,15 @@ jobs:
       run: dotnet test --filter TestCategory!=Interactive --configuration Debug --nologo
       continue-on-error: true
     
+    - name: Cache DotNet Global Tools
+      id: cache-dotnet-globaltools
+      uses: actions/cache@v3
+      with:
+        path: ~/.dotnet/tools
+        key: ${{ runner.os }}-DotNET-GlobalTools-Build-${{ github.workflow_sha }}
+
     - name: Install Coverage Report Generator
+      if: ${{ steps.cache-dotnet-globaltools.cache-hit != 'true' }}
       run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
     - name: Generate Code Coverage Reports
@@ -73,3 +82,33 @@ jobs:
       with:
         name: Fido2UI
         path: Build/bin/Release/Fido2UI/*
+
+  analyze:
+    name: CodeQL
+    runs-on: windows-latest
+    ## Not licensed
+    if: false
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'csharp' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2

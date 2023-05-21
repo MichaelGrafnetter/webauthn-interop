@@ -4,6 +4,10 @@
 public WindowHandle(IntPtr handle)
 ```
 
+| parameter | description |
+| --- | --- |
+| handle |  |
+
 ## See Also
 
 * struct [WindowHandle](../WindowHandle.md)

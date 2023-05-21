@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Win32.WebAuthn.Interop.Tests
@@ -119,7 +120,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             Assert.AreEqual(CredentialAttestationVersion.Version5, CredentialAttestationVersion.Current);
             Assert.AreEqual(AuthenticatorMakeCredentialOptionsVersion.Version6, AuthenticatorMakeCredentialOptionsVersion.Current);
             Assert.AreEqual(AuthenticatorGetAssertionOptionsVersion.Version6, AuthenticatorGetAssertionOptionsVersion.Current);
-            Assert.AreEqual(CredentialDetailtVersion.Version2, CredentialDetailtVersion.Current);
+            Assert.AreEqual(CredentialDetailsVersion.Version2, CredentialDetailsVersion.Current);
             Assert.AreEqual(GetCredentialOptionsVersion.Version1, GetCredentialOptionsVersion.Current);
             Assert.AreEqual(AssertionVersion.Version4, AssertionVersion.Current);
 
@@ -133,6 +134,20 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
 
             // Also check the API itself
             Assert.AreEqual(ApiVersion.Version6, ApiVersion.Current);
+        }
+
+        [TestMethod]
+        public void NativeMethods_StructSizes()
+        {
+            // Check that the struct size increases with each version
+            Assert.IsTrue(Marshal.SizeOf<AssertionV1>() < Marshal.SizeOf<AssertionV2>());
+            Assert.IsTrue(Marshal.SizeOf<AssertionV2>() < Marshal.SizeOf<AssertionV3>());
+            Assert.IsTrue(Marshal.SizeOf<AssertionV3>() < Marshal.SizeOf<Assertion>());
+
+            Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV1>() < Marshal.SizeOf<CredentialAttestationV2>());
+            Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV2>() < Marshal.SizeOf<CredentialAttestationV3>());
+            Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV3>() < Marshal.SizeOf<CredentialAttestationV4>());
+            Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV4>() < Marshal.SizeOf<CredentialAttestation>());
         }
     }
 }

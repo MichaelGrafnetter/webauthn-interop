@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.COSE;
-using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -321,7 +320,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                 }
                 else
                 {
-                    // LOad default values
+                    // Load default values
                     UserId = null;
                     UserName = null;
                     UserDisplayName = null;

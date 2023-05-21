@@ -3,7 +3,7 @@
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     /// <summary>
-    /// Interaction logic for AssertionOptionsEditor.xaml
+    /// Interaction logic for AssertionOptionsView.xaml
     /// </summary>
     public partial class AssertionOptionsView : UserControl
     {

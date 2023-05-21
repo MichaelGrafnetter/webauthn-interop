@@ -5,11 +5,11 @@ using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.Interop;
 using Fido2NetLib.Objects;
 using Newtonsoft.Json;
-using AttestationConveyancePreference = DSInternals.Win32.WebAuthn.FIDO.AttestationConveyancePreference;
-using AuthenticatorAttachment = DSInternals.Win32.WebAuthn.FIDO.AuthenticatorAttachment;
-using AuthenticatorTransport = DSInternals.Win32.WebAuthn.FIDO.AuthenticatorTransport;
-using PublicKeyCredentialDescriptor = DSInternals.Win32.WebAuthn.FIDO.PublicKeyCredentialDescriptor;
-using UserVerificationRequirement = DSInternals.Win32.WebAuthn.FIDO.UserVerificationRequirement;
+using AttestationConveyancePreference = DSInternals.Win32.WebAuthn.AttestationConveyancePreference;
+using AuthenticatorAttachment = DSInternals.Win32.WebAuthn.AuthenticatorAttachment;
+using AuthenticatorTransport = DSInternals.Win32.WebAuthn.AuthenticatorTransport;
+using PublicKeyCredentialDescriptor = DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor;
+using UserVerificationRequirement = DSInternals.Win32.WebAuthn.UserVerificationRequirement;
 
 namespace DSInternals.Win32.WebAuthn.Adapter
 {

@@ -6,7 +6,9 @@ namespace DSInternals.Win32.WebAuthn.COSE
     /// COSE Key Type Parameters
     /// </summary>
     /// <see>https://www.iana.org/assignments/cose/cose.xhtml#key-type-parameters</see>
+#pragma warning disable CA1008 // Enums should have zero value
     public enum KeyTypeParameter
+#pragma warning restore CA1008 // Enums should have zero value
     {
         /// <summary> 
         /// EC identifier

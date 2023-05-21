@@ -11,7 +11,7 @@ using Newtonsoft.Json.Converters;
 namespace DSInternals.Win32.WebAuthn.ActiveDirectory
 {
     /// <summary>
-    ///  This class represents a single AD/AAD key credential.
+    /// This class represents a single AD/AAD key credential.
     /// </summary>
     /// <remarks>
     /// In Active Directory, this structure is stored as the binary portion of the msDS-KeyCredentialLink DN-Binary attribute
@@ -59,7 +59,10 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             private set;
         }
 
-#if NET5_0
+        /// <summary>
+        /// Indicates whether the RSA public key is susceptible to the ROCA vulnerability.
+        /// </summary>
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         public bool IsWeak
@@ -73,6 +76,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             }
         }
 
+        /// <summary>
+        /// Type of the key credential.
+        /// </summary>
         [JsonProperty("usage", Order = 1)]
         [JsonConverter(typeof(StringEnumConverter))]
         public KeyUsage Usage
@@ -81,12 +87,18 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             private set;
         }
 
+        /// <summary>
+        /// Legacy type of the key credential.
+        /// </summary>
         public string LegacyUsage
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Indicates whether the key was registered using ADFS or AAD.
+        /// </summary>
         public KeySource Source
         {
             get;
@@ -135,7 +147,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             }
         }
 
-#if NET5_0
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         public RSAParameters? RSAPublicKey
@@ -181,7 +193,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             }
         }
 
-#if NET5_0
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         public string RSAModulus
@@ -200,6 +212,10 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             get;
             private set;
         }
+
+        /// <summary>
+        /// Identifier of the device with which this key credential is associated.
+        /// </summary>
 
         [JsonProperty("deviceId", Order = 5)]
         public Guid? DeviceId
@@ -291,7 +307,7 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
             }
         }
 
-#if NET5_0
+#if NET5_0_OR_GREATER
         [SupportedOSPlatform("windows")]
 #endif
         public KeyCredential(X509Certificate2 certificate, Guid? deviceId, string owner, DateTime? currentTime = null, bool isComputerKey = false)
@@ -462,6 +478,9 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
                 this.CreationTime);
         }
 
+        /// <summary>
+        /// Serializes the key credential into a binary form used by AD.
+        /// </summary>
         public byte[] ToByteArray()
         {
             // Note that we do not support the legacy V1 format.
@@ -622,10 +641,14 @@ namespace DSInternals.Win32.WebAuthn.ActiveDirectory
 
         private static byte[] ComputeHash(byte[] data)
         {
-            using (var sha256 = new SHA256Managed())
+#if NET5_0_OR_GREATER
+            return SHA256.HashData(data);
+#else
+            using (var sha256 = SHA256.Create())
             {
                 return sha256.ComputeHash(data);
             }
+#endif
         }
 
         private static string ComputeKeyIdentifier(byte[] keyMaterial, KeyCredentialVersion version)

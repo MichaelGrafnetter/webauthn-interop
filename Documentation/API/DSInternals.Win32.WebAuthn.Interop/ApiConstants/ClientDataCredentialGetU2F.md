@@ -1,5 +1,7 @@
 # ApiConstants.ClientDataCredentialGetU2F field
 
+WebAuthn operation type used for authentication with FIDO U2F credentials.
+
 ```csharp
 public const string ClientDataCredentialGetU2F;
 ```

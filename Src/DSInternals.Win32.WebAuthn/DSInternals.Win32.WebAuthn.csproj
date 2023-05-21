@@ -22,7 +22,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(Configuration)' == 'Release'">
     <!-- Enable Source Link on CI builds -->
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <!-- DLLs need to be digitally signed first before a NuGet package is created. -->
@@ -30,7 +30,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net7.0' AND '$(Configuration)' == 'Debug'">
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AnalysisMode>All</AnalysisMode>
+  </PropertyGroup>
+
+  <!-- Suppress some warnings -->
+  <PropertyGroup>
+    <!-- CA1819: Properties should not return arrays -->
+    <NoWarn>CA1819</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,11 +44,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <!-- TODO: Replace with System.Formats.Cbor -->
     <PackageReference Include="PeterO.Cbor" Version="4.5.2" />
-    <!-- Note: Classes from this namespace are part of .NET 4.7 -->
-    <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472'" />
+    <!-- Note: Classes from this namespace are part of .NET Framework -->
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472' AND '$(TargetFramework)' != 'net48'" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+  <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(Configuration)' == 'Release'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
   </ItemGroup>
 

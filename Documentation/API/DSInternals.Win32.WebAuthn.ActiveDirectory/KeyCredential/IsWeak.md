@@ -1,5 +1,7 @@
 # KeyCredential.IsWeak property
 
+Indicates whether the RSA public key is susceptible to the ROCA vulnerability.
+
 ```csharp
 public bool IsWeak { get; }
 ```

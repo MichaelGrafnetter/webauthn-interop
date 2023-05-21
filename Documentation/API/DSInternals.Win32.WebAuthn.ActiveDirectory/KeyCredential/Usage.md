@@ -1,5 +1,7 @@
 # KeyCredential.Usage property
 
+Type of the key credential.
+
 ```csharp
 public KeyUsage Usage { get; }
 ```

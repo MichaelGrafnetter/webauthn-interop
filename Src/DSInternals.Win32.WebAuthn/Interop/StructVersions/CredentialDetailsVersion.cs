@@ -3,7 +3,7 @@
     /// <summary>
     /// Credential Details Structure Version Information.
     /// </summary>
-    internal enum CredentialDetailtVersion : int
+    internal enum CredentialDetailsVersion : int
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_DETAILS_VERSION_1.

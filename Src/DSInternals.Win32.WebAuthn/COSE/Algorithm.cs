@@ -5,7 +5,9 @@ namespace DSInternals.Win32.WebAuthn.COSE
     /// <summary>
     /// Well-known COSE algorithm specifying the algorithm to use for the credential. https://www.iana.org/assignments/cose/cose.xhtml#algorithms
     /// </summary>
+#pragma warning disable CA1008 // Enums should have zero value
     public enum Algorithm : int
+#pragma warning restore CA1008 // Enums should have zero value
     {
         /// <summary>
         /// ECDSA with SHA-256
