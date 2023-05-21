@@ -1,4 +1,6 @@
-﻿namespace DSInternals.Win32.WebAuthn.Interop
+﻿using DSInternals.Win32.WebAuthn.Interop;
+
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// The operation to perform on the large blob.

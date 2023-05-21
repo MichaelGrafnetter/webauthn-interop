@@ -76,6 +76,18 @@
         /// This operation returned because the timeout period expired.
         /// </summary>
         /// <remarks>Corresponds to HRESULT_FROM_WIN32(ERROR_TIMEOUT).</remarks>
-        OperationTimeout = 0x800705B4
+        OperationTimeout = 0x800705B4,
+
+        /// <summary>
+        /// The key container could not be opened.
+        /// </summary>
+        /// <remarks>Corresponds to NTE_BAD_KEYSET.</remarks>
+        BadKeyset = 0x80090016,
+
+        /// <summary>
+        /// No smart card readers are available.
+        /// </summary>
+        /// <remarks>Corresponds to SCARD_E_NO_READERS_AVAILABLE.</remarks>
+        NoReadersAvailable = 0x8010002E
     }
 }

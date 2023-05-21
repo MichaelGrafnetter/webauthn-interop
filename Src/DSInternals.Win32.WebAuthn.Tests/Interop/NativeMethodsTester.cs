@@ -120,7 +120,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             Assert.AreEqual(CredentialAttestationVersion.Version5, CredentialAttestationVersion.Current);
             Assert.AreEqual(AuthenticatorMakeCredentialOptionsVersion.Version6, AuthenticatorMakeCredentialOptionsVersion.Current);
             Assert.AreEqual(AuthenticatorGetAssertionOptionsVersion.Version6, AuthenticatorGetAssertionOptionsVersion.Current);
-            Assert.AreEqual(CredentialDetailtVersion.Version2, CredentialDetailtVersion.Current);
+            Assert.AreEqual(CredentialDetailsVersion.Version2, CredentialDetailsVersion.Current);
             Assert.AreEqual(GetCredentialOptionsVersion.Version1, GetCredentialOptionsVersion.Current);
             Assert.AreEqual(AssertionVersion.Version4, AssertionVersion.Current);
 

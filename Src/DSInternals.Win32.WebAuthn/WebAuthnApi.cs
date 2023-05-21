@@ -16,7 +16,7 @@ namespace DSInternals.Win32.WebAuthn
 #if NET5_0_OR_GREATER
     [SupportedOSPlatform("windows")]
 #endif
-    public class WebAuthnApi
+    public partial class WebAuthnApi
     {
         private static ApiVersion? _apiVersionCache;
         private Guid? _cancellationId;
@@ -54,7 +54,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Indicates the availability of the WebAuthn API.
         /// </summary>
-        public static bool IsAvailable => ApiVersion >= Interop.ApiVersion.Version1;
+        public static bool IsAvailable => ApiVersion >= WebAuthn.ApiVersion.Version1;
 
         /// <summary>
         /// Indicates the availability of the Credential Protection extension.
@@ -62,7 +62,23 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Support for the credProtect extension was added in V2 API.
         /// </remarks>
-        public static bool IsCredProtectExtensionSupported => ApiVersion >= Interop.ApiVersion.Version2;
+        public static bool IsCredProtectExtensionSupported => ApiVersion >= WebAuthn.ApiVersion.Version2;
+
+        /// <summary>
+        /// Indicates the availability of enterprise attestation.
+        /// </summary>
+        /// <remarks>
+        /// Support for the enterprise attestation was added in V3 API.
+        /// </remarks>
+        public static bool IsEnterpriseAttestationSupported => ApiVersion >= WebAuthn.ApiVersion.Version3;
+
+        /// <summary>
+        /// Indicates the availability of the Credential Large Blob extension.
+        /// </summary>
+        /// <remarks>
+        /// Support for the credBlob extension was added in V3 API.
+        /// </remarks>
+        public static bool IsLargeBlobSupported => ApiVersion >= WebAuthn.ApiVersion.Version3;
 
         /// <summary>
         /// Indicates whether operation cancellation is supported by the API.
@@ -104,7 +120,8 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Creates a public key credential source bound to a managing authenticator.
+        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
+        /// associated with its credential private key.
         /// </summary>
         public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
             RelyingPartyInformation rpEntity,
@@ -179,7 +196,8 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Creates a public key credential source bound to a managing authenticator.
+        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
+        /// associated with its credential private key.
         /// </summary>
         public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
             RelyingPartyInformation rpEntity,
@@ -221,25 +239,25 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
-            if (enterpriseAttestation != EnterpriseAttestationType.None && ApiVersion < Interop.ApiVersion.Version4)
+            if (enterpriseAttestation != EnterpriseAttestationType.None && ApiVersion < WebAuthn.ApiVersion.Version4)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("The enterprise attestation requirement is not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && ApiVersion < Interop.ApiVersion.Version5)
+            if (browserInPrivateMode == true && ApiVersion < WebAuthn.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
             }
 
-            if (largeBlobSupport == LargeBlobSupport.Required && ApiVersion < Interop.ApiVersion.Version5)
+            if (largeBlobSupport == LargeBlobSupport.Required && ApiVersion < WebAuthn.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
             }
 
-            if (enablePseudoRandomFunction == true && ApiVersion < Interop.ApiVersion.Version6)
+            if (enablePseudoRandomFunction == true && ApiVersion < WebAuthn.ApiVersion.Version6)
             {
                 // This feature is only supported in API V6.
                 throw new NotSupportedException("The PRF extension is not supported on this OS.");
@@ -274,8 +292,9 @@ namespace DSInternals.Win32.WebAuthn
                 using (var excludeCredListEx = new CredentialList(excludeCredsEx.ToArray()))
                 using (var pubKeyCredParamsNative = new CoseCredentialParameters(pubKeyCredParams))
                 using (var clientDataNative = new ClientData(clientData))
-                using (var extensionsList = ApiHelper.TranslateAttestationExtensions(clientData.ClientExtensions))
+                using (var extensionsList = ApiHelper.Translate(clientData.ClientExtensions))
                 using (var nativeExtensions = new ExtensionsIn(extensionsList.ToArray()))
+                using (var userEntityNative = ApiHelper.Translate(userEntity))
                 using (var options = new AuthenticatorMakeCredentialOptions())
                 {
                     options.AttestationConveyancePreference = attestationConveyancePreference;
@@ -296,7 +315,7 @@ namespace DSInternals.Win32.WebAuthn
                     var result = NativeMethods.AuthenticatorMakeCredential(
                         windowHandle,
                         rpEntity,
-                        userEntity,
+                        userEntityNative,
                         pubKeyCredParamsNative,
                         clientDataNative,
                         options,
@@ -320,14 +339,8 @@ namespace DSInternals.Win32.WebAuthn
                         return new AuthenticatorAttestationResponse()
                         {
                             ClientDataJson = clientDataNative.ClientDataRaw,
-                            AttestationObject = attestation.AttestationObject
+                            AttestationObject = attestation.AttestationObject,
                             // TODO: Return more data from the attestation.
-                            // attestation.Attestation
-                            // attestation.AttestationDecoded
-                            // attestation.AuthenticatorData
-                            // attestation.CredentialId
-                            // attestation.UsedTransport
-                            // attestation.FormatType
                         };
                     }
                     finally
@@ -339,7 +352,7 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Signs a challenge and other collected data into an assertion, which is used as a credential.
+        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
         /// </summary>
         public AuthenticatorAssertionResponse AuthenticatorGetAssertion(
             string rpId,
@@ -397,7 +410,7 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Signs a challenge and other collected data into an assertion, which is used as a credential.
+        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
         /// </summary>
         public AuthenticatorAssertionResponse AuthenticatorGetAssertion(
             string rpId,
@@ -422,13 +435,13 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(clientData));
             }
 
-            if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && ApiVersion < Interop.ApiVersion.Version5)
+            if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && ApiVersion < WebAuthn.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && ApiVersion < Interop.ApiVersion.Version5)
+            if (browserInPrivateMode == true && ApiVersion < WebAuthn.ApiVersion.Version5)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
@@ -508,9 +521,9 @@ namespace DSInternals.Win32.WebAuthn
         /// <param name="rpId">Optional Id of the relying party that is making the request.</param>
         /// <param name="browserInPrivateMode">Indicates whether the browser is in private mode.</param>
         /// <exception cref="NotSupportedException"></exception>
-        public static string GetPlatformCredentialList(string rpId = null, bool browserInPrivateMode = false)
+        public static IList<CredentialDetails> GetPlatformCredentialList(string rpId = null, bool browserInPrivateMode = false)
         {
-            if (ApiVersion < Interop.ApiVersion.Version4)
+            if (ApiVersion < WebAuthn.ApiVersion.Version4)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("Credential API is not supported on this OS.");
@@ -518,20 +531,19 @@ namespace DSInternals.Win32.WebAuthn
 
             var options = new GetCredentialsOptions()
             {
-                RpId = rpId,
+                RpId = string.IsNullOrEmpty(rpId) ? null : rpId,
                 BrowserInPrivateMode = browserInPrivateMode
             };
 
             // Perform the Win32 API call
             var result = NativeMethods.GetPlatformCredentialList(options, out var credentialListHandle);
-
             ApiHelper.Validate(result);
 
             try
             {
-                var credentialList = credentialListHandle.ToManaged();
                 // Wrap the raw results
-                return null;
+                var credentialList = credentialListHandle.ToManaged();
+                return ApiHelper.Translate(credentialList);
             }
             finally
             {
@@ -548,7 +560,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <exception cref="ArgumentNullException"></exception>
         public static void DeletePlatformCredential(byte[] credentialId)
         {
-            if (ApiVersion < Interop.ApiVersion.Version4)
+            if (ApiVersion < WebAuthn.ApiVersion.Version4)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("Credential API is not supported on this OS.");

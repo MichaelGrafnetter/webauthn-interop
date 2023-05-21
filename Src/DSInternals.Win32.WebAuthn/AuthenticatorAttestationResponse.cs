@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// The AuthenticatorAttestationResponse class represents the authenticator's response

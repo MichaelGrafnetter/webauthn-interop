@@ -1,7 +1,7 @@
 ﻿using System;
 using DSInternals.Win32.WebAuthn.Interop;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Enterprise Attestation Capabilities

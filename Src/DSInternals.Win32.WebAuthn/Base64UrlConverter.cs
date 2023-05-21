@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Custom converter for encoding/decoding byte[] using Base64Url instead of default Base64.

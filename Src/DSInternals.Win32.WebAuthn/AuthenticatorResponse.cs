@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Authenticators respond to Relying Party requests by returning an object derived from the AuthenticatorResponse class.

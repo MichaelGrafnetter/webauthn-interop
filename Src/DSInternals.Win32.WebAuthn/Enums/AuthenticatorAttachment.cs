@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using DSInternals.Win32.WebAuthn.Interop;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// This enumeration’s values describe authenticators' attachment modalities.

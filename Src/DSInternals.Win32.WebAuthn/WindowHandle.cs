@@ -1,9 +1,22 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
-namespace DSInternals.Win32.WebAuthn.Interop
+/* Unmerged change from project 'DSInternals.Win32.WebAuthn (net6.0)'
+Before:
+using System.Runtime.Versioning;
+After:
+using System.Runtime.Versioning;
+using DSInternals;
+using DSInternals.Win32;
+using DSInternals.Win32.WebAuthn;
+using DSInternals.Win32.WebAuthn;
+using DSInternals.Win32.WebAuthn.Interop;
+*/
+using System.Runtime.Versioning;
+using DSInternals.Win32.WebAuthn.Interop;
+
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Represents a window handle.

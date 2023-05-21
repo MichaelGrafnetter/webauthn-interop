@@ -90,15 +90,15 @@
                 </GroupBox>
                 <GroupBox Header="Public Key Algorithms">
                     <UniformGrid Columns="3">
-                        <CheckBox x:Name="ES256CheckBox" Content="ES256 (ECDSA P-256 with SHA-256)" IsChecked="{Binding AlgorithmES256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="RS256CheckBox" Content="RS256 (RSASSA-PKCS1-v1_5 with SHA-256)" IsChecked="{Binding AlgorithmRS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="PS256CheckBox" Content="PS256 (RSASSA-PSS with SHA-256)" IsChecked="{Binding AlgorithmPS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="ES384CheckBox" Content="ES384 (ECDSA P-384 with SHA-384)" IsChecked="{Binding AlgorithmES384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="RS384CheckBox" Content="RS384 (RSASSA-PKCS1-v1_5 with SHA-384)" IsChecked="{Binding AlgorithmRS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="PS384CheckBox" Content="PS384 (RSASSA-PSS with SHA-384)" IsChecked="{Binding AlgorithmPS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="ES512CheckBox" Content="ES512 (ECDSA P-521 with SHA-512)" IsChecked="{Binding AlgorithmES512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="RS512CheckBox" Content="RS512 (RSASSA-PKCS1-v1_5 with SHA-512)" IsChecked="{Binding AlgorithmRS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="PS512CheckBox" Content="PS512 (RSASSA-PSS with SHA-512)" IsChecked="{Binding AlgorithmPS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="ES256CheckBox" Content="ES256" ToolTip="ECDSA P-256 with SHA-256" IsChecked="{Binding AlgorithmES256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="RS256CheckBox" Content="RS256" ToolTip="RSASSA-PKCS1-v1_5 with SHA-256" IsChecked="{Binding AlgorithmRS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="PS256CheckBox" Content="PS256" ToolTip="RSASSA-PSS with SHA-256" IsChecked="{Binding AlgorithmPS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="ES384CheckBox" Content="ES384" ToolTip="ECDSA P-384 with SHA-384" IsChecked="{Binding AlgorithmES384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="RS384CheckBox" Content="RS384" ToolTip="RSASSA-PKCS1-v1_5 with SHA-384" IsChecked="{Binding AlgorithmRS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="PS384CheckBox" Content="PS384" ToolTip="RSASSA-PSS with SHA-384)" IsChecked="{Binding AlgorithmPS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="ES512CheckBox" Content="ES512" ToolTip="ECDSA P-521 with SHA-512" IsChecked="{Binding AlgorithmES512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="RS512CheckBox" Content="RS512" ToolTip="RSASSA-PKCS1-v1_5 with SHA-512" IsChecked="{Binding AlgorithmRS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="PS512CheckBox" Content="PS512" ToolTip="RSASSA-PSS with SHA-512" IsChecked="{Binding AlgorithmPS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
                     </UniformGrid>
                 </GroupBox>
             </DockPanel>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using DSInternals.Win32.WebAuthn.Interop;
 using PeterO.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.FIDO

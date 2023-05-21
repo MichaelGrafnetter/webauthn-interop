@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.Interop;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {

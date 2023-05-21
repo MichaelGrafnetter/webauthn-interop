@@ -1,6 +1,4 @@
-﻿using DSInternals.Win32.WebAuthn.FIDO;
-
-namespace DSInternals.Win32.WebAuthn.Fido2UI
+﻿namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
     public interface IAssertionOptionsViewModel
     {

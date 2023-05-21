@@ -3,7 +3,7 @@ using DSInternals.Win32.WebAuthn.Interop;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Defines the credential protection policy.

@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.COSE;
-using DSInternals.Win32.WebAuthn.FIDO;
-using DSInternals.Win32.WebAuthn.Interop;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -73,6 +73,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             try
             {
+                // Clear the results window first
+                this.AttestationResponse = null;
+
                 var response = _api.AuthenticatorMakeCredential(
                     AttestationOptionsViewModel.RelyingPartyEntity,
                     AttestationOptionsViewModel.UserEntity,
@@ -85,6 +88,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AttestationOptionsViewModel.Timeout,
                     AttestationOptionsViewModel.ClientExtensions
                     );
+
+                this.AttestationResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -97,13 +102,18 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             try
             {
+                // Clear the results window first
+                this.AssertionResponse = null;
+
                 var response = _api.AuthenticatorGetAssertion(
                     AssertionOptionsViewModel.RelyingPartyId,
                     AssertionOptionsViewModel.Challenge,
                     AssertionOptionsViewModel.UserVerificationRequirement,
                     AssertionOptionsViewModel.AuthenticatorAttachment,
                     AssertionOptionsViewModel.Timeout
-                    );
+                );
+
+                this.AssertionResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -116,7 +126,14 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             try
             {
-                var response = WebAuthnApi.GetPlatformCredentialList();
+                // Clear the results window first
+                this.CredentialManagerResponse = null;
+
+                var credentials = WebAuthnApi.GetPlatformCredentialList(
+                    CredentialManagementViewModel.RelyingPartyId,
+                    CredentialManagementViewModel.IsBrowserPrivateMode);
+
+                this.CredentialManagerResponse = JsonConvert.SerializeObject(credentials, Formatting.Indented);
             }
             catch (Exception ex)
             {

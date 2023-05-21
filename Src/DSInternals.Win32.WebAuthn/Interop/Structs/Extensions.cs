@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using DSInternals.Win32.WebAuthn.FIDO;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {

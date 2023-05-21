@@ -1,18 +1,19 @@
 ﻿using System.Runtime.InteropServices;
+using DSInternals.Win32.WebAuthn.Interop;
 
-namespace DSInternals.Win32.WebAuthn.Interop
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Information about an RP Entity
     /// </summary>
     /// <remarks>Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION.</remarks>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public class RelyingPartyInformation
+    public sealed class RelyingPartyInformation
     {
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private RelyingPartyInformationVersion Version { get; set; } = RelyingPartyInformationVersion.Current;
+        internal RelyingPartyInformationVersion Version { get; set; } = RelyingPartyInformationVersion.Current;
 
         /// <summary>
         /// Identifier for the RP.

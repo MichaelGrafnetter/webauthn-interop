@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Contains WebAuthn extensions that are actually supported by Windows 10.
@@ -21,11 +21,11 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             get
             {
                 // Treat false as null, so that it is not serialized.
-                return _hmacSecret ? true : (bool?)null;
+                return _hmacSecret ? true : null;
             }
             set
             {
-                _hmacSecret = (value == true);
+                _hmacSecret = value == true;
             }
         }
 
@@ -40,7 +40,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             get
             {
                 // Threat Any as null, so that it is not serialized to JSON.
-                return (_credProtect == UserVerification.Any) ? (UserVerification?)null : _credProtect;
+                return _credProtect == UserVerification.Any ? null : _credProtect;
             }
             set
             {

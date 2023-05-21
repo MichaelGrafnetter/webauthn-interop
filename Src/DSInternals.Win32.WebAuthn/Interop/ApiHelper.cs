@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using DSInternals.Win32.WebAuthn.FIDO;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -40,7 +40,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
-        public static DisposableList<ExtensionIn> TranslateAttestationExtensions(AuthenticationExtensionsClientInputs extensions)
+        public static DisposableList<ExtensionIn> Translate(AuthenticationExtensionsClientInputs extensions)
         {
             var nativeExtensions = new DisposableList<ExtensionIn>();
 
@@ -62,6 +62,52 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
 
             return nativeExtensions;
+        }
+
+        public static UserInformationIn Translate(UserInformation userInfo)
+        {
+            return new UserInformationIn
+            {
+                Id = userInfo.Id,
+                DisplayName = userInfo.DisplayName,
+                Icon = userInfo.Icon,
+                Name = userInfo.Name
+            };
+        }
+
+        public static UserInformation Translate(UserInformationOut userInfo)
+        {
+            return new UserInformation
+            {
+                Id = userInfo.Id,
+                DisplayName = userInfo.DisplayName,
+                Icon = userInfo.Icon,
+                Name = userInfo.Name
+            };
+        }
+
+        public static IList<CredentialDetails> Translate(CredentialDetailsOut[] credentials)
+        {
+            if(credentials == null || credentials.Length == 0)
+            {
+                return null;
+            }
+
+            var result = new List<CredentialDetails>();
+
+            foreach (var credential in credentials)
+            {
+                result.Add(new CredentialDetails
+                {
+                    UserInformation = Translate(credential.UserInformation),
+                    RelyingPartyInformation = credential.RelyingPartyInformation,
+                    CredentialId = credential.CredentialId,
+                    BackedUp = credential.BackedUp,
+                    Removable = credential.Removable
+                });
+            }
+
+            return result;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public static extern HResult AuthenticatorMakeCredential(
             WindowHandle windowHandle,
             RelyingPartyInformation rpInformation,
-            UserInformation userInformation,
+            UserInformationIn userInformation,
             CoseCredentialParameters pubKeyCredParams,
             ClientData clientData,
             AuthenticatorMakeCredentialOptions makeCredentialOptions,
@@ -134,7 +134,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetPlatformCredentialList", CharSet = CharSet.Unicode)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult GetPlatformCredentialList(GetCredentialsOptions getCredentialsOptions, out PlatformCredentialListSafeHandle credentialDetailsList);
+        public static extern HResult GetPlatformCredentialList(GetCredentialsOptions getCredentialsOptions, [Out] out PlatformCredentialListSafeHandle credentialDetailsList);
 
         /// <summary>
         /// Frees the allocation for the WEBAUTHN_CREDENTIAL_DETAILS_LIST.

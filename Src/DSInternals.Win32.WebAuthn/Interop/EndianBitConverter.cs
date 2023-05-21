@@ -1,6 +1,18 @@
-﻿using System;
+﻿
+/* Unmerged change from project 'DSInternals.Win32.WebAuthn (net6.0)'
+Before:
+using System;
+After:
+using System;
+using DSInternals;
+using DSInternals.Win32;
+using DSInternals.Win32.WebAuthn;
+using DSInternals.Win32.WebAuthn;
+using DSInternals.Win32.WebAuthn.FIDO;
+*/
+using System;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal static class EndianBitConverter
     {
@@ -39,7 +51,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
 
         public static void SwapBytes(this byte[] bytes, int index1, int index2)
         {
-            byte temp = bytes[index1];
+            var temp = bytes[index1];
             bytes[index1] = bytes[index2];
             bytes[index2] = temp;
         }

@@ -1,6 +1,6 @@
 ﻿using DSInternals.Win32.WebAuthn.Interop;
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// This enumeration contains attestation conveyance options for credential generation.

@@ -39,36 +39,34 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             bool rk = options.AuthenticatorSelection?.RequireResidentKey ?? false;
             var attachment = ApiMapper.Translate(options.AuthenticatorSelection?.AuthenticatorAttachment);
             var attestationPref = ApiMapper.Translate(options.Attestation);
+            var user = ApiMapper.Translate(options.User);
 
-            using (var user = ApiMapper.Translate(options.User))
+            var attestation = _api.AuthenticatorMakeCredential(
+                rp,
+                user,
+                options.Challenge,
+                uv,
+                attachment,
+                rk,
+                credParams,
+                attestationPref,
+                timeout,
+                null,
+                excludeCreds
+            );
+
+            return new AuthenticatorAttestationRawResponse()
             {
-                var attestation = _api.AuthenticatorMakeCredential(
-                    rp,
-                    user,
-                    options.Challenge,
-                    uv,
-                    attachment,
-                    rk,
-                    credParams,
-                    attestationPref,
-                    timeout,
-                    null,
-                    excludeCreds
-                );
-
-                return new AuthenticatorAttestationRawResponse()
+                // TODO: Id = attestation.CredentialId,
+                // TODO: RawId = attestation.CredentialId,
+                Type = PublicKeyCredentialType.PublicKey,
+                // TODO: Extensions = ApiMapper.Translate(attestation.Extensions),
+                Response = new AuthenticatorAttestationRawResponse.ResponseData()
                 {
-                    // TODO: Id = attestation.CredentialId,
-                    // TODO: RawId = attestation.CredentialId,
-                    Type = PublicKeyCredentialType.PublicKey,
-                    // TODO: Extensions = ApiMapper.Translate(attestation.Extensions),
-                    Response = new AuthenticatorAttestationRawResponse.ResponseData()
-                    {
-                        AttestationObject = attestation.AttestationObject,
-                        ClientDataJson = attestation.ClientDataJson
-                    }
-                };
-            }
+                    AttestationObject = attestation.AttestationObject,
+                    ClientDataJson = attestation.ClientDataJson
+                }
+            };
         }
 
         public async Task<AuthenticatorAttestationRawResponse> AuthenticatorMakeCredentialAsync(CredentialCreateOptions options, CancellationToken cancellationToken = default)
@@ -83,7 +81,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
         /// <param name="options">Assertion options.</param>
         /// <param name="authenticatorAttachment">Optionally filters the eligible authenticators by their attachment.</param>
         /// <returns>The cryptographically signed Authenticator Assertion Response object returned by an authenticator.</returns>
-        public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options, AuthenticatorAttachment? authenticatorAttachment = null)
+        public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null)
         {
             if (options == null)
             {
@@ -127,7 +125,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             };
         }
 
-        public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default)
+        public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default)
         {
             cancellationToken.Register(state => CancelCurrentOperation(), null, false);
             return await Task.Run(() => AuthenticatorGetAssertion(options, authenticatorAttachment), cancellationToken).ConfigureAwait(false);
