@@ -1,5 +1,7 @@
 # FidoKeyMaterial class
 
+Represents a FIDO2 key stored in AAD.
+
 ```csharp
 public class FidoKeyMaterial
 ```

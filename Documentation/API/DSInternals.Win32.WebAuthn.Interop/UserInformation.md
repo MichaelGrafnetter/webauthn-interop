@@ -3,7 +3,7 @@
 Information about a User Entity
 
 ```csharp
-public class UserInformation : IDisposable
+public sealed class UserInformation : IDisposable
 ```
 
 ## Public Members
@@ -15,7 +15,7 @@ public class UserInformation : IDisposable
 | [Icon](UserInformation/Icon.md) { get; set; } | Optional URL that can be used to retrieve an image containing the user's current avatar, or a data URI that contains the image data. |
 | [Id](UserInformation/Id.md) { get; set; } | Identifier for the User. |
 | [Name](UserInformation/Name.md) { get; set; } | Contains a detailed name for this account, such as "john.p.smith@example.com". |
-| [Dispose](UserInformation/Dispose.md)() |  |
+| [Dispose](UserInformation/Dispose.md)() | Deallocates unmanaged resources. |
 
 ## Remarks
 

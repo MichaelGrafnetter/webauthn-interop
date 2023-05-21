@@ -6,7 +6,7 @@ public AuthenticationExtensionsClientInputs ClientExtensions { get; set; }
 
 ## See Also
 
-* class [AuthenticationExtensionsClientInputs](../AuthenticationExtensionsClientInputs.md)
+* class [AuthenticationExtensionsClientInputs](../../DSInternals.Win32.WebAuthn/AuthenticationExtensionsClientInputs.md)
 * class [CollectedClientData](../CollectedClientData.md)
 * namespace [DSInternals.Win32.WebAuthn.FIDO](../../DSInternals.Win32.WebAuthn.md)
 

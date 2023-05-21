@@ -15,6 +15,7 @@ public enum AuthenticatorTransport
 | USB | `0x1` | Universal Serial Bus (USB). |
 | NFC | `0x2` | Near Field Communication (NFC). |
 | BLE | `0x4` | Bluetooth Low Energy (BLE). |
+| Hybrid | `0x20` | Hybrid Transport (QR Code). |
 | Test | `0x8` |  |
 | Internal | `0x10` | Client device-specific transport. |
 

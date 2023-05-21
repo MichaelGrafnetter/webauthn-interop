@@ -1,5 +1,7 @@
 # ApiConstants.ClientDataCredentialGet field
 
+WebAuthn operation type used for authentication with FIDO2 credentials.
+
 ```csharp
 public const string ClientDataCredentialGet;
 ```

@@ -1,5 +1,7 @@
 # AttestedCredentialData.ToString method
 
+Displays the data in a human-readable form.
+
 ```csharp
 public override string ToString()
 ```

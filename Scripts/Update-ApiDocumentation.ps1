@@ -15,11 +15,11 @@ if($null -eq $command)
 $outputPath = "$PSScriptRoot\..\Documentation\API"
 
 $namespace = 'DSInternals.Win32.WebAuthn'
-$assemblyPath = "$PSScriptRoot\..\Build\bin\Release\DSInternals.Win32.WebAuthn\net472\DSInternals.Win32.WebAuthn.dll"
+$assemblyPath = "$PSScriptRoot\..\Build\bin\Release\DSInternals.Win32.WebAuthn\net48\DSInternals.Win32.WebAuthn.dll"
 $sourceUri = 'https://github.com/MichaelGrafnetter/webauthn-interop/tree/master/Src/DSInternals.Win32.WebAuthn'
 xmldocmd $assemblyPath $outputPath --source $sourceUri --namespace $namespace --visibility public --clean
 
 $namespace = 'DSInternals.Win32.WebAuthnAdapter'
-$assemblyPath = "$PSScriptRoot\..\Build\bin\Release\DSInternals.Win32.WebAuthn.Adapter\net472\DSInternals.Win32.WebAuthn.Adapter.dll"
+$assemblyPath = "$PSScriptRoot\..\Build\bin\Release\DSInternals.Win32.WebAuthn.Adapter\net6.0\DSInternals.Win32.WebAuthn.Adapter.dll"
 $sourceUri = 'https://github.com/MichaelGrafnetter/webauthn-interop/tree/master/Src/DSInternals.Win32.WebAuthn.Adapter'
 xmldocmd $assemblyPath $outputPath --source $sourceUri --namespace $namespace --visibility public --clean

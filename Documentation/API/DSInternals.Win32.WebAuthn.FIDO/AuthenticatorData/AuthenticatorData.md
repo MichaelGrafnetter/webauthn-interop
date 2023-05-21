@@ -1,8 +1,18 @@
 # AuthenticatorData constructor
 
+Parses the binary form of the authenticator data.
+
 ```csharp
 public AuthenticatorData(byte[] authData)
 ```
+
+## Exceptions
+
+| exception | condition |
+| --- | --- |
+| ArgumentNullException |  |
+| ArgumentOutOfRangeException |  |
+| ArgumentException |  |
 
 ## See Also
 

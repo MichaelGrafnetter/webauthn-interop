@@ -15,7 +15,7 @@ public KeyCredential(byte[] blob, string owner)
 
 ```csharp
 public KeyCredential(byte[] publicKey, Guid? deviceId, string owner, 
-    DateTime? currentTime = default(DateTime?), bool isComputerKey = false)
+    DateTime? currentTime = default, bool isComputerKey = false)
 ```
 
 ## See Also
@@ -29,7 +29,7 @@ public KeyCredential(byte[] publicKey, Guid? deviceId, string owner,
 
 ```csharp
 public KeyCredential(X509Certificate2 certificate, Guid? deviceId, string owner, 
-    DateTime? currentTime = default(DateTime?), bool isComputerKey = false)
+    DateTime? currentTime = default, bool isComputerKey = false)
 ```
 
 ## See Also

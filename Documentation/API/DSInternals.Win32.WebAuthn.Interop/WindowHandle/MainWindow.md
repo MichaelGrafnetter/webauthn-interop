@@ -1,5 +1,7 @@
 # WindowHandle.MainWindow property
 
+Gets the window handle of the main window of the calling process.
+
 ```csharp
 public static WindowHandle MainWindow { get; }
 ```

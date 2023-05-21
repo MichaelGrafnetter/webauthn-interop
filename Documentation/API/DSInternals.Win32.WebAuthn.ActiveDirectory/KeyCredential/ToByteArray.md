@@ -1,5 +1,7 @@
 # KeyCredential.ToByteArray method
 
+Serializes the key credential into a binary form used by AD.
+
 ```csharp
 public byte[] ToByteArray()
 ```

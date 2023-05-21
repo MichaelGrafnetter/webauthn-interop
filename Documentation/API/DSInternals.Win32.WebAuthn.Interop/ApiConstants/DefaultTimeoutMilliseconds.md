@@ -1,5 +1,7 @@
 # ApiConstants.DefaultTimeoutMilliseconds field
 
+Default timeut for WebAuthn operations.
+
 ```csharp
 public const int DefaultTimeoutMilliseconds;
 ```

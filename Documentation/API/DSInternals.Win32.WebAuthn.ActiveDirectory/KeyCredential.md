@@ -15,21 +15,21 @@ public class KeyCredential
 | static [ParseJson](KeyCredential/ParseJson.md)(…) |  |
 | [CreationTime](KeyCredential/CreationTime.md) { get; } | The approximate time this key was created. |
 | [CustomKeyInfo](KeyCredential/CustomKeyInfo.md) { get; } |  |
-| [DeviceId](KeyCredential/DeviceId.md) { get; } |  |
+| [DeviceId](KeyCredential/DeviceId.md) { get; } | Identifier of the device with which this key credential is associated. |
 | [ECPublicKey](KeyCredential/ECPublicKey.md) { get; } |  |
 | [FidoKeyMaterial](KeyCredential/FidoKeyMaterial.md) { get; } |  |
 | [Identifier](KeyCredential/Identifier.md) { get; } | A SHA256 hash of the Value field of the RawKeyMaterial entry. |
-| [IsWeak](KeyCredential/IsWeak.md) { get; } |  |
+| [IsWeak](KeyCredential/IsWeak.md) { get; } | Indicates whether the RSA public key is susceptible to the ROCA vulnerability. |
 | [LastLogonTime](KeyCredential/LastLogonTime.md) { get; } | The approximate time this key was last used. |
-| [LegacyUsage](KeyCredential/LegacyUsage.md) { get; } |  |
+| [LegacyUsage](KeyCredential/LegacyUsage.md) { get; } | Legacy type of the key credential. |
 | [Owner](KeyCredential/Owner.md) { get; } | Distinguished name of the AD object (UPN in case of AAD objects) that holds this key credential. |
 | [RawKeyMaterial](KeyCredential/RawKeyMaterial.md) { get; } | Key material of the credential. |
 | [RSAModulus](KeyCredential/RSAModulus.md) { get; } |  |
 | [RSAPublicKey](KeyCredential/RSAPublicKey.md) { get; } |  |
-| [Source](KeyCredential/Source.md) { get; } |  |
-| [Usage](KeyCredential/Usage.md) { get; } |  |
+| [Source](KeyCredential/Source.md) { get; } | Indicates whether the key was registered using ADFS or AAD. |
+| [Usage](KeyCredential/Usage.md) { get; } | Type of the key credential. |
 | [Version](KeyCredential/Version.md) { get; } | Defines the version of the structure. |
-| [ToByteArray](KeyCredential/ToByteArray.md)() |  |
+| [ToByteArray](KeyCredential/ToByteArray.md)() | Serializes the key credential into a binary form used by AD. |
 | [ToDNWithBinary](KeyCredential/ToDNWithBinary.md)() |  |
 | [ToJson](KeyCredential/ToJson.md)() |  |
 | override [ToString](KeyCredential/ToString.md)() |  |

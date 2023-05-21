@@ -12,7 +12,11 @@ public enum ApiVersion
 | --- | --- | --- |
 | Version1 | `1` | Baseline Version |
 | Version2 | `2` | Delta From V1. |
-| Current | `2` | Current Version |
+| Version3 | `3` | Delta From V2. |
+| Version4 | `4` | Delta From V3. |
+| Version5 | `5` | Delta From V4. |
+| Version6 | `6` | Delta From V5. |
+| Current | `6` | Current Version |
 
 ## See Also
 

@@ -1,5 +1,7 @@
 # UserInformation.Dispose method
 
+Deallocates unmanaged resources.
+
 ```csharp
 public void Dispose()
 ```

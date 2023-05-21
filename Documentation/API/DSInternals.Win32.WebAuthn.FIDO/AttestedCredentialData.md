@@ -14,7 +14,7 @@ public class AttestedCredentialData
 | [AaGuid](AttestedCredentialData/AaGuid.md) { get; } | The AAGUID of the authenticator. Can be used to identify the make and model of the authenticator. |
 | [CredentialId](AttestedCredentialData/CredentialId.md) { get; } | A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions. |
 | [CredentialPublicKey](AttestedCredentialData/CredentialPublicKey.md) { get; } | The credential public key encoded in COSE_Key format, as defined in Section 7 of RFC8152, using the CTAP2 canonical CBOR encoding form. |
-| override [ToString](AttestedCredentialData/ToString.md)() |  |
+| override [ToString](AttestedCredentialData/ToString.md)() | Displays the data in a human-readable form. |
 
 ## See Also
 

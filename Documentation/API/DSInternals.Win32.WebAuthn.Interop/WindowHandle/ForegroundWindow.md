@@ -1,5 +1,7 @@
 # WindowHandle.ForegroundWindow property
 
+Gets the window handle of the foreground window associated with the calling process.
+
 ```csharp
 public static WindowHandle ForegroundWindow { get; }
 ```

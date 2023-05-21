@@ -1,5 +1,7 @@
 # KeyCredential.LegacyUsage property
 
+Legacy type of the key credential.
+
 ```csharp
 public string LegacyUsage { get; }
 ```

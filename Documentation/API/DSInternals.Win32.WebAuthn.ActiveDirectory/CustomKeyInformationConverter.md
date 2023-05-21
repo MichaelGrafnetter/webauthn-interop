@@ -16,7 +16,7 @@ public class CustomKeyInformationConverter : JsonConverter<CustomKeyInformation>
 
 ## See Also
 
-* class [CustomKeyInformation](CustomKeyInformation.md)
+* class [CustomKeyInformation](./CustomKeyInformation.md)
 * namespace [DSInternals.Win32.WebAuthn.ActiveDirectory](../DSInternals.Win32.WebAuthn.md)
 * [CustomKeyInformationConverter.cs](https://github.com/MichaelGrafnetter/webauthn-interop/tree/master/Src/DSInternals.Win32.WebAuthn/ActiveDirectory/CustomKeyInformationConverter.cs)
 
