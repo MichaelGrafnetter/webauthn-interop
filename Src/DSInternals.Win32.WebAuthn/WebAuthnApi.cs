@@ -73,12 +73,20 @@ namespace DSInternals.Win32.WebAuthn
         public static bool IsEnterpriseAttestationSupported => ApiVersion >= WebAuthn.ApiVersion.Version3;
 
         /// <summary>
-        /// Indicates the availability of the Credential Large Blob extension.
+        /// Indicates the availability of the Credential Blob extension.
         /// </summary>
         /// <remarks>
         /// Support for the credBlob extension was added in V3 API.
         /// </remarks>
-        public static bool IsLargeBlobSupported => ApiVersion >= WebAuthn.ApiVersion.Version3;
+        public static bool IsCredBlobSupported => ApiVersion >= WebAuthn.ApiVersion.Version3;
+
+        /// <summary>
+        /// Indicates the availability of the large blobs.
+        /// </summary>
+        /// <remarks>
+        /// Support for the large blobs was added in V5 API.
+        /// </remarks>
+        public static bool IsLargeBlobSupported => ApiVersion >= WebAuthn.ApiVersion.Version5;
 
         /// <summary>
         /// Indicates whether operation cancellation is supported by the API.
