@@ -57,7 +57,7 @@ jobs:
       with:
         path: ~/.nuget/packages
         # Heuristics: The current list of required packages is defined in the project files.
-        key: ${{ runner.os }}-DotNET-NuGet-Release-${{ hashFiles('**/**/*.csproj') }}
+        key: ${{ runner.os }}-DotNET-NuGet-Release-${{ hashFiles('**/**/*.csproj'):7 }}
 
     - name: Build
       working-directory: Src
@@ -70,7 +70,7 @@ jobs:
       with:
         path: ~/.dotnet/tools
         # Heuristics: The current list of required global tools is defined in this workflow file.
-        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ github.workflow_sha }}
+        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ github.workflow_sha:7 }}
 
     - name: Install Azure KeyVault Code Signing Tools
       if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}
