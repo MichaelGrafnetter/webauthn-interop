@@ -30,7 +30,7 @@
                 <DockPanel>
                     <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" />
                     <GroupBox Name="AttestationResponseGroupBox" Header="Response">
-                        <TextBox Name="AttestationResponseTextBox" IsReadOnly="true" Text="{Binding AttestationResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" />
+                        <TextBox Name="AttestationResponseTextBox" IsReadOnly="true" Text="{Binding AttestationResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>
                 </DockPanel>
             </TabItem>
@@ -38,7 +38,7 @@
                 <DockPanel>
                     <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" />
                     <GroupBox Name="AssertionResponseGroupBox" Header="Response">
-                        <TextBox Name="AssertionResponseTextBox" IsReadOnly="True" Text="{Binding AssertionResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" />
+                        <TextBox Name="AssertionResponseTextBox" IsReadOnly="True" Text="{Binding AssertionResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>
                 </DockPanel>
             </TabItem>
