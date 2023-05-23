@@ -13,10 +13,7 @@
     Title="FIDO2 UI" MinHeight="700" MinWidth="1150">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Register" Command="{Binding RegisterCommand}" Padding="5" />
-            <MenuItem Header="_Authenticate" Command="{Binding AuthenticateCommand}" Padding="5" />
-            <MenuItem Header="List Platform _Credentials" Command="{Binding ListPlatformCredentialsCommand}" Padding="5" />
-            <MenuItem Header="_Load Options" Padding="5">
+            <MenuItem Header="Load Default _Options" Padding="5">
                 <MenuItem Header="_Microsoft FIDO2" Command="{Binding LoadMicrosoftOptionsCommand}" />
                 <MenuItem Header="_Facebook U2F" Command="{Binding LoadFacebookOptionsCommand}" />
                 <MenuItem Header="_Google U2F" Command="{Binding LoadGoogleOptionsCommand}" />
@@ -29,6 +26,7 @@
             <TabItem Header="Registration">
                 <DockPanel>
                     <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" />
+                    <Button x:Name="RegisterButton" DockPanel.Dock="Top" Content="_Register" Command="{Binding RegisterCommand}" HorizontalAlignment="Center" />
                     <GroupBox Name="AttestationResponseGroupBox" Header="Response">
                         <TextBox Name="AttestationResponseTextBox" IsReadOnly="true" Text="{Binding AttestationResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>
@@ -37,6 +35,7 @@
             <TabItem Header="Authentication">
                 <DockPanel>
                     <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" />
+                    <Button x:Name="AuthenticateButton" DockPanel.Dock="Top" Content="_Authenticate" Command="{Binding AuthenticateCommand}" HorizontalAlignment="Center" />
                     <GroupBox Name="AssertionResponseGroupBox" Header="Response">
                         <TextBox Name="AssertionResponseTextBox" IsReadOnly="True" Text="{Binding AssertionResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>
@@ -45,6 +44,7 @@
             <TabItem Header="Management">
                 <DockPanel>
                     <local:CredentialManagementView x:Name="CredentiaManager" DockPanel.Dock="Top" />
+                    <Button x:Name="ListCredentialsButton" DockPanel.Dock="Top" Content="_List platform credentials" Command="{Binding ListPlatformCredentialsCommand}" HorizontalAlignment="Center" />
                     <GroupBox Name="CredentialManagerResponseGroupBox" Header="Response">
                         <TextBox Name="CredentialManagerResponseTextBox" Text="{Binding CredentialManagerResponse, Mode=OneWay}" IsReadOnly="True" VerticalScrollBarVisibility="Visible" />
                     </GroupBox>

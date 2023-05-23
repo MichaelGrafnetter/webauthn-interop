@@ -7,13 +7,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
              d:DesignHeight="30" d:DesignWidth="200"
-             x:Name="TimeoutEditorControl">
+             x:Name="TimeoutEditorControl"
+             KeyboardNavigation.TabNavigation="Local">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBox Name="TimeoutTextBox" IsEnabled="False" Text="{Binding ElementName=TimeoutSlider, Mode=OneWay, StringFormat='{}{0:###0,} s', Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Column="0" />
-        <Slider Name="TimeoutSlider" Value="{Binding Path=Timeout, ElementName=TimeoutEditorControl, Mode=TwoWay}" Minimum="5000" Maximum="300000" IsSnapToTickEnabled="True" TickFrequency="1000" Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="1" />
+        <TextBox Name="TimeoutTextBox" IsEnabled="False" Text="{Binding ElementName=TimeoutSlider, Mode=OneWay, StringFormat='{}{0:###0,} s', Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Column="0" IsTabStop="False" />
+        <Slider Name="TimeoutSlider" Value="{Binding Path=Timeout, ElementName=TimeoutEditorControl, Mode=TwoWay}" Minimum="5000" Maximum="300000" IsSnapToTickEnabled="True" TickFrequency="1000" Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="1" IsTabStop="True" />
     </Grid>
 </UserControl>

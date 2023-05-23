@@ -25,7 +25,7 @@
                     <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
                 <!-- FIDO2 Support -->
-                <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API support:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+                <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API support:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
                 <CheckBox x:Name="FIDOSupportedCheckBox" IsChecked="{Binding IsApiAvailable, Mode=OneWay}" IsEnabled="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
                 <!-- API Version -->
                 <Label Name="ApiVersionLabel" Content="WebAuthn API version:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
@@ -39,12 +39,12 @@
                 <!-- Credential Blob Support -->
                 <Label Name="CredentialBlobSupportedLabel" Content="Credential blob support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
                 <CheckBox x:Name="CredentialBlobSupportedCheckBox" IsChecked="{Binding IsCredBlobSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="4"/>
-                <!-- Enterprise Attestation Support -->
-                <Label Name="EnterpriseAttestationSupportedLabel" Content="Enterprise attestation support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5"/>
-                <CheckBox x:Name="EnterpriseAttestationSupportedCheckBox" IsChecked="{Binding IsEnterpriseAttestationSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="5"/>
                 <!-- Large Blob Support -->
-                <Label Name="LargeBlobSupportedLabel" Content="Large blob support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="6"/>
-                <CheckBox x:Name="LargeBlobSupportedCheckBox" IsChecked="{Binding IsLargeBlobSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="6"/>
+                <Label Name="LargeBlobSupportedLabel" Content="Large blob support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5"/>
+                <CheckBox x:Name="LargeBlobSupportedCheckBox" IsChecked="{Binding IsLargeBlobSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="5"/>
+                <!-- Enterprise Attestation Support -->
+                <Label Name="EnterpriseAttestationSupportedLabel" Content="Enterprise attestation support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="6"/>
+                <CheckBox x:Name="EnterpriseAttestationSupportedCheckBox" IsChecked="{Binding IsEnterpriseAttestationSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="6"/>
             </Grid>
         </GroupBox>
     </StackPanel>

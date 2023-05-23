@@ -7,7 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="800">
     <GroupBox Header="Attestation Options" Margin="0, 0, 0, 0">
         <DockPanel>
             <DockPanel DockPanel.Dock="Top">
@@ -23,10 +23,10 @@
                             <RowDefinition Height="30" />
                         </Grid.RowDefinitions>
                         <Label Name="AttachmentLabel" Content="Attachment:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
-                        <ComboBox Name="AttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+                        <ComboBox Name="AttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TabIndex="6" />
                         <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                        <ComboBox Name="UserVerificationRequirementComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
-                        <CheckBox Name="RequireResidentKeyCheckBox" IsChecked="{Binding RequireResidentKey, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content=" Require resident key" VerticalAlignment="Center" />
+                        <ComboBox Name="UserVerificationRequirementComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TabIndex="7" />
+                        <CheckBox Name="RequireResidentKeyCheckBox" IsChecked="{Binding RequireResidentKey, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content=" Require resident key" VerticalAlignment="Center" TabIndex="8" />
                     </Grid>
                 </GroupBox>
                 <UniformGrid Rows="1">
@@ -34,16 +34,16 @@
                         <StackPanel>
                             <DockPanel>
                                 <Label Content="Name:" Width="100" VerticalAlignment="Center" />
-                                <TextBox Name="UserNameTextBox" Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                                <TextBox Name="UserNameTextBox" Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="0" />
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Display name:" Width="100" VerticalAlignment="Center" />
-                                <TextBox Name="UserDisplayNameTextBox" Text="{Binding UserDisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                                <TextBox Name="UserDisplayNameTextBox" Text="{Binding UserDisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="1" />
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Credential ID:" Width="100" VerticalAlignment="Center" />
-                                <Button Name="GenerateUserIdButton" Content="Random" Command="{Binding GenerateUserIdCommand}" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="5,0,0,0" Padding="2" />
-                                <TextBox Name="UserCredentialIdTextBox" VerticalAlignment="Center">
+                                <Button Name="GenerateUserIdButton" Content="Random" Command="{Binding GenerateUserIdCommand}" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="5,0,0,0" Padding="2" TabIndex="3" />
+                                <TextBox Name="UserCredentialIdTextBox" VerticalAlignment="Center" TabIndex="2">
                                     <TextBox.Text>
                                         <Binding Path="UserIdString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                             <Binding.ValidationRules>
@@ -59,11 +59,11 @@
                         <StackPanel>
                             <DockPanel>
                                 <Label Content="Domain name:" Width="100" VerticalAlignment="Center" />
-                                <TextBox Name="RpDomainNameTextBox" Text="{Binding RpId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                                <TextBox Name="RpDomainNameTextBox" Text="{Binding RpId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="4" />
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Display name:" Width="100" VerticalAlignment="Center" />
-                                <TextBox Name="RpDisplayNameTextBox" Text="{Binding RpName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                                <TextBox Name="RpDisplayNameTextBox" Text="{Binding RpName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="5" />
                             </DockPanel>
                         </StackPanel>
                     </GroupBox>
@@ -82,38 +82,38 @@
                             <RowDefinition Height="30" />
                         </Grid.RowDefinitions>
                         <Label Name="HmacSecretLabel" Content="HMAC Secret:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" />
-                        <CheckBox Name="HmacSecretCheckBox"  IsChecked="{Binding HmacSecret, Mode=TwoWay}" Content="Enabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
+                        <CheckBox Name="HmacSecretCheckBox"  IsChecked="{Binding HmacSecret, Mode=TwoWay}" Content="Enabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TabIndex="9" />
                         <Label Name="CredProtectLabel" Content="Credential Protection:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
-                        <ComboBox Name="CredProtectComboBox" ItemsSource="{Binding CredProtectPolicies, Mode=OneTime}" SelectedValue="{Binding CredProtectPolicy, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" />
-                        <CheckBox Name="CredProtectEnforceCheckBox" IsChecked="{Binding EnforceCredProtect, Mode=TwoWay}" IsEnabled="{Binding EnforceCredProtectEnabled, Mode=OneWay}" Content="Enforced" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
+                        <ComboBox Name="CredProtectComboBox" ItemsSource="{Binding CredProtectPolicies, Mode=OneTime}" SelectedValue="{Binding CredProtectPolicy, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TabIndex="10" />
+                        <CheckBox Name="CredProtectEnforceCheckBox" IsChecked="{Binding EnforceCredProtect, Mode=TwoWay}" IsEnabled="{Binding EnforceCredProtectEnabled, Mode=OneWay}" Content="Enforced" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" TabIndex="11" />
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Public Key Algorithms">
                     <UniformGrid Columns="3">
-                        <CheckBox x:Name="ES256CheckBox" Content="ES256" ToolTip="ECDSA P-256 with SHA-256" IsChecked="{Binding AlgorithmES256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="RS256CheckBox" Content="RS256" ToolTip="RSASSA-PKCS1-v1_5 with SHA-256" IsChecked="{Binding AlgorithmRS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="PS256CheckBox" Content="PS256" ToolTip="RSASSA-PSS with SHA-256" IsChecked="{Binding AlgorithmPS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="ES384CheckBox" Content="ES384" ToolTip="ECDSA P-384 with SHA-384" IsChecked="{Binding AlgorithmES384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="RS384CheckBox" Content="RS384" ToolTip="RSASSA-PKCS1-v1_5 with SHA-384" IsChecked="{Binding AlgorithmRS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="PS384CheckBox" Content="PS384" ToolTip="RSASSA-PSS with SHA-384)" IsChecked="{Binding AlgorithmPS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="ES512CheckBox" Content="ES512" ToolTip="ECDSA P-521 with SHA-512" IsChecked="{Binding AlgorithmES512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="RS512CheckBox" Content="RS512" ToolTip="RSASSA-PKCS1-v1_5 with SHA-512" IsChecked="{Binding AlgorithmRS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
-                        <CheckBox x:Name="PS512CheckBox" Content="PS512" ToolTip="RSASSA-PSS with SHA-512" IsChecked="{Binding AlgorithmPS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" />
+                        <CheckBox x:Name="ES256CheckBox" Content="ES256" ToolTip="ECDSA P-256 with SHA-256" IsChecked="{Binding AlgorithmES256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="12" />
+                        <CheckBox x:Name="RS256CheckBox" Content="RS256" ToolTip="RSASSA-PKCS1-v1_5 with SHA-256" IsChecked="{Binding AlgorithmRS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="15" />
+                        <CheckBox x:Name="PS256CheckBox" Content="PS256" ToolTip="RSASSA-PSS with SHA-256" IsChecked="{Binding AlgorithmPS256Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="18" />
+                        <CheckBox x:Name="ES384CheckBox" Content="ES384" ToolTip="ECDSA P-384 with SHA-384" IsChecked="{Binding AlgorithmES384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="13" />
+                        <CheckBox x:Name="RS384CheckBox" Content="RS384" ToolTip="RSASSA-PKCS1-v1_5 with SHA-384" IsChecked="{Binding AlgorithmRS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="16" />
+                        <CheckBox x:Name="PS384CheckBox" Content="PS384" ToolTip="RSASSA-PSS with SHA-384)" IsChecked="{Binding AlgorithmPS384Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="19" />
+                        <CheckBox x:Name="ES512CheckBox" Content="ES512" ToolTip="ECDSA P-521 with SHA-512" IsChecked="{Binding AlgorithmES512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="14" />
+                        <CheckBox x:Name="RS512CheckBox" Content="RS512" ToolTip="RSASSA-PKCS1-v1_5 with SHA-512" IsChecked="{Binding AlgorithmRS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="17" />
+                        <CheckBox x:Name="PS512CheckBox" Content="PS512" ToolTip="RSASSA-PSS with SHA-512" IsChecked="{Binding AlgorithmPS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2, 2, 2, 1" TabIndex="20" />
                     </UniformGrid>
                 </GroupBox>
             </DockPanel>
             <GroupBox Header="Request">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
-                        <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" Padding="2" Margin="5,0,0,0" DockPanel.Dock="Right" />
+                        <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" Padding="2" Margin="5,0,0,0" DockPanel.Dock="Right" TabIndex="23" />
                         <Label Name="AttestationLabel" Content="Attestation:" Width="80" VerticalAlignment="Center" />
-                        <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="90" />
+                        <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="90" TabIndex="21" />
                         <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
-                        <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" />
+                        <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="22" />
                     </DockPanel>
                     <DockPanel Margin="0,5,0,0">
                         <Label Name="ChallengeLabel" Content="Challenge:" Width="80" />
-                        <TextBox Name="ChallengeTextBox"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100">
+                        <TextBox Name="ChallengeTextBox"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="24">
                             <TextBox.Text>
                                 <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
