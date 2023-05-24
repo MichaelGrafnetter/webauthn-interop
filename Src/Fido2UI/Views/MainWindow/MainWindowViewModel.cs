@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Windows.Input;
@@ -39,6 +40,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             LoadMicrosoftOptionsCommand = new DelegateCommand(OnLoadMicrosoftOptions);
             LoadGoogleOptionsCommand = new DelegateCommand(OnLoadGoogleOptions);
             LoadFacebookOptionsCommand = new DelegateCommand(OnLoadFacebookOptions);
+            OpenHyperLinkCommand = new DelegateCommand<string>(OnOpenHyperLink);
         }
 
         public ICommand RegisterCommand { get; private set; }
@@ -47,6 +49,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public ICommand LoadMicrosoftOptionsCommand { get; private set; }
         public ICommand LoadGoogleOptionsCommand { get; private set; }
         public ICommand LoadFacebookOptionsCommand { get; private set; }
+
+        public ICommand OpenHyperLinkCommand { get; private set; }
 
         private string _attestationResponse;
         public string AttestationResponse
@@ -67,6 +71,14 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             get => _credentialManagerResponse;
             set => SetProperty(ref _credentialManagerResponse, value);
+        }
+
+        private void OnOpenHyperLink(string link)
+        {
+            Process.Start(new ProcessStartInfo() {
+                FileName = link,
+                UseShellExecute = true
+            });
         }
 
         private void OnRegister()

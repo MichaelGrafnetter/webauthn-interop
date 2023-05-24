@@ -89,6 +89,30 @@ namespace DSInternals.Win32.WebAuthn
         public static bool IsLargeBlobSupported => ApiVersion >= WebAuthn.ApiVersion.Version5;
 
         /// <summary>
+        /// Indicates the availability of the API for platform credential management.
+        /// </summary>
+        /// <remarks>
+        /// Support for platform credential management was added in V4 API.
+        /// </remarks>
+        public static bool IsPlatformCredentialManagementSupported => ApiVersion >= WebAuthn.ApiVersion.Version4;
+
+        /// <summary>
+        /// Indicates the availability of the minimum PIN length extension.
+        /// </summary>
+        /// <remarks>
+        /// Support for the minPinLength extension was added in V3 API.
+        /// </remarks>
+        public static bool IsMinPinLengthSupported => ApiVersion >= WebAuthn.ApiVersion.Version3;
+
+        /// <summary>
+        /// Indicates the availability of the psuedo-random function (PRF) extension.
+        /// </summary>
+        /// <remarks>
+        /// Support for the prf extension was added in V6 API.
+        /// </remarks>
+        public static bool IsPsuedoRandomFunctionSupported => ApiVersion >= WebAuthn.ApiVersion.Version6;
+
+        /// <summary>
         /// Indicates whether operation cancellation is supported by the API.
         /// </summary>
         public bool IsCancellationSupported => _cancellationId.HasValue;
@@ -247,7 +271,7 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
-            if (enterpriseAttestation != EnterpriseAttestationType.None && ApiVersion < WebAuthn.ApiVersion.Version4)
+            if (enterpriseAttestation != EnterpriseAttestationType.None && IsEnterpriseAttestationSupported == false)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("The enterprise attestation requirement is not supported on this OS.");
@@ -259,13 +283,13 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
             }
 
-            if (largeBlobSupport == LargeBlobSupport.Required && ApiVersion < WebAuthn.ApiVersion.Version5)
+            if (largeBlobSupport == LargeBlobSupport.Required && IsLargeBlobSupported == false)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
             }
 
-            if (enablePseudoRandomFunction == true && ApiVersion < WebAuthn.ApiVersion.Version6)
+            if (enablePseudoRandomFunction == true && IsPsuedoRandomFunctionSupported == false)
             {
                 // This feature is only supported in API V6.
                 throw new NotSupportedException("The PRF extension is not supported on this OS.");
@@ -443,7 +467,7 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(clientData));
             }
 
-            if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && ApiVersion < WebAuthn.ApiVersion.Version5)
+            if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && IsLargeBlobSupported == false)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
@@ -531,7 +555,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <exception cref="NotSupportedException"></exception>
         public static IList<CredentialDetails> GetPlatformCredentialList(string rpId = null, bool browserInPrivateMode = false)
         {
-            if (ApiVersion < WebAuthn.ApiVersion.Version4)
+            if (IsPlatformCredentialManagementSupported == false)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("Credential API is not supported on this OS.");
@@ -568,7 +592,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <exception cref="ArgumentNullException"></exception>
         public static void DeletePlatformCredential(byte[] credentialId)
         {
-            if (ApiVersion < WebAuthn.ApiVersion.Version4)
+            if (IsPlatformCredentialManagementSupported == false)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("Credential API is not supported on this OS.");

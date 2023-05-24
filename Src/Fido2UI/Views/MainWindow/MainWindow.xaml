@@ -13,14 +13,18 @@
     Title="FIDO2 UI" MinHeight="700" MinWidth="1150">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Load Default _Options" Padding="5">
+            <MenuItem Header="Load Default _Options">
                 <MenuItem Header="_Microsoft FIDO2" Command="{Binding LoadMicrosoftOptionsCommand}" />
                 <MenuItem Header="_Facebook U2F" Command="{Binding LoadFacebookOptionsCommand}" />
                 <MenuItem Header="_Google U2F" Command="{Binding LoadGoogleOptionsCommand}" />
             </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="Windows SDK webauthn.h Header" Command="{Binding OpenHyperLinkCommand}" CommandParameter="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ToolTip}" ToolTip="https://learn.microsoft.com/en-us/windows/win32/api/webauthn" />
+                <MenuItem Header="WebAuthn Managed API Wrapper" Command="{Binding OpenHyperLinkCommand}" CommandParameter="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ToolTip}" ToolTip="https://github.com/MichaelGrafnetter/webauthn-interop#webauthn-interop-assembly" />
+            </MenuItem>
         </Menu>
         <TabControl Padding="2">
-            <TabItem Header="Information">
+            <TabItem Header="Windows API Information">
                 <local:ApiInformationView x:Name="ApiInformationView" />
             </TabItem>
             <TabItem Header="Registration">
