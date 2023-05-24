@@ -9,30 +9,30 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-        <GroupBox Header="Operating System Information" Margin="0, 0, 0, 0">
+        <GroupBox Header="Operating System Information">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="270"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <!-- FIDO2 Support -->
                 <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API availability:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
                 <CheckBox x:Name="FIDOSupportedCheckBox" IsChecked="{Binding IsApiAvailable, Mode=OneWay}" IsEnabled="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
                 <!-- API Version -->
                 <Label Name="ApiVersionLabel" Content="WebAuthn API version:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
-                <TextBox x:Name="ApiVersionTextBox" TextWrapping="Wrap" Text="{Binding ApiVersion, Mode=OneWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
+                <TextBox x:Name="ApiVersionTextBox" TextWrapping="Wrap" Text="{Binding ApiVersion, Mode=OneWay}" d:Text="VersionX" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
                 <!-- Platform Authenticator Support -->
                 <Label Name="PlatformAuthenticatorLabel" Content="Platform authenticator (Windows Hello):" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
                 <CheckBox x:Name="PlatformAuthenticatorCheckBox" IsChecked="{Binding IsPlatformAuthenticatorAvailable, Mode=OneWay}" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
