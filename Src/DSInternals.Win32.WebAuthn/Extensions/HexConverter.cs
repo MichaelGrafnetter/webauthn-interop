@@ -8,6 +8,7 @@ namespace DSInternals.Win32.WebAuthn
         private const string HexDigitsUpper = "0123456789ABCDEF";
         private const string HexDigitsLower = "0123456789abcdef";
 
+        // TODO: In .NET 5+, use System.Convert.ToHexString instead.
         public static string ToHex(this byte[] bytes, bool caps = false)
         {
             if (bytes == null)
