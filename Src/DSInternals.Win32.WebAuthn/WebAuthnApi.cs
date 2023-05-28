@@ -296,8 +296,8 @@ namespace DSInternals.Win32.WebAuthn
             }
 
             // TODO: Add support for WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_BLOB (available since WEBAUTHN_API_VERSION_3)
-            // TODO: Add support for WEBAUTHN_EXTENSIONS_IDENTIFIER_MIN_PIN_LENGTH (available since WEBAUTHN_API_VERSION_3)
             // TODO: Add support for LARGE_BLOB (available since WEBAUTHN_API_VERSION_5)
+            // TODO: Add support for PRF
 
             if (pubKeyCredParams == null || pubKeyCredParams.Length == 0)
             {

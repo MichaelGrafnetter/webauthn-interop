@@ -29,7 +29,7 @@
             </TabItem>
             <TabItem Header="Registration">
                 <DockPanel>
-                    <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" />
+                    <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" DataContext="{Binding AttestationOptionsViewModel}" />
                     <Button x:Name="RegisterButton" DockPanel.Dock="Top" Content="_Register" Command="{Binding RegisterCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}" />
                     <GroupBox Name="AttestationResponseGroupBox" Header="Response">
                         <TextBox Name="AttestationResponseTextBox" IsReadOnly="true" Text="{Binding AttestationResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
@@ -38,7 +38,7 @@
             </TabItem>
             <TabItem Header="Authentication">
                 <DockPanel>
-                    <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" />
+                    <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" DataContext="{Binding AssertionOptionsViewModel}" />
                     <Button x:Name="AuthenticateButton" DockPanel.Dock="Top" Content="_Authenticate" Command="{Binding AuthenticateCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}" />
                     <GroupBox Name="AssertionResponseGroupBox" Header="Response">
                         <TextBox Name="AssertionResponseTextBox" IsReadOnly="True" Text="{Binding AssertionResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
@@ -47,7 +47,7 @@
             </TabItem>
             <TabItem Header="Management">
                 <DockPanel>
-                    <local:CredentialManagementView x:Name="CredentiaManager" DockPanel.Dock="Top" />
+                    <local:CredentialManagementView x:Name="CredentiaManager" DockPanel.Dock="Top" DataContext="{Binding CredentialManagementViewModel}" />
                     <Button x:Name="ListCredentialsButton" DockPanel.Dock="Top" Content="_List platform credentials" Command="{Binding ListPlatformCredentialsCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}" />
                     <GroupBox Name="CredentialManagerResponseGroupBox" Header="Response">
                         <TextBox Name="CredentialManagerResponseTextBox" Text="{Binding CredentialManagerResponse, Mode=OneWay}" IsReadOnly="True" VerticalScrollBarVisibility="Visible" />

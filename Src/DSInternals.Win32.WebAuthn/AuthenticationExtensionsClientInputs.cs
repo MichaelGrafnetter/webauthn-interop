@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -10,23 +11,25 @@ namespace DSInternals.Win32.WebAuthn
     {
         private UserVerification _credProtect;
         private bool _enforceCredProtect;
-        private bool _hmacSecret;
+        private bool _hmacCreateSecret;
+        private bool _minPinLength;
+        private bool _getCredBlob;
 
         /// <summary>
         /// This extension is used by the platform to retrieve a symmetric secret from the authenticator when it needs to encrypt or decrypt data using that symmetric secret. This symmetric secret is scoped to a credential. The authenticator and the platform each only have the part of the complete secret to prevent offline attacks. This extension can be used to maintain different secrets on different machines.
         /// </summary>
         /// <see>https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#sctn-hmac-secret-extension</see>
         [JsonProperty("hmacCreateSecret", NullValueHandling = NullValueHandling.Ignore)]
-        public bool? HmacSecret
+        public bool? HmacCreateSecret
         {
             get
             {
                 // Treat false as null, so that it is not serialized.
-                return _hmacSecret ? true : null;
+                return _hmacCreateSecret ? true : null;
             }
             set
             {
-                _hmacSecret = value == true;
+                _hmacCreateSecret = value == true;
             }
         }
 
@@ -73,5 +76,45 @@ namespace DSInternals.Win32.WebAuthn
         /// <see>https://www.w3.org/TR/webauthn/#sctn-appid-extension</see>
         [JsonProperty("appid", NullValueHandling = NullValueHandling.Ignore)]
         public string AppID { get; set; }
+
+        /// <summary>
+        /// This extension returns the current minimum PIN length value. This value does not decrease unless the authenticator is reset, in which case, all the credentials are reset. This extension is only applicable during credential creation.
+        /// </summary>
+        /// <see>https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#sctn-minpinlength-extension</see>
+        [JsonProperty("minPinLength", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? MinPinLength
+        {
+            get
+            {
+                // Treat false as null, so that it is not serialized.
+                return _minPinLength ? true : null;
+            }
+            set
+            {
+                _minPinLength = value == true;
+            }
+        }
+
+        [JsonProperty("credBlob", NullValueHandling = NullValueHandling.Ignore)]
+        public byte[] CredBlob { get; set; }
+
+
+        [JsonProperty("getCredBlob", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? GetCredBlob
+        {
+            get
+            {
+                // Treat false as null, so that it is not serialized.
+                return _getCredBlob ? true : null;
+            }
+            set
+            {
+                _getCredBlob = value == true;
+            }
+        }
+
+        // TODO: boolean hmacCreateSecret;
+
+        // TODO: HMACGetSecretInput hmacGetSecret;
     }
 }

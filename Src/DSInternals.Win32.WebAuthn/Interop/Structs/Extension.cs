@@ -54,12 +54,19 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
         public static ExtensionIn CreateCredBlobAttestation(byte[] blob)
         {
+            if(blob == null)
+            {
+                throw new ArgumentNullException(nameof(blob));
+            }
+
             // Below type definitions is for WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_BLOB
             // MakeCredential Input Type:   WEBAUTHN_CRED_BLOB_EXTENSION.
             //      - pvExtension must point to a WEBAUTHN_CRED_BLOB_EXTENSION struct
             //      - cbExtension must contain the sizeof(WEBAUTHN_CRED_BLOB_EXTENSION).
-            
-
+            int structSize = blob.Length + sizeof(int);
+            byte[] extensionData = new byte[structSize];
+            BitConverter.GetBytes(blob.Length).CopyTo(extensionData, 0);
+            blob.CopyTo(extensionData, sizeof(int));
             return new ExtensionIn(ApiConstants.ExtensionsIdentifierCredBlob, extensionData);
         }
 
