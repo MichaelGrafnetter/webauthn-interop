@@ -6,6 +6,24 @@
              xmlns:ui="http://schemas.modernwpf.com/2019">
     <Application.Resources>
         <ResourceDictionary>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxStyle}">
+                <Setter Property="Margin" Value="5,2,5,2"/>
+            </Style>
+            <Style TargetType="Label" BasedOn="{StaticResource DefaultLabelStyle}">
+                <Setter Property="Margin" Value="5,2,5,2"/>
+            </Style>
+            <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
+                <Setter Property="Margin" Value="5,2,5,2"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource DefaultComboBoxStyle}">
+                <Setter Property="Margin" Value="5,2,5,2"/>
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                <Setter Property="Margin" Value="5,2,5,2"/>
+            </Style>
+            <Style TargetType="GroupBox" BasedOn="{StaticResource DefaultGroupBoxStyle}">
+                <Setter Property="Margin" Value="5,0,5,0"/>
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
