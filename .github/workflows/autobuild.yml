@@ -56,7 +56,7 @@ jobs:
         key: ${{ runner.os }}-DotNET-GlobalTools-Build-${{ hashFiles('.github/workflows/autobuild.yml') }}
 
     - name: Install Coverage Report Generator
-      if: ${{ steps.cache-dotnet-globaltools.cache-hit != 'true' }}
+      if: ${{ steps.cache-dotnet-globaltools.outputs.cache-hit != 'true' }}
       run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
     - name: Generate Code Coverage Reports

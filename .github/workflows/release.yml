@@ -73,7 +73,7 @@ jobs:
         key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ hashFiles('.github/workflows/release.yml') }}
 
     - name: Install Azure KeyVault Code Signing Tools
-      if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}
+      if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.outputs.cache-hit != 'true' }}
       run: |
         dotnet tool install --global AzureSignTool
         dotnet tool install --global NuGetKeyVaultSignTool
