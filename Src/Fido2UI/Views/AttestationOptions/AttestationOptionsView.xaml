@@ -23,9 +23,9 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Label Name="AttachmentLabel" Content="Attachment:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
-                        <ComboBox Name="AttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TabIndex="6" Width="150" />
+                        <ComboBox Name="AttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TabIndex="6" Width="160" />
                         <Label Name="UserVerificationLabel" Content="User verification:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                        <ComboBox Name="UserVerificationRequirementComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TabIndex="7" Width="150" />
+                        <ComboBox Name="UserVerificationRequirementComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TabIndex="7" Width="160" />
                         <CheckBox Name="RequireResidentKeyCheckBox" IsChecked="{Binding RequireResidentKey, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content=" Require resident key" VerticalAlignment="Center" TabIndex="8" />
                     </Grid>
                 </GroupBox>
@@ -42,8 +42,8 @@
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Credential ID:" Width="100" VerticalAlignment="Center" />
-                                <Button Name="GenerateUserIdButton" Content="Random" Command="{Binding GenerateUserIdCommand}" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="3" />
-                                <TextBox Name="UserCredentialIdTextBox" VerticalAlignment="Center" TabIndex="2">
+                                <Button Name="GenerateUserIdButton" Content="Generate ID" ToolTip="Generate a random credential ID" Command="{Binding GenerateUserIdCommand}" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="3" />
+                                <TextBox Name="UserCredentialIdTextBox" VerticalAlignment="Center" TabIndex="2" ToolTip="Unique credential identifier in Base64url encoding">
                                     <TextBox.Text>
                                         <Binding Path="UserIdString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                             <Binding.ValidationRules>
@@ -91,7 +91,7 @@
                         <ComboBox Name="CredProtectComboBox" ItemsSource="{Binding CredProtectPolicies, Mode=OneTime}" SelectedValue="{Binding CredProtectPolicy, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TabIndex="11" Width="230" />
                         <CheckBox Name="CredProtectEnforceCheckBox" IsChecked="{Binding EnforceCredProtect, Mode=TwoWay}" IsEnabled="{Binding EnforceCredProtectEnabled, Mode=OneWay}" Content="Enforced" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" TabIndex="12" />
                         <Label Name="CredBlobLabel" Content="Credential blob:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2" />
-                        <TextBox Name="CredBlobTextBox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" TabIndex="13">
+                        <TextBox Name="CredBlobTextBox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ToolTip="Credential blob in Base64url encoding" TabIndex="13">
                             <TextBox.Text>
                                 <Binding Path="CredentialBlobString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -106,7 +106,7 @@
             <GroupBox Header="Request">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
-                        <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="18" />
+                        <Button Name="GenerateChallengeButton" Content="Generate challenge" ToolTip="Generate a random challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="18" />
                         <Label Name="AttestationLabel" Content="Attestation:" Width="80" VerticalAlignment="Center" />
                         <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="90" TabIndex="15" />
                         <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
@@ -114,7 +114,7 @@
                     </DockPanel>
                     <DockPanel>
                         <Label Name="ChallengeLabel" Content="Challenge:" Width="80" />
-                        <TextBox Name="ChallengeTextBox"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="17">
+                        <TextBox Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="17">
                             <TextBox.Text>
                                 <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
