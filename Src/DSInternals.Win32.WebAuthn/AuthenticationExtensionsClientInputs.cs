@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -96,11 +95,11 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         [JsonProperty("credBlob", NullValueHandling = NullValueHandling.Ignore)]
-        public byte[] CredBlob { get; set; }
+        public byte[] CredentialBlob { get; set; }
 
 
         [JsonProperty("getCredBlob", NullValueHandling = NullValueHandling.Ignore)]
-        public bool? GetCredBlob
+        public bool? GetCredentialBlob
         {
             get
             {
@@ -112,8 +111,6 @@ namespace DSInternals.Win32.WebAuthn
                 _getCredBlob = value == true;
             }
         }
-
-        // TODO: boolean hmacCreateSecret;
 
         // TODO: HMACGetSecretInput hmacGetSecret;
     }

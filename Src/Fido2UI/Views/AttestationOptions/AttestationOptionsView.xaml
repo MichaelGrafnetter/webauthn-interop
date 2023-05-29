@@ -91,7 +91,15 @@
                         <ComboBox Name="CredProtectComboBox" ItemsSource="{Binding CredProtectPolicies, Mode=OneTime}" SelectedValue="{Binding CredProtectPolicy, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TabIndex="11" Width="230" />
                         <CheckBox Name="CredProtectEnforceCheckBox" IsChecked="{Binding EnforceCredProtect, Mode=TwoWay}" IsEnabled="{Binding EnforceCredProtectEnabled, Mode=OneWay}" Content="Enforced" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" TabIndex="12" />
                         <Label Name="CredBlobLabel" Content="Credential blob:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2" />
-                        <TextBox Name="CredBlobTextBox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Text="{Binding CredBlob, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TabIndex="13" />
+                        <TextBox Name="CredBlobTextBox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" TabIndex="13">
+                            <TextBox.Text>
+                                <Binding Path="CredentialBlobString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </Grid>
                 </GroupBox>
             </DockPanel>

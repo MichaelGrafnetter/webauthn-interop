@@ -245,7 +245,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             get
             {
-                if (CredProtectPolicy == UserVerification.Any && HmacSecret == false && MinPinLength == false)
+                if (CredProtectPolicy == UserVerification.Any && HmacSecret == false && MinPinLength == false && CredentialBlob == null)
                 {
                     // No extensions are set
                     return null;
@@ -257,7 +257,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     EnforceCredProtect = this.EnforceCredProtect ? true : (bool?)null,
                     HmacCreateSecret = this.HmacSecret ? true : (bool?)null,
                     MinPinLength = this.MinPinLength ? true : (bool?)null,
-                    // GetCredBlob = this.CredBlob ? true : (bool?)null
+                    CredentialBlob = this.CredentialBlob?.Length > 0 ? this.CredentialBlob : null
                 };
             }
             set
@@ -268,6 +268,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     CredProtectPolicy = value.CredProtect ?? UserVerification.Any;
                     EnforceCredProtect = value.EnforceCredProtect == true;
                     MinPinLength = value.MinPinLength == true;
+                    CredentialBlob = value.CredentialBlob;
                 }
                 else
                 {
@@ -275,6 +276,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     CredProtectPolicy = UserVerification.Any;
                     HmacSecret = false;
                     MinPinLength = false;
+                    CredentialBlob = null;
                 }
             }
         }
@@ -321,9 +323,39 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set => SetProperty(ref _hmacSecret, value);
         }
 
+        private byte[] _credentialBlob;
+        public byte[] CredentialBlob
+        {
+            get => _credentialBlob;
+            set
+            {
+                bool changed = SetProperty(ref _credentialBlob, value);
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(CredentialBlobString));
+                }
+            }
+        }
+
+        public string CredentialBlobString
+        {
+            get => _credentialBlob != null ? Base64UrlConverter.ToBase64UrlString(_credentialBlob) : string.Empty;
+            set
+            {
+                byte[] binaryValue = value != null ? Base64UrlConverter.FromBase64UrlString(value) : null;
+                bool changed = SetProperty(ref _credentialBlob, binaryValue, nameof(CredentialBlob));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(CredentialBlobString));
+                }
+            }
+        }
+
         private static byte[] GetRandomBytes(int count)
         {
-            using (var rng = new RNGCryptoServiceProvider())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 byte[] randomBytes = new byte[count];
                 rng.GetBytes(randomBytes);

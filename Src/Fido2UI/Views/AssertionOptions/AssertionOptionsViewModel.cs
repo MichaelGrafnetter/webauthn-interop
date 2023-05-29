@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.Interop;
@@ -18,14 +19,30 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
             // Initialize commands
             GenerateChallengeCommand = new DelegateCommand(OnGenerateChallenge);
+            GenerateHmacSecretSalt1Command = new DelegateCommand(OnGenerateHmacSecretSalt1);
+            GenerateHmacSecretSalt2Command = new DelegateCommand(OnGenerateHmacSecretSalt2);
         }
 
         public ICommand GenerateChallengeCommand { get; private set; }
+        public ICommand GenerateHmacSecretSalt1Command { get; private set; }
+        public ICommand GenerateHmacSecretSalt2Command { get; private set; }
 
         private void OnGenerateChallenge()
         {
             Challenge = GetRandomBytes(RandomChallengeLength);
         }
+
+        private void OnGenerateHmacSecretSalt1()
+        {
+            HmacSecretSalt1 = GetRandomBytes(ApiConstants.CtapOneHmacSecretLength);
+        }
+
+        private void OnGenerateHmacSecretSalt2()
+        {
+            HmacSecretSalt2 = GetRandomBytes(ApiConstants.CtapOneHmacSecretLength);
+        }
+
+        public int HmacSecretSaltStringLength => 2 * ApiConstants.CtapOneHmacSecretLength; // HEX length
 
         private string _relyingPartyId;
         public string RelyingPartyId
@@ -103,17 +120,124 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         {
             get
             {
-                return !string.IsNullOrEmpty(AppId) ? new AuthenticationExtensionsClientInputs() { AppID = this.AppId } : null;
+                if(string.IsNullOrEmpty(AppId) && GetCredentialBlob == false && HmacSecretSalt1 == null && HmacSecretSalt2 == null)
+                {
+                    // No extensions are set
+                    return null;
+                }
+
+                return new AuthenticationExtensionsClientInputs()
+                {
+                    AppID = this.AppId,
+                    GetCredentialBlob = this.GetCredentialBlob,
+                    // TODO: HmacSecretSalt1
+                    // TODO: HmacSecretSalt2
+                };
             }
             set
             {
-                AppId = value?.AppID;
+                if (value != null)
+                {
+                    AppId = value.AppID;
+                    GetCredentialBlob = value.GetCredentialBlob == true;
+                    // TODO: HmacSecretSalt1
+                    // TODO: HmacSecretSalt2
+                }
+                else
+                {
+                    // Load default values
+                    AppId = null;
+                    GetCredentialBlob = false;
+                    HmacSecretSalt1 = null;
+                    HmacSecretSalt2 = null;
+                }
+                
+            }
+        }
+
+        private bool _getCredentialBlob;
+        public bool GetCredentialBlob
+        {
+            get => _getCredentialBlob;
+            set => SetProperty(ref _getCredentialBlob, value);
+        }
+
+        private byte[] _hmacSecretSalt1;
+        public byte[] HmacSecretSalt1
+        {
+            get => _hmacSecretSalt1;
+            set
+            {
+                bool changed = SetProperty(ref _hmacSecretSalt1, value);
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(HmacSecretSalt1String));
+                }
+            }
+        }
+
+        public string HmacSecretSalt1String
+        {
+            get => _hmacSecretSalt1?.ToHex(caps: true) ?? string.Empty;
+            set
+            {
+                byte[] binaryValue = value?.HexToBinary();
+
+                if (binaryValue != null && binaryValue.Length != HmacSecretSaltStringLength)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(HmacSecretSalt1String));
+                }
+
+                bool changed = SetProperty(ref _hmacSecretSalt1, binaryValue, nameof(HmacSecretSalt1));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(HmacSecretSalt1String));
+                }
+            }
+        }
+
+        private byte[] _hmacSecretSalt2;
+        public byte[] HmacSecretSalt2
+        {
+            get => _hmacSecretSalt2;
+            set
+            {
+                bool changed = SetProperty(ref _hmacSecretSalt2, value);
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(HmacSecretSalt2String));
+                }
+            }
+        }
+
+        public string HmacSecretSalt2String
+        {
+            get => _hmacSecretSalt2?.ToHex(caps: true) ?? string.Empty;
+            set
+            {
+                
+                byte[] binaryValue = value?.HexToBinary();
+
+                if( binaryValue != null && binaryValue.Length != HmacSecretSaltStringLength )
+                {
+                    throw new ArgumentOutOfRangeException(nameof(HmacSecretSalt2String));
+                }
+
+                bool changed = SetProperty(ref _hmacSecretSalt2, binaryValue, nameof(HmacSecretSalt2));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(HmacSecretSalt2String));
+                }
             }
         }
 
         private static byte[] GetRandomBytes(int count)
         {
-            using (var rng = new RNGCryptoServiceProvider())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 byte[] randomBytes = new byte[count];
                 rng.GetBytes(randomBytes);
