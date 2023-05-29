@@ -56,9 +56,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
-        key: ${{ runner.os }}-DotNET-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-DotNET-NuGet-
+        # Heuristics: The current list of required packages is defined in the project files.
+        key: ${{ runner.os }}-DotNET-NuGet-Release-${{ hashFiles('**/**/*.csproj') }}
 
     - name: Build
       working-directory: Src
@@ -70,7 +69,8 @@ jobs:
       if: ${{ github.event.inputs.certificate_sign }}
       with:
         path: ~/.dotnet/tools
-        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ github.workflow_sha }}
+        # Heuristics: The current list of required global tools is defined in this workflow file.
+        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ hashFiles('.github/workflows/release.yml') }}
 
     - name: Install Azure KeyVault Code Signing Tools
       if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}

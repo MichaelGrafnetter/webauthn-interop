@@ -53,11 +53,17 @@ namespace DSInternals.Win32.WebAuthn.Interop
                         extensions.EnforceCredProtect == true));
                 }
 
-                if (extensions.HmacSecret.HasValue)
+                if (extensions.HmacCreateSecret.HasValue)
                 {
                     nativeExtensions.Add(ExtensionIn.CreateHmacSecret());
                 }
 
+                if(extensions.MinPinLength.HasValue)
+                {
+                    nativeExtensions.Add(ExtensionIn.CreateMinPinLength());
+                }
+
+                // if(extensions.CredBlob)
                 // TODO: Add support for additional extensions
             }
 

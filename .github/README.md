@@ -25,7 +25,7 @@ The project also contains a simple Windows GUI tool called `FIDO2 UI`, which is 
 
 ![](../Documentation/Screenshots/fido2_ui.png)
 
-he only purpose of this tool is to demonstrate the usage of the WebAuthn API.
+The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 
 ## Downloads
 
@@ -156,7 +156,7 @@ Windows 10 creates very detailed logs of WebAuthn API calls and CTAP commands. T
 ![WebAuthn Event Viewer Screenshot](../Documentation/Screenshots/webauthn_event_viewer.png)
 
 ## Microsoft's Documentation
-- [WebAuthn APIs for password-less authentication on Windows 10](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthnapis)
+- [WebAuthn APIs for password-less authentication on Windows 10](https://learn.microsoft.com/en-us/windows/win32/api/webauthn/)
 - [C header file](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
 
 ## Acknowledgements

@@ -17,7 +17,6 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public static readonly DependencyProperty TimeoutProperty =
             DependencyProperty.Register(nameof(Timeout), typeof(int), typeof(TimeoutEditor), new PropertyMetadata(0));
 
-
         public TimeoutEditor()
         {
             InitializeComponent();

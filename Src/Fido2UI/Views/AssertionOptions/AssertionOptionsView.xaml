@@ -8,31 +8,60 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="800">
-    <GroupBox Header="Assertion Options" Margin="0, 0, 0, 0">
+             d:DesignHeight="400" d:DesignWidth="1024">
+    <GroupBox Header="Assertion Options">
         <DockPanel>
             <UniformGrid Rows="1" DockPanel.Dock="Top">
                 <DockPanel>
-                    <Label Name="RpIdLabel" Content="Relying party:" Width="110" VerticalAlignment="Center" />
-                    <TextBox x:Name="RpIdTextBox" Text="{Binding RelyingPartyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                    <Label Name="RpIdLabel" Content="Relying party:" Width="130" VerticalAlignment="Center" />
+                    <TextBox x:Name="RpIdTextBox" Text="{Binding RelyingPartyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="0" />
                 </DockPanel>
                 <DockPanel>
                     <Label x:Name="AppIdLabel" Content="U2F AppID:" VerticalAlignment="Center" />
-                    <TextBox x:Name="AppIdTextBox" Text="{Binding AppId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                    <TextBox x:Name="AppIdTextBox" Text="{Binding AppId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="1" />
                 </DockPanel>
             </UniformGrid>
             <DockPanel DockPanel.Dock="Top">
-                <Label Name="UserVerificationLabel" Content="User verification:" Width="110" VerticalAlignment="Center" />
-                <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="120" VerticalAlignment="Center" />
+                <Label Name="UserVerificationLabel" Content="User verification:" Width="130" VerticalAlignment="Center" />
+                <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="130" VerticalAlignment="Center" TabIndex="2" />
                 <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" VerticalAlignment="Center" />
-                <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="155" VerticalAlignment="Center" />
-                <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" Padding="2" Margin="5,0,0,0" DockPanel.Dock="Right" />
+                <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="160" VerticalAlignment="Center" TabIndex="3" />
+                <CheckBox Name="GetCredBlobCheckBox" Content="Get credential blob" IsChecked="{Binding GetCredentialBlob, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="4" />
+                <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="6" />
                 <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
-                <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" />
+                <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="5" />
             </DockPanel>
-            <DockPanel Margin="0,5,0,0">
-                <Label Name="ChallengeLabel" Content="Challenge:" Width="110" />
-                <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100">
+            <UniformGrid Rows="1" DockPanel.Dock="Bottom">
+                <DockPanel>
+                    <Label Name="HmacSecretSalt1Label" Content="HMAC secret salt 1:" VerticalAlignment="Center" Width="130" DockPanel.Dock="Left" />
+                    <Button Name="GenerateHmacSecretSalt1Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt1Command}" ToolTip="Generate random HMAC secret salt 1" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="9" />
+                    <TextBox x:Name="HmacSecretSalt1TextBox" VerticalAlignment="Center" TabIndex="8" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}">
+                        <TextBox.Text>
+                            <Binding Path="HmacSecretSalt1String" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <ExceptionValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </DockPanel>
+                <DockPanel>
+                    <Label Name="HmacSecretSalt2Label" Content="HMAC secret salt 2:" VerticalAlignment="Center" DockPanel.Dock="Left" />
+                    <Button Name="GenerateHmacSecretSalt2Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt2Command}" ToolTip="Generate random HMAC secret salt 2" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="11" />
+                    <TextBox x:Name="HmacSecretSalt2TextBox" VerticalAlignment="Center" TabIndex="10" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}">
+                        <TextBox.Text>
+                            <Binding Path="HmacSecretSalt2String" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <ExceptionValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </DockPanel>
+            </UniformGrid>
+            <DockPanel>
+                <Label Name="ChallengeLabel" Content="Challenge:" Width="130" />
+                <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="7">
                     <TextBox.Text>
                         <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>

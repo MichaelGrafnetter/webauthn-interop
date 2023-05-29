@@ -3,7 +3,10 @@ using System.Text;
 
 namespace DSInternals.Win32.WebAuthn
 {
-    internal static class HexConverter
+#if NET5_0_OR_GREATER
+    [Obsolete("In .NET 5+, use System.Convert.ToHexString instead.")]
+#endif
+    public static class HexConverter
     {
         private const string HexDigitsUpper = "0123456789ABCDEF";
         private const string HexDigitsLower = "0123456789abcdef";

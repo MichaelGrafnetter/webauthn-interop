@@ -9,30 +9,54 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-        <GroupBox Header="Operating System Information" Margin="0, 0, 0, 0">
+        <GroupBox Header="Operating System Information">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="270"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <!-- FIDO2 Support -->
-                <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API support:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+                <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API availability:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
                 <CheckBox x:Name="FIDOSupportedCheckBox" IsChecked="{Binding IsApiAvailable, Mode=OneWay}" IsEnabled="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
                 <!-- API Version -->
                 <Label Name="ApiVersionLabel" Content="WebAuthn API version:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
-                <TextBox x:Name="ApiVersionTextBox" TextWrapping="Wrap" Text="{Binding ApiVersion, Mode=OneWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
+                <TextBox x:Name="ApiVersionTextBox" TextWrapping="Wrap" Text="{Binding ApiVersion, Mode=OneWay}" d:Text="VersionX" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
                 <!-- Platform Authenticator Support -->
-                <Label Name="PlatformAuthenticatorLabel" Content="Platform authenticator:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
+                <Label Name="PlatformAuthenticatorLabel" Content="Platform authenticator (Windows Hello):" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
                 <CheckBox x:Name="PlatformAuthenticatorCheckBox" IsChecked="{Binding IsPlatformAuthenticatorAvailable, Mode=OneWay}" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
                 <!-- CredProtect Support -->
                 <Label Name="CredProtectSupportedLabel" Content="Credential protection support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3"/>
                 <CheckBox x:Name="CredProtectSupportedCheckBox" IsChecked="{Binding IsCredProtectExtensionSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="3"/>
+                <!-- Credential Blob Support -->
+                <Label Name="CredentialBlobSupportedLabel" Content="Credential blob support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
+                <CheckBox x:Name="CredentialBlobSupportedCheckBox" IsChecked="{Binding IsCredBlobSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="4"/>
+                <!-- Large Blob Support -->
+                <Label Name="LargeBlobSupportedLabel" Content="Large blob support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5"/>
+                <CheckBox x:Name="LargeBlobSupportedCheckBox" IsChecked="{Binding IsLargeBlobSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="5"/>
+                <!-- Enterprise Attestation Support -->
+                <Label Name="EnterpriseAttestationSupportedLabel" Content="Enterprise attestation support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="6"/>
+                <CheckBox x:Name="EnterpriseAttestationSupportedCheckBox" IsChecked="{Binding IsEnterpriseAttestationSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="6"/>
+                <!-- Platform Credential Management Support -->
+                <Label Name="PlatformCredentialManagementSupportedLabel" Content="Platform credential management support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="7"/>
+                <CheckBox x:Name="PlatformCredentialManagementSupportedCheckBox" IsChecked="{Binding IsPlatformCredentialManagementSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="7"/>
+                <!-- Minimum PIN Length Support -->
+                <Label Name="MinPinLengthSupportedLabel" Content="Minimum PIN length support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="8"/>
+                <CheckBox x:Name="MinPinLengthSupportedCheckBox" IsChecked="{Binding IsMinPinLengthSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="8"/>
+                <!-- PRF Support -->
+                <Label Name="PsuedoRandomFunctionSupportedLabel" Content="Pseudo-random function (PRF) support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="9"/>
+                <CheckBox x:Name="PsuedoRandomFunctionSupportedCheckBox" IsChecked="{Binding IsPsuedoRandomFunctionSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="9"/>
             </Grid>
         </GroupBox>
     </StackPanel>

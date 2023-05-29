@@ -26,8 +26,8 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// This attribute contains the user handle returned from the authenticator, or null if the authenticator did not return a user handle.
         /// </summary>
-        [JsonProperty("userHandle")]
-        [JsonConverter(typeof(Base64UrlConverter), Required.AllowNull)]
+        [JsonProperty("userHandle", Required = Required.AllowNull)]
+        [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] UserHandle { get; set; }
     }
 }

@@ -8,8 +8,6 @@ namespace DSInternals.Win32.WebAuthn
     /// </summary>
     public class Base64UrlConverter : JsonConverter<byte[]>
     {
-        public Base64UrlConverter() { }
-
         public override byte[] ReadJson(JsonReader reader, Type objectType, byte[] existingValue, bool hasExistingValue,
             JsonSerializer serializer)
         {

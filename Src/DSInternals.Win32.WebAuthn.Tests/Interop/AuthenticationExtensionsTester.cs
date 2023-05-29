@@ -14,7 +14,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
 
             // Parse
             var request = JsonConvert.DeserializeObject<AuthenticationExtensionsClientInputs>(jsonRequest);
-            Assert.AreEqual(true, request.HmacSecret);
+            Assert.AreEqual(true, request.HmacCreateSecret);
             Assert.AreEqual(UserVerification.Optional, request.CredProtect);
             Assert.IsNull(request.EnforceCredProtect);
 
@@ -30,7 +30,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
 
             // Parse
             var request = JsonConvert.DeserializeObject<AuthenticationExtensionsClientInputs>(jsonRequest);
-            Assert.IsNull(request.HmacSecret);
+            Assert.IsNull(request.HmacCreateSecret);
             Assert.IsNull(request.CredProtect);
             Assert.IsNull(request.EnforceCredProtect);
 
@@ -76,7 +76,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             var extensions = new AuthenticationExtensionsClientInputs()
             {
-                HmacSecret = false,
+                HmacCreateSecret = false,
                 CredProtect = UserVerification.Any
             };
 
@@ -102,7 +102,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             var extensions = new AuthenticationExtensionsClientInputs()
             {
-                HmacSecret = true,
+                HmacCreateSecret = true,
                 CredProtect = UserVerification.Optional
             };
 

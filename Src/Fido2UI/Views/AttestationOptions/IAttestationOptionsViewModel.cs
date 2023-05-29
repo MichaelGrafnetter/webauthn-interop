@@ -19,7 +19,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
         UserVerificationRequirement UserVerificationRequirement { get; set; }
 
-        Algorithm[] PublicKeyCredentialParameters { get; set; }
+        List<Algorithm> PublicKeyCredentialParameters { get; set; }
 
         AttestationConveyancePreference AttestationConveyancePreference { get; set; }
 

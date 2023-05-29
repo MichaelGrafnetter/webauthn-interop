@@ -44,9 +44,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public UserVerificationRequirement UserVerificationRequirement { get; set; }
 
         /// <summary>
-        /// Reserved for future Use.
+        /// Flags
         /// </summary>
-        private uint Flags;
+        private AssertionOptionsFlags _flags;
 
         /// <summary>
         /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower-cased.
@@ -252,6 +252,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
             {
                 _hmacSecretSaltValues?.Dispose();
                 _hmacSecretSaltValues = value;
+
+                // Set or unset the corresponding flag
+                _flags = value != null ?
+                    _flags | AssertionOptionsFlags.AuthenticatorHmacSecretValues :
+                    _flags & ~AssertionOptionsFlags.AuthenticatorHmacSecretValues;
             }
         }
 

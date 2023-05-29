@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Net;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.COSE;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using Prism.Services.Dialogs;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
@@ -13,17 +15,18 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
     public class MainWindowViewModel : BindableBase
     {
         private WebAuthnApi _api { get; set; }
-        private IAttestationOptionsViewModel AttestationOptionsViewModel { get; set; }
-        private IAssertionOptionsViewModel AssertionOptionsViewModel { get; set; }
-        private ICredentialManagementViewModel CredentialManagementViewModel { get; set; }
+
         private IDialogService DialogService { get; set; }
+
+        private IRegionManager RegionManager { get; set; }
 
         public MainWindowViewModel(
             WebAuthnApi api,
             IAttestationOptionsViewModel attestationOptionsViewModel,
             IAssertionOptionsViewModel assertionOptionsViewModel,
             ICredentialManagementViewModel credentialManagementViewModel,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IRegionManager regionManager)
         {
             // Save dependencies
             _api = api;
@@ -31,6 +34,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AssertionOptionsViewModel = assertionOptionsViewModel;
             CredentialManagementViewModel = credentialManagementViewModel;
             DialogService = dialogService;
+            RegionManager = regionManager;
 
             // Initialize commands
             RegisterCommand = new DelegateCommand(OnRegister);
@@ -39,7 +43,12 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             LoadMicrosoftOptionsCommand = new DelegateCommand(OnLoadMicrosoftOptions);
             LoadGoogleOptionsCommand = new DelegateCommand(OnLoadGoogleOptions);
             LoadFacebookOptionsCommand = new DelegateCommand(OnLoadFacebookOptions);
+            OpenHyperLinkCommand = new DelegateCommand<string>(OnOpenHyperLink);
         }
+
+        public IAttestationOptionsViewModel AttestationOptionsViewModel { get; private set; }
+        public IAssertionOptionsViewModel AssertionOptionsViewModel { get; private set; }
+        public ICredentialManagementViewModel CredentialManagementViewModel { get; private set; }
 
         public ICommand RegisterCommand { get; private set; }
         public ICommand AuthenticateCommand { get; private set; }
@@ -47,6 +56,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public ICommand LoadMicrosoftOptionsCommand { get; private set; }
         public ICommand LoadGoogleOptionsCommand { get; private set; }
         public ICommand LoadFacebookOptionsCommand { get; private set; }
+        public ICommand OpenHyperLinkCommand { get; private set; }
 
         private string _attestationResponse;
         public string AttestationResponse
@@ -69,6 +79,14 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set => SetProperty(ref _credentialManagerResponse, value);
         }
 
+        private void OnOpenHyperLink(string link)
+        {
+            Process.Start(new ProcessStartInfo() {
+                FileName = link,
+                UseShellExecute = true
+            });
+        }
+
         private void OnRegister()
         {
             try
@@ -83,7 +101,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AttestationOptionsViewModel.UserVerificationRequirement,
                     AttestationOptionsViewModel.AuthenticatorAttachment,
                     AttestationOptionsViewModel.RequireResidentKey,
-                    AttestationOptionsViewModel.PublicKeyCredentialParameters,
+                    AttestationOptionsViewModel.PublicKeyCredentialParameters?.ToArray(),
                     AttestationOptionsViewModel.AttestationConveyancePreference,
                     AttestationOptionsViewModel.Timeout,
                     AttestationOptionsViewModel.ClientExtensions
@@ -169,7 +187,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientInputs()
             {
                 CredProtect = UserVerification.Optional,
-                HmacSecret = true
+                HmacCreateSecret = true
             };
 
             AttestationOptionsViewModel.Challenge = Encoding.ASCII.GetBytes("CbWTU93Ppbgok1glyka*K9sZSWkqpK3qS1ldeLJxsI4k3jMLIi3dl8VDx10siTGd8U5SNj8yyMIbqXQH!apXGnrhWmYlg2GNdEGddIkO03cql!kKVgKi*MqEIl9aPqmJdYuRMjrEYlIyzi4*wP0YSyA$");
@@ -177,7 +195,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Required;
             AttestationOptionsViewModel.RequireResidentKey = true;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.Direct;
-            AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256, Algorithm.RS256 };
+            AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256, Algorithm.RS256 };
             AttestationOptionsViewModel.Timeout = 120000;
 
             // Credential Management
@@ -218,7 +236,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Preferred;
             AttestationOptionsViewModel.RequireResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.None;
-            AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256 };
+            AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 60000;
 
@@ -258,7 +276,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Discouraged;
             AttestationOptionsViewModel.RequireResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.None;
-            AttestationOptionsViewModel.PublicKeyCredentialParameters = new[] { Algorithm.ES256 };
+            AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 30000;
 

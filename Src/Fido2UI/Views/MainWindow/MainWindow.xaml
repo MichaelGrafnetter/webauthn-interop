@@ -13,38 +13,42 @@
     Title="FIDO2 UI" MinHeight="700" MinWidth="1150">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Register" Command="{Binding RegisterCommand}" Padding="5" />
-            <MenuItem Header="_Authenticate" Command="{Binding AuthenticateCommand}" Padding="5" />
-            <MenuItem Header="List Platform _Credentials" Command="{Binding ListPlatformCredentialsCommand}" Padding="5" />
-            <MenuItem Header="_Load Options" Padding="5">
+            <MenuItem Header="Load Default _Options">
                 <MenuItem Header="_Microsoft FIDO2" Command="{Binding LoadMicrosoftOptionsCommand}" />
                 <MenuItem Header="_Facebook U2F" Command="{Binding LoadFacebookOptionsCommand}" />
                 <MenuItem Header="_Google U2F" Command="{Binding LoadGoogleOptionsCommand}" />
             </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="Windows SDK webauthn.h Header" Command="{Binding OpenHyperLinkCommand}" CommandParameter="https://learn.microsoft.com/en-us/windows/win32/api/webauthn" ToolTip="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=CommandParameter}" />
+                <MenuItem Header="WebAuthn Managed API Wrapper" Command="{Binding OpenHyperLinkCommand}" CommandParameter="https://github.com/MichaelGrafnetter/webauthn-interop#webauthn-interop-assembly" ToolTip="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=CommandParameter}" />
+            </MenuItem>
         </Menu>
-        <TabControl Padding="2">
-            <TabItem Header="Information">
+        <TabControl>
+            <TabItem Header="Windows API Information">
                 <local:ApiInformationView x:Name="ApiInformationView" />
             </TabItem>
             <TabItem Header="Registration">
                 <DockPanel>
-                    <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" />
+                    <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" DataContext="{Binding AttestationOptionsViewModel}" />
+                    <Button x:Name="RegisterButton" DockPanel.Dock="Top" Content="_Register" Command="{Binding RegisterCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}" />
                     <GroupBox Name="AttestationResponseGroupBox" Header="Response">
-                        <TextBox Name="AttestationResponseTextBox" IsReadOnly="true" Text="{Binding AttestationResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" />
+                        <TextBox Name="AttestationResponseTextBox" IsReadOnly="true" Text="{Binding AttestationResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>
                 </DockPanel>
             </TabItem>
             <TabItem Header="Authentication">
                 <DockPanel>
-                    <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" />
+                    <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" DataContext="{Binding AssertionOptionsViewModel}" />
+                    <Button x:Name="AuthenticateButton" DockPanel.Dock="Top" Content="_Authenticate" Command="{Binding AuthenticateCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}" />
                     <GroupBox Name="AssertionResponseGroupBox" Header="Response">
-                        <TextBox Name="AssertionResponseTextBox" IsReadOnly="True" Text="{Binding AssertionResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" />
+                        <TextBox Name="AssertionResponseTextBox" IsReadOnly="True" Text="{Binding AssertionResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>
                 </DockPanel>
             </TabItem>
             <TabItem Header="Management">
                 <DockPanel>
-                    <local:CredentialManagementView x:Name="CredentiaManager" DockPanel.Dock="Top" />
+                    <local:CredentialManagementView x:Name="CredentiaManager" DockPanel.Dock="Top" DataContext="{Binding CredentialManagementViewModel}" />
+                    <Button x:Name="ListCredentialsButton" DockPanel.Dock="Top" Content="_List platform credentials" Command="{Binding ListPlatformCredentialsCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}" />
                     <GroupBox Name="CredentialManagerResponseGroupBox" Header="Response">
                         <TextBox Name="CredentialManagerResponseTextBox" Text="{Binding CredentialManagerResponse, Mode=OneWay}" IsReadOnly="True" VerticalScrollBarVisibility="Visible" />
                     </GroupBox>
