@@ -53,7 +53,7 @@ jobs:
       with:
         path: ~/.dotnet/tools
         # Heuristics: The current list of required global tools is defined in this workflow file.
-        key: ${{ runner.os }}-DotNET-GlobalTools-Build-${{ github.workflow_sha }}
+        key: ${{ runner.os }}-DotNET-GlobalTools-Build-${{ hashFiles('.github/workflows/autobuild.yml') }}
 
     - name: Install Coverage Report Generator
       if: ${{ steps.cache-dotnet-globaltools.cache-hit != 'true' }}

@@ -70,7 +70,7 @@ jobs:
       with:
         path: ~/.dotnet/tools
         # Heuristics: The current list of required global tools is defined in this workflow file.
-        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ github.workflow_sha }}
+        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ hashFiles('.github/workflows/release.yml') }}
 
     - name: Install Azure KeyVault Code Signing Tools
       if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.cache-hit != 'true' }}
