@@ -9,7 +9,7 @@
              KeyboardNavigation.TabNavigation="Local">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="75"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TextBox Name="TimeoutTextBox" IsEnabled="False" Text="{Binding ElementName=TimeoutSlider, Mode=OneWay, StringFormat='{}{0:###0,} s', Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Column="0" IsTabStop="False" />

@@ -18,7 +18,7 @@
                 </DockPanel>
                 <DockPanel>
                     <Label x:Name="AppIdLabel" Content="U2F AppID:" VerticalAlignment="Center" />
-                    <TextBox x:Name="AppIdTextBox" Text="{Binding AppId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="1" />
+                    <TextBox x:Name="AppIdTextBox" Text="{Binding AppId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ToolTip="Legacy U2F application identifier" TabIndex="1" />
                 </DockPanel>
             </UniformGrid>
             <DockPanel DockPanel.Dock="Top">
@@ -35,7 +35,7 @@
                 <DockPanel>
                     <Label Name="HmacSecretSalt1Label" Content="HMAC secret salt 1:" VerticalAlignment="Center" Width="130" DockPanel.Dock="Left" />
                     <Button Name="GenerateHmacSecretSalt1Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt1Command}" ToolTip="Generate random HMAC secret salt 1" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="9" />
-                    <TextBox x:Name="HmacSecretSalt1TextBox" VerticalAlignment="Center" TabIndex="8" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}">
+                    <TextBox x:Name="HmacSecretSalt1TextBox" VerticalAlignment="Center" TabIndex="8" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}" ToolTip="System-specific 32-byte salt in Base16 encoding">
                         <TextBox.Text>
                             <Binding Path="HmacSecretSalt1String" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
@@ -48,7 +48,7 @@
                 <DockPanel>
                     <Label Name="HmacSecretSalt2Label" Content="HMAC secret salt 2:" VerticalAlignment="Center" DockPanel.Dock="Left" />
                     <Button Name="GenerateHmacSecretSalt2Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt2Command}" ToolTip="Generate random HMAC secret salt 2" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="11" />
-                    <TextBox x:Name="HmacSecretSalt2TextBox" VerticalAlignment="Center" TabIndex="10" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}">
+                    <TextBox x:Name="HmacSecretSalt2TextBox" VerticalAlignment="Center" TabIndex="10" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}" ToolTip="Optional system-specific 32-byte salt in Base16 encoding">
                         <TextBox.Text>
                             <Binding Path="HmacSecretSalt2String" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
@@ -61,7 +61,7 @@
             </UniformGrid>
             <DockPanel>
                 <Label Name="ChallengeLabel" Content="Challenge:" Width="130" />
-                <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="7">
+                <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="7">
                     <TextBox.Text>
                         <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
