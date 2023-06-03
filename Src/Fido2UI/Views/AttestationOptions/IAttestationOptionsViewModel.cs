@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.FIDO;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {
@@ -13,6 +14,10 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
         bool RequireResidentKey { get; set; }
 
+        bool PreferResidentKey { get; set; }
+
+        EnterpriseAttestationType EnterpriseAttestation { get; set; }
+
         AuthenticationExtensionsClientInputs ClientExtensions { get; set; }
 
         AuthenticatorAttachment AuthenticatorAttachment { get; set; }
@@ -24,5 +29,11 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         AttestationConveyancePreference AttestationConveyancePreference { get; set; }
 
         int Timeout { get; set; }
+
+        bool EnablePseudoRandomFunction { get; set; }
+
+        LargeBlobSupport LargeBlobSupport { get; set; }
+
+        bool IsBrowserPrivateMode { get; set; }
     }
 }
