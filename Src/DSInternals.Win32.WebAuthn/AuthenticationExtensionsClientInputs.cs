@@ -112,6 +112,7 @@ namespace DSInternals.Win32.WebAuthn
             }
         }
 
-        // TODO: HMACGetSecretInput hmacGetSecret;
+        [JsonProperty("hmacGetSecret", NullValueHandling = NullValueHandling.Ignore)]
+        public HMACGetSecretInput HmacGetSecret { get; set; }
     }
 }

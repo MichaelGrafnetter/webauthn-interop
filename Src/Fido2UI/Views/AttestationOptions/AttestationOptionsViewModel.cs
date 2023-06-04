@@ -376,7 +376,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             get => _credentialBlob != null ? Base64UrlConverter.ToBase64UrlString(_credentialBlob) : string.Empty;
             set
             {
-                byte[] binaryValue = value != null ? Base64UrlConverter.FromBase64UrlString(value) : null;
+                byte[] binaryValue = string.IsNullOrEmpty(value) ? null : Base64UrlConverter.FromBase64UrlString(value);
                 bool changed = SetProperty(ref _credentialBlob, binaryValue, nameof(CredentialBlob));
 
                 if (changed)

@@ -166,13 +166,22 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     return null;
                 }
 
-                return new AuthenticationExtensionsClientInputs()
+                var result = new AuthenticationExtensionsClientInputs()
                 {
                     AppID = this.AppId,
-                    GetCredentialBlob = this.GetCredentialBlob,
-                    // TODO: HmacSecretSalt1
-                    // TODO: HmacSecretSalt2
+                    GetCredentialBlob = this.GetCredentialBlob
                 };
+
+                if(this.HmacSecretSalt1 != null || this.HmacSecretSalt2 != null)
+                {
+                    result.HmacGetSecret = new HMACGetSecretInput()
+                    {
+                        Salt1 = this.HmacSecretSalt1,
+                        Salt2 = this.HmacSecretSalt2
+                    };
+                }
+
+                return result;
             }
             set
             {
@@ -180,8 +189,12 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                 {
                     AppId = value.AppID;
                     GetCredentialBlob = value.GetCredentialBlob == true;
-                    // TODO: HmacSecretSalt1
-                    // TODO: HmacSecretSalt2
+
+                    if(value.HmacGetSecret != null)
+                    {
+                        HmacSecretSalt1 = value.HmacGetSecret.Salt1;
+                        HmacSecretSalt2 = value.HmacGetSecret.Salt2;
+                    }
                 }
                 else
                 {
