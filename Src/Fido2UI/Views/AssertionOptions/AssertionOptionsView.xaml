@@ -8,7 +8,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="1024">
+             d:DesignHeight="400" d:DesignWidth="1250">
     <GroupBox Header="Assertion Options">
         <DockPanel>
             <UniformGrid Rows="1" DockPanel.Dock="Top">
@@ -27,18 +27,18 @@
                 <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" VerticalAlignment="Center" />
                 <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="160" VerticalAlignment="Center" TabIndex="3" />
                 <Label Name="LargeBlobOperationLabel" Content="Large blob operation:" VerticalAlignment="Center" />
-                <ComboBox x:Name="LargelobperationComboBox" ItemsSource="{Binding LargeBlobOperations, Mode=OneTime}" SelectedValue="{Binding LargeBlobOperation, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="90" VerticalAlignment="Center" TabIndex="2" />
-                <CheckBox Name="GetCredBlobCheckBox" Content="Get credential blob" IsChecked="{Binding GetCredentialBlob, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="4" />
-                <CheckBox Name="IsBrowserPrivateModeCheckBox" IsChecked="{Binding IsBrowserPrivateMode, Mode=TwoWay}" Content="Browser in private mode" VerticalAlignment="Center" TabIndex="1" />
-                <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="6" />
+                <ComboBox x:Name="LargelobperationComboBox" ItemsSource="{Binding LargeBlobOperations, Mode=OneTime}" SelectedValue="{Binding LargeBlobOperation, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="90" VerticalAlignment="Center" TabIndex="4" />
+                <CheckBox Name="GetCredBlobCheckBox" Content="Get credential blob" IsChecked="{Binding GetCredentialBlob, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="5" />
+                <CheckBox Name="IsBrowserPrivateModeCheckBox" IsChecked="{Binding IsBrowserPrivateMode, Mode=TwoWay}" Content="Browser in private mode" VerticalAlignment="Center" TabIndex="6" />
+                <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="8" />
                 <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
-                <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="5" />
+                <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="7" />
             </DockPanel>
             <UniformGrid Rows="1" DockPanel.Dock="Bottom">
                 <DockPanel>
                     <Label Name="HmacSecretSalt1Label" Content="HMAC secret salt 1:" VerticalAlignment="Center" Width="130" DockPanel.Dock="Left" />
-                    <Button Name="GenerateHmacSecretSalt1Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt1Command}" ToolTip="Generate random HMAC secret salt 1" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="9" />
-                    <TextBox x:Name="HmacSecretSalt1TextBox" VerticalAlignment="Center" TabIndex="8" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}" ToolTip="System-specific 32-byte salt in Base16 encoding">
+                    <Button Name="GenerateHmacSecretSalt1Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt1Command}" ToolTip="Generate random HMAC secret salt 1" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="12" />
+                    <TextBox x:Name="HmacSecretSalt1TextBox" VerticalAlignment="Center" TabIndex="11" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}" ToolTip="System-specific 32-byte salt in Base16 encoding">
                         <TextBox.Text>
                             <Binding Path="HmacSecretSalt1String" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
@@ -50,8 +50,8 @@
                 </DockPanel>
                 <DockPanel>
                     <Label Name="HmacSecretSalt2Label" Content="HMAC secret salt 2:" VerticalAlignment="Center" DockPanel.Dock="Left" />
-                    <Button Name="GenerateHmacSecretSalt2Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt2Command}" ToolTip="Generate random HMAC secret salt 2" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="11" />
-                    <TextBox x:Name="HmacSecretSalt2TextBox" VerticalAlignment="Center" TabIndex="10" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}" ToolTip="Optional system-specific 32-byte salt in Base16 encoding">
+                    <Button Name="GenerateHmacSecretSalt2Button" Content="Generate" Command="{Binding GenerateHmacSecretSalt2Command}" ToolTip="Generate random HMAC secret salt 2" VerticalAlignment="Center" DockPanel.Dock="Right" TabIndex="14" />
+                    <TextBox x:Name="HmacSecretSalt2TextBox" VerticalAlignment="Center" TabIndex="13" MaxLength="{Binding HmacSecretSaltStringLength, Mode=OneTime}" ToolTip="Optional system-specific 32-byte salt in Base16 encoding">
                         <TextBox.Text>
                             <Binding Path="HmacSecretSalt2String" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
@@ -65,7 +65,7 @@
             <UniformGrid Columns="1">
                 <DockPanel>
                     <Label Name="ChallengeLabel" Content="Challenge:" Width="130" />
-                    <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="7">
+                    <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="9">
                         <TextBox.Text>
                             <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
@@ -77,7 +77,7 @@
                 </DockPanel>
                 <DockPanel>
                     <Label Name="LargeBlobLabel" Content="Large blob:" Width="130" />
-                    <TextBox x:Name="LargeBlobTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="7">
+                    <TextBox x:Name="LargeBlobTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="10">
                         <TextBox.Text>
                             <Binding Path="LargeBlobString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>

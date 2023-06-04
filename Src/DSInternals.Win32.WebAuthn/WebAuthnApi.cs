@@ -89,6 +89,14 @@ namespace DSInternals.Win32.WebAuthn
         public static bool IsLargeBlobSupported => ApiVersion >= WebAuthn.ApiVersion.Version5;
 
         /// <summary>
+        /// Indicates the API can differentiate between browser modes.
+        /// </summary>
+        /// <remarks>
+        /// Support for the browser mode indicator was added in V5 API.
+        /// </remarks>
+        public static bool IsPrivateBrowserModeIndicatorSupported => ApiVersion >= WebAuthn.ApiVersion.Version5;
+
+        /// <summary>
         /// Indicates the availability of the API for platform credential management.
         /// </summary>
         /// <remarks>
@@ -283,7 +291,7 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The enterprise attestation requirement is not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && ApiVersion < WebAuthn.ApiVersion.Version5)
+            if (browserInPrivateMode == true && IsPrivateBrowserModeIndicatorSupported == false)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
@@ -482,7 +490,7 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && ApiVersion < WebAuthn.ApiVersion.Version5)
+            if (browserInPrivateMode == true && IsPrivateBrowserModeIndicatorSupported == false)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");

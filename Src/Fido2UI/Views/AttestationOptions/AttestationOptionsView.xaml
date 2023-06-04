@@ -29,7 +29,7 @@
                         <ComboBox Name="UserVerificationRequirementComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TabIndex="7" Width="190" Grid.ColumnSpan="2" />
                         <Label Name="ResidentKeyLabel" Content="Resident key:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
                         <CheckBox Name="RequireResidentKeyCheckBox" IsChecked="{Binding RequireResidentKey, Mode=TwoWay}" Content="Required" VerticalAlignment="Center" TabIndex="8" Grid.Row="2" Grid.Column="1" />
-                        <CheckBox Name="PreferResidentKeyCheckBox" IsChecked="{Binding PreferResidentKey, Mode=TwoWay}" Content=" Preferred" VerticalAlignment="Center" TabIndex="8" Grid.Row="2" Grid.Column="2" />
+                        <CheckBox Name="PreferResidentKeyCheckBox" IsChecked="{Binding PreferResidentKey, Mode=TwoWay}" Content=" Preferred" VerticalAlignment="Center" TabIndex="9" Grid.Row="2" Grid.Column="2" />
                     </Grid>
                 </GroupBox>
                 <UniformGrid Rows="1">
@@ -74,7 +74,7 @@
             </DockPanel>
             <DockPanel DockPanel.Dock="Top">
                 <GroupBox Header="Public Key Algorithms" Width="300" DockPanel.Dock="Right">
-                    <local:AlgorithmSelector x:Name="AlhorithmSelector" DataContext="{Binding AlgorithmSelectorViewModel}" TabIndex="14" />
+                    <local:AlgorithmSelector x:Name="AlhorithmSelector" DataContext="{Binding AlgorithmSelectorViewModel}" TabIndex="17" />
                 </GroupBox>
                 <GroupBox Header="Extensions">
                     <Grid>
@@ -90,13 +90,13 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <CheckBox Name="MinPinLengthCheckBox" IsChecked="{Binding MinPinLength, Mode=TwoWay}" Content="Minimum PIN length" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TabIndex="10" />
-                        <CheckBox Name="HmacSecretCheckBox" IsChecked="{Binding HmacSecret, Mode=TwoWay}" Content="HMAC secret" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" TabIndex="9" />
+                        <CheckBox Name="MinPinLengthCheckBox" IsChecked="{Binding MinPinLength, Mode=TwoWay}" Content="Minimum PIN length" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TabIndex="11" />
+                        <CheckBox Name="HmacSecretCheckBox" IsChecked="{Binding HmacSecret, Mode=TwoWay}" Content="HMAC secret" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" TabIndex="10" />
                         <Label Name="CredProtectLabel" Content="Credential protection:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
-                        <ComboBox Name="CredProtectComboBox" ItemsSource="{Binding CredProtectPolicies, Mode=OneTime}" SelectedValue="{Binding CredProtectPolicy, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TabIndex="11" Width="230" />
-                        <CheckBox Name="CredProtectEnforceCheckBox" IsChecked="{Binding EnforceCredProtect, Mode=TwoWay}" IsEnabled="{Binding EnforceCredProtectEnabled, Mode=OneWay}" Content="Enforced" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" TabIndex="12" />
+                        <ComboBox Name="CredProtectComboBox" ItemsSource="{Binding CredProtectPolicies, Mode=OneTime}" SelectedValue="{Binding CredProtectPolicy, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TabIndex="12" Width="230" />
+                        <CheckBox Name="CredProtectEnforceCheckBox" IsChecked="{Binding EnforceCredProtect, Mode=TwoWay}" IsEnabled="{Binding EnforceCredProtectEnabled, Mode=OneWay}" Content="Enforced" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" TabIndex="13" />
                         <Label Name="CredBlobLabel" Content="Credential blob:" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="2" />
-                        <TextBox Name="CredBlobTextBox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ToolTip="Credential blob in Base64url encoding" TabIndex="13">
+                        <TextBox Name="CredBlobTextBox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ToolTip="Credential blob in Base64url encoding" TabIndex="15">
                             <TextBox.Text>
                                 <Binding Path="CredentialBlobString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -105,27 +105,27 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <CheckBox Name="EnablePRFCheckBox" IsChecked="{Binding EnablePseudoRandomFunction, Mode=TwoWay}" Content="Pseudo-random function (PRF)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" TabIndex="12" />
+                        <CheckBox Name="EnablePRFCheckBox" IsChecked="{Binding EnablePseudoRandomFunction, Mode=TwoWay}" Content="Pseudo-random function (PRF)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" TabIndex="14" />
                         <Label Name="LargeBlobLabel" Content="Large blob support:" VerticalAlignment="Center"  Grid.Row="3" Grid.Column="2" />
-                        <ComboBox Name="LargeBlobSupportComboBox" ItemsSource="{Binding LargeBlobSupportPolicies, Mode=OneTime}" SelectedValue="{Binding LargeBlobSupport, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="3" Grid.Row="3" TabIndex="11" Width="110" />
+                        <ComboBox Name="LargeBlobSupportComboBox" ItemsSource="{Binding LargeBlobSupportPolicies, Mode=OneTime}" SelectedValue="{Binding LargeBlobSupport, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Grid.Column="3" Grid.Row="3" TabIndex="16" Width="110" />
                     </Grid>
                 </GroupBox>
             </DockPanel>
             <GroupBox Header="Request">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
-                        <Button Name="GenerateChallengeButton" Content="Generate challenge" ToolTip="Generate a random challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="20" />
+                        <Button Name="GenerateChallengeButton" Content="Generate challenge" ToolTip="Generate a random challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="23" />
                         <Label Name="AttestationLabel" Content="Attestation:" Width="80" VerticalAlignment="Center" />
-                        <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="90" TabIndex="15" />
+                        <ComboBox Name="AttestationComboBox" ItemsSource="{Binding AttestationTypes, Mode=OneTime}" SelectedValue="{Binding AttestationConveyancePreference, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="90" TabIndex="18" />
                         <Label Name="EnterpriseAttestationLabel" Content="Enterprise attestation:" Width="140" VerticalAlignment="Center" />
-                        <ComboBox Name="EnterpriseAttestationComboBox" ItemsSource="{Binding EnterpriseAttestationTypes, Mode=OneTime}" SelectedValue="{Binding EnterpriseAttestation, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="160" TabIndex="16" />
-                        <CheckBox Name="IsBrowserPrivateModeCheckBox" IsChecked="{Binding IsBrowserPrivateMode, Mode=TwoWay}" Content="Browser in private mode" VerticalAlignment="Center" TabIndex="17" />
+                        <ComboBox Name="EnterpriseAttestationComboBox" ItemsSource="{Binding EnterpriseAttestationTypes, Mode=OneTime}" SelectedValue="{Binding EnterpriseAttestation, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" VerticalAlignment="Center" Width="160" TabIndex="19" />
+                        <CheckBox Name="IsBrowserPrivateModeCheckBox" IsChecked="{Binding IsBrowserPrivateMode, Mode=TwoWay}" Content="Browser in private mode" VerticalAlignment="Center" TabIndex="20" />
                         <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
-                        <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="18" />
+                        <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="21" />
                     </DockPanel>
                     <DockPanel>
                         <Label Name="ChallengeLabel" Content="Challenge:" Width="80" />
-                        <TextBox Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="19">
+                        <TextBox Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="22">
                             <TextBox.Text>
                                 <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
