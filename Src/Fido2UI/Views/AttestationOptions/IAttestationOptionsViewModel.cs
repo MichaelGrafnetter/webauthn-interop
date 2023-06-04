@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using DSInternals.Win32.WebAuthn.COSE;
-using DSInternals.Win32.WebAuthn.FIDO;
 
 namespace DSInternals.Win32.WebAuthn.Fido2UI
 {

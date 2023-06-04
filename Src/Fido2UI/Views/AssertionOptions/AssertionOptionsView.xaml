@@ -26,7 +26,10 @@
                 <ComboBox x:Name="UserVerificationComboBox" ItemsSource="{Binding UserVerificationRequirements, Mode=OneTime}" SelectedValue="{Binding UserVerificationRequirement, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="130" VerticalAlignment="Center" TabIndex="2" />
                 <Label Name="AuthenticatorAttachmentLabel" Content="Authenticator:" VerticalAlignment="Center" />
                 <ComboBox x:Name="AuthenticatorAttachmentComboBox" ItemsSource="{Binding AuthenticatorAttachments, Mode=OneTime}" SelectedValue="{Binding AuthenticatorAttachment, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="160" VerticalAlignment="Center" TabIndex="3" />
+                <Label Name="LargeBlobOperationLabel" Content="Large blob operation:" VerticalAlignment="Center" />
+                <ComboBox x:Name="LargelobperationComboBox" ItemsSource="{Binding LargeBlobOperations, Mode=OneTime}" SelectedValue="{Binding LargeBlobOperation, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Width="90" VerticalAlignment="Center" TabIndex="2" />
                 <CheckBox Name="GetCredBlobCheckBox" Content="Get credential blob" IsChecked="{Binding GetCredentialBlob, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="4" />
+                <CheckBox Name="IsBrowserPrivateModeCheckBox" IsChecked="{Binding IsBrowserPrivateMode, Mode=TwoWay}" Content="Browser in private mode" VerticalAlignment="Center" TabIndex="1" />
                 <Button Name="GenerateChallengeButton" Content="Generate challenge" VerticalAlignment="Center" Command="{Binding GenerateChallengeCommand}" DockPanel.Dock="Right" TabIndex="6" />
                 <Label Name="TimeoutLabel" Content="Timeout:" VerticalAlignment="Center" />
                 <local:TimeoutEditor x:Name="TimeoutEditor" Timeout="{Binding Timeout, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="5" />
@@ -59,18 +62,32 @@
                     </TextBox>
                 </DockPanel>
             </UniformGrid>
-            <DockPanel>
-                <Label Name="ChallengeLabel" Content="Challenge:" Width="130" />
-                <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="7">
-                    <TextBox.Text>
-                        <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <ExceptionValidationRule />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-            </DockPanel>
+            <UniformGrid Columns="1">
+                <DockPanel>
+                    <Label Name="ChallengeLabel" Content="Challenge:" Width="130" />
+                    <TextBox x:Name="ChallengeTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" ToolTip="Random challenge in Base64url encoding" TabIndex="7">
+                        <TextBox.Text>
+                            <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <ExceptionValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </DockPanel>
+                <DockPanel>
+                    <Label Name="LargeBlobLabel" Content="Large blob:" Width="130" />
+                    <TextBox x:Name="LargeBlobTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="7">
+                        <TextBox.Text>
+                            <Binding Path="LargeBlobString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <ExceptionValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </DockPanel>
+            </UniformGrid>
         </DockPanel>
     </GroupBox>
 </UserControl>

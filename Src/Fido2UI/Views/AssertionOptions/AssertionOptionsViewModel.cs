@@ -81,6 +81,36 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             }
         }
 
+        private byte[] _largeBlob;
+        public byte[] LargeBlob
+        {
+            get => _largeBlob;
+            set
+            {
+                bool changed = SetProperty(ref _largeBlob, value, nameof(LargeBlob));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(LargeBlobString));
+                }
+            }
+        }
+
+        public string LargeBlobString
+        {
+            get => _largeBlob != null ? Base64UrlConverter.ToBase64UrlString(_largeBlob) : string.Empty;
+            set
+            {
+                byte[] binaryValue = string.IsNullOrEmpty(value) ? null : Base64UrlConverter.FromBase64UrlString(value);
+                bool changed = SetProperty(ref _largeBlob, binaryValue, nameof(LargeBlob));
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(LargeBlobString));
+                }
+            }
+        }
+
         private UserVerificationRequirement _userVerification;
         public UserVerificationRequirement UserVerificationRequirement
         {
@@ -101,6 +131,16 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public IList<KeyValuePair<AuthenticatorAttachment?, string>> AuthenticatorAttachments
          => EnumAdapter.GetComboBoxItems<AuthenticatorAttachment>();
 
+
+        private CredentialLargeBlobOperation _largeBlobOperation;
+        public CredentialLargeBlobOperation LargeBlobOperation
+        {
+            get => _largeBlobOperation;
+            set => SetProperty(ref _largeBlobOperation, value);
+        }
+
+        public IList<KeyValuePair<CredentialLargeBlobOperation?, string>> LargeBlobOperations
+         => EnumAdapter.GetComboBoxItems<CredentialLargeBlobOperation>();
 
         private int _timeout;
         public int Timeout
@@ -233,6 +273,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     RaisePropertyChanged(nameof(HmacSecretSalt2String));
                 }
             }
+        }
+
+        private bool _isBrowserPrivateMode;
+        public bool IsBrowserPrivateMode
+        {
+            get => _isBrowserPrivateMode;
+            set => SetProperty(ref _isBrowserPrivateMode, value);
         }
 
         private static byte[] GetRandomBytes(int count)

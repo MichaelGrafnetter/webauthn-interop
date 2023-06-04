@@ -104,7 +104,14 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AttestationOptionsViewModel.PublicKeyCredentialParameters?.ToArray(),
                     AttestationOptionsViewModel.AttestationConveyancePreference,
                     AttestationOptionsViewModel.Timeout,
-                    AttestationOptionsViewModel.ClientExtensions
+                    AttestationOptionsViewModel.ClientExtensions,
+                    null,
+                    AttestationOptionsViewModel.EnterpriseAttestation,
+                    AttestationOptionsViewModel.LargeBlobSupport,
+                    AttestationOptionsViewModel.PreferResidentKey,
+                    AttestationOptionsViewModel.IsBrowserPrivateMode,
+                    AttestationOptionsViewModel.EnablePseudoRandomFunction,
+                    WindowHandle.MainWindow
                     );
 
                 this.AttestationResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
@@ -128,7 +135,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AssertionOptionsViewModel.Challenge,
                     AssertionOptionsViewModel.UserVerificationRequirement,
                     AssertionOptionsViewModel.AuthenticatorAttachment,
-                    AssertionOptionsViewModel.Timeout
+                    AssertionOptionsViewModel.Timeout,
+                    null,
+                    AssertionOptionsViewModel.ClientExtensions,
+                    AssertionOptionsViewModel.LargeBlobOperation,
+                    AssertionOptionsViewModel.LargeBlob,
+                    AssertionOptionsViewModel.IsBrowserPrivateMode,
+                    WindowHandle.MainWindow
                 );
 
                 this.AssertionResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
@@ -169,6 +182,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AssertionOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.Any;
             AssertionOptionsViewModel.ClientExtensions = null;
             AssertionOptionsViewModel.Timeout = 120000;
+            AssertionOptionsViewModel.LargeBlob = null;
+            AssertionOptionsViewModel.LargeBlobOperation = CredentialLargeBlobOperation.None;
 
             // Attestation:
             AttestationOptionsViewModel.UserEntity = new UserInformation() {
@@ -194,9 +209,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.CrossPlatform;
             AttestationOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Required;
             AttestationOptionsViewModel.RequireResidentKey = true;
+            AttestationOptionsViewModel.PreferResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.Direct;
+            AttestationOptionsViewModel.EnterpriseAttestation = EnterpriseAttestationType.None;
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256, Algorithm.RS256 };
             AttestationOptionsViewModel.Timeout = 120000;
+            AttestationOptionsViewModel.LargeBlobSupport = LargeBlobSupport.None;
+            AttestationOptionsViewModel.EnablePseudoRandomFunction = false;
 
             // Credential Management
             CredentialManagementViewModel.RelyingPartyId = "login.microsoft.com";
@@ -210,6 +229,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AssertionOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Preferred;
             AssertionOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.CrossPlatform;
             AssertionOptionsViewModel.Timeout = 60000;
+            AssertionOptionsViewModel.LargeBlob = null;
+            AssertionOptionsViewModel.LargeBlobOperation = CredentialLargeBlobOperation.None;
 
             AssertionOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientInputs()
             {
@@ -235,10 +256,14 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.CrossPlatform;
             AttestationOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Preferred;
             AttestationOptionsViewModel.RequireResidentKey = false;
+            AttestationOptionsViewModel.PreferResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.None;
+            AttestationOptionsViewModel.EnterpriseAttestation = EnterpriseAttestationType.None;
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 60000;
+            AttestationOptionsViewModel.LargeBlobSupport = LargeBlobSupport.None;
+            AttestationOptionsViewModel.EnablePseudoRandomFunction = false;
 
             // Credential Management
             CredentialManagementViewModel.RelyingPartyId = "facebook.com";
@@ -252,6 +277,8 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AssertionOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Discouraged;
             AssertionOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.Any;
             AssertionOptionsViewModel.Timeout = 30000;
+            AssertionOptionsViewModel.LargeBlob = null;
+            AssertionOptionsViewModel.LargeBlobOperation = CredentialLargeBlobOperation.None;
 
             AssertionOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientInputs()
             {
@@ -275,10 +302,14 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.CrossPlatform;
             AttestationOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Discouraged;
             AttestationOptionsViewModel.RequireResidentKey = false;
+            AttestationOptionsViewModel.PreferResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.None;
+            AttestationOptionsViewModel.EnterpriseAttestation = EnterpriseAttestationType.None;
             AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256 };
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 30000;
+            AttestationOptionsViewModel.LargeBlobSupport = LargeBlobSupport.None;
+            AttestationOptionsViewModel.EnablePseudoRandomFunction = false;
 
             // Credential Management
             CredentialManagementViewModel.RelyingPartyId = "google.com";
