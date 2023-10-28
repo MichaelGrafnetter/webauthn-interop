@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Version of this structure.
         /// </summary>
-        private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version6;
+        private AuthenticatorMakeCredentialOptionsVersion _version = AuthenticatorMakeCredentialOptionsVersion.Version7;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -97,6 +97,24 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_6.</remarks>
         public bool EnablePseudoRandomFunction { get; set; }
+
+        /// <summary>
+        /// Linked Device Connection Info.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        public HybridStorageLinkedData LinkedDevice { get; set; }
+
+        /// <summary>
+        /// Size of JSON extension.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        private int _jsonExtLength = 0;
+
+        /// <summary>
+        /// JSON extension.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        private ByteArrayIn _jsonExt;
 
         public AuthenticatorMakeCredentialOptions() { }
 
@@ -184,9 +202,30 @@ namespace DSInternals.Win32.WebAuthn.Interop
         }
 
         /// <summary>
+        /// JSON extension.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        public byte[] JsonExt
+        {
+            get
+            {
+                return _jsonExt?.Read(_jsonExtLength);
+            }
+            set
+            {
+                // Get rid of any previous blob first
+                _jsonExt?.Dispose();
+
+                // Now replace the previous value with a new one
+                _jsonExtLength = value?.Length ?? 0;
+                _jsonExt = new ByteArrayIn(value);
+            }
+        }
+
+        /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        /// <remarks>This is a V5 struct. If V6 arrives, new fields will need to be added.</remarks>
+        /// <remarks>This is a V7 struct. If V8 arrives, new fields will need to be added.</remarks>
         public AuthenticatorMakeCredentialOptionsVersion Version
         {
             get
@@ -195,7 +234,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
             set
             {
-                if(value > AuthenticatorMakeCredentialOptionsVersion.Version5)
+                if(value > AuthenticatorMakeCredentialOptionsVersion.Version7)
                 {
                     // We only support older struct versions.
                     throw new ArgumentOutOfRangeException(nameof(value), "The requested data structure version is not yet supported.");
@@ -213,7 +252,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
             _excludeCredentials?.Dispose();
             _excludeCredentials = null;
 
-            if(_excludeCredentialList != IntPtr.Zero)
+            _jsonExt?.Dispose();
+            _jsonExt = null;
+
+            if (_excludeCredentialList != IntPtr.Zero)
             {
                 Marshal.FreeHGlobal(_excludeCredentialList);
                 _excludeCredentialList = IntPtr.Zero;

@@ -25,5 +25,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public bool IsPlatformCredentialManagementSupported => WebAuthnApi.IsPlatformCredentialManagementSupported;
 
         public bool IsUnsignedExtensionOutputSupported => WebAuthnApi.IsUnsignedExtensionOutputSupported;
+
+        public bool IsHybridStorageLinkedDataSupported => WebAuthnApi.IsHybridStorageLinkedDataSupported;
     }
 }

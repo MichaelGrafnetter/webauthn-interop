@@ -180,6 +180,16 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int CredentialExCurrentVersion = 1;
 
         /// <remarks>
+        /// Corresponds to CTAPCBOR_HYBRID_STORAGE_LINKED_DATA_VERSION_1.
+        /// </remarks>
+        public const int HybridStorageLinkedDataVersion1 = 1;
+
+        /// <remarks>
+        /// Corresponds to CTAPCBOR_HYBRID_STORAGE_LINKED_DATA_CURRENT_VERSION.
+        /// </remarks>
+        public const int HybridStorageLinkedDataCurrentVersion = HybridStorageLinkedDataVersion1;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_DETAILS_VERSION_1.
         /// </remarks>
         public const int CredentialDetailsVersion1 = 1;

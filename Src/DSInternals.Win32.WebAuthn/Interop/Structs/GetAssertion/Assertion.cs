@@ -87,6 +87,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_4.</remarks>
         public TransportContext UsedTransport { get; private set; }
 
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_5.</remarks>
+        private int _unsignedExtensionOutputsLength;
+
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_5.</remarks>
+        private ByteArrayOut _unsignedExtensionOutputs;
+
         /// <summary>
         /// Authenticator data that was created for this assertion.
         /// </summary>
@@ -106,5 +112,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Credential Large Blob
         /// </summary>
         public byte[] LargeBlob => _largeBlob?.Read(_largeBlobLength);
+
+        /// <summary>
+        /// Unsigned extension outputs.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_5.</remarks>
+        public byte[] UnsignedExtensionOutputs => _unsignedExtensionOutputs?.Read(_unsignedExtensionOutputsLength);
     }
 }

@@ -134,6 +134,14 @@ namespace DSInternals.Win32.WebAuthn
         public static bool IsUnsignedExtensionOutputSupported => ApiVersion >= WebAuthn.ApiVersion.Version7;
 
         /// <summary>
+        /// Indicates the support for linked device data.
+        /// </summary>
+        /// <remarks>
+        /// Support for linked device data was added in V7 API.
+        /// </remarks>
+        public static bool IsHybridStorageLinkedDataSupported => ApiVersion >= WebAuthn.ApiVersion.Version7;
+
+        /// <summary>
         /// Indicates the availability of user-verifying platform authenticator (e.g. Windows Hello).
         /// </summary>
         public static bool IsUserVerifyingPlatformAuthenticatorAvailable
@@ -188,6 +196,7 @@ namespace DSInternals.Win32.WebAuthn
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
             bool enablePseudoRandomFunction = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
         )
         {
@@ -239,6 +248,7 @@ namespace DSInternals.Win32.WebAuthn
                 preferResidentKey,
                 browserInPrivateMode,
                 enablePseudoRandomFunction,
+                linkedDevice,
                 windowHandle
                 );
         }
@@ -263,6 +273,7 @@ namespace DSInternals.Win32.WebAuthn
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
             bool enablePseudoRandomFunction = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
             )
         {
@@ -317,6 +328,12 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The PRF extension is not supported on this OS.");
             }
 
+            if (linkedDevice != null && IsHybridStorageLinkedDataSupported == false)
+            {
+                // This feature is only supported in API V7.
+                throw new NotSupportedException("Hybrid storage linked data is not supported on this OS.");
+            }
+
             if (pubKeyCredParams == null || pubKeyCredParams.Length == 0)
             {
                 // Provide a default algorithm
@@ -361,6 +378,7 @@ namespace DSInternals.Win32.WebAuthn
                     options.BrowserInPrivateMode = browserInPrivateMode;
                     options.EnablePseudoRandomFunction = enablePseudoRandomFunction;
                     options.CancellationId = _cancellationId;
+                    options.LinkedDevice = linkedDevice;
 
                     var result = NativeMethods.AuthenticatorMakeCredential(
                         windowHandle,
@@ -416,6 +434,7 @@ namespace DSInternals.Win32.WebAuthn
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
         )
         {
@@ -456,6 +475,7 @@ namespace DSInternals.Win32.WebAuthn
                 largeBlobOperation,
                 largeBlob,
                 browserInPrivateMode,
+                linkedDevice,
                 windowHandle
             );
         }
@@ -473,6 +493,7 @@ namespace DSInternals.Win32.WebAuthn
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
             )
         {
@@ -508,6 +529,12 @@ namespace DSInternals.Win32.WebAuthn
             {
                 // This feature is only supported in API V6.
                 throw new NotSupportedException("The PRF extension is not supported on this OS.");
+            }
+
+            if (linkedDevice != null && IsHybridStorageLinkedDataSupported == false)
+            {
+                // This feature is only supported in API V7.
+                throw new NotSupportedException("Hybrid storage linked data is not supported on this OS.");
             }
 
             if (!windowHandle.IsValid)
@@ -547,6 +574,7 @@ namespace DSInternals.Win32.WebAuthn
                     options.LargeBlob = largeBlob;
                     options.BrowserInPrivateMode = browserInPrivateMode;
                     options.HmacSecretSaltValues = hmacSecretSaltValues;
+                    options.LinkedDevice = linkedDevice;
 
                     options.CancellationId = _cancellationId;
 

@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// The version of this structure.
         /// </summary>
-        private AuthenticatorGetAssertionOptionsVersion _version = AuthenticatorGetAssertionOptionsVersion.Version6;
+        private AuthenticatorGetAssertionOptionsVersion _version = AuthenticatorGetAssertionOptionsVersion.Version7;
 
         /// <summary>
         /// Time that the operation is expected to complete within.
@@ -106,6 +106,31 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public bool BrowserInPrivateMode { get; set; }
 
         /// <summary>
+        /// Linked Device Connection Info.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        public HybridStorageLinkedData LinkedDevice { get; set; }
+
+        /// <summary>
+        /// Allowlist MUST contain 1 credential applicable for Hybrid transport.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        bool AutoFill { get; set; }
+
+        /// <summary>
+        /// Size of JSON extension.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        private int _jsonExtLength = 0;
+
+        /// <summary>
+        /// JSON extension.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        private ByteArrayIn _jsonExt;
+
+
+        /// <summary>
         /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower cased.
         /// </summary>
         public string U2fAppId
@@ -195,7 +220,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        /// <remarks>This is a V6 struct. If V7 arrives, new fields will need to be added.</remarks>
+        /// <remarks>This is a V7 struct. If V8 arrives, new fields will need to be added.</remarks>
         public AuthenticatorGetAssertionOptionsVersion Version
         {
             get
@@ -204,7 +229,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
             set
             {
-                if (value > AuthenticatorGetAssertionOptionsVersion.Version6)
+                if (value > AuthenticatorGetAssertionOptionsVersion.Version7)
                 {
                     // We only support older struct versions.
                     throw new ArgumentOutOfRangeException(nameof(value), "The requested data structure version is not yet supported.");
@@ -260,6 +285,27 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
+        /// <summary>
+        /// JSON extension.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        public byte[] JsonExt
+        {
+            get
+            {
+                return _jsonExt?.Read(_jsonExtLength);
+            }
+            set
+            {
+                // Get rid of any previous blob first
+                _jsonExt?.Dispose();
+
+                // Now replace the previous value with a new one
+                _jsonExtLength = value?.Length ?? 0;
+                _jsonExt = new ByteArrayIn(value);
+            }
+        }
+
         public void Dispose()
         {
             _extensions?.Dispose();
@@ -270,6 +316,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
             _largeBlob?.Dispose();
             _largeBlob = null;
+
+            _jsonExt?.Dispose();
+            _jsonExt = null;
 
             if (_allowCredentialList != IntPtr.Zero)
             {
