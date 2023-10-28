@@ -18,6 +18,10 @@ on:
         required: true
         type: boolean
         default: false
+      release_version:
+        description: 'Version'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -163,8 +167,8 @@ jobs:
 
     - name: Create ZIP for GitHub Release
       if: ${{ github.event.inputs.create_github_release }}
-      shell: powershell
-      run: Compress-Archive -Path Build/bin/Release/Fido2UI -DestinationPath Build/bin/Release/FIDO2UI.zip -Force -ErrorAction Stop
+      working-directory: Build/bin/Release
+      run: 7z a -tzip -mx=9 -r packages/Fido2UI.zip Fido2UI
 
     - name: Create GitHub Release
       if: ${{ github.event.inputs.create_github_release }}
@@ -173,16 +177,22 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.0
-        release_name: FIDO2 UI
+        tag_name: v${{ github.event.inputs.release_version }}
+        release_name: WebAuthn Interop Assembly ${{ github.event.inputs.release_version }}
+        draft: true
+        prerelease: false
+        body: |
+            Changes in this Release
+            - First Change
+            - Second Change
 
-    - name: Upload Desktop App as Release
+    - name: Upload Desktop App as Asset
       if: ${{ github.event.inputs.create_github_release }}
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: Build/bin/Release/Fido2UI.zip
+        asset_path: Build/bin/Release/packages/Fido2UI.zip
         asset_name: FIDO2UI.zip
         asset_content_type: applicaion/zip
