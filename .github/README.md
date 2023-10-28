@@ -3,7 +3,7 @@
 [![Windows 10 1903+](https://img.shields.io/badge/Windows%2010-1903%2B-007bb8.svg?logo=Windows)](#)
 [![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
 [![.NET Core 3+](https://img.shields.io/badge/.NET%20Core-3%2B-007FFF.svg)](#)
-[![Continuous Integration Status](https://github.com/MichaelGrafnetter/webauthn-interop/workflows/CI/badge.svg)](https://github.com/MichaelGrafnetter/webauthn-interop/actions)
+[![Continuous Integration Status](https://github.com/MichaelGrafnetter/webauthn-interop/actions/workflows/autobuild.yml/badge.svg)](https://github.com/MichaelGrafnetter/webauthn-interop/actions)
 
 **FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications**
 
