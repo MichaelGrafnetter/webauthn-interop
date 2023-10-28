@@ -13,6 +13,11 @@ on:
         required: true
         type: boolean
         default: false
+      create_github_release:
+        description: 'Create a GitHub Release?'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -144,14 +149,40 @@ jobs:
         --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
 
-    - name: Upload NuGet Packages
+    - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: NuGet
         path: Build/bin/Release/Packages/*nupkg
 
-    - name: Upload Desktop App
+    - name: Upload Desktop App as Artifact
       uses: actions/upload-artifact@v3
       with:
         name: Fido2UI
         path: Build/bin/Release/Fido2UI/*
+
+    - name: Create ZIP for GitHub Release
+      if: ${{ github.event.inputs.create_github_release }}
+      shell: powershell
+      run: Compress-Archive -Path Build/bin/Release/Fido2UI -DestinationPath Build/bin/Release/FIDO2UI.zip -Force -ErrorAction Stop
+
+    - name: Create GitHub Release
+      if: ${{ github.event.inputs.create_github_release }}
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v1.0
+        release_name: FIDO2 UI
+
+    - name: Upload Desktop App as Release
+      if: ${{ github.event.inputs.create_github_release }}
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Build/bin/Release/Fido2UI.zip
+        asset_name: FIDO2UI.zip
+        asset_content_type: applicaion/zip
