@@ -48,6 +48,12 @@ namespace DSInternals.Win32.WebAuthn
         Version6 = ApiConstants.ApiVersion6,
 
         /// <summary>
+        /// Delta From V6.
+        /// </summary>
+        /// <remarks>Corresponds to WEBAUTHN_API_VERSION_6.</remarks>
+        Version7 = ApiConstants.ApiVersion7,
+
+        /// <summary>
         /// Current Version
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_API_CURRENT_VERSION.</remarks>

@@ -126,6 +126,14 @@ namespace DSInternals.Win32.WebAuthn
         public bool IsCancellationSupported => _cancellationId.HasValue;
 
         /// <summary>
+        /// Indicates the support for unsigned extension outputs.
+        /// </summary>
+        /// <remarks>
+        /// Support for the unsigned extension outputs was added in V7 API.
+        /// </remarks>
+        public static bool IsUnsignedExtensionOutputSupported => ApiVersion >= WebAuthn.ApiVersion.Version7;
+
+        /// <summary>
         /// Indicates the availability of user-verifying platform authenticator (e.g. Windows Hello).
         /// </summary>
         public static bool IsUserVerifyingPlatformAuthenticatorAvailable

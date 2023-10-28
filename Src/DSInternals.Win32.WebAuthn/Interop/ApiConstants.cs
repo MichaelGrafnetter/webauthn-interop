@@ -35,9 +35,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int ApiVersion6 = 6;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_API_VERSION_7.
+        /// </remarks>
+        public const int ApiVersion7 = 7;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_API_CURRENT_VERSION.
         /// </remarks>
-        public const int ApiCurrentVersion = ApiVersion6;
+        public const int ApiCurrentVersion = ApiVersion7;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION.
@@ -167,7 +172,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <remarks>
         /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_FLAGS_MASK.
         /// </remarks>
-        public const int CtapTransportFlagsMask = 0x0000002F;
+        public const int CtapTransportFlagsMask = 0x0000003F;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_EX_CURRENT_VERSION.
@@ -365,9 +370,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AuthenticatorMakeCredentialOptionsVersion6 = 6;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.
+        /// </remarks>
+        public const int AuthenticatorMakeCredentialOptionsVersion7 = 7;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION.
         /// </remarks>
-        public const int AuthenticatorMakeCredentialOptionsCurrentVersion = AuthenticatorMakeCredentialOptionsVersion6;
+        public const int AuthenticatorMakeCredentialOptionsCurrentVersion = AuthenticatorMakeCredentialOptionsVersion7;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_NONE.
@@ -420,9 +430,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AuthenticatorGetAssertionOptionsVersion6 = 6;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_7.
+        /// </remarks>
+        public const int AuthenticatorGetAssertionOptionsVersion7 = 7;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION.
         /// </remarks>
-        public const int AuthenticatorGetAssertionOptionsCurrentVersion = AuthenticatorGetAssertionOptionsVersion6;
+        public const int AuthenticatorGetAssertionOptionsCurrentVersion = AuthenticatorGetAssertionOptionsVersion7;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_HMAC_SECRET_VALUES_FLAG.
@@ -495,9 +510,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int CredentialAttestationVersion5 = 5;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_6.
+        /// </remarks>
+        public const int CredentialAttestationVersion6 = 6;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_ATTESTATION_CURRENT_VERSION.
         /// </remarks>
-        public const int CredentialAttestationCurrentVersion = CredentialAttestationVersion5;
+        public const int CredentialAttestationCurrentVersion = CredentialAttestationVersion6;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NONE.
@@ -570,9 +590,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const int AssertionVersion4 = 4;
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_ASSERTION_VERSION_5.
+        /// </remarks>
+        public const int AssertionVersion5 = 5;
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_ASSERTION_CURRENT_VERSION.
         /// </remarks>
-        public const int AssertionCurrentVersion = AssertionVersion4;
+        public const int AssertionCurrentVersion = AssertionVersion5;
 
     }
 }
