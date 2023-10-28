@@ -111,6 +111,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AttestationOptionsViewModel.PreferResidentKey,
                     AttestationOptionsViewModel.IsBrowserPrivateMode,
                     AttestationOptionsViewModel.EnablePseudoRandomFunction,
+                    null,
                     WindowHandle.MainWindow
                     );
 
@@ -141,6 +142,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     AssertionOptionsViewModel.LargeBlobOperation,
                     AssertionOptionsViewModel.LargeBlob,
                     AssertionOptionsViewModel.IsBrowserPrivateMode,
+                    null,
                     WindowHandle.MainWindow
                 );
 

@@ -117,12 +117,13 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         public void NativeMethods_StructVersions()
         {
             // Check that all structure definitions are in sync with the current winauthn.h
-            Assert.AreEqual(CredentialAttestationVersion.Version5, CredentialAttestationVersion.Current);
-            Assert.AreEqual(AuthenticatorMakeCredentialOptionsVersion.Version6, AuthenticatorMakeCredentialOptionsVersion.Current);
-            Assert.AreEqual(AuthenticatorGetAssertionOptionsVersion.Version6, AuthenticatorGetAssertionOptionsVersion.Current);
+            Assert.AreEqual(CredentialAttestationVersion.Version6, CredentialAttestationVersion.Current);
+            Assert.AreEqual(AuthenticatorMakeCredentialOptionsVersion.Version7, AuthenticatorMakeCredentialOptionsVersion.Current);
+            Assert.AreEqual(AuthenticatorGetAssertionOptionsVersion.Version7, AuthenticatorGetAssertionOptionsVersion.Current);
             Assert.AreEqual(CredentialDetailsVersion.Version2, CredentialDetailsVersion.Current);
             Assert.AreEqual(GetCredentialOptionsVersion.Version1, GetCredentialOptionsVersion.Current);
-            Assert.AreEqual(AssertionVersion.Version4, AssertionVersion.Current);
+            Assert.AreEqual(AssertionVersion.Version5, AssertionVersion.Current);
+            Assert.AreEqual(HybridStorageLinkedDataVersion.Version1, HybridStorageLinkedDataVersion.Current);
 
             Assert.AreEqual(1, (int)UserInformationVersion.Current);
             Assert.AreEqual(1, (int)RelyingPartyInformationVersion.Current);
@@ -133,7 +134,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             Assert.AreEqual(1, (int)ClientDataVersion.Current);
 
             // Also check the API itself
-            Assert.AreEqual(ApiVersion.Version6, ApiVersion.Current);
+            Assert.AreEqual(ApiVersion.Version7, ApiVersion.Current);
         }
 
         [TestMethod]
@@ -142,12 +143,14 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             // Check that the struct size increases with each version
             Assert.IsTrue(Marshal.SizeOf<AssertionV1>() < Marshal.SizeOf<AssertionV2>());
             Assert.IsTrue(Marshal.SizeOf<AssertionV2>() < Marshal.SizeOf<AssertionV3>());
-            Assert.IsTrue(Marshal.SizeOf<AssertionV3>() < Marshal.SizeOf<Assertion>());
+            Assert.IsTrue(Marshal.SizeOf<AssertionV3>() < Marshal.SizeOf<AssertionV4>());
+            Assert.IsTrue(Marshal.SizeOf<AssertionV4>() < Marshal.SizeOf<Assertion>());
 
             Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV1>() < Marshal.SizeOf<CredentialAttestationV2>());
             Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV2>() < Marshal.SizeOf<CredentialAttestationV3>());
             Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV3>() < Marshal.SizeOf<CredentialAttestationV4>());
-            Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV4>() < Marshal.SizeOf<CredentialAttestation>());
+            Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV4>() < Marshal.SizeOf<CredentialAttestationV5>());
+            Assert.IsTrue(Marshal.SizeOf<CredentialAttestationV5>() < Marshal.SizeOf<CredentialAttestation>());
         }
     }
 }
