@@ -53,21 +53,38 @@ namespace DSInternals.Win32.WebAuthn.Interop
                         extensions.EnforceCredProtect == true));
                 }
 
-                if (extensions.HmacCreateSecret.HasValue)
+                if (extensions.HmacCreateSecret == true)
                 {
                     nativeExtensions.Add(ExtensionIn.CreateHmacSecret());
                 }
 
-                if(extensions.MinPinLength.HasValue)
+                if(extensions.MinPinLength == true)
                 {
                     nativeExtensions.Add(ExtensionIn.CreateMinPinLength());
                 }
 
-                // if(extensions.CredBlob)
-                // TODO: Add support for additional extensions
+                if (extensions.CredentialBlob != null)
+                {
+                    nativeExtensions.Add(ExtensionIn.CreateCredBlobAttestation(extensions.CredentialBlob));
+                }
+
+                if (extensions.GetCredentialBlob == true)
+                {
+                    nativeExtensions.Add(ExtensionIn.CreateCredBlobAssertion());
+                }
             }
 
             return nativeExtensions;
+        }
+
+        public static HmacSecretSaltIn Translate(HMACGetSecretInput salts)
+        {
+            if(salts == null)
+            {
+                return null;
+            }
+
+            return new HmacSecretSaltIn(salts.Salt1, salts.Salt2);
         }
 
         public static UserInformationIn Translate(UserInformation userInfo)

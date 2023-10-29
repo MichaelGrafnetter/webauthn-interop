@@ -40,6 +40,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     sourceStructSize = Marshal.SizeOf<AssertionV3>();
                     break;
                 case AssertionVersion.Version4:
+                    sourceStructSize = Marshal.SizeOf<AssertionV4>();
+                    break;
+                case AssertionVersion.Version5:
                 default:
                     sourceStructSize = Marshal.SizeOf<Assertion>();
                     break;

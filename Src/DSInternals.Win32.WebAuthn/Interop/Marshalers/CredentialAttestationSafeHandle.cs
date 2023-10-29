@@ -44,6 +44,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     sourceStructSize = Marshal.SizeOf<CredentialAttestationV4>();
                     break;
                 case CredentialAttestationVersion.Version5:
+                    sourceStructSize = Marshal.SizeOf<CredentialAttestationV5>();
+                    break;
+                case CredentialAttestationVersion.Version6:
                 default:
                     sourceStructSize = Marshal.SizeOf<CredentialAttestation>();
                     break;

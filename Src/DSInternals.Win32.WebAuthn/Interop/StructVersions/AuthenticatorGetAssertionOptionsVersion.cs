@@ -36,6 +36,11 @@
         Version6 = ApiConstants.AuthenticatorGetAssertionOptionsVersion6,
 
         /// <remarks>
+        /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_7.
+        /// </remarks>
+        Version7 = ApiConstants.AuthenticatorGetAssertionOptionsVersion7,
+
+        /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION.
         /// </remarks>
 #pragma warning disable CA1069 // Enums values should not be duplicated

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using DSInternals.Win32.WebAuthn.COSE;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
@@ -8,6 +9,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 {
     [TestClass]
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public class ApiMapperTester
     {
         [TestMethod]

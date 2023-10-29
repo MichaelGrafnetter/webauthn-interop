@@ -29,6 +29,7 @@ namespace DSInternals.Win32.WebAuthn
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
             bool enablePseudoRandomFunction = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
         )
@@ -51,6 +52,7 @@ namespace DSInternals.Win32.WebAuthn
                 preferResidentKey,
                 browserInPrivateMode,
                 enablePseudoRandomFunction,
+                linkedDevice,
                 windowHandle
             )).ConfigureAwait(false);
         }
@@ -69,6 +71,7 @@ namespace DSInternals.Win32.WebAuthn
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
         )
@@ -85,6 +88,7 @@ namespace DSInternals.Win32.WebAuthn
                 largeBlobOperation,
                 largeBlob,
                 browserInPrivateMode,
+                linkedDevice,
                 windowHandle
             )).ConfigureAwait(false);
         }
@@ -109,6 +113,7 @@ namespace DSInternals.Win32.WebAuthn
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
             bool enablePseudoRandomFunction = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
             )
@@ -130,6 +135,7 @@ namespace DSInternals.Win32.WebAuthn
                 preferResidentKey,
                 browserInPrivateMode,
                 enablePseudoRandomFunction,
+                linkedDevice,
                 windowHandle
             )).ConfigureAwait(false);
         }
@@ -147,6 +153,7 @@ namespace DSInternals.Win32.WebAuthn
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
             )
@@ -162,6 +169,7 @@ namespace DSInternals.Win32.WebAuthn
                 largeBlobOperation,
                 largeBlob,
                 browserInPrivateMode,
+                linkedDevice,
                 windowHandle
             )).ConfigureAwait(false);
         }

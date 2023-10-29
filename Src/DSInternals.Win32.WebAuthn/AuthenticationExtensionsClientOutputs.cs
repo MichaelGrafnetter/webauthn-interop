@@ -47,5 +47,13 @@ namespace DSInternals.Win32.WebAuthn
                 _credProtect = value ?? UserVerification.Any;
             }
         }
+
+        /// <summary>
+        /// HMAC Secret Extension
+        /// </summary>
+        /// <remarks>This extension is only applicable during credential creation.</remarks>
+        /// <see>https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#sctn-hmac-secret-extension</see>
+        [JsonProperty("hmacGetSecret", NullValueHandling = NullValueHandling.Ignore)]
+        public HMACGetSecretOutput HmacGetSecret { get; set; }
     }
 }

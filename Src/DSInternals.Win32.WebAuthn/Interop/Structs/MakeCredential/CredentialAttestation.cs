@@ -72,6 +72,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_5.</remarks>
         public bool PseudoRandomFunctionEnabled { get; private set; }
 
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_6.</remarks>
+        private int _unsignedExtensionOutputsLength;
+
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_6.</remarks>
+        private ByteArrayOut _unsignedExtensionOutputs;
+
         /// <summary>
         /// Authenticator data that was created for this credential.
         /// </summary>
@@ -92,6 +98,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         /// <remarks>Used by Edge to return to the RP.</remarks>
         public byte[] CredentialId => _credentialId?.Read(_credentialIdLength);
+
+        /// <summary>
+        /// Unsigned extension outputs.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_6.</remarks>
+        public byte[] UnsignedExtensionOutputs => _unsignedExtensionOutputs?.Read(_unsignedExtensionOutputsLength);
 
         /// <summary>
         /// CBOR attestation information.

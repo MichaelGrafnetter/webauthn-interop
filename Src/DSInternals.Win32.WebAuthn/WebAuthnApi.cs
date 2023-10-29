@@ -89,6 +89,14 @@ namespace DSInternals.Win32.WebAuthn
         public static bool IsLargeBlobSupported => ApiVersion >= WebAuthn.ApiVersion.Version5;
 
         /// <summary>
+        /// Indicates the API can differentiate between browser modes.
+        /// </summary>
+        /// <remarks>
+        /// Support for the browser mode indicator was added in V5 API.
+        /// </remarks>
+        public static bool IsPrivateBrowserModeIndicatorSupported => ApiVersion >= WebAuthn.ApiVersion.Version5;
+
+        /// <summary>
         /// Indicates the availability of the API for platform credential management.
         /// </summary>
         /// <remarks>
@@ -116,6 +124,22 @@ namespace DSInternals.Win32.WebAuthn
         /// Indicates whether operation cancellation is supported by the API.
         /// </summary>
         public bool IsCancellationSupported => _cancellationId.HasValue;
+
+        /// <summary>
+        /// Indicates the support for unsigned extension outputs.
+        /// </summary>
+        /// <remarks>
+        /// Support for the unsigned extension outputs was added in V7 API.
+        /// </remarks>
+        public static bool IsUnsignedExtensionOutputSupported => ApiVersion >= WebAuthn.ApiVersion.Version7;
+
+        /// <summary>
+        /// Indicates the support for linked device data.
+        /// </summary>
+        /// <remarks>
+        /// Support for linked device data was added in V7 API.
+        /// </remarks>
+        public static bool IsHybridStorageLinkedDataSupported => ApiVersion >= WebAuthn.ApiVersion.Version7;
 
         /// <summary>
         /// Indicates the availability of user-verifying platform authenticator (e.g. Windows Hello).
@@ -172,6 +196,7 @@ namespace DSInternals.Win32.WebAuthn
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
             bool enablePseudoRandomFunction = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
         )
         {
@@ -223,6 +248,7 @@ namespace DSInternals.Win32.WebAuthn
                 preferResidentKey,
                 browserInPrivateMode,
                 enablePseudoRandomFunction,
+                linkedDevice,
                 windowHandle
                 );
         }
@@ -247,6 +273,7 @@ namespace DSInternals.Win32.WebAuthn
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
             bool enablePseudoRandomFunction = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
             )
         {
@@ -271,13 +298,19 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
+            if (clientData.ClientExtensions?.CredentialBlob != null && IsCredBlobSupported == false)
+            {
+                // This extension is only supported in API V3.
+                throw new NotSupportedException("The credential blob extension is not supported on this OS.");
+            }
+
             if (enterpriseAttestation != EnterpriseAttestationType.None && IsEnterpriseAttestationSupported == false)
             {
                 // This feature is only supported in API V4.
                 throw new NotSupportedException("The enterprise attestation requirement is not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && ApiVersion < WebAuthn.ApiVersion.Version5)
+            if (browserInPrivateMode == true && IsPrivateBrowserModeIndicatorSupported == false)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
@@ -295,9 +328,11 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The PRF extension is not supported on this OS.");
             }
 
-            // TODO: Add support for WEBAUTHN_EXTENSIONS_IDENTIFIER_CRED_BLOB (available since WEBAUTHN_API_VERSION_3)
-            // TODO: Add support for LARGE_BLOB (available since WEBAUTHN_API_VERSION_5)
-            // TODO: Add support for PRF
+            if (linkedDevice != null && IsHybridStorageLinkedDataSupported == false)
+            {
+                // This feature is only supported in API V7.
+                throw new NotSupportedException("Hybrid storage linked data is not supported on this OS.");
+            }
 
             if (pubKeyCredParams == null || pubKeyCredParams.Length == 0)
             {
@@ -343,6 +378,7 @@ namespace DSInternals.Win32.WebAuthn
                     options.BrowserInPrivateMode = browserInPrivateMode;
                     options.EnablePseudoRandomFunction = enablePseudoRandomFunction;
                     options.CancellationId = _cancellationId;
+                    options.LinkedDevice = linkedDevice;
 
                     var result = NativeMethods.AuthenticatorMakeCredential(
                         windowHandle,
@@ -364,9 +400,10 @@ namespace DSInternals.Win32.WebAuthn
                         {
                             HmacSecret = attestation.Extensions?.HmacSecret,
                             CredProtect = attestation.Extensions?.CredProtect
-                            // TODO: Add support for the large blob extension
-                            // TODO: Add support for the min pin length extension
                         };
+
+                        bool? credBlobCreated = attestation.Extensions?.CredBlobCreated;
+                        int? minPinLength = attestation.Extensions?.MinPinLength;
 
                         return new AuthenticatorAttestationResponse()
                         {
@@ -397,6 +434,7 @@ namespace DSInternals.Win32.WebAuthn
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
         )
         {
@@ -437,6 +475,7 @@ namespace DSInternals.Win32.WebAuthn
                 largeBlobOperation,
                 largeBlob,
                 browserInPrivateMode,
+                linkedDevice,
                 windowHandle
             );
         }
@@ -454,6 +493,7 @@ namespace DSInternals.Win32.WebAuthn
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
+            HybridStorageLinkedData linkedDevice = null,
             WindowHandle windowHandle = default
             )
         {
@@ -467,19 +507,35 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(clientData));
             }
 
+            if (clientData.ClientExtensions?.GetCredentialBlob == true && IsCredBlobSupported == false)
+            {
+                // This feature is only supported in API V3.
+                throw new NotSupportedException("Credential blobs are not supported on this OS.");
+            }
+
             if ((largeBlobOperation != CredentialLargeBlobOperation.None || largeBlob != null) && IsLargeBlobSupported == false)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("Large blobs are not supported on this OS.");
             }
 
-            if (browserInPrivateMode == true && ApiVersion < WebAuthn.ApiVersion.Version5)
+            if (browserInPrivateMode == true && IsPrivateBrowserModeIndicatorSupported == false)
             {
                 // This feature is only supported in API V5.
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
             }
 
-            // TODO: Do a compatibility test for PRF / HMAC Secret.
+            if (clientData.ClientExtensions?.HmacGetSecret != null && IsPsuedoRandomFunctionSupported == false)
+            {
+                // This feature is only supported in API V6.
+                throw new NotSupportedException("The PRF extension is not supported on this OS.");
+            }
+
+            if (linkedDevice != null && IsHybridStorageLinkedDataSupported == false)
+            {
+                // This feature is only supported in API V7.
+                throw new NotSupportedException("Hybrid storage linked data is not supported on this OS.");
+            }
 
             if (!windowHandle.IsValid)
             {
@@ -500,6 +556,10 @@ namespace DSInternals.Win32.WebAuthn
                 using (var allowCredList = new Credentials(allowCreds.ToArray()))
                 using (var allowCredListEx = new CredentialList(allowCredsEx.ToArray()))
                 using (var clientDataNative = new ClientData(clientData))
+                using (var globalHmacSalt = ApiHelper.Translate(clientData.ClientExtensions?.HmacGetSecret))
+                using (var hmacSecretSaltValues = new HmacSecretSaltValuesIn(globalHmacSalt, null))
+                using (var extensionsList = ApiHelper.Translate(clientData.ClientExtensions))
+                using (var nativeExtensions = new ExtensionsIn(extensionsList.ToArray()))
                 using (var options = new AuthenticatorGetAssertionOptions())
                 {
                     // Prepare native options
@@ -510,8 +570,12 @@ namespace DSInternals.Win32.WebAuthn
                     options.AllowCredentialsEx = allowCredListEx;
                     options.U2fAppId = clientData.ClientExtensions?.AppID;
                     options.LargeBlobOperation = largeBlobOperation;
+                    options.Extensions = nativeExtensions;
+                    options.LargeBlob = largeBlob;
                     options.BrowserInPrivateMode = browserInPrivateMode;
-                    // TODO: Add support for the PRF extension / HmacSecretSaltValuesIn
+                    options.HmacSecretSaltValues = hmacSecretSaltValues;
+                    options.LinkedDevice = linkedDevice;
+
                     options.CancellationId = _cancellationId;
 
                     // Perform the Win32 API call
@@ -528,6 +592,17 @@ namespace DSInternals.Win32.WebAuthn
                     try
                     {
                         var assertion = assertionHandle.ToManaged();
+
+                        var extensions = new AuthenticationExtensionsClientOutputs()
+                        {
+                            HmacGetSecret = new HMACGetSecretOutput
+                            {
+                                Output1 = assertion.HmacSecret?.First,
+                                Output2 = assertion.HmacSecret?.Second,
+                            }
+                        };
+
+                        byte[] credBlob = assertion.Extensions?.CredBlob;
 
                         // Wrap the raw results
                         return new AuthenticatorAssertionResponse()

@@ -12,6 +12,12 @@
 
         AuthenticationExtensionsClientInputs ClientExtensions { get; set; }
 
+        CredentialLargeBlobOperation LargeBlobOperation { get; set; }
+
+        byte[] LargeBlob { get; set; }
+
         int Timeout { get; set; }
+
+        bool IsBrowserPrivateMode { get; set; }
     }
 }

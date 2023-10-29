@@ -138,6 +138,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set => SetProperty(ref _requireResidentKey, value);
         }
 
+        private bool _preferResidentKey;
+        public bool PreferResidentKey
+        {
+            get => _preferResidentKey;
+            set => SetProperty(ref _preferResidentKey, value);
+        }
+
         private AuthenticatorAttachment _authenticatorAttachment;
         public AuthenticatorAttachment AuthenticatorAttachment
         {
@@ -147,7 +154,6 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
         public IList<KeyValuePair<AuthenticatorAttachment?, string>> AuthenticatorAttachments
          => EnumAdapter.GetComboBoxItems<AuthenticatorAttachment>();
-
 
         private UserVerificationRequirement _userVerification;
         public UserVerificationRequirement UserVerificationRequirement
@@ -170,6 +176,16 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
         public IList<KeyValuePair<AttestationConveyancePreference?, string>> AttestationTypes
         => EnumAdapter.GetComboBoxItems<AttestationConveyancePreference>();
 
+        private EnterpriseAttestationType _enterpriseAttestation;
+        public EnterpriseAttestationType EnterpriseAttestation
+        {
+            get => _enterpriseAttestation;
+            set => SetProperty(ref _enterpriseAttestation, value);
+        }
+
+        public IList<KeyValuePair<EnterpriseAttestationType?, string>> EnterpriseAttestationTypes
+        => EnumAdapter.GetComboBoxItems<EnterpriseAttestationType>();
+
         private int _timeout;
         public int Timeout
         {
@@ -179,6 +195,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
         public IList<KeyValuePair<UserVerification?, string>> CredProtectPolicies
         => EnumAdapter.GetComboBoxItems<UserVerification>();
+
+        public IList<KeyValuePair<LargeBlobSupport?, string>> LargeBlobSupportPolicies
+        => EnumAdapter.GetComboBoxItems<LargeBlobSupport>();
 
         public RelyingPartyInformation RelyingPartyEntity
         {
@@ -323,6 +342,20 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set => SetProperty(ref _hmacSecret, value);
         }
 
+        private bool _enablePRF;
+        public bool EnablePseudoRandomFunction
+        {
+            get => _enablePRF;
+            set => SetProperty(ref _enablePRF, value);
+        }
+
+        private LargeBlobSupport _largeBlobSupport;
+        public LargeBlobSupport LargeBlobSupport
+        {
+            get => _largeBlobSupport;
+            set => SetProperty(ref _largeBlobSupport, value);
+        }
+
         private byte[] _credentialBlob;
         public byte[] CredentialBlob
         {
@@ -343,7 +376,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             get => _credentialBlob != null ? Base64UrlConverter.ToBase64UrlString(_credentialBlob) : string.Empty;
             set
             {
-                byte[] binaryValue = value != null ? Base64UrlConverter.FromBase64UrlString(value) : null;
+                byte[] binaryValue = string.IsNullOrEmpty(value) ? null : Base64UrlConverter.FromBase64UrlString(value);
                 bool changed = SetProperty(ref _credentialBlob, binaryValue, nameof(CredentialBlob));
 
                 if (changed)
@@ -351,6 +384,13 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     RaisePropertyChanged(nameof(CredentialBlobString));
                 }
             }
+        }
+
+        private bool _isBrowserPrivateMode;
+        public bool IsBrowserPrivateMode
+        {
+            get => _isBrowserPrivateMode;
+            set => SetProperty(ref _isBrowserPrivateMode, value);
         }
 
         private static byte[] GetRandomBytes(int count)

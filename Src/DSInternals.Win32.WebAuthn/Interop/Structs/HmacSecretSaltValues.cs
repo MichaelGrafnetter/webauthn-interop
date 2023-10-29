@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using DSInternals.Win32.WebAuthn.Interop.Structs;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {

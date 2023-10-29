@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace DSInternals.Win32.WebAuthn.Interop.Structs
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <remarks>Corresponds to WEBAUTHN_CRED_WITH_HMAC_SECRET_SALT.</remarks>
     [StructLayout(LayoutKind.Sequential)]
