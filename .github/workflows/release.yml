@@ -34,7 +34,7 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-    
+
     - name: Restore Strong Name Key
       if: ${{ github.event.inputs.strong_name_sign }}
       working-directory: Keys
@@ -88,7 +88,7 @@ jobs:
         dotnet tool install --global NuGetKeyVaultSignTool
 
     - name: Sign Binaries
-      if: ${{ github.event.inputs.certificate_sign }}  
+      if: ${{ github.event.inputs.certificate_sign }}
       shell: cmd
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
@@ -124,7 +124,7 @@ jobs:
       run: dotnet pack --configuration Release --no-build --nologo
 
     - name: Sign NuGet Packages
-      if: ${{ github.event.inputs.certificate_sign }}  
+      if: ${{ github.event.inputs.certificate_sign }}
       shell: cmd
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
