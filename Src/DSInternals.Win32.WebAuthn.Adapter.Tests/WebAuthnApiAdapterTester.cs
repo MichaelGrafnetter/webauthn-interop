@@ -34,8 +34,8 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 
             var user = new Fido2User
             {
-                Name = "michel.grafnetter@outlook.com",
-                DisplayName = "Michael Grafnetter",
+                Name = "john.doe@outlook.com",
+                DisplayName = "John Doe",
                 Id = Base64Url.Decode("TUY65dH-Otl4jMdTRvlFQ1aApACYsuqGKSPQDQc1Bd4WVyw")
             };
 
