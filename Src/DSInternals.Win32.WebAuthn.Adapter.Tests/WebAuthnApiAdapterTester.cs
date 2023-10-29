@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
     /// </summary>
     [TestClass]
     [TestCategory("Interactive")]
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public class WebAuthnApiAdapterTester
     {
         [TestMethod]
@@ -22,7 +26,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             var config = new Fido2Configuration()
             {
                 ChallengeSize = 32,
-                Origin = "login.microsoft.com",
+                Origins = new HashSet<string>(new string[] { "https://login.microsoft.com" }),
                 ServerDomain = "login.microsoft.com",
                 ServerName = "Microsoft",
                 Timeout = 60000
@@ -88,7 +92,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
         {
             var config = new Fido2Configuration()
             {
-                Origin = "login.microsoft.com",
+                Origins = new HashSet<string>(new string[] { "https://login.microsoft.com" }),
                 ServerDomain = "login.microsoft.com",
                 ServerName = "Microsoft",
                 Timeout = 60000
@@ -132,6 +136,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             var pubKey = new byte[] { 0, 0, 0 };
             uint counter = 25;
             var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, (_, _) => Task.FromResult(true)).GetAwaiter().GetResult();
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
@@ -139,7 +144,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
         {
             var config = new Fido2Configuration()
             {
-                Origin = "login.microsoft.com",
+                Origins = new HashSet<string>(new string[] { "https://login.microsoft.com" }),
                 ServerDomain = "login.microsoft.com",
                 ServerName = "Microsoft",
                 Timeout = 60000
@@ -163,6 +168,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             var pubKey = new byte[] { 0, 0, 0 };
             uint counter = 25;
             var result = fido2.MakeAssertionAsync(response, options, pubKey, counter, (_, _) => Task.FromResult(true)).GetAwaiter().GetResult();
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
@@ -171,7 +177,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
         {
             var config = new Fido2Configuration()
             {
-                Origin = "login.microsoft.com",
+                Origins = new HashSet<string>(new string[] { "https://login.microsoft.com" }),
                 ServerDomain = "login.microsoft.com",
                 ServerName = "Microsoft"
             };
@@ -188,7 +194,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 
             var webauthn = new WebAuthnApiAdapter();
 
-            var source = new CancellationTokenSource(5000);
+            var source = new CancellationTokenSource(5000); // Cancel in 5 seconds
             webauthn.AuthenticatorGetAssertionAsync(options, null, source.Token).GetAwaiter().GetResult();
         }
     }

@@ -4,12 +4,6 @@ using System.Linq;
 using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.Interop;
 using Fido2NetLib.Objects;
-using Newtonsoft.Json;
-using AttestationConveyancePreference = DSInternals.Win32.WebAuthn.AttestationConveyancePreference;
-using AuthenticatorAttachment = DSInternals.Win32.WebAuthn.AuthenticatorAttachment;
-using AuthenticatorTransport = DSInternals.Win32.WebAuthn.AuthenticatorTransport;
-using PublicKeyCredentialDescriptor = DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor;
-using UserVerificationRequirement = DSInternals.Win32.WebAuthn.UserVerificationRequirement;
 
 namespace DSInternals.Win32.WebAuthn.Adapter
 {
@@ -55,12 +49,16 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             {
                 throw new ArgumentNullException(nameof(credParams));
             }
-            //TODO: Fix this ex
-            throw new NotImplementedException();
-            // return credParams.Select(item => Translate(item.Alg)).ToArray();
+
+            return credParams.Select(item => Translate(item.Alg)).ToArray();
         }
 
         public static Algorithm Translate(long algorithm)
+        {
+            return checked((Algorithm)algorithm);
+        }
+
+        public static Algorithm Translate(Fido2NetLib.Objects.COSE.Algorithm algorithm)
         {
             return checked((Algorithm)algorithm);
         }
@@ -79,6 +77,11 @@ namespace DSInternals.Win32.WebAuthn.Adapter
 
         public static PublicKeyCredentialDescriptor Translate(Fido2NetLib.Objects.PublicKeyCredentialDescriptor credential)
         {
+            if(credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+
             return new PublicKeyCredentialDescriptor(credential.Id, Translate(credential.Transports), Translate(credential.Type));
         }
 
