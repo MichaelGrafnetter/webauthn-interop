@@ -98,7 +98,7 @@ jobs:
       with:
         client-id: ${{ secrets.SIGNING_CLIENT_ID }}
         tenant-id: ${{ secrets.SIGNING_TENANT_ID }}
-        subscription-id: ${{ secrets.SIGNING_SUBSCRIPTION_ID }}
+        allow-no-subscriptions: true
           
     - name: Sign Binaries
       if: ${{ github.event.inputs.certificate_sign }}
