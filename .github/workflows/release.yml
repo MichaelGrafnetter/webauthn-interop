@@ -112,7 +112,7 @@ jobs:
       working-directory: Build/bin/Release
       timeout-minutes: 1
       run: |
-        SET keyVaultToken=az account get-access-token --resource "%SIGNING_VAULT_URL%" --query accessToken --output tsv
+        for /f %%i in ('az account get-access-token --resource "%SIGNING_VAULT_URL%" --query accessToken --output tsv') do set keyVaultToken=%%i
         echo %keyVaultToken%
         AzureSignTool sign ^
         DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll ^
