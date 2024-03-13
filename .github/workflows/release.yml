@@ -23,6 +23,7 @@ on:
         description: 'Version'
         required: true
         type: string
+        default: '1.x'
 
 permissions:
       id-token: write
@@ -105,15 +106,11 @@ jobs:
       shell: cmd
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
-        SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
-        SIGNING_CLIENT_ID: ${{ secrets.SIGNING_CLIENT_ID }}
-        SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
       working-directory: Build/bin/Release
       timeout-minutes: 1
       run: |
-        for /f %%i in ('az account get-access-token --resource "%SIGNING_VAULT_URL%" --query accessToken --output tsv') do set keyVaultToken=%%i
-        echo %keyVaultToken%
+        for /f %%i in ('az account get-access-token --resource "%SIGNING_VAULT_URL%" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
         AzureSignTool sign ^
         DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll ^
         DSInternals.Win32.WebAuthn/net48/DSInternals.Win32.WebAuthn.dll ^
@@ -128,9 +125,7 @@ jobs:
         --timestamp-digest sha256 ^
         --timestamp-rfc3161 http://timestamp.digicert.com ^
         --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
-        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
-        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
-        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
+        --azure-key-vault-accesstoken "%KEYVAULT_TOKEN%" ^
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
         xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/" /Y /I /F
 
@@ -143,29 +138,23 @@ jobs:
       shell: cmd
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
-        SIGNING_TENANT_ID: ${{ secrets.SIGNING_TENANT_ID }}
-        SIGNING_CLIENT_ID: ${{ secrets.SIGNING_CLIENT_ID }}
-        SIGNING_CLIENT_SECRET: ${{ secrets.SIGNING_CLIENT_SECRET }}
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
       working-directory: Build/bin/Release/Packages
       run: |
+        for /f %%i in ('az account get-access-token --resource "%SIGNING_VAULT_URL%" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
         NuGetKeyVaultSignTool sign *.nupkg ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
         --timestamp-rfc3161 http://timestamp.digicert.com ^
         --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
-        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
-        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
-        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
+        --azure-key-vault-accesstoken "%KEYVAULT_TOKEN%" ^
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
         NuGetKeyVaultSignTool sign *.snupkg ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
         --timestamp-rfc3161 http://timestamp.digicert.com ^
         --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
-        --azure-key-vault-tenant-id "%SIGNING_TENANT_ID%" ^
-        --azure-key-vault-client-id "%SIGNING_CLIENT_ID%" ^
-        --azure-key-vault-client-secret "%SIGNING_CLIENT_SECRET%" ^
+        --azure-key-vault-accesstoken "%KEYVAULT_TOKEN%" ^
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
 
     - name: Upload NuGet Packages as Artifacts
