@@ -93,7 +93,7 @@ jobs:
         dotnet tool install --global NuGetKeyVaultSignTool
 
     - name: Azure Login
-      uses: azure/login@2
+      uses: azure/login@v2
       if: ${{ github.event.inputs.certificate_sign }}
       with:
         client-id: ${{ secrets.SIGNING_CLIENT_ID }}
