@@ -1,4 +1,5 @@
 # WebAuthn Interop Assembly
+
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 [![Windows 10 1903+](https://img.shields.io/badge/Windows%2010-1903%2B-007bb8.svg?logo=Windows)](#)
 [![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
@@ -9,7 +10,7 @@
 
 ## Introduction
 
-The `DSInternals.Win32.WebAuthn` library allows .NET applications to directly interact with Passkeys (e.g. [Windows Hello](https://support.microsoft.com/en-us/windows/passkeys-in-windows-301c8944-5ea2-452b-9886-97e4d2ef4422), [YubiKey](https://www.yubico.com/products/), [Feitian](https://www.ftsafe.com/products/FIDO), or [Crayonic](https://www.crayonic.com/)) and with [Windows Hello](https://support.microsoft.com/en-us/windows/learn-about-windows-hello-and-set-it-up-dae28983-8242-bb2a-d3d1-87c9d265a5f0) / [Windows Hello for Business](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/hello-identity-verification). 
+The `DSInternals.Win32.WebAuthn` library allows .NET applications to directly interact with Passkeys (e.g. [Windows Hello](https://support.microsoft.com/en-us/windows/passkeys-in-windows-301c8944-5ea2-452b-9886-97e4d2ef4422), [YubiKey](https://www.yubico.com/products/), [Feitian](https://www.ftsafe.com/products/FIDO), or [Crayonic](https://www.crayonic.com/)) and with [Windows Hello](https://support.microsoft.com/en-us/windows/learn-about-windows-hello-and-set-it-up-dae28983-8242-bb2a-d3d1-87c9d265a5f0) / [Windows Hello for Business](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/hello-identity-verification).
 It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://learn.microsoft.com/en-us/windows/win32/api/_webauthn/)
 (defined in the [`webauthn.h`](https://github.com/microsoft/webauthn/blob/master/webauthn.h) header file and implemented in the `webauthn.dll` system library). This API is mainly used by browsers
 (see the source code of [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
@@ -23,7 +24,7 @@ See the [project site](https://github.com/abergs/fido2-net-lib) for more details
 
 The project also contains a simple Windows GUI tool called `FIDO2 UI`, which is built on top of the `DSInternals.Win32.WebAuthn` library:
 
-![](../Documentation/Screenshots/fido2_ui.png)
+![FIDO2 UI Screenshot](../Documentation/Screenshots/fido2_ui.png)
 
 The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 
@@ -41,7 +42,7 @@ The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 
 The WebAuthn API is only supported on Windows 10 1903 and newer. It is exposed in the [DSInternals.Win32.WebAuthn](../Documentation/API/DSInternals.Win32.WebAuthn.md) namespace, with the [WebAuthnApi](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi.md) class being the main entry point.
 
-Following are code samples that mimic the behavior of [login.microsoftonline.com](https://login.microsoftonline.com). 
+Following are code samples that mimic the behavior of [login.microsoftonline.com](https://login.microsoftonline.com).
 The samples are not ready for production use, as they are missing validation and contain many hardcoded values. Especially the `challenge` must be randomly generated in a cryptographically safe way.
 
 ### Registration (Attestation)
@@ -95,16 +96,18 @@ Rohitab API Monitor can be used to [analyze WebAuthn API calls made by browsers]
 
 ### Windows Event Viewer
 
-Windows 10 creates very detailed logs of WebAuthn API calls and CTAP commands. The logs can be displayed in the built-in 
+Windows 10 creates very detailed logs of WebAuthn API calls and CTAP commands. The logs can be displayed in the built-in
 **Event Viewer** console under **Applications and Services Logs &rarr; Microsoft &rarr; Windows &rarr; WebAuthN &rarr; Operational**:
 
 ![WebAuthn Event Viewer Screenshot](../Documentation/Screenshots/webauthn_event_viewer.png)
 
 ## Microsoft's Documentation
+
 - [WebAuthn APIs for password-less authentication on Windows 10](https://learn.microsoft.com/en-us/windows/win32/api/webauthn/)
 - [C header file](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
 
 ## Acknowledgements
+
 - This project uses the [FIDO2 .NET Library](https://github.com/abergs/fido2-net-lib). Huge thanks to its contributors, mainly @abergs and @aseigler.
 - There are at least 2 similar projects, in various stages of completeness:
   - [Yoq.Windows.WebAuthn](https://github.com/dbeinder/Yoq.Windows.WebAuthn)

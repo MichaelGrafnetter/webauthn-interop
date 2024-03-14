@@ -2,7 +2,7 @@ name: 'Build and Test'
 
 on:
   push:
-    paths:    
+    paths:
     - 'Src/**'
     - '.github/workflows/**'
 
@@ -11,24 +11,28 @@ jobs:
     name: 'Build'
     runs-on: windows-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
-
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v3
-    
+      uses: actions/checkout@v4
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-          dotnet-version: |
-            7.0.x
+          dotnet-version: 8.x
+          cache: false
       env:
         DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
     - name: Cache NuGet Packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
         # Heuristics: The current list of required packages is defined in the project files.
@@ -46,10 +50,19 @@ jobs:
       working-directory: Src
       run: dotnet test --filter TestCategory!=Interactive --configuration Debug --nologo
       continue-on-error: true
-    
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/windows@v2
+      if: always()
+      with:
+        files: |
+          Build\TestResults\**\*.xml
+          Build\TestResults\**\*.trx
+          Build\TestResults\**\*.json
+
     - name: Cache DotNet Global Tools
       id: cache-dotnet-globaltools
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.dotnet/tools
         # Heuristics: The current list of required global tools is defined in this workflow file.
@@ -64,21 +77,21 @@ jobs:
       run: reportgenerator -reports:*/coverage.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary" -title:"WebAuthn Interop Assembly"
 
     - name: Upload Test Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: TestResults
         path: |
             Build/TestResults/*.*
             !**/*.htm
 
-    - name: Upload NuGet Packages
-      uses: actions/upload-artifact@v3
+    - name: Upload NuGet Packages as Artifacts
+      uses: actions/upload-artifact@v4
       with:
         name: NuGet
         path: Build/bin/Release/Packages/*nupkg
 
-    - name: Upload Desktop App
-      uses: actions/upload-artifact@v3
+    - name: Upload Desktop App as Artifact
+      uses: actions/upload-artifact@v4
       with:
         name: Fido2UI
         path: Build/bin/Release/Fido2UI/*
@@ -100,7 +113,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
