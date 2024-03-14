@@ -63,8 +63,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
           dotnet-version: 8.x
-          cache: true
-          cache-dependency-path: '**/packages.lock.json'
+          cache: false
       env:
         DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
