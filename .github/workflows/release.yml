@@ -68,7 +68,7 @@ jobs:
         DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
     - name: Cache NuGet Packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
         # Heuristics: The current list of required packages is defined in the project files.
@@ -80,7 +80,7 @@ jobs:
 
     - name: Cache DotNet Global Tools
       id: cache-dotnet-globaltools
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       if: ${{ github.event.inputs.certificate_sign }}
       with:
         path: ~/.dotnet/tools
