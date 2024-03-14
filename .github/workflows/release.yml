@@ -110,7 +110,7 @@ jobs:
       working-directory: Build/bin/Release
       timeout-minutes: 1
       run: |
-        for /f %%i in ('az account get-access-token --resource "%SIGNING_VAULT_URL%" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
+        for /f %%i in ('az account get-access-token --resource "https://vault.azure.net" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
         AzureSignTool sign ^
         DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll ^
         DSInternals.Win32.WebAuthn/net48/DSInternals.Win32.WebAuthn.dll ^
@@ -141,7 +141,7 @@ jobs:
         SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
       working-directory: Build/bin/Release/Packages
       run: |
-        for /f %%i in ('az account get-access-token --resource "%SIGNING_VAULT_URL%" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
+        for /f %%i in ('az account get-access-token --resource "https://vault.azure.net" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
         NuGetKeyVaultSignTool sign *.nupkg ^
         --file-digest sha256 ^
         --timestamp-digest sha256 ^
