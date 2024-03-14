@@ -62,8 +62,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-          dotnet-version: 7.0.x
+          dotnet-version: 8.x
           cache: true
+          cache-dependency-path: '**/packages.lock.json'
       env:
         DOTNET_INSTALL_DIR: 'C:\Program Files\dotnet'
 
