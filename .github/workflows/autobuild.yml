@@ -55,10 +55,7 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action/windows@v2
       if: always()
       with:
-        files: |
-          Build\TestResults\**\*.xml
-          Build\TestResults\**\*.trx
-          Build\TestResults\**\*.json
+        files: Build\TestResults\**\*.trx
 
     - name: Cache DotNet Global Tools
       id: cache-dotnet-globaltools
