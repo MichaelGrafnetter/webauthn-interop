@@ -1,60 +1,60 @@
-﻿using DSInternals.Win32.WebAuthn.Interop;
+﻿using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// The status of the large blob operation.
     /// </summary>
-    internal enum CredentialLargeBlobStatus : int
+    internal enum CredentialLargeBlobStatus : uint
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NONE.
         /// </remarks>
-        None = ApiConstants.CredLargeBlobStatusNone,
+        None = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_NONE,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_SUCCESS.
         /// </remarks>
-        Success = ApiConstants.CredLargeBlobStatusSuccess,
+        Success = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_SUCCESS,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NOT_SUPPORTED.
         /// </remarks>
-        NotSupported = ApiConstants.CredLargeBlobStatusNotSupported,
+        NotSupported = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_NOT_SUPPORTED,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_INVALID_DATA.
         /// </remarks>
-        InvalidData = ApiConstants.CredLargeBlobStatusInvalidData,
+        InvalidData = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_INVALID_DATA,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_INVALID_PARAMETER.
         /// </remarks>
-        InvalidParameter = ApiConstants.CredLargeBlobStatusInvalidParameter,
+        InvalidParameter = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_INVALID_PARAMETER,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_NOT_FOUND.
         /// </remarks>
-        NotFound = ApiConstants.CredLargeBlobStatusNotFound,
+        NotFound = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_NOT_FOUND,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_MULTIPLE_CREDENTIALS.
         /// </remarks>
-        MultipleCredentials = ApiConstants.CredLargeBlobStatusMultipleCredentials,
+        MultipleCredentials = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_MULTIPLE_CREDENTIALS,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_LACK_OF_SPACE.
         /// </remarks>
-        LackOfSpace = ApiConstants.CredLargeBlobStatusLackOfSpace,
+        LackOfSpace = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_LACK_OF_SPACE,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_PLATFORM_ERROR.
         /// </remarks>
-        PlatformError = ApiConstants.CredLargeBlobStatusPlatformError,
+        PlatformError = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_PLATFORM_ERROR,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_STATUS_AUTHENTICATOR_ERROR.
         /// </remarks>
-        AuthenticatorError = ApiConstants.CredLargeBlobStatusAuthenticatorError
+        AuthenticatorError = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_STATUS_AUTHENTICATOR_ERROR
     }
 }

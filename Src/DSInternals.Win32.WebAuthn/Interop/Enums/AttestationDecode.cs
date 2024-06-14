@@ -1,11 +1,13 @@
-﻿namespace DSInternals.Win32.WebAuthn.Interop
+﻿using Windows.Win32;
+
+namespace DSInternals.Win32.WebAuthn.Interop
 {
-    internal enum AttestationDecode : int
+    internal enum AttestationDecode : uint
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_DECODE_NONE.
         /// </remarks>
-        None = ApiConstants.AttestationDecodeNone,
+        None = PInvoke.WEBAUTHN_ATTESTATION_DECODE_NONE,
 
         /// <summary>
         /// Supports the packed and fido-u2f format types.
@@ -13,6 +15,6 @@
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_DECODE_COMMON.
         /// </remarks>
-        Common = ApiConstants.AttestationDecodeCommon
+        Common = PInvoke.WEBAUTHN_ATTESTATION_DECODE_COMMON
     }
 }

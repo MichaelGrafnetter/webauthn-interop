@@ -36,7 +36,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             //      - pvExtension must point to a BOOL with the value TRUE.
             //      - cbExtension must contain the sizeof(BOOL).
             byte[] binaryTrue = BitConverter.GetBytes((int)1);
-            return new ExtensionIn(ApiConstants.ExtensionsIdentifierHmacSecret, binaryTrue);
+            return new ExtensionIn(ApiConstants.ExtensionIdentifierHmacSecret, binaryTrue);
         }
 
         public static ExtensionIn CreateCredProtect(UserVerification uv, bool enforce)
@@ -49,7 +49,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             byte[] extensionData = new byte[structSize];
             BitConverter.GetBytes((int)uv).CopyTo(extensionData, 0);
             BitConverter.GetBytes(enforce ? (int)1 : (int)0).CopyTo(extensionData, sizeof(UserVerification));
-            return new ExtensionIn(ApiConstants.ExtensionsIdentifierCredProtect, extensionData);
+            return new ExtensionIn(ApiConstants.ExtensionIdentifierCredProtect, extensionData);
         }
 
         public static ExtensionIn CreateCredBlobAttestation(byte[] blob)
@@ -67,7 +67,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             byte[] extensionData = new byte[structSize];
             BitConverter.GetBytes(blob.Length).CopyTo(extensionData, 0);
             blob.CopyTo(extensionData, sizeof(int));
-            return new ExtensionIn(ApiConstants.ExtensionsIdentifierCredBlob, extensionData);
+            return new ExtensionIn(ApiConstants.ExtensionIdentifierCredBlob, extensionData);
         }
 
         public static ExtensionIn CreateCredBlobAssertion()
@@ -77,7 +77,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             //      - pvExtension must point to a BOOL with the value TRUE to request the credBlob.
             //      - cbExtension must contain the sizeof(BOOL).
             byte[] binaryTrue = BitConverter.GetBytes((int)1);
-            return new ExtensionIn(ApiConstants.ExtensionsIdentifierCredBlob, binaryTrue);
+            return new ExtensionIn(ApiConstants.ExtensionIdentifierCredBlob, binaryTrue);
         }
 
         public static ExtensionIn CreateMinPinLength()
@@ -87,7 +87,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             //      - pvExtension must point to a BOOL with the value TRUE to request the minPinLength.
             //      - cbExtension must contain the sizeof(BOOL).
             byte[] binaryTrue = BitConverter.GetBytes((int)1);
-            return new ExtensionIn(ApiConstants.ExtensionsIdentifierMinPinLength, binaryTrue);
+            return new ExtensionIn(ApiConstants.ExtensionIdentifierMinPinLength, binaryTrue);
         }
 
         public void Dispose()

@@ -1,7 +1,7 @@
 ﻿using System;
 #pragma warning disable CA1028 // Enum Storage should be Int32
 
-namespace DSInternals.Win32.WebAuthn.FIDO
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Authenticator data flags 

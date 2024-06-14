@@ -1,9 +1,11 @@
-﻿namespace DSInternals.Win32.WebAuthn.Interop
+﻿using Windows.Win32;
+
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// User Information Structure Version Information.
     /// </summary>
-    internal enum UserInformationVersion : int
+    internal enum UserInformationVersion : uint
     {
         /// <summary>
         /// Current version
@@ -11,6 +13,6 @@
         /// <remarks>
         /// Corresponds to WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION.
         /// </remarks>
-        Current = ApiConstants.UserEntityInformationCurrentVersion
+        Current = PInvoke.WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION
     }
 }

@@ -15,6 +15,7 @@
         <Set Name="WEBAUTHN_API_VERSION_4" Value="4" />
         <Set Name="WEBAUTHN_API_VERSION_5" Value="5" />
         <Set Name="WEBAUTHN_API_VERSION_6" Value="6" />
+        <Set Name="WEBAUTHN_API_VERSION_7" Value="7" />
       </Enum>
     </Variable>
     <Variable Name="[WEBAUTHN_RP_ENTITY_INFORMATION_VERSION]" Type="Alias" Base="DWORD">

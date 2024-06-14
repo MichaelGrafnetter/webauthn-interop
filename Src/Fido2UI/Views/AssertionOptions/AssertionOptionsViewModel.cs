@@ -42,7 +42,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             HmacSecretSalt2 = GetRandomBytes(ApiConstants.CtapOneHmacSecretLength);
         }
 
-        public int HmacSecretSaltStringLength => 2 * ApiConstants.CtapOneHmacSecretLength; // HEX length
+        public uint HmacSecretSaltStringLength => 2 * ApiConstants.CtapOneHmacSecretLength; // HEX length
 
         private string _relyingPartyId;
         public string RelyingPartyId
@@ -295,7 +295,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             set => SetProperty(ref _isBrowserPrivateMode, value);
         }
 
-        private static byte[] GetRandomBytes(int count)
+        private static byte[] GetRandomBytes(uint count)
         {
             using (var rng = RandomNumberGenerator.Create())
             {

@@ -20,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 //      - pvExtension will point to a BOOL with the value TRUE if credential
                 //        was successfully created with HMAC_SECRET.
                 //      - cbExtension will contain the sizeof(BOOL).
-                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierHmacSecret);
+                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionIdentifierHmacSecret);
 
                 if(foundExtension == null)
                 {
@@ -47,7 +47,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 //      - pvExtension will point to a DWORD with one of the above WEBAUTHN_USER_VERIFICATION_* values
                 //        if credential was successfully created with CRED_PROTECT.
                 //      - cbExtension will contain the sizeof(DWORD).
-                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierCredProtect);
+                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionIdentifierCredProtect);
 
                 if (foundExtension == null)
                 {
@@ -73,7 +73,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 // MakeCredential Output Type:  BOOL.
                 //      - pvExtension will point to a BOOL with the value TRUE if credBlob was successfully created
                 //      - cbExtension will contain the sizeof(BOOL).
-                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierCredBlob);
+                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionIdentifierCredBlob);
 
                 if (foundExtension == null)
                 {
@@ -99,7 +99,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 //      - pvExtension will point to a WEBAUTHN_CRED_BLOB_EXTENSION struct if the authenticator
                 //        returns the credBlob in the signed extensions
                 //      - cbExtension will contain the sizeof(WEBAUTHN_CRED_BLOB_EXTENSION).
-                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierCredBlob);
+                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionIdentifierCredBlob);
 
                 if (foundExtension == null)
                 {
@@ -137,7 +137,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 // MakeCredential Output Type:  DWORD.
                 //      - pvExtension will point to a DWORD with the minimum pin length if returned by the authenticator
                 //      - cbExtension will contain the sizeof(DWORD).
-                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierMinPinLength);
+                var foundExtension = Items?.FirstOrDefault(extension => extension.Identifier == ApiConstants.ExtensionIdentifierMinPinLength);
 
                 if (foundExtension == null)
                 {

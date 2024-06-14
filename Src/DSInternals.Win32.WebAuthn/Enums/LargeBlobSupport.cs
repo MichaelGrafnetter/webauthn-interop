@@ -1,25 +1,25 @@
-﻿using DSInternals.Win32.WebAuthn.Interop;
+﻿using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// Large blob support options.
     /// </summary>
-    public enum LargeBlobSupport :int
+    public enum LargeBlobSupport :uint
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_NONE.
         /// </remarks>
-        None = ApiConstants.LargeBlobSupportNone,
+        None = PInvoke.WEBAUTHN_LARGE_BLOB_SUPPORT_NONE,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_REQUIRED.
         /// </remarks>
-        Required = ApiConstants.LargeBlobSupportRequired,
+        Required = PInvoke.WEBAUTHN_LARGE_BLOB_SUPPORT_REQUIRED,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_LARGE_BLOB_SUPPORT_PREFERRED.
         /// </remarks>
-        Preferred = ApiConstants.LargeBlobSupportPreferred
+        Preferred = PInvoke.WEBAUTHN_LARGE_BLOB_SUPPORT_PREFERRED
     }
 }

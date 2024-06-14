@@ -1,30 +1,30 @@
-﻿using DSInternals.Win32.WebAuthn.Interop;
+﻿using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// The operation to perform on the large blob.
     /// </summary>
-    public enum CredentialLargeBlobOperation : int
+    public enum CredentialLargeBlobOperation : uint
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_NONE.
         /// </remarks>
-        None = ApiConstants.CredLargeBlobOperationNone,
+        None = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_OPERATION_NONE,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_GET.
         /// </remarks>
-        Get = ApiConstants.CredLargeBlobOperationGet,
+        Get = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_OPERATION_GET,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_SET.
         /// </remarks>
-        Set = ApiConstants.CredLargeBlobOperationSet,
+        Set = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_OPERATION_SET,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_CRED_LARGE_BLOB_OPERATION_DELETE.
         /// </remarks>
-        Delete = ApiConstants.CredLargeBlobOperationDelete
+        Delete = PInvoke.WEBAUTHN_CRED_LARGE_BLOB_OPERATION_DELETE
     }
 }

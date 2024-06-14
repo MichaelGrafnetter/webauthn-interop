@@ -110,8 +110,8 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             using (var nativeExtensions = new ExtensionsIn(nativeExtensionList.ToArray()))
             {
                 Assert.AreEqual(2, nativeExtensionList.Count);
-                var hmacSecret = nativeExtensionList.Find(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierHmacSecret);
-                var credProtect = nativeExtensionList.Find(extension => extension.Identifier == ApiConstants.ExtensionsIdentifierCredProtect);
+                var hmacSecret = nativeExtensionList.Find(extension => extension.Identifier == ApiConstants.ExtensionIdentifierHmacSecret);
+                var credProtect = nativeExtensionList.Find(extension => extension.Identifier == ApiConstants.ExtensionIdentifierCredProtect);
             }
         }
     }

@@ -1,9 +1,11 @@
-﻿namespace DSInternals.Win32.WebAuthn.Interop
+﻿using Windows.Win32;
+
+namespace DSInternals.Win32.WebAuthn.Interop
 {
     /// <summary>
     /// Relying Party Information Structure Version Information.
     /// </summary>
-    internal enum RelyingPartyInformationVersion : int
+    internal enum RelyingPartyInformationVersion : uint
     {
         /// <summary>
         /// Current version
@@ -11,6 +13,6 @@
         /// <remarks>
         /// Corresponds to WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION.
         /// </remarks>
-        Current = ApiConstants.RpEntityInformationCurrentVersion
+        Current = PInvoke.WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION
     }
 }

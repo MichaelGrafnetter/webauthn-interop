@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "DSInternals.Win32.WebAuthn.CodeGen": {
-      "commandName": "Project",
-      "commandLineArgs": "\"$(MSBuildProjectDirectory)\\CodeGen.h\" \"$(MSBuildProjectDirectory)\\..\\DSInternals.Win32.WebAuthn\\Interop\\ApiConstants.cs\""
-    }
-  }
-}

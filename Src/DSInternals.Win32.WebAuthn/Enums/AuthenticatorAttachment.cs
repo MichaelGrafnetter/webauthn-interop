@@ -1,6 +1,6 @@
 ﻿
 using System.Runtime.Serialization;
-using DSInternals.Win32.WebAuthn.Interop;
+using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -8,7 +8,7 @@ namespace DSInternals.Win32.WebAuthn
     /// This enumeration’s values describe authenticators' attachment modalities.
     /// </summary>
     /// <see>https://www.w3.org/TR/webauthn-2/#enum-attachment</see>
-    public enum AuthenticatorAttachment : int
+    public enum AuthenticatorAttachment : uint
     {
         /// <summary>
         /// No authenticator attachment filters are applied.
@@ -17,7 +17,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY.
         /// </remarks>
         [EnumMember(Value = "NULL")]
-        Any = ApiConstants.AuthenticatorAttachmentAny,
+        Any = PInvoke.WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY,
 
         /// <summary>
         /// This value indicates platform attachment.
@@ -26,7 +26,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_ATTACHMENT_PLATFORM.
         /// </remarks>
         [EnumMember(Value = "platform")]
-        Platform = ApiConstants.AuthenticatorAttachmentPlatform,
+        Platform = PInvoke.WEBAUTHN_AUTHENTICATOR_ATTACHMENT_PLATFORM,
 
         /// <summary>
         /// This value indicates cross-platform attachment.
@@ -35,11 +35,11 @@ namespace DSInternals.Win32.WebAuthn
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_ATTACHMENT_CROSS_PLATFORM.
         /// </remarks>
         [EnumMember(Value = "cross-platform")]
-        CrossPlatform = ApiConstants.AuthenticatorAttachmentCrossPlatform,
+        CrossPlatform = PInvoke.WEBAUTHN_AUTHENTICATOR_ATTACHMENT_CROSS_PLATFORM,
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_AUTHENTICATOR_ATTACHMENT_CROSS_PLATFORM_U2F_V2.
         /// </remarks>
-        CrossPlatformU2F = ApiConstants.AuthenticatorAttachmentCrossPlatformU2fV2
+        CrossPlatformU2F = PInvoke.WEBAUTHN_AUTHENTICATOR_ATTACHMENT_CROSS_PLATFORM_U2F_V2
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Runtime.Serialization;
-using DSInternals.Win32.WebAuthn.Interop;
+using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -7,13 +7,13 @@ namespace DSInternals.Win32.WebAuthn
     /// This enumeration describes the Relying Party's requirements regarding user verification for the create() operation.
     /// Eligible authenticators are filtered to only those capable of satisfying this requirement.
     /// </summary>
-    public enum UserVerificationRequirement : int
+    public enum UserVerificationRequirement : uint
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_ANY.
         /// </remarks>
         [EnumMember(Value = "NULL")]
-        Any = ApiConstants.UserVerificationRequirementAny,
+        Any = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_ANY,
 
         /// <summary>
         /// This value indicates that the Relying Party requires user verification for the operation
@@ -23,7 +23,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_REQUIRED.
         /// </remarks>
         [EnumMember(Value = "required")]
-        Required = ApiConstants.UserVerificationRequirementRequired,
+        Required = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_REQUIRED,
 
         /// <summary>
         /// This value indicates that the Relying Party prefers user verification for the operation if possible,
@@ -33,7 +33,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED.
         /// </remarks>
         [EnumMember(Value = "preferred")]
-        Preferred = ApiConstants.UserVerificationRequirementPreferred,
+        Preferred = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED,
 
         /// <summary>
         /// This value indicates that the Relying Party does not want user verification employed during the operation
@@ -43,6 +43,6 @@ namespace DSInternals.Win32.WebAuthn
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_DISCOURAGED.
         /// </remarks>
         [EnumMember(Value = "discouraged")]
-        Discouraged = ApiConstants.UserVerificationRequirementDiscouraged
+        Discouraged = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_DISCOURAGED
     }
 }

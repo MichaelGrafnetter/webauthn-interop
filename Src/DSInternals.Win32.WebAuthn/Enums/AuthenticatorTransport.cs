@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using DSInternals.Win32.WebAuthn.Interop;
+using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -9,7 +9,7 @@ namespace DSInternals.Win32.WebAuthn
     /// </summary>
     /// <see>https://www.w3.org/TR/webauthn/#enum-transport</see>
     [Flags]
-    public enum AuthenticatorTransport : int
+    public enum AuthenticatorTransport : uint
     {
         /// <summary>
         /// No transport restrictions.
@@ -24,37 +24,37 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_USB.</remarks>
         [EnumMember(Value = "usb")]
-        USB = ApiConstants.CtapTransportUsb,
+        USB = PInvoke.WEBAUTHN_CTAP_TRANSPORT_USB,
 
         /// <summary>
         /// Near Field Communication (NFC).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_NFC.</remarks>
         [EnumMember(Value = "nfc")]
-        NFC = ApiConstants.CtapTransportNfc,
+        NFC = PInvoke.WEBAUTHN_CTAP_TRANSPORT_NFC,
 
         /// <summary>
         /// Bluetooth Low Energy (BLE).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_BLE.</remarks>
         [EnumMember(Value = "ble")]
-        BLE = ApiConstants.CtapTransportBle,
+        BLE = PInvoke.WEBAUTHN_CTAP_TRANSPORT_BLE,
 
         /// <summary>
         /// Hybrid Transport (QR Code).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_HYBRID.</remarks>
         [EnumMember(Value = "hybrid")]
-        Hybrid = ApiConstants.CtapTransportHybrid,
+        Hybrid = PInvoke.WEBAUTHN_CTAP_TRANSPORT_HYBRID,
 
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_TEST.</remarks>
-        Test = ApiConstants.CtapTransportTest,
+        Test = PInvoke.WEBAUTHN_CTAP_TRANSPORT_TEST,
 
         /// <summary>
         /// Client device-specific transport.
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_INTERNAL.</remarks>
         [EnumMember(Value = "internal")]
-        Internal = ApiConstants.CtapTransportInternal
+        Internal = PInvoke.WEBAUTHN_CTAP_TRANSPORT_INTERNAL
     }
 }
