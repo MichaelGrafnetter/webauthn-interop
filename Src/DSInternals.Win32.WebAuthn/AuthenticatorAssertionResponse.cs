@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -26,7 +26,8 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// This attribute contains the user handle returned from the authenticator, or null if the authenticator did not return a user handle.
         /// </summary>
-        [JsonProperty("userHandle", Required = Required.AllowNull)]
+        [JsonPropertyName("userHandle")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] UserHandle { get; set; }
     }

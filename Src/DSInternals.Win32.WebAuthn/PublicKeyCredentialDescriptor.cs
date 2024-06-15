@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.Interop;
 
 namespace DSInternals.Win32.WebAuthn
@@ -8,6 +9,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// This member contains the type of the public key credential the caller is referring to.
         /// </summary>
+        [JsonPropertyName("type")]
         public string Type
         {
             get;
@@ -16,6 +18,8 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// This member contains the credential ID of the public key credential the caller is referring to.
         /// </summary>
+        [JsonPropertyName("id")]
+        [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] Id
         {
             get;
@@ -24,11 +28,13 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// This member contains a hint as to how the client might communicate with the managing authenticator of the public key credential the caller is referring to.
         /// </summary>
+        [JsonPropertyName("transports")]
         public AuthenticatorTransport Transports
         {
             get;
         }
 
+        [JsonConstructor]
         public PublicKeyCredentialDescriptor(
             byte[] id,
             AuthenticatorTransport transports = AuthenticatorTransport.NoRestrictions,

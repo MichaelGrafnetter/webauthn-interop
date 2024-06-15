@@ -25,6 +25,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSInternals.Win32.WebAuthn.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSInternals.Win32.WebAuthn.Adaper.Tests", "DSInternals.Win32.WebAuthn.Adapter.Tests\DSInternals.Win32.WebAuthn.Adaper.Tests.csproj", "{D96F5E49-EE79-4B70-ABB4-4F59B5EACCF8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module", "Module", "{840191B3-0860-4B83-A0CC-F7AE3C6381B4}"
+	ProjectSection(SolutionItems) = preProject
+		DSInternals.Passkeys\DSInternals.Passkeys.psd1 = DSInternals.Passkeys\DSInternals.Passkeys.psd1
+		DSInternals.Passkeys\DSInternals.Passkeys.psm1 = DSInternals.Passkeys\DSInternals.Passkeys.psm1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +60,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{840191B3-0860-4B83-A0CC-F7AE3C6381B4} = {686243F0-D2B5-4684-9B92-B2754BBD9401}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5EAF41A3-0BD0-46BF-95A9-27963D948EE4}

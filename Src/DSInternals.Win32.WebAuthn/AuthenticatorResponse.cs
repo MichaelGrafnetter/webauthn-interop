@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -10,7 +10,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// This attribute contains a JSON-compatible serialization of the client data.
         /// </summary>
-        [JsonProperty("clientDataJSON")]
+        [JsonPropertyName("clientDataJSON")]
         [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] ClientDataJson { get; set; }
     }

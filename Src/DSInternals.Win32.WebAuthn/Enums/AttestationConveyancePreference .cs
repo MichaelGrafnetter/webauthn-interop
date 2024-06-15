@@ -1,4 +1,6 @@
-﻿using Windows.Win32;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -6,6 +8,7 @@ namespace DSInternals.Win32.WebAuthn
     /// This enumeration contains attestation conveyance options for credential generation.
     /// </summary>
     /// <see>https://www.w3.org/TR/webauthn-2/#enum-attestation-convey</see>
+    [JsonConverter(typeof(JsonStringEnumConverter<AttestationConveyancePreference>))]
     public enum AttestationConveyancePreference : uint
     {
         /// <remarks>
@@ -19,6 +22,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_NONE.
         /// </remarks>
+        [EnumMember(Value = "none")]
         None = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_NONE,
 
         /// <summary>
@@ -28,6 +32,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_INDIRECT.
         /// </remarks>
+        [EnumMember(Value = "indirect")]
         Indirect = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_INDIRECT,
 
         /// <summary>
@@ -36,6 +41,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT.
         /// </remarks>
+        [EnumMember(Value = "direct")]
         Direct = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT
 
         // TODO: Enterprise AttestationConveyancePreference

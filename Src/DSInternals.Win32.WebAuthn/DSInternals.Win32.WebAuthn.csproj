@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net7.0;net6.0;net5.0;netcoreapp3.1;net48;net472</TargetFrameworks>
+    <Platform>windows</Platform>
     <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
     <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
@@ -45,7 +46,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <!-- TODO: Replace with System.Formats.Cbor -->
     <PackageReference Include="PeterO.Cbor" Version="4.5.2" />
     <!-- Note: Classes from this namespace are part of .NET Framework -->

@@ -1,7 +1,7 @@
 ﻿using System;
 using DSInternals.Win32.WebAuthn.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace DSInternals.Win32.WebAuthn.FIDO.Tests
 {
@@ -20,9 +20,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO.Tests
                 Origin = "https://login.microsoft.com"
             };
 
-            string expected = @"{""type"":""webauthn.create"",""challenge"":""AQIDBAU"",""origin"":""https://login.microsoft.com""}";
+            string expected = @"{""type"":""webauthn.create"",""challenge"":""AQIDBAU"",""origin"":""https://login.microsoft.com"",""crossOrigin"":false}";
 
-            string clientDataJson = JsonConvert.SerializeObject(input);
+            string clientDataJson = JsonSerializer.Serialize(input);
             Assert.AreEqual(expected, clientDataJson);
 
             byte[] clientDataBinary = new ClientData(input).ClientDataRaw;
@@ -32,13 +32,12 @@ namespace DSInternals.Win32.WebAuthn.FIDO.Tests
         [TestMethod]
         public void CollectedClientData_Deserialize_Vector1()
         {
-            string clientDataJson = @"{""challenge"":""FsxBWwUb1jOFRA3ILdkCsPdCZkzohvd3JrCNeDqWpJQ"",""origin"":""http://localhost:8080"",""type"":""webauthn.create""}";
-            var clientData = JsonConvert.DeserializeObject<CollectedClientData>(clientDataJson);
+            string clientDataJson = @"{""type"":""webauthn.create"",""challenge"":""FsxBWwUb1jOFRA3ILdkCsPdCZkzohvd3JrCNeDqWpJQ"",""origin"":""http://localhost:8080""}";
+            var clientData = JsonSerializer.Deserialize<CollectedClientData>(clientDataJson);
 
             Assert.AreEqual("http://localhost:8080", clientData.Origin);
             Assert.AreEqual("webauthn.create", clientData.Type);
-            Assert.IsNull(clientData.CrossOrigin);
-            Assert.IsNull(clientData.HashAlgorithm);
+            Assert.IsFalse(clientData.CrossOrigin);
             CollectionAssert.AreEqual(Convert.FromBase64String("FsxBWwUb1jOFRA3ILdkCsPdCZkzohvd3JrCNeDqWpJQ="), clientData.Challenge);
         }
 
@@ -51,9 +50,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO.Tests
   ""origin"": ""https://demo.yubico.com"",
   ""type"": ""webauthn.create""
 }";
-            var clientData = JsonConvert.DeserializeObject<CollectedClientData>(clientDataJson);
+            var clientData = JsonSerializer.Deserialize<CollectedClientData>(clientDataJson);
             Assert.AreEqual("https://demo.yubico.com", clientData.Origin);
-            Assert.AreEqual(null, clientData.CrossOrigin);
+            Assert.IsFalse(clientData.CrossOrigin);
             Assert.AreEqual("webauthn.create", clientData.Type);
             CollectionAssert.AreEqual(Convert.FromBase64String("qNqrdXUrk5S7dCM1MAYH3qSVDXznb+6prQoGqiACR10="), clientData.Challenge);
         }

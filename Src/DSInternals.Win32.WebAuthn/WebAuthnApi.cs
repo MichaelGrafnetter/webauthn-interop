@@ -179,7 +179,33 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
         /// associated with its credential private key.
         /// </summary>
-        public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
+        public PublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return AuthenticatorMakeCredential(
+                rpEntity: options.RelyingParty,
+                userEntity: options.User,
+                challenge: options.Challenge,
+                userVerificationRequirement: options.AuthenticatorSelection.UserVerificationRequirement,
+                authenticatorAttachment: options.AuthenticatorSelection.AuthenticatorAttachment,
+                requireResidentKey: options.AuthenticatorSelection.RequireResidentKey,
+                pubKeyCredParams: options.PublicKeyCredentialParameters.Select(p => p.Algorithm).ToArray(),
+                attestationConveyancePreference: options.Attestation,
+                timeoutMilliseconds: options.TimeoutMilliseconds,
+                extensions: options.Extensions,
+                excludeCredentials: options.ExcludeCredentials
+                );
+        }
+
+        /// <summary>
+        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
+        /// associated with its credential private key.
+        /// </summary>
+        public PublicKeyCredential AuthenticatorMakeCredential(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
             byte[] challenge,
@@ -189,9 +215,9 @@ namespace DSInternals.Win32.WebAuthn
             COSE.Algorithm[] pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            AuthenticationExtensionsClientInputs extensions = null,
-            IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null,
             EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
+            AuthenticationExtensionsClientInputs extensions = null,
             LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
@@ -220,16 +246,16 @@ namespace DSInternals.Win32.WebAuthn
             // Add "https://" to RpId if missing
             var origin = new UriBuilder(rpEntity.Id)
             {
-                Scheme = Uri.UriSchemeHttps
+                Scheme = Uri.UriSchemeHttps,
+                Port = -1 // Omit port number in the URI
             };
 
             var clientData = new CollectedClientData()
             {
                 Type = ApiConstants.ClientDataCredentialCreate,
                 Challenge = challenge,
-                Origin = origin.Uri.ToString(),
-                CrossOrigin = false,
-                ClientExtensions = extensions
+                Origin = origin.Uri.ToString().TrimEnd('/'),
+                CrossOrigin = false
             };
 
             return AuthenticatorMakeCredential(
@@ -244,6 +270,7 @@ namespace DSInternals.Win32.WebAuthn
                 timeoutMilliseconds,
                 excludeCredentials,
                 enterpriseAttestation,
+                extensions,
                 largeBlobSupport,
                 preferResidentKey,
                 browserInPrivateMode,
@@ -257,7 +284,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
         /// associated with its credential private key.
         /// </summary>
-        public AuthenticatorAttestationResponse AuthenticatorMakeCredential(
+        public PublicKeyCredential AuthenticatorMakeCredential(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
             CollectedClientData clientData,
@@ -267,8 +294,9 @@ namespace DSInternals.Win32.WebAuthn
             COSE.Algorithm[] pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null,
             EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
+            AuthenticationExtensionsClientInputs extensions = null,
             LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
@@ -292,13 +320,13 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(clientData));
             }
 
-            if (clientData.ClientExtensions?.CredProtect.HasValue == true && IsCredProtectExtensionSupported == false)
+            if (extensions?.CredProtect!= UserVerification.Any && IsCredProtectExtensionSupported == false)
             {
                 // This extension is only supported in API V2.
                 throw new NotSupportedException("The Credential Protection extension is not supported on this OS.");
             }
 
-            if (clientData.ClientExtensions?.CredentialBlob != null && IsCredBlobSupported == false)
+            if (extensions?.CredentialBlob != null && IsCredBlobSupported == false)
             {
                 // This extension is only supported in API V3.
                 throw new NotSupportedException("The credential blob extension is not supported on this OS.");
@@ -359,7 +387,7 @@ namespace DSInternals.Win32.WebAuthn
                 using (var excludeCredListEx = new CredentialList(excludeCredsEx.ToArray()))
                 using (var pubKeyCredParamsNative = new CoseCredentialParameters(pubKeyCredParams))
                 using (var clientDataNative = new ClientData(clientData))
-                using (var extensionsList = ApiHelper.Translate(clientData.ClientExtensions))
+                using (var extensionsList = ApiHelper.Translate(extensions))
                 using (var nativeExtensions = new ExtensionsIn(extensionsList.ToArray()))
                 using (var userEntityNative = ApiHelper.Translate(userEntity))
                 using (var options = new AuthenticatorMakeCredentialOptions())
@@ -396,20 +424,21 @@ namespace DSInternals.Win32.WebAuthn
                     {
                         var attestation = attestationHandle.ToManaged();
 
-                        var extensions = new AuthenticationExtensionsClientOutputs()
+                        return new PublicKeyCredential()
                         {
-                            HmacSecret = attestation.Extensions?.HmacSecret,
-                            CredProtect = attestation.Extensions?.CredProtect
-                        };
-
-                        bool? credBlobCreated = attestation.Extensions?.CredBlobCreated;
-                        int? minPinLength = attestation.Extensions?.MinPinLength;
-
-                        return new AuthenticatorAttestationResponse()
-                        {
-                            ClientDataJson = clientDataNative.ClientDataRaw,
-                            AttestationObject = attestation.AttestationObject,
-                            // TODO: Return more data from the attestation.
+                            Id = attestation.CredentialId,
+                            AuthenticatorResponse = new AuthenticatorAttestationResponse()
+                            {
+                                ClientDataJson = clientDataNative.ClientDataRaw,
+                                AttestationObject = attestation.AttestationObject,
+                            },
+                            ClientExtensionResults = new AuthenticationExtensionsClientOutputs()
+                            {
+                                HmacSecret = attestation.Extensions?.HmacSecret ?? false,
+                                CredProtect = attestation.Extensions?.CredProtect ?? UserVerification.Any,
+                                MinimumPinLength = attestation.Extensions?.MinPinLength,
+                                CredentialBlobCreated = attestation.Extensions?.CredBlobCreated ?? false
+                            }
                         };
                     }
                     finally
@@ -429,7 +458,7 @@ namespace DSInternals.Win32.WebAuthn
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null,
             AuthenticationExtensionsClientInputs extensions = null,
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
@@ -461,8 +490,7 @@ namespace DSInternals.Win32.WebAuthn
                 Type = ApiConstants.ClientDataCredentialGet,
                 Challenge = challenge,
                 Origin = origin.Uri.ToString(),
-                CrossOrigin = false,
-                ClientExtensions = extensions
+                CrossOrigin = false
             };
 
             return AuthenticatorGetAssertion(
@@ -472,6 +500,7 @@ namespace DSInternals.Win32.WebAuthn
                 authenticatorAttachment,
                 timeoutMilliseconds,
                 allowCredentials,
+                extensions,
                 largeBlobOperation,
                 largeBlob,
                 browserInPrivateMode,
@@ -489,7 +518,8 @@ namespace DSInternals.Win32.WebAuthn
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            AuthenticationExtensionsClientInputs extensions = null,
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
@@ -507,7 +537,7 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(clientData));
             }
 
-            if (clientData.ClientExtensions?.GetCredentialBlob == true && IsCredBlobSupported == false)
+            if (extensions?.GetCredentialBlob == true && IsCredBlobSupported == false)
             {
                 // This feature is only supported in API V3.
                 throw new NotSupportedException("Credential blobs are not supported on this OS.");
@@ -525,7 +555,7 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("The browser private mode indicator is not supported on this OS.");
             }
 
-            if (clientData.ClientExtensions?.HmacGetSecret != null && IsPsuedoRandomFunctionSupported == false)
+            if (extensions?.HmacGetSecret != null && IsPsuedoRandomFunctionSupported == false)
             {
                 // This feature is only supported in API V6.
                 throw new NotSupportedException("The PRF extension is not supported on this OS.");
@@ -556,9 +586,9 @@ namespace DSInternals.Win32.WebAuthn
                 using (var allowCredList = new Credentials(allowCreds.ToArray()))
                 using (var allowCredListEx = new CredentialList(allowCredsEx.ToArray()))
                 using (var clientDataNative = new ClientData(clientData))
-                using (var globalHmacSalt = ApiHelper.Translate(clientData.ClientExtensions?.HmacGetSecret))
+                using (var globalHmacSalt = ApiHelper.Translate(extensions?.HmacGetSecret))
                 using (var hmacSecretSaltValues = new HmacSecretSaltValuesIn(globalHmacSalt, null))
-                using (var extensionsList = ApiHelper.Translate(clientData.ClientExtensions))
+                using (var extensionsList = ApiHelper.Translate(extensions))
                 using (var nativeExtensions = new ExtensionsIn(extensionsList.ToArray()))
                 using (var options = new AuthenticatorGetAssertionOptions())
                 {
@@ -568,7 +598,7 @@ namespace DSInternals.Win32.WebAuthn
                     options.UserVerificationRequirement = userVerificationRequirement;
                     options.AllowCredentials = allowCredList;
                     options.AllowCredentialsEx = allowCredListEx;
-                    options.U2fAppId = clientData.ClientExtensions?.AppID;
+                    options.U2fAppId = extensions?.AppID;
                     options.LargeBlobOperation = largeBlobOperation;
                     options.Extensions = nativeExtensions;
                     options.LargeBlob = largeBlob;
@@ -593,7 +623,7 @@ namespace DSInternals.Win32.WebAuthn
                     {
                         var assertion = assertionHandle.ToManaged();
 
-                        var extensions = new AuthenticationExtensionsClientOutputs()
+                        var extensionsOut = new AuthenticationExtensionsClientOutputs()
                         {
                             HmacGetSecret = new HMACGetSecretOutput
                             {

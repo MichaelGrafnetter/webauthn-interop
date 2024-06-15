@@ -129,7 +129,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         }
 
 
-        public int? MinPinLength
+        public uint? MinPinLength
         {
             get
             {
@@ -151,7 +151,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     throw new ArgumentOutOfRangeException(nameof(foundExtension.Data));
                 }
 
-                return BitConverter.ToInt32(foundExtension.Data, 0);
+                return BitConverter.ToUInt32(foundExtension.Data, 0);
             }
         }
 

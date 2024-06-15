@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
@@ -7,6 +8,7 @@ namespace DSInternals.Win32.WebAuthn
     /// This enumeration describes the Relying Party's requirements regarding user verification for the create() operation.
     /// Eligible authenticators are filtered to only those capable of satisfying this requirement.
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter<UserVerificationRequirement>))]
     public enum UserVerificationRequirement : uint
     {
         /// <remarks>

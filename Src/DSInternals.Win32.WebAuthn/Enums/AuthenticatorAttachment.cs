@@ -1,5 +1,6 @@
 ﻿
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
@@ -8,6 +9,7 @@ namespace DSInternals.Win32.WebAuthn
     /// This enumeration’s values describe authenticators' attachment modalities.
     /// </summary>
     /// <see>https://www.w3.org/TR/webauthn-2/#enum-attachment</see>
+    [JsonConverter(typeof(JsonCustomEnumConverter<AuthenticatorAttachment>))]
     public enum AuthenticatorAttachment : uint
     {
         /// <summary>

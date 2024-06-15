@@ -1,9 +1,9 @@
 ﻿using System;
-using PeterO.Cbor;
-using System.Security.Cryptography;
 using System.Globalization;
-using DSInternals.Win32.WebAuthn.COSE;
 using System.Runtime.Versioning;
+using System.Security.Cryptography;
+using DSInternals.Win32.WebAuthn.COSE;
+using PeterO.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {

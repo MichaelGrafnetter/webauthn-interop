@@ -1,4 +1,6 @@
-﻿namespace DSInternals.Win32.WebAuthn
+﻿using System.Text.Json.Serialization;
+
+namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
     /// The inputs to the hmac secret if it was created during registration.
@@ -9,11 +11,13 @@
         /// <summary>
         /// 32-byte random data.
         /// </summary>
+        [JsonPropertyName("salt1")]
         public byte[] Salt1 { get; set; }
 
         /// <summary>
         ///  Optional additional 32-byte random data. Used when the platform wants to roll over the symmetric secret in one operation.
         /// </summary>
+        [JsonPropertyName("salt2")]
         public byte[] Salt2 { get; set; }
     }
 }

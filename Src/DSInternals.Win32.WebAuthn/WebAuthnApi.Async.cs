@@ -12,7 +12,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
         /// associated with its credential private key.
         /// </summary>
-        public async Task<AuthenticatorAttestationResponse> AuthenticatorMakeCredentialAsync(
+        public async Task<PublicKeyCredential> AuthenticatorMakeCredentialAsync(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
             byte[] challenge,
@@ -23,7 +23,7 @@ namespace DSInternals.Win32.WebAuthn
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
             AuthenticationExtensionsClientInputs extensions = null,
-            IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null,
             EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
             LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
             bool preferResidentKey = false,
@@ -45,9 +45,9 @@ namespace DSInternals.Win32.WebAuthn
                 pubKeyCredParams,
                 attestationConveyancePreference,
                 timeoutMilliseconds,
-                extensions,
                 excludeCredentials,
                 enterpriseAttestation,
+                extensions,
                 largeBlobSupport,
                 preferResidentKey,
                 browserInPrivateMode,
@@ -66,7 +66,7 @@ namespace DSInternals.Win32.WebAuthn
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null,
             AuthenticationExtensionsClientInputs extensions = null,
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
@@ -97,7 +97,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
         /// associated with its credential private key.
         /// </summary>
-        public async Task<AuthenticatorAttestationResponse> AuthenticatorMakeCredentialAsync(
+        public async Task<PublicKeyCredential> AuthenticatorMakeCredentialAsync(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
             CollectedClientData clientData,
@@ -107,8 +107,9 @@ namespace DSInternals.Win32.WebAuthn
             COSE.Algorithm[] pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null,
             EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
+            AuthenticationExtensionsClientInputs extensions = null,
             LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
             bool preferResidentKey = false,
             bool browserInPrivateMode = false,
@@ -131,6 +132,7 @@ namespace DSInternals.Win32.WebAuthn
                 timeoutMilliseconds,
                 excludeCredentials,
                 enterpriseAttestation,
+                extensions,
                 largeBlobSupport,
                 preferResidentKey,
                 browserInPrivateMode,
@@ -149,7 +151,8 @@ namespace DSInternals.Win32.WebAuthn
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             int timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null,
+            AuthenticationExtensionsClientInputs extenstions = null,
             CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
             byte[] largeBlob = null,
             bool browserInPrivateMode = false,
@@ -166,6 +169,7 @@ namespace DSInternals.Win32.WebAuthn
                 authenticatorAttachment,
                 timeoutMilliseconds,
                 allowCredentials,
+                extenstions,
                 largeBlobOperation,
                 largeBlob,
                 browserInPrivateMode,

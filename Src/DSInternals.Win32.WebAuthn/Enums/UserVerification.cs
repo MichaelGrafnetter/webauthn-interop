@@ -1,6 +1,5 @@
 ﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
@@ -8,7 +7,7 @@ namespace DSInternals.Win32.WebAuthn
     /// <summary>
     /// Defines the credential protection policy.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonCustomEnumConverter<UserVerification>))]
     public enum UserVerification : uint
     {
         /// <summary>

@@ -46,10 +46,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
             if (extensions != null)
             {
-                if (extensions.CredProtect.HasValue)
+                if (extensions.CredProtect != UserVerification.Any)
                 {
                     nativeExtensions.Add(ExtensionIn.CreateCredProtect(
-                        extensions.CredProtect.Value,
+                        extensions.CredProtect,
                         extensions.EnforceCredProtect == true));
                 }
 
@@ -58,7 +58,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     nativeExtensions.Add(ExtensionIn.CreateHmacSecret());
                 }
 
-                if(extensions.MinPinLength == true)
+                if (extensions.MinimumPinLength == true)
                 {
                     nativeExtensions.Add(ExtensionIn.CreateMinPinLength());
                 }

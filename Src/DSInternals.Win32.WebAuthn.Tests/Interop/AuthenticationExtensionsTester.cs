@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Win32.WebAuthn.Interop.Tests
 {
@@ -13,13 +13,13 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             string jsonRequest = @"{""hmacCreateSecret"":true,""credentialProtectionPolicy"":""userVerificationOptional""}";
 
             // Parse
-            var request = JsonConvert.DeserializeObject<AuthenticationExtensionsClientInputs>(jsonRequest);
+            var request = JsonSerializer.Deserialize<AuthenticationExtensionsClientInputs>(jsonRequest);
             Assert.AreEqual(true, request.HmacCreateSecret);
             Assert.AreEqual(UserVerification.Optional, request.CredProtect);
-            Assert.IsNull(request.EnforceCredProtect);
+            Assert.IsFalse(request.EnforceCredProtect);
 
             // Serialize
-            string jsonRequest2 = JsonConvert.SerializeObject(request);
+            string jsonRequest2 = JsonSerializer.Serialize(request);
             Assert.AreEqual(jsonRequest, jsonRequest2);
         }
 
@@ -29,13 +29,13 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             string jsonRequest = @"{}";
 
             // Parse
-            var request = JsonConvert.DeserializeObject<AuthenticationExtensionsClientInputs>(jsonRequest);
-            Assert.IsNull(request.HmacCreateSecret);
-            Assert.IsNull(request.CredProtect);
-            Assert.IsNull(request.EnforceCredProtect);
+            var request = JsonSerializer.Deserialize<AuthenticationExtensionsClientInputs>(jsonRequest);
+            Assert.IsFalse(request.HmacCreateSecret);
+            Assert.AreEqual(UserVerification.Any, request.CredProtect);
+            Assert.IsFalse(request.EnforceCredProtect);
 
             // Serialize
-            string jsonRequest2 = JsonConvert.SerializeObject(request);
+            string jsonRequest2 = JsonSerializer.Serialize(request);
             Assert.AreEqual(jsonRequest, jsonRequest2);
         }
 
@@ -46,12 +46,12 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             string jsonResponse = @"{""hmacCreateSecret"":true,""credentialProtectionPolicy"":""userVerificationOptional""}";
 
             // Parse
-            var response = JsonConvert.DeserializeObject<AuthenticationExtensionsClientOutputs>(jsonResponse);
+            var response = JsonSerializer.Deserialize<AuthenticationExtensionsClientOutputs>(jsonResponse);
             Assert.AreEqual(true, response.HmacSecret);
             Assert.AreEqual(UserVerification.Optional, response.CredProtect);
 
             // Serialize
-            string jsonRsponse2 = JsonConvert.SerializeObject(response);
+            string jsonRsponse2 = JsonSerializer.Serialize(response);
             Assert.AreEqual(jsonResponse, jsonRsponse2);
 
         }
@@ -62,12 +62,12 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             string jsonResponse = @"{}";
 
             // Parse
-            var response = JsonConvert.DeserializeObject<AuthenticationExtensionsClientOutputs>(jsonResponse);
-            Assert.IsNull(response.HmacSecret);
-            Assert.IsNull(response.CredProtect);
+            var response = JsonSerializer.Deserialize<AuthenticationExtensionsClientOutputs>(jsonResponse);
+            Assert.IsFalse(response.HmacSecret);
+            Assert.AreEqual(UserVerification.Any, response.CredProtect);
 
             // Serialize
-            string jsonResponse2 = JsonConvert.SerializeObject(response);
+            string jsonResponse2 = JsonSerializer.Serialize(response);
             Assert.AreEqual(jsonResponse, jsonResponse2);
         }
 
@@ -80,7 +80,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
                 CredProtect = UserVerification.Any
             };
 
-            string jsonExtensions = JsonConvert.SerializeObject(extensions);
+            string jsonExtensions = JsonSerializer.Serialize(extensions);
             Assert.AreEqual("{}", jsonExtensions);
         }
 
@@ -93,7 +93,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
                 CredProtect = UserVerification.Any
             };
 
-            string jsonExtensions = JsonConvert.SerializeObject(extensions);
+            string jsonExtensions = JsonSerializer.Serialize(extensions);
             Assert.AreEqual("{}", jsonExtensions);
         }
 

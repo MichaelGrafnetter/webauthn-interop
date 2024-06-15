@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -16,6 +16,7 @@ namespace DSInternals.Win32.WebAuthn
         /// and cryptographically protected against tampering by, the client.
         /// The attestation object contains both authenticator data and an attestation statement.
         /// </summary>
+        [JsonPropertyName("attestationObject")]
         [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] AttestationObject { get; set; }
     }

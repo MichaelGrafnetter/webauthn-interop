@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Win32.WebAuthn.FIDO.Tests
 {
@@ -8,7 +9,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO.Tests
         [TestMethod]
         public void Base64UrlConverter_RFC4648Vectors()
         {
-            CollectionAssert.AreEqual(new byte[] { }, Base64UrlConverter.FromBase64UrlString(string.Empty));
+            CollectionAssert.AreEqual(Array.Empty<byte>(), Base64UrlConverter.FromBase64UrlString(string.Empty));
             CollectionAssert.AreEqual(new byte[] { 102 }, Base64UrlConverter.FromBase64UrlString("Zg"));
             CollectionAssert.AreEqual(new byte[] { 102, 111 }, Base64UrlConverter.FromBase64UrlString("Zm8"));
             CollectionAssert.AreEqual(new byte[] { 102, 111, 111 }, Base64UrlConverter.FromBase64UrlString("Zm9v"));
