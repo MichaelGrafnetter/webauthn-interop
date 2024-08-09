@@ -7,9 +7,15 @@ namespace DSInternals.Win32.WebAuthn
 {
     public class PublicKeyCredentialParameter
     {
+        /// <summary>
+        /// Specifies the cryptographic signature algorithm used for the new credential.
+        /// </summary>
         [JsonPropertyName("alg")]
         public Algorithm Algorithm { get; private set; }
 
+        /// <summary>
+        /// Specifies the type of credential to be created. The only supported value is public-key.
+        /// </summary>
         [JsonPropertyName("type")]
         public string Type { get; private set; }
 

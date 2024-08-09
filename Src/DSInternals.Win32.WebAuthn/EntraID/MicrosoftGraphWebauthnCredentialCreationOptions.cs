@@ -10,9 +10,15 @@ namespace DSInternals.Win32.WebAuthn
     /// <remarks>OData Object: https://graph.microsoft.com/beta/$metadata#microsoft.graph.webauthnCredentialCreationOptions</remarks>
     public class MicrosoftGraphWebauthnCredentialCreationOptions
     {
+        /// <summary>
+        /// Defines when the challenge in the creation options is no longer valid.
+        /// </summary>
         [JsonPropertyName("challengeTimeoutDateTime")]
         public DateTime ChallengeTimeout { get; set; }
 
+        /// <summary>
+        /// Defines public key options for the creation of a new WebAuthn public key credential.
+        /// </summary>
         [JsonPropertyName("publicKey")]
         public PublicKeyCredentialCreationOptions PublicKeyOptions { get; set; }
 

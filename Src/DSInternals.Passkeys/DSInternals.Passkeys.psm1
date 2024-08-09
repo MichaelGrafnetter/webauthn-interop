@@ -1,5 +1,14 @@
+<#
+.SYNOPSIS
+Retrieves creation options required to generate and register a Microsoft Entra ID-compatible passkey. Self-service operations aren't supported.
+
+.NOTES
+https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
+
+#>
 function Get-PasskeyRegistrationOptions
 {
+    [CmdletBinding()]
     [OutputType([DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions])]
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
@@ -11,6 +20,8 @@ function Get-PasskeyRegistrationOptions
 
     try {
         # TODO: Validate/Encode the $userId format
+
+        # TODO: Validate the $ChallengeTimeout to be between 5 mins and 30 days
 
         # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods/creationOptions
         [string] $credentialOptionsUrl = '{0}/beta/users/{1}/authentication/fido2Methods/creationOptions' -f (Get-MgGraphEndpoint),$UserId
@@ -31,6 +42,7 @@ function Get-PasskeyRegistrationOptions
 
 function Register-Passkey
 {
+    [CmdletBinding()]
     [OutputType([Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod])]
     param(
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
@@ -48,12 +60,12 @@ function Register-Passkey
         [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 10)
     )
 
+    # TODO: Validate/Encode the $userId format
+
     switch ($PSCmdlet.ParameterSetName) {
         'Existing' {
             [string] $endpoint = Get-MgGraphEndpoint
             
-            # TODO: Validate/Encode the $userId format
-
             # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods
             [string] $registrationUrl = '{0}/beta/users/{1}/authentication/fido2Methods' -f $endpoint,$UserId
 
@@ -68,19 +80,20 @@ function Register-Passkey
         }
         'New' {
             [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions] $registrationOptions =
-                Get-PasskeyRegistrationOptions -UserId 'AdeleV@dev.dsinternals.com' -ChallengeTimeout $ChallengeTimeout
+                Get-PasskeyRegistrationOptions -UserId $UserId -ChallengeTimeout $ChallengeTimeout
 
             [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse] $passkey =
                 New-Passkey -Options $registrationOptions -DisplayName $DisplayName
 
             # Recursive call with the 'Existing' parameter set
-            return Register-Passkey -UserId 'AdeleV@dev.dsinternals.com' -Passkey $passkey
+            return Register-Passkey -UserId $UserId -Passkey $passkey
         }
     }
 }
 
 function New-Passkey
 {
+    [CmdletBinding()]
     [OutputType([DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse])]
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
@@ -94,17 +107,23 @@ function New-Passkey
     try {
         [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
         [DSInternals.Win32.WebAuthn.PublicKeyCredential] $credential = $api.AuthenticatorMakeCredential($Options.PublicKeyOptions)
-
-        return [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse]::new($credential, $DisplayName);
-    }
     catch {
         # TODO: PS Error Record
         throw
     }
 }
-  
+
+<#
+.SYNOPSIS
+Retrieves the Microsoft Graph endpoint URL.
+
+.NOTES
+Dynamic URL retrieval is required for the support of 
+
+#>
 function Get-MgGraphEndpoint
 {
+    [CmdletBinding()]
     [OutputType([string])]
     param()
 
@@ -115,7 +134,7 @@ function Get-MgGraphEndpoint
     }
     else {
         # TODO: PS Error Record
-        throw 'Not connected to graph'
+        throw 'Not connected to Microsoft Graph.'
     }
 }
 

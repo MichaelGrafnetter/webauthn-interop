@@ -5,9 +5,15 @@ namespace DSInternals.Win32.WebAuthn
 {
     public class MicrosoftGraphWebauthnAttestationResponse
     {
+        /// <summary>
+        /// The display name of the key as given by the user.
+        /// </summary>
         [JsonPropertyName("displayName")]
         public string DisplayName { get; set; }
 
+        /// <summary>
+        /// Contains the WebAuthn public key credential information being registered.
+        /// </summary>
         [JsonPropertyName("publicKeyCredential")]
         public PublicKeyCredential PublicKeyCredential { get; set; }
 
