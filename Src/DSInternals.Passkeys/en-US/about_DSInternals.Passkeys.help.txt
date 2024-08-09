@@ -1,0 +1,18 @@
+﻿TOPIC
+    about_DSInternals.Passkeys
+
+SHORT DESCRIPTION
+    Allows administrative registration of passkeys
+    (i.e. FIDO2 security keys and Microsoft Authenticator mobile app)
+    in Microsoft Entra ID (formerly Azure Active Directory).
+
+EXAMPLES
+    Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+    Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+
+SEE ALSO
+    https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod
+
+KEYWORDS
+    - Passkeys
+    - FIDO2

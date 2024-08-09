@@ -20,13 +20,13 @@ GUID = '2561bb28-b9cd-4cf1-b35c-96ea07e13ca1'
 Author = 'Michael Grafnetter'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = 'DSInternals'
 
 # Copyright statement for this module
 Copyright = '(c) Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory).'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.0'
@@ -44,7 +44,7 @@ PowerShellVersion = '5.0'
 # ClrVersion = ''
 
 # Processor architecture (None, X86, Amd64) required by this module
-ProcessorArchitecture = 'MSIL'
+ProcessorArchitecture = 'None'
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @('Microsoft.Graph.Authentication','Microsoft.Graph.Identity.SignIns')
@@ -65,16 +65,16 @@ RequiredAssemblies = 'DSInternals.Win32.WebAuthn.dll'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+FunctionsToExport = @('Get-PasskeyRegistrationOptions', 'New-Passkey', 'Register-Passkey')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+CmdletsToExport = @()
 
 # Variables to export from this module
-VariablesToExport = '*'
+VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+AliasesToExport = @('New-MgUserAuthenticationFido2Method')
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -83,7 +83,10 @@ AliasesToExport = '*'
 # ModuleList = @()
 
 # List of all files packaged with this module
-# FileList = @()
+FileList = @(
+    'en-US/about_DSInternals.Passkeys.help.txt'
+    'en-US/DSInternals.Passkeys-help.xml'
+)
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
@@ -91,19 +94,19 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('Windows', 'PSEdition_Desktop')
+        Tags = @('Windows', 'PSEdition_Desktop', 'PSModule', 'FIDO2', 'Passkeys', 'EntraID', 'AzureAD', 'Azure', 'WebAuthn', 'CTAP', 'Security')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/MichaelGrafnetter/webauthn-interop/blob/main/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/MichaelGrafnetter/webauthn-interop'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        IconUri = 'https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/Src/Icons/module_black.png'
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'Initial version of the module. Note that the API is currently in public preview (beta).'
 
         # Prerelease string of this module
         # Prerelease = ''
