@@ -129,6 +129,43 @@ jobs:
         --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
         xcopy "DSInternals.Win32.WebAuthn/net472/DSInternals.Win32.WebAuthn.dll" "Fido2UI/" /Y /I /F
 
+    - name: Upload Desktop App as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Fido2UI
+        path: Build/bin/Release/Fido2UI/*
+
+    - name: Build PowerShell Module
+      working-directory: Scripts
+      shell: PowerShell
+      run: .\Build-PowerShellModule.ps1 -Configuration Release
+
+    - name: Sign PowerShell Module
+      if: ${{ github.event.inputs.certificate_sign }}
+      shell: cmd
+      env:
+        SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
+        SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
+      working-directory: Build/bin/Release/DSInternals.Passkeys
+      timeout-minutes: 1
+      run: |
+        for /f %%i in ('az account get-access-token --resource "https://vault.azure.net" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
+        AzureSignTool sign ^
+        DSInternals.Passkeys.psd1 ^
+        DSInternals.Passkeys.psm1 ^
+        --file-digest sha256 ^
+        --timestamp-digest sha256 ^
+        --timestamp-rfc3161 http://timestamp.digicert.com ^
+        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
+        --azure-key-vault-accesstoken "%KEYVAULT_TOKEN%" ^
+        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
+
+    - name: Upload PowerShell Module as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PowerShell
+        path: Build/bin/Release/DSInternals.Passkeys
+
     - name: Create NuGet Packages
       working-directory: Src
       run: dotnet pack --configuration Release --no-build --nologo
@@ -162,12 +199,6 @@ jobs:
       with:
         name: NuGet
         path: Build/bin/Release/Packages/*nupkg
-
-    - name: Upload Desktop App as Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Fido2UI
-        path: Build/bin/Release/Fido2UI/*
 
     - name: Create ZIP for GitHub Release
       if: ${{ github.event.inputs.create_github_release }}

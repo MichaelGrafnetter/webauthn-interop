@@ -273,9 +273,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                 return new AuthenticationExtensionsClientInputs()
                 {
                     CredProtect = this.CredProtectPolicy,
-                    EnforceCredProtect = this.EnforceCredProtect ? true : (bool?)null,
-                    HmacCreateSecret = this.HmacSecret ? true : (bool?)null,
-                    MinPinLength = this.MinPinLength ? true : (bool?)null,
+                    EnforceCredProtect = this.EnforceCredProtect,
+                    HmacCreateSecret = this.HmacSecret,
+                    MinimumPinLength = this.MinPinLength,
                     CredentialBlob = this.CredentialBlob?.Length > 0 ? this.CredentialBlob : null
                 };
             }
@@ -284,9 +284,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                 if (value != null)
                 {
                     HmacSecret = value.HmacCreateSecret == true;
-                    CredProtectPolicy = value.CredProtect ?? UserVerification.Any;
+                    CredProtectPolicy = value.CredProtect;
                     EnforceCredProtect = value.EnforceCredProtect == true;
-                    MinPinLength = value.MinPinLength == true;
+                    MinPinLength = value.MinimumPinLength == true;
                     CredentialBlob = value.CredentialBlob;
                 }
                 else

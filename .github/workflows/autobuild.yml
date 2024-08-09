@@ -38,13 +38,36 @@ jobs:
         # Heuristics: The current list of required packages is defined in the project files.
         key: ${{ runner.os }}-DotNET-NuGet-Build-${{ hashFiles('**/*.csproj') }}
 
-    - name: Build
+    - name: Build Binaries
       working-directory: Src
       run: dotnet build --configuration Release  --nologo
+
+    - name: Upload Desktop App as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Fido2UI
+        path: Build/bin/Release/Fido2UI/*
+
+    - name: Build PowerShell Module
+      working-directory: Scripts
+      shell: PowerShell
+      run: .\Build-PowerShellModule.ps1 -Configuration Release
+
+    - name: Upload PowerShell Module as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PowerShell
+        path: Build/bin/Release/DSInternals.Passkeys
 
     - name: Create NuGet Packages
       working-directory: Src
       run: dotnet pack --configuration Release --no-build --nologo
+
+    - name: Upload NuGet Packages as Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: NuGet
+        path: Build/bin/Release/Packages/*nupkg
 
     - name: Run Non-Interactive Unit Tests
       working-directory: Src
@@ -80,18 +103,6 @@ jobs:
         path: |
             Build/TestResults/*.*
             !**/*.htm
-
-    - name: Upload NuGet Packages as Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: NuGet
-        path: Build/bin/Release/Packages/*nupkg
-
-    - name: Upload Desktop App as Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Fido2UI
-        path: Build/bin/Release/Fido2UI/*
 
   analyze:
     name: CodeQL
