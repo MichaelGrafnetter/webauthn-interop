@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,8 +52,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                 credParams,
                 attestationPref,
                 timeout,
-                null,
-                excludeCreds
+                new ReadOnlyCollection<PublicKeyCredentialDescriptor>(excludeCreds)
             );
 
             return new AuthenticatorAttestationRawResponse()
@@ -63,8 +63,8 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                 // TODO: Extensions = ApiMapper.Translate(attestation.Extensions),
                 Response = new AuthenticatorAttestationRawResponse.ResponseData()
                 {
-                    AttestationObject = attestation.AttestationObject,
-                    ClientDataJson = attestation.ClientDataJson
+                    AttestationObject = attestation.AuthenticatorResponse.AttestationObject,
+                    ClientDataJson = attestation.AuthenticatorResponse.ClientDataJson
                 }
             };
         }
@@ -107,7 +107,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                 uv,
                 attachment,
                 timeout,
-                allowCreds
+                new ReadOnlyCollection<PublicKeyCredentialDescriptor>(allowCreds)
             );
             
             return new AuthenticatorAssertionRawResponse()

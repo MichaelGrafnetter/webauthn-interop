@@ -36,7 +36,7 @@
     <!-- Fido2.Models dropped .NET Framework support with version 3.0 -->
     <PackageReference Include="Fido2.Models" Version="2.0.2" Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1' OR '$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'net472'" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PeterO.Cbor" Version="4.5.2" />
+    <PackageReference Include="PeterO.Cbor" Version="4.5.3" />
     <!-- Note: Classes from this namespace are part of .NET Framework -->
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472' AND '$(TargetFramework)' != 'net48'" />
   </ItemGroup>

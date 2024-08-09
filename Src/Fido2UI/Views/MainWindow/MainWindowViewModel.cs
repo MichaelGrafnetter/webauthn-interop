@@ -214,7 +214,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.PreferResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.Direct;
             AttestationOptionsViewModel.EnterpriseAttestation = EnterpriseAttestationType.None;
-            AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256, Algorithm.RS256 };
+            AttestationOptionsViewModel.PublicKeyCredentialParameters = [Algorithm.ES256, Algorithm.RS256];
             AttestationOptionsViewModel.Timeout = 120000;
             AttestationOptionsViewModel.LargeBlobSupport = LargeBlobSupport.None;
             AttestationOptionsViewModel.EnablePseudoRandomFunction = false;
@@ -244,7 +244,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             {
                 Name = "john.doe",
                 DisplayName = "John Doe",
-                Id = new byte[] { 0x37, 0x34, 0x37, 0x35, 0x39, 0x32, 0x33, 0x39, 0x33 }
+                Id = [0x37, 0x34, 0x37, 0x35, 0x39, 0x32, 0x33, 0x39, 0x33]
             };
 
             AttestationOptionsViewModel.RelyingPartyEntity = new RelyingPartyInformation()
@@ -261,7 +261,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.PreferResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.None;
             AttestationOptionsViewModel.EnterpriseAttestation = EnterpriseAttestationType.None;
-            AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256 };
+            AttestationOptionsViewModel.PublicKeyCredentialParameters = [Algorithm.ES256];
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 60000;
             AttestationOptionsViewModel.LargeBlobSupport = LargeBlobSupport.None;
@@ -292,7 +292,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             {
                 Name = "john.doe",
                 DisplayName = "John Doe",
-                Id = new byte[] { 0x37, 0x34, 0x37, 0x35, 0x39, 0x32, 0x33, 0x39, 0x33 }
+                Id = [0x37, 0x34, 0x37, 0x35, 0x39, 0x32, 0x33, 0x39, 0x33]
             };
 
             AttestationOptionsViewModel.RelyingPartyEntity = new RelyingPartyInformation()
@@ -307,7 +307,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AttestationOptionsViewModel.PreferResidentKey = false;
             AttestationOptionsViewModel.AttestationConveyancePreference = AttestationConveyancePreference.None;
             AttestationOptionsViewModel.EnterpriseAttestation = EnterpriseAttestationType.None;
-            AttestationOptionsViewModel.PublicKeyCredentialParameters = new List<Algorithm> { Algorithm.ES256 };
+            AttestationOptionsViewModel.PublicKeyCredentialParameters = [Algorithm.ES256];
             AttestationOptionsViewModel.ClientExtensions = null;
             AttestationOptionsViewModel.Timeout = 30000;
             AttestationOptionsViewModel.LargeBlobSupport = LargeBlobSupport.None;

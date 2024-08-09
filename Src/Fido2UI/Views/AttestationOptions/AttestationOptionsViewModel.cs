@@ -395,12 +395,10 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
 
         private static byte[] GetRandomBytes(int count)
         {
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                byte[] randomBytes = new byte[count];
-                rng.GetBytes(randomBytes);
-                return randomBytes;
-            }
+            using var rng = RandomNumberGenerator.Create();
+            byte[] randomBytes = new byte[count];
+            rng.GetBytes(randomBytes);
+            return randomBytes;
         }
     }
 }
