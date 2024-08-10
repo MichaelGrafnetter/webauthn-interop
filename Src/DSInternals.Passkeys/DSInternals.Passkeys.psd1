@@ -23,10 +23,10 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) Michael Grafnetter. All rights reserved.'
+Copyright = 'Copyright (c) 2021-2024 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory).'
+Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) through the Microsoft Graph API.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.0'
@@ -94,7 +94,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('Windows', 'PSEdition_Desktop', 'PSModule', 'FIDO2', 'Passkeys', 'EntraID', 'AzureAD', 'Azure', 'WebAuthn', 'CTAP', 'Security')
+        Tags = @('Windows', 'PSEdition_Desktop', 'PSModule', 'FIDO2', 'Passkeys', 'EntraID', 'AzureAD', 'Azure', 'WebAuthn', 'CTAP', 'Security','2FA','MFA','Authentication','Identity','Passwordless')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/webauthn-interop/blob/main/LICENSE'

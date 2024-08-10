@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;net5.0;netcoreapp3.1;net48;net472</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;net5.0;netcoreapp3.1;net48;net472</TargetFrameworks>
     <Platform>windows</Platform>
     <AssemblyName>DSInternals.Win32.WebAuthn</AssemblyName>
     <RootNamespace>DSInternals.Win32.WebAuthn</RootNamespace>
@@ -30,7 +30,7 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net7.0' AND '$(Configuration)' == 'Debug'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0' AND '$(Configuration)' == 'Debug'">
     <AnalysisMode>All</AnalysisMode>
   </PropertyGroup>
 

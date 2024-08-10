@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.COSE;
-using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -115,7 +115,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     WindowHandle.MainWindow
                     );
 
-                this.AttestationResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+                this.AttestationResponse = JsonSerializer.Serialize(response, new JsonSerializerOptions() { WriteIndented = true });
             }
             catch (Exception ex)
             {
@@ -146,7 +146,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     WindowHandle.MainWindow
                 );
 
-                this.AssertionResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+                this.AssertionResponse = JsonSerializer.Serialize(response, new JsonSerializerOptions() { WriteIndented = true });
             }
             catch (Exception ex)
             {
@@ -166,7 +166,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                     CredentialManagementViewModel.RelyingPartyId,
                     CredentialManagementViewModel.IsBrowserPrivateMode);
 
-                this.CredentialManagerResponse = JsonConvert.SerializeObject(credentials, Formatting.Indented);
+                this.CredentialManagerResponse = JsonSerializer.Serialize(credentials, new JsonSerializerOptions() { WriteIndented = true });
             }
             catch (Exception ex)
             {

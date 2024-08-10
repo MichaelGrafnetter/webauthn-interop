@@ -17,7 +17,7 @@
     <!-- Configure NuGet package properties -->
     <Authors>Michael Grafnetter</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) 2021-2023 Michael Grafnetter. All rights reserved.</Copyright>
+    <Copyright>Copyright (c) 2021-2024 Michael Grafnetter. All rights reserved.</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/MichaelGrafnetter/webauthn-interop</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MichaelGrafnetter/webauthn-interop.git</RepositoryUrl>
@@ -39,7 +39,7 @@
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
 
-  <!-- Note: Fido2.Models and CppAst are currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
+  <!-- Note: Fido2.Models is currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
   <PropertyGroup Condition="
                    '$(Configuration)' == 'Release' AND
                    Exists('..\Keys\DSInternals.Private.snk') AND
