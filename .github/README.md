@@ -1,4 +1,4 @@
-# WebAuthn Interop AssemblyProjet
+# WebAuthn Interop Assembly Project
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 [![Windows 10 1903+](https://img.shields.io/badge/Windows%2010-1903%2B-007bb8.svg?logo=Windows)](#)
