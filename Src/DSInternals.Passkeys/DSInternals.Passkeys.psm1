@@ -217,7 +217,7 @@ function Get-MgGraphEndpoint
     }
 }
 
-New-Alias -Name New-MgUserAuthenticationFido2Method -Value New-Passkey
+New-Alias -Name Register-MgUserAuthenticationFido2Method -Value Register-Passkey
 
 Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','New-Passkey','Register-Passkey' `
-                    -Alias 'New-MgUserAuthenticationFido2Method'
+                    -Alias 'Register-MgUserAuthenticationFido2Method'
