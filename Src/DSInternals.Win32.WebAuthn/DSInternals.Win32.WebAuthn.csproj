@@ -38,10 +38,11 @@
   <PropertyGroup>
     <!-- CA1819: Properties should not return arrays -->
     <NoWarn>CA1819</NoWarn>
+    <!-- CA1028: Enum storage should be Int32 -->
+    <NoWarn>CA1028</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- TODO: Replace with System.Text.Json -->
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.106">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -50,11 +51,11 @@
     <PackageReference Include="PeterO.Cbor" Version="4.5.3" />
     <!-- Note: Classes from this namespace are part of .NET Framework -->
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472' AND '$(TargetFramework)' != 'net48'" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+      <PackageReference Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(Configuration)' == 'Release'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Enable the test assembly to access internal members. -->

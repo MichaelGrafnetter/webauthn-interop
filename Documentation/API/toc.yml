@@ -1,0 +1,113 @@
+### YamlMime:TableOfContent
+- name: DSInternals.Win32.WebAuthn
+  href: DSInternals.Win32.WebAuthn.md
+  items:
+  - name: Classes
+  - name: AuthenticationExtensionsClientInputs
+    href: DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md
+  - name: AuthenticationExtensionsClientOutputs
+    href: DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientOutputs.md
+  - name: AuthenticatorAssertionResponse
+    href: DSInternals.Win32.WebAuthn.AuthenticatorAssertionResponse.md
+  - name: AuthenticatorAttestationResponse
+    href: DSInternals.Win32.WebAuthn.AuthenticatorAttestationResponse.md
+  - name: AuthenticatorResponse
+    href: DSInternals.Win32.WebAuthn.AuthenticatorResponse.md
+  - name: AuthenticatorSelection
+    href: DSInternals.Win32.WebAuthn.AuthenticatorSelection.md
+  - name: Base64UrlConverter
+    href: DSInternals.Win32.WebAuthn.Base64UrlConverter.md
+  - name: CredentialDetails
+    href: DSInternals.Win32.WebAuthn.CredentialDetails.md
+  - name: HMACGetSecretInput
+    href: DSInternals.Win32.WebAuthn.HMACGetSecretInput.md
+  - name: HMACGetSecretOutput
+    href: DSInternals.Win32.WebAuthn.HMACGetSecretOutput.md
+  - name: HexConverter
+    href: DSInternals.Win32.WebAuthn.HexConverter.md
+  - name: JsonCustomEnumConverter<TEnum>
+    href: DSInternals.Win32.WebAuthn.JsonCustomEnumConverter-1.md
+  - name: MicrosoftGraphWebauthnAttestationResponse
+    href: DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse.md
+  - name: MicrosoftGraphWebauthnCredentialCreationOptions
+    href: DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions.md
+  - name: PublicKeyCredential
+    href: DSInternals.Win32.WebAuthn.PublicKeyCredential.md
+  - name: PublicKeyCredentialCreationOptions
+    href: DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md
+  - name: PublicKeyCredentialDescriptor
+    href: DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md
+  - name: PublicKeyCredentialParameter
+    href: DSInternals.Win32.WebAuthn.PublicKeyCredentialParameter.md
+  - name: RelyingPartyInformation
+    href: DSInternals.Win32.WebAuthn.RelyingPartyInformation.md
+  - name: UserInformation
+    href: DSInternals.Win32.WebAuthn.UserInformation.md
+  - name: WebAuthnApi
+    href: DSInternals.Win32.WebAuthn.WebAuthnApi.md
+  - name: Structs
+  - name: WindowHandle
+    href: DSInternals.Win32.WebAuthn.WindowHandle.md
+  - name: Enums
+  - name: ApiVersion
+    href: DSInternals.Win32.WebAuthn.ApiVersion.md
+  - name: AttestationConveyancePreference
+    href: DSInternals.Win32.WebAuthn.AttestationConveyancePreference.md
+  - name: AuthenticatorAttachment
+    href: DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md
+  - name: AuthenticatorFlags
+    href: DSInternals.Win32.WebAuthn.AuthenticatorFlags.md
+  - name: AuthenticatorTransport
+    href: DSInternals.Win32.WebAuthn.AuthenticatorTransport.md
+  - name: CredentialLargeBlobOperation
+    href: DSInternals.Win32.WebAuthn.CredentialLargeBlobOperation.md
+  - name: EnterpriseAttestationType
+    href: DSInternals.Win32.WebAuthn.EnterpriseAttestationType.md
+  - name: LargeBlobSupport
+    href: DSInternals.Win32.WebAuthn.LargeBlobSupport.md
+  - name: UserVerification
+    href: DSInternals.Win32.WebAuthn.UserVerification.md
+  - name: UserVerificationRequirement
+    href: DSInternals.Win32.WebAuthn.UserVerificationRequirement.md
+- name: DSInternals.Win32.WebAuthn.Adapter
+  href: DSInternals.Win32.WebAuthn.Adapter.md
+  items:
+  - name: Classes
+  - name: ApiMapper
+    href: DSInternals.Win32.WebAuthn.Adapter.ApiMapper.md
+  - name: WebAuthnApiAdapter
+    href: DSInternals.Win32.WebAuthn.Adapter.WebAuthnApiAdapter.md
+- name: DSInternals.Win32.WebAuthn.COSE
+  href: DSInternals.Win32.WebAuthn.COSE.md
+  items:
+  - name: Enums
+  - name: Algorithm
+    href: DSInternals.Win32.WebAuthn.COSE.Algorithm.md
+  - name: EllipticCurve
+    href: DSInternals.Win32.WebAuthn.COSE.EllipticCurve.md
+  - name: KeyCommonParameter
+    href: DSInternals.Win32.WebAuthn.COSE.KeyCommonParameter.md
+  - name: KeyType
+    href: DSInternals.Win32.WebAuthn.COSE.KeyType.md
+  - name: KeyTypeParameter
+    href: DSInternals.Win32.WebAuthn.COSE.KeyTypeParameter.md
+- name: DSInternals.Win32.WebAuthn.FIDO
+  href: DSInternals.Win32.WebAuthn.FIDO.md
+  items:
+  - name: Classes
+  - name: AttestedCredentialData
+    href: DSInternals.Win32.WebAuthn.FIDO.AttestedCredentialData.md
+  - name: AuthenticatorData
+    href: DSInternals.Win32.WebAuthn.FIDO.AuthenticatorData.md
+  - name: CollectedClientData
+    href: DSInternals.Win32.WebAuthn.FIDO.CollectedClientData.md
+  - name: CredentialPublicKey
+    href: DSInternals.Win32.WebAuthn.FIDO.CredentialPublicKey.md
+- name: DSInternals.Win32.WebAuthn.Interop
+  href: DSInternals.Win32.WebAuthn.Interop.md
+  items:
+  - name: Classes
+  - name: ApiConstants
+    href: DSInternals.Win32.WebAuthn.Interop.ApiConstants.md
+  - name: HybridStorageLinkedData
+    href: DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md

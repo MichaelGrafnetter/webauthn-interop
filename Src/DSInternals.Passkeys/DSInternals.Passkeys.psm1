@@ -1,3 +1,13 @@
+# Load PS host-specific assemblies
+if ($PSVersionTable.PSVersion.Major -ge 6) {
+    # PowerShell Core
+    Add-Type -Path "$PSScriptRoot/net6.0/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
+}
+else {
+    # PowerShell Desktop
+    Add-Type -Path "$PSScriptRoot/net48/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
+}
+
 <#
 .SYNOPSIS
 Retrieves creation options required to generate and register a Microsoft Entra ID-compatible passkey.

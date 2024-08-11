@@ -1,24 +1,31 @@
-# WebAuthn Interop Assembly
+# WebAuthn Interop AssemblyProjet
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 [![Windows 10 1903+](https://img.shields.io/badge/Windows%2010-1903%2B-007bb8.svg?logo=Windows)](#)
-[![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
+[![.NET Framework 4.8+](https://img.shields.io/badge/.NET%20Framework-4.8%2B-007FFF.svg)](#)
 [![.NET Core 3+](https://img.shields.io/badge/.NET%20Core-3%2B-007FFF.svg)](#)
 [![Continuous Integration Status](https://github.com/MichaelGrafnetter/webauthn-interop/actions/workflows/autobuild.yml/badge.svg)](https://github.com/MichaelGrafnetter/webauthn-interop/actions)
 
 **Passkeys / FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications**
 
-## Introduction
+## Interop Assembly
 
-The `DSInternals.Win32.WebAuthn` library allows .NET applications to directly interact with Passkeys (e.g. [Windows Hello](https://support.microsoft.com/en-us/windows/passkeys-in-windows-301c8944-5ea2-452b-9886-97e4d2ef4422), [YubiKey](https://www.yubico.com/products/), [Feitian](https://www.ftsafe.com/products/FIDO), or [Crayonic](https://www.crayonic.com/)) and with [Windows Hello](https://support.microsoft.com/en-us/windows/learn-about-windows-hello-and-set-it-up-dae28983-8242-bb2a-d3d1-87c9d265a5f0) / [Windows Hello for Business](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/hello-identity-verification).
-It provides a managed wrapper of the low-level [Windows 10 WebAuthn API](https://learn.microsoft.com/en-us/windows/win32/api/_webauthn/)
+The `DSInternals.Win32.WebAuthn` library allows .NET applications to directly interact with Passkeys (e.g. [Windows Hello](https://support.microsoft.com/en-us/windows/passkeys-in-windows-301c8944-5ea2-452b-9886-97e4d2ef4422), [Microsoft Authnticator](https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-register-passkey-authenticator), [YubiKey](https://www.yubico.com/products/), [Feitian](https://www.ftsafe.com/products/FIDO), or [Crayonic](https://www.crayonic.com/)) on Windows.
+It provides a managed wrapper of the low-level [Windows 10+ WebAuthn API](https://learn.microsoft.com/en-us/windows/win32/api/_webauthn/)
 (defined in the [`webauthn.h`](https://github.com/microsoft/webauthn/blob/master/webauthn.h) header file and implemented in the `webauthn.dll` system library). This API is mainly used by browsers
 (see the source code of [Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/master/device/fido/win/webauthn_api.cc)
 and [Firefox](https://searchfox.org/mozilla-central/source/dom/webauthn/WinWebAuthnService.cpp)) to implement passwordless web authentication,
 but it can also be used by any .NET desktop or CLI application.
 
-The `DSInternals.Win32.WebAuthn.Adapter` library additionally uses classes defined in the [Fido2.Models](https://www.nuget.org/packages/Fido2.Models/) package as its front-end, which it then translates to native C structures.
-See the [project site](https://github.com/abergs/fido2-net-lib) for more details.
+The `DSInternals.Win32.WebAuthn.Adapter` library additionally uses classes defined in the [Fido2.Models](https://www.nuget.org/packages/Fido2.Models/) package as its front-end, which it then translates to native C structures. See the [project site](https://github.com/abergs/fido2-net-lib) for more details.
+
+## PowerShell Module
+
+The [DSInternals.Passkeys](https://www.powershellgallery.com/packages/DSInternals.Passkeys) PowerShell module uses the `DSInternals.Win32.WebAuthn` library together with the [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod?view=graph-rest-beta) to provide Microsoft Entra ID administrators the capability of registering Passkeys on behalf of other users:
+
+![PowerShell Passkey Registration Screenshot](../Documentation/Screenshots/powershell.png)
+
+See [Yubico's blog](https://www.yubico.com/blog/microsoft-strengthens-phishing-resistant-security-for-entra-id-with-fido2-provisioning-apis/) for more details on the API.
 
 ## FIDO2 UI
 
@@ -31,8 +38,10 @@ The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 ## Downloads
 
 [![GitHub Downloads](https://img.shields.io/github/downloads/MichaelGrafnetter/webauthn-interop/total.svg?label=GitHub%20Downloads&logo=GitHub)](https://github.com/MichaelGrafnetter/webauthn-interop/releases)
+[![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/DSInternals.Passkeys.svg?label=PowerShell%20Gallery%20Downloads&logo=PowerShell)](https://www.powershellgallery.com/packages/DSInternals.Passkeys/)
 [![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Win32.WebAuthn.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn/)
 
+- The `DSInternals.Passkeys` PowerShell module is published in the [PowerShell Gallery](https://www.powershellgallery.com/packages/DSInternals.Passkeys).
 - The latest version of the `FIDO2 UI` can be downloaded from the [Releases section](https://github.com/MichaelGrafnetter/webauthn-interop/releases/latest).
 - The `DSInternals.Win32.WebAuthn` library is published in the [NuGet Gallery](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn/).
 
@@ -81,11 +90,6 @@ var response = api.AuthenticatorGetAssertion("login.microsoft.com", challenge, U
 
 See the [full API documentation](../Documentation/API/DSInternals.Win32.WebAuthn.md) for more information on using this library.
 
-## Code Generation
-
-The [APiConstants.cs](../Src/DSInternals.Win32.WebAuthn/Interop/ApiConstants.cs) file is automatically generated from `#define` statements in [webauthn.h](https://github.com/microsoft/webauthn/blob/master/webauthn.h).
-This is performed in the [DSInternals.Win32.WebAuthn.CodeGen](../Src/DSInternals.Win32.WebAuthn.CodeGen/Program.cs) helper application by leveraging the [CppAst.NET project](https://github.com/xoofx/CppAst.NET).
-
 ## Troubleshooting
 
 ### Rohitab API Monitor
@@ -105,6 +109,7 @@ Windows 10 creates very detailed logs of WebAuthn API calls and CTAP commands. T
 
 - [WebAuthn APIs for password-less authentication on Windows 10](https://learn.microsoft.com/en-us/windows/win32/api/webauthn/)
 - [C header file](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
+- [Graph API Create fido2AuthenticationMethod](https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods?view=graph-rest-beta)
 
 ## Acknowledgements
 

@@ -11,7 +11,7 @@ RootModule = 'DSInternals.Passkeys.psm1'
 ModuleVersion = '1.0'
 
 # Supported PSEditions
-CompatiblePSEditions = 'Desktop'
+CompatiblePSEditions = @('Desktop','Core')
 
 # ID used to uniquely identify this module
 GUID = '2561bb28-b9cd-4cf1-b35c-96ea07e13ca1'
@@ -29,7 +29,7 @@ Copyright = 'Copyright (c) 2021-2024 Michael Grafnetter. All rights reserved.'
 Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) through the Microsoft Graph API.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '5.0'
+PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -50,7 +50,7 @@ ProcessorArchitecture = 'None'
 RequiredModules = @('Microsoft.Graph.Authentication','Microsoft.Graph.Identity.SignIns')
 
 # Assemblies that must be loaded prior to importing this module
-RequiredAssemblies = 'DSInternals.Win32.WebAuthn.dll'
+# RequiredAssemblies = @()
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.
 # ScriptsToProcess = @()
@@ -85,7 +85,9 @@ AliasesToExport = @('New-MgUserAuthenticationFido2Method')
 # List of all files packaged with this module
 FileList = @(
     'en-US/about_DSInternals.Passkeys.help.txt'
-    'en-US/DSInternals.Passkeys-help.xml'
+    'en-US/DSInternals.Passkeys-help.xml',
+    'net6.0/DSInternals.Win32.WebAuthn.dll',
+    'net48/DSInternals.Win32.WebAuthn.dll'
 )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
@@ -94,7 +96,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('Windows', 'PSEdition_Desktop', 'PSModule', 'FIDO2', 'Passkeys', 'EntraID', 'AzureAD', 'Azure', 'WebAuthn', 'CTAP', 'Security','2FA','MFA','Authentication','Identity','Passwordless')
+        Tags = @('Windows', 'PSEdition_Desktop', 'PSEdition_Core', 'PSModule', 'FIDO2', 'Passkeys', 'EntraID', 'AzureAD', 'Azure', 'WebAuthn', 'CTAP', 'Security','2FA','MFA','Authentication','Identity','Passwordless')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/webauthn-interop/blob/main/LICENSE'
@@ -118,7 +120,6 @@ PrivateData = @{
         # ExternalModuleDependencies = @()
 
     } # End of PSData hashtable
-
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module

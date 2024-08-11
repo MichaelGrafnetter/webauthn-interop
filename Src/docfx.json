@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": ".",
+          "files": [
+            "DSInternals.Win32.WebAuthn/DSInternals.Win32.WebAuthn.csproj",
+            "DSInternals.Win32.WebAuthn.Adapter/DSInternals.Win32.WebAuthn.Adapter.csproj"
+          ]
+        }
+      ],
+      "codeSourceBasePath": "../Src",
+      "output": "../Documentation/API",
+      "outputFormat": "markdown",
+      "categoryLayout": "flattened",
+      "namespaceLayout": "flattened",
+      "noRestore": true,
+      "enumSortOrder": "declaringOrder",
+      "properties": {
+        "TargetFramework": "net7.0"
+      }
+    }
+  ]
+}
