@@ -193,7 +193,9 @@ jobs:
       if: ${{ github.event.inputs.create_github_release }}
       shell: powershell
       working-directory: Build
-      run: Compress-Archive -Path .\bin\FIDO2UI\release\* -DestinationPath .\publish\FIDO2UI.zip -CompressionLevel Optimal -Force
+      run: |
+        New-Item -ItemType Directory -Path .\publish -Force
+        Compress-Archive -Path .\bin\FIDO2UI\release\* -DestinationPath .\publish\FIDO2UI.zip -CompressionLevel Optimal -Force
 
     - name: Create Module ZIP for GitHub Release
       if: ${{ github.event.inputs.create_github_release }}
