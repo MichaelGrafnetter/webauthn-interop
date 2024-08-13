@@ -8,10 +8,10 @@
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
     <Product>WebAuthn Interop Assembly</Product>
     <Title>WebAuthn Interop Assembly</Title>
-    <Version>1.0</Version>
-    <AssemblyVersion>1.0</AssemblyVersion>
-    <ProductVersion>1.0</ProductVersion>
-    <FileVersion>1.0</FileVersion>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2</AssemblyVersion>
+    <ProductVersion>1.0.2</ProductVersion>
+    <FileVersion>1.0.2</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
     <PackageReleaseNotes>-Initial release.
 - Windows 10 1903 or newer is required.

@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Passkeys.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.1'
+ModuleVersion = '1.0.2'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -108,7 +108,7 @@ PrivateData = @{
         IconUri = 'https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/Src/Icons/module_black.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Initial version of the module. Note that the API is currently in public preview (beta).'
+        ReleaseNotes = 'The module is now properly digitally signed. Note that the API is currently in public preview (beta).'
 
         # Prerelease string of this module
         # Prerelease = ''

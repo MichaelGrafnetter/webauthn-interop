@@ -191,13 +191,15 @@ jobs:
 
     - name: Create Application ZIP for GitHub Release
       if: ${{ github.event.inputs.create_github_release }}
+      shell: powershell
       working-directory: Build
-      run: 7z a -tzip -mx=9 -r publish/Fido2UI.zip bin/Fido2UI/release
+      run: Compress-Archive -Path .\bin\FIDO2UI\release\* -DestinationPath .\publish\FIDO2UI.zip -CompressionLevel Optimal -Force
 
     - name: Create Module ZIP for GitHub Release
       if: ${{ github.event.inputs.create_github_release }}
+      shell: powershell
       working-directory: Build
-      run: 7z a -tzip -mx=9 -r publish/DSInternals.Passkeys.zip bin/PSModule/Release
+      run: Compress-Archive -Path .\bin\PSModule\Release\* -DestinationPath .\publish\DSInternals.Passkeys.zip -CompressionLevel Optimal -Force
 
     - name: Create GitHub Release
       if: ${{ github.event.inputs.create_github_release }}
@@ -223,7 +225,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: Build/publish/Fido2UI.zip
-        asset_name: FIDO2UI.zip
+        asset_name: FIDO2UI_v${{ github.event.inputs.release_version }}.zip
         asset_content_type: applicaion/zip
 
     - name: Upload PowerShell Module as Asset
@@ -234,5 +236,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: Build/publish/DSInternals.Passkeys.zip
-        asset_name: DSInternals.Passkeys.zip
+        asset_name: DSInternals.Passkeys_v${{ github.event.inputs.release_version }}.zip
         asset_content_type: applicaion/zip

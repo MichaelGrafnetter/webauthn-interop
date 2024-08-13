@@ -45,7 +45,7 @@ The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 - The latest version of the `FIDO2 UI` can be downloaded from the [Releases section](https://github.com/MichaelGrafnetter/webauthn-interop/releases/latest).
 - The `DSInternals.Win32.WebAuthn` library is published in the [NuGet Gallery](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn/).
 
-## Usage
+## .NET API Usage
 
 ### Overview
 
