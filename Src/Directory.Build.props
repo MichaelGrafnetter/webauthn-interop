@@ -5,14 +5,9 @@
     <!--TODO: <Nullable>enable</Nullable>-->
 
     <!-- Redirect output directories -->
-    <!-- TODO: Remove this WPF directory name fix (*_[0-9a-z]{8}_wpftmp$ suffix) once the compiler issue is resolved. -->
-    <SanitizedProjectDirectoryName>$([System.Text.RegularExpressions.Regex]::Replace($(MSBuildProjectName), '_[0-9a-z]{8}_wpftmp$', ''))</SanitizedProjectDirectoryName>
-    <BaseIntermediateOutputPath>..\..\Build\obj\$(Configuration)\$(SanitizedProjectDirectoryName)</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
-    <OutputPath>..\..\Build\bin\$(Configuration)\$(SanitizedProjectDirectoryName)</OutputPath>
-    <PackageOutputPath>..\..\Build\bin\$(Configuration)\Packages</PackageOutputPath>
-    <VSTestResultsDirectory>..\..\Build\TestResults</VSTestResultsDirectory>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)..\Build</ArtifactsPath>
+    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)..\Build\TestResults</VSTestResultsDirectory>
 
     <!-- Configure NuGet package properties -->
     <Authors>Michael Grafnetter</Authors>
@@ -29,6 +24,9 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NeutralLanguage>en-US</NeutralLanguage>
     <IncludeSymbols>true</IncludeSymbols>
+
+    <!-- Configure publishing options -->
+    <PublishRelease>true</PublishRelease>
 
     <!-- Configure MSTest properties -->
     <VSTestLogger>html;trx</VSTestLogger>
@@ -48,14 +46,14 @@
                     '$(MSBuildProjectName)' == 'DSInternals.Win32.WebAuthn.Tests'
                    )">
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
     <StrongNamePublicKey>002400000480000094000000060200000024000052534131000400000100010077154b93d8084f0f30c52174d6c93d25ffdc65e11ba1b125383e55c6095061df3c2f765401c21434aa413aa264b6eb3039d95c5f33a9d4eb7deb695b55e434d8dd9b42e0e86f3287498732d3a30d0ee22d8d58b2361f033351d5c1a64a16324ac6c42b5a4b14c12483b52a98a43f7e934df86b92cc8a9c4ee0f408d7b6d987e3</StrongNamePublicKey>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- Additional files to include in NuGet packages -->
-    <None Include="../Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
-    <None Include="../../LICENSE" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)../LICENSE" Pack="true" PackagePath="/" Visible="false" />
   </ItemGroup>
 </Project>

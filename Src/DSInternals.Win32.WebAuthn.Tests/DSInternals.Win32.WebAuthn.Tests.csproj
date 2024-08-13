@@ -5,6 +5,7 @@
     <Platform>windows</Platform>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
   </PropertyGroup>
 
   <ItemGroup>
