@@ -1,6 +1,7 @@
 <!--
     API Definition File for Rohitab API Monitor
-    Author: Mocharl Grafnetter (@MGrafnetter)
+    WebAuthN API Version: 7
+    Author: Michael Grafnetter (@MGrafnetter)
 -->
 <ApiMonitor>
   <Include Filename="Headers\windows.h.xml" />
@@ -17,55 +18,70 @@
         <Set Name="WEBAUTHN_API_VERSION_6" Value="6" />
         <Set Name="WEBAUTHN_API_VERSION_7" Value="7" />
       </Enum>
+      <Set Name="WEBAUTHN_API_CURRENT_VERSION" Value="7" />
     </Variable>
+
     <Variable Name="[WEBAUTHN_RP_ENTITY_INFORMATION_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_USER_ENTITY_INFORMATION_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_CLIENT_DATA_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_CLIENT_DATA_CURRENT_VERSION" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_COSE_CREDENTIAL_PARAMETER_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_COSE_CREDENTIAL_PARAMETER_CURRENT_VERSION" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_CREDENTIAL_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_CREDENTIAL_CURRENT_VERSION" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_CREDENTIAL_EX_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_CREDENTIAL_EX_CURRENT_VERSION" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_COMMON_ATTESTATION_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_COMMON_ATTESTATION_CURRENT_VERSION" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_ASSERTION_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
-        <Set Name="WEBAUTHN_ASSERTION_CURRENT_VERSION" Value="1" />
+        <Set Name="WEBAUTHN_ASSERTION_VERSION_1" Value="1" />
+        <Set Name="WEBAUTHN_ASSERTION_VERSION_2" Value="2" />
+        <Set Name="WEBAUTHN_ASSERTION_VERSION_3" Value="3" />
+        <Set Name="WEBAUTHN_ASSERTION_VERSION_4" Value="4" />
+        <Set Name="WEBAUTHN_ASSERTION_VERSION_5" Value="5" />
       </Enum>
+      <Set Name="WEBAUTHN_ASSERTION_CURRENT_VERSION" Value="5" />
     </Variable>
+
     <Variable Name="[WEBAUTHN_CREDENTIAL_DETAILS_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -73,12 +89,22 @@
         <Set Name="WEBAUTHN_CREDENTIAL_DETAILS_VERSION_2" Value="2" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_GET_CREDENTIALS_OPTIONS_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
         <Set Name="WEBAUTHN_GET_CREDENTIALS_OPTIONS_VERSION_1" Value="1" />
       </Enum>
     </Variable>
+
+    <Variable Name="[CTAPCBOR_HYBRID_STORAGE_LINKED_DATA_VERSION]" Type="Alias" Base="DWORD">
+      <Display Name="DWORD" />
+      <Enum>
+        <Set Name="CTAPCBOR_HYBRID_STORAGE_LINKED_DATA_VERSION_1" Value="1" />
+      </Enum>
+      <Set Name="CTAPCBOR_HYBRID_STORAGE_LINKED_DATA_CURRENT_VERSION" Value="1" />
+    </Variable>
+
     <Variable Name="[WEBAUTHN_COSE_ALGORITHM]" Type="Alias" Base="LONG">
       <Display Name="LONG" />
       <Enum>
@@ -93,6 +119,7 @@
         <Set Name="WEBAUTHN_COSE_ALGORITHM_RSA_PSS_WITH_SHA512" Value="-39" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_CTAP_TRANSPORT]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Flag>
@@ -105,6 +132,7 @@
         <Set Name="WEBAUTHN_CTAP_TRANSPORT_FLAGS_MASK" Value="0x0000001F" />
       </Flag>
     </Variable>
+
     <Variable Name="[WEBAUTHN_USER_VERIFICATION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -114,6 +142,7 @@
         <Set Name="WEBAUTHN_USER_VERIFICATION_REQUIRED" Value="3" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_AUTHENTICATOR_ATTACHMENT]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -123,6 +152,7 @@
         <Set Name="WEBAUTHN_AUTHENTICATOR_ATTACHMENT_CROSS_PLATFORM_U2F_V2" Value="3" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_USER_VERIFICATION_REQUIREMENT]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -132,6 +162,7 @@
         <Set Name="WEBAUTHN_USER_VERIFICATION_REQUIREMENT_DISCOURAGED" Value="3" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -141,6 +172,7 @@
         <Set Name="WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT" Value="3" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_ENTERPRISE_ATTESTATION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -149,6 +181,7 @@
         <Set Name="WEBAUTHN_ENTERPRISE_ATTESTATION_PLATFORM_MANAGED" Value="2" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_LARGE_BLOB_SUPPORT]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -157,6 +190,7 @@
         <Set Name="WEBAUTHN_LARGE_BLOB_SUPPORT_PREFERRED" Value="2" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -166,8 +200,10 @@
         <Set Name="WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_4" Value="4" />
         <Set Name="WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_5" Value="5" />
         <Set Name="WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_6" Value="6" />
+        <Set Name="WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7" Value="7" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_CRED_LARGE_BLOB_OPERATION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -177,6 +213,7 @@
         <Set Name="WEBAUTHN_CRED_LARGE_BLOB_OPERATION_DELETE" Value="3" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -186,8 +223,10 @@
         <Set Name="WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4" Value="4" />
         <Set Name="WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_5" Value="5" />
         <Set Name="WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6" Value="6" />
+        <Set Name="WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_7" Value="7" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_ATTESTATION_DECODE]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -195,6 +234,7 @@
         <Set Name="WEBAUTHN_ATTESTATION_DECODE_COMMON" Value="1" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -203,8 +243,10 @@
         <Set Name="WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_3" Value="3" />
         <Set Name="WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_4" Value="4" />
         <Set Name="WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_5" Value="5" />
+        <Set Name="WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_6" Value="6" />
       </Enum>
     </Variable>
+
     <Variable Name="[WEBAUTHN_CRED_LARGE_BLOB_STATUS]" Type="Alias" Base="DWORD">
       <Display Name="DWORD" />
       <Enum>
@@ -220,6 +262,14 @@
         <Set Name="WEBAUTHN_CRED_LARGE_BLOB_STATUS_AUTHENTICATOR_ERROR" Value="9" />
       </Enum>
     </Variable>
+
+    <Variable Name="[WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_FLAGS]" Type="Alias" Base="DWORD">
+      <Display Name="DWORD" />
+      <Flag>
+        <Set Name="WEBAUTHN_AUTHENTICATOR_HMAC_SECRET_VALUES_FLAG" Value="0x00100000" />
+      </Flag>
+    </Variable>
+
     <!-- Structs -->
     <Variable Name="WEBAUTHN_RP_ENTITY_INFORMATION" Type="Struct">
       <Field Type="[WEBAUTHN_RP_ENTITY_INFORMATION_VERSION]" Name="dwVersion" />
@@ -228,6 +278,7 @@
       <Field Type="PCWSTR" Name="pwszIcon" />
     </Variable>
     <Variable Name="PCWEBAUTHN_RP_ENTITY_INFORMATION" Type="Pointer" Base="WEBAUTHN_RP_ENTITY_INFORMATION" />
+    <Variable Name="PWEBAUTHN_RP_ENTITY_INFORMATION" Type="Pointer" Base="WEBAUTHN_RP_ENTITY_INFORMATION" />
 
     <Variable Name="WEBAUTHN_USER_ENTITY_INFORMATION" Type="Struct">
       <Field Type="[WEBAUTHN_USER_ENTITY_INFORMATION_VERSION]" Name="dwVersion" />
@@ -235,8 +286,10 @@
       <Field Type="PBYTE" Name="pbId" Length="cbId" Display="PUCHAR" />
       <Field Type="PCWSTR" Name="pwszName" />
       <Field Type="PCWSTR" Name="pwszIcon" />
+      <Field Type="PCWSTR" Name="pwszDisplayName" />
     </Variable>
     <Variable Name="PCWEBAUTHN_USER_ENTITY_INFORMATION" Type="Pointer" Base="WEBAUTHN_USER_ENTITY_INFORMATION" />
+    <Variable Name="PWEBAUTHN_USER_ENTITY_INFORMATION" Type="Pointer" Base="WEBAUTHN_USER_ENTITY_INFORMATION" />
 
     <Variable Name="WEBAUTHN_CLIENT_DATA" Type="Struct">
       <Field Type="[WEBAUTHN_CLIENT_DATA_VERSION]" Name="dwVersion" />
@@ -302,6 +355,21 @@
     </Variable>
     <Variable Name="PCWEBAUTHN_COSE_CREDENTIAL_PARAMETERS" Type="Pointer" Base="WEBAUTHN_COSE_CREDENTIAL_PARAMETERS" />
 
+    <Variable Name="CTAPCBOR_HYBRID_STORAGE_LINKED_DATA" Type="Struct">
+      <Field Type="[CTAPCBOR_HYBRID_STORAGE_LINKED_DATA_VERSION]" Name="dwVersion" />
+      <Field Type="DWORD" Name="cbContactId" />
+      <Field Type="PBYTE" Name="pbContactId" Length="cbContactId" />
+      <Field Type="DWORD" Name="cbLinkId" />
+      <Field Type="PBYTE" Name="pbLinkId" Length="cbLinkId" />
+      <Field Type="DWORD" Name="cbLinkSecret" />
+      <Field Type="PBYTE" Name="pbLinkSecret" Length="cbLinkSecret" />
+      <Field Type="DWORD" Name="cbPublicKey" />
+      <Field Type="PBYTE" Name="pbPublicKey" Length="cbPublicKey" />
+      <Field Type="LPCWSTR" Name="pwszAuthenticatorName" />
+      <Field Type="WORD" Name="wEncodedTunnelServerDomain" />
+    </Variable>
+    <Variable Name="PCTAPCBOR_HYBRID_STORAGE_LINKED_DATA" Type="Pointer" Base="CTAPCBOR_HYBRID_STORAGE_LINKED_DATA" />
+
     <Variable Name="WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS" Type="Struct">
       <Field Type="[WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION]" Name="dwVersion" />
       <Field Type="DWORD" Name="dwTimeoutMilliseconds" />
@@ -314,8 +382,38 @@
       <Field Type="DWORD" Name="dwFlags" />
       <Field Type="GUID*" Name="pCancellationId" />
       <Field Type="PWEBAUTHN_CREDENTIAL_LIST" Name="pExcludeCredentialList" />
+      <Field Type="[WEBAUTHN_ENTERPRISE_ATTESTATION]" Name="dwEnterpriseAttestation" />
+      <Field Type="[WEBAUTHN_LARGE_BLOB_SUPPORT]" Name="dwLargeBlobSupport" />
+      <Field Type="BOOL" Name="bPreferResidentKey" />
+      <Field Type="BOOL" Name="bBrowserInPrivateMode" />
+      <Field Type="BOOL" Name="bEnablePrf" />
+      <Field Type="PCTAPCBOR_HYBRID_STORAGE_LINKED_DATA" Name="pLinkedDevice" />
+      <Field Type="DWORD" Name="cbJsonExt" />
+      <Field Type="PBYTE" Name="pbJsonExt" Length="cbJsonExt" Display="PUCHAR" />
     </Variable>
     <Variable Name="PCWEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS" Type="Pointer" Base="WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS" />
+
+    <Variable Name="WEBAUTHN_HMAC_SECRET_SALT" Type="Struct">
+      <Field Type="DWORD" Name="cbFirst" />
+      <Field Type="PBYTE" Name="pbFirst" Length="cbFirst" />
+      <Field Type="DWORD" Name="cbSecond" />
+      <Field Type="PBYTE" Name="pbSecond" Length="cbSecond" />
+    </Variable>
+    <Variable Name="PWEBAUTHN_HMAC_SECRET_SALT" Type="Pointer" Base="WEBAUTHN_HMAC_SECRET_SALT" />
+
+    <Variable Name="WEBAUTHN_CRED_WITH_HMAC_SECRET_SALT" Type="Struct">
+      <Field Type="DWORD" Name="cbCredID" />
+      <Field Type="PBYTE" Name="pbCredID" Length="cbCredID" />
+      <Field Type="PWEBAUTHN_HMAC_SECRET_SALT" Name="pHmacSecretSalt" />
+    </Variable>
+    <Variable Name="PWEBAUTHN_CRED_WITH_HMAC_SECRET_SALT" Type="Pointer" Base="WEBAUTHN_CRED_WITH_HMAC_SECRET_SALT" />
+
+    <Variable Name="WEBAUTHN_HMAC_SECRET_SALT_VALUES" Type="Struct">
+      <Field Type="PWEBAUTHN_HMAC_SECRET_SALT" Name="pGlobalHmacSalt" />
+      <Field Type="DWORD" Name="cCredWithHmacSecretSaltList" />
+      <Field Type="PWEBAUTHN_CRED_WITH_HMAC_SECRET_SALT" Name="pCredWithHmacSecretSaltList" Count="cCredWithHmacSecretSaltList" />
+    </Variable>
+    <Variable Name="PWEBAUTHN_HMAC_SECRET_SALT_VALUES" Type="Pointer" Base="WEBAUTHN_HMAC_SECRET_SALT_VALUES" />
 
     <Variable Name="WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS" Type="Struct">
       <Field Type="[WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION]" Name="dwVersion" />
@@ -324,11 +422,20 @@
       <Field Type="WEBAUTHN_EXTENSIONS" Name="Extensions" />
       <Field Type="[WEBAUTHN_AUTHENTICATOR_ATTACHMENT]" Name="dwAuthenticatorAttachment" />
       <Field Type="[WEBAUTHN_USER_VERIFICATION_REQUIREMENT]" Name="dwUserVerificationRequirement" />
-      <Field Type="DWORD" Name="dwFlags" />
+      <Field Type="[WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_FLAGS]" Name="dwFlags" />
       <Field Type="PCWSTR" Name="pwszU2fAppId" />
       <Field Type="BOOL*" Name="pbU2fAppId" />
       <Field Type="GUID*" Name="pCancellationId" />
       <Field Type="PWEBAUTHN_CREDENTIAL_LIST" Name="pAllowCredentialList" />
+      <Field Type="[WEBAUTHN_CRED_LARGE_BLOB_OPERATION]" Name="dwCredLargeBlobOperation" />
+      <Field Type="DWORD" Name="cbCredLargeBlob" />
+      <Field Type="PBYTE" Name="pbCredLargeBlob" Length="cbCredLargeBlob" />
+      <Field Type="PWEBAUTHN_HMAC_SECRET_SALT_VALUES" Name="pHmacSecretSaltValues" />
+      <Field Type="BOOL" Name="bBrowserInPrivateMode" />
+      <Field Type="PCTAPCBOR_HYBRID_STORAGE_LINKED_DATA" Name="pLinkedDevice" />
+      <Field Type="BOOL" Name="bAutoFill" />
+      <Field Type="DWORD" Name="cbJsonExt" />
+      <Field Type="PBYTE" Name="pbJsonExt" Length="cbJsonExt" Display="PUCHAR" />
     </Variable>
     <Variable Name="PCWEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS" Type="Pointer" Base="WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS" />
 
@@ -369,20 +476,63 @@
       <Field Type="PBYTE" Name="pbCredentialId" Length="cbCredentialId" Display="PUCHAR"/>
       <Field Type="WEBAUTHN_EXTENSIONS" Name="Extensions" />
       <Field Type="[WEBAUTHN_CTAP_TRANSPORT]" Name="dwUsedTransport" />
+      <Field Type="BOOL" Name="bEpAtt" />
+      <Field Type="BOOL" Name="bLargeBlobSupported" />
+      <Field Type="BOOL" Name="bResidentKey" />
+      <Field Type="BOOL" Name="bPrfEnabled" />
+      <Field Type="DWORD" Name="cbUnsignedExtensionOutputs" />
+      <Field Type="PBYTE" Name="pbUnsignedExtensionOutputs" Length="cbUnsignedExtensionOutputs" Display="PUCHAR" />
     </Variable>
     <Variable Name="PWEBAUTHN_CREDENTIAL_ATTESTATION" Type="Pointer" Base="WEBAUTHN_CREDENTIAL_ATTESTATION" />
+    <Variable Name="PWEBAUTHN_CREDENTIAL_ATTESTATION*" Type="Pointer" Base="PWEBAUTHN_CREDENTIAL_ATTESTATION" />
 
     <Variable Name="WEBAUTHN_ASSERTION" Type="Struct">
       <Field Type="[WEBAUTHN_ASSERTION_VERSION]" Name="dwVersion" />
       <Field Type="DWORD" Name="cbAuthenticatorData" />
-      <Field Type="PBYTE" Name="pbAuthenticatorData" Length="cbAuthenticatorData" />
+      <Field Type="PBYTE" Name="pbAuthenticatorData" Length="cbAuthenticatorData" Display="PUCHAR" />
       <Field Type="DWORD" Name="cbSignature" />
-      <Field Type="PBYTE" Name="pbSignature" Length="cbSignature" />
+      <Field Type="PBYTE" Name="pbSignature" Length="cbSignature" Display="PUCHAR" />
       <Field Type="WEBAUTHN_CREDENTIAL" Name="Credential" />
       <Field Type="DWORD" Name="cbUserId" />
       <Field Type="PBYTE" Name="pbUserId" Length="cbUserId" Display="PUCHAR"/>
+      <Field Type="WEBAUTHN_EXTENSIONS" Name="Extensions" />
+      <Field Type="DWORD" Name="cbCredLargeBlob" />
+      <Field Type="PBYTE" Name="pbCredLargeBlob" Length="cbCredLargeBlob" Display="PUCHAR" />
+      <Field Type="[WEBAUTHN_CRED_LARGE_BLOB_STATUS]" Name="dwCredLargeBlobStatus" />
+      <Field Type="PWEBAUTHN_HMAC_SECRET_SALT" Name="pHmacSecret" />
+      <Field Type="[WEBAUTHN_CTAP_TRANSPORT]" Name="dwUsedTransport" />
+      <Field Type="DWORD" Name="cbUnsignedExtensionOutputs" />
+      <Field Type="PBYTE" Name="pbUnsignedExtensionOutputs" Length="cbUnsignedExtensionOutputs" Display="PUCHAR" />
     </Variable>
     <Variable Name="PWEBAUTHN_ASSERTION" Type="Pointer" Base="WEBAUTHN_ASSERTION" />
+    <Variable Name="PWEBAUTHN_ASSERTION*" Type="Pointer" Base="PWEBAUTHN_ASSERTION" />
+
+    <Variable Name="WEBAUTHN_GET_CREDENTIALS_OPTIONS" Type="Struct">
+      <Field Type="[WEBAUTHN_GET_CREDENTIALS_OPTIONS_VERSION]" Name="dwVersion" />
+      <Field Type="LPCWSTR" Name="pwszRpId" />
+      <Field Type="BOOL" Name="bBrowserInPrivateMode" />
+    </Variable>
+    <Variable Name="PWEBAUTHN_GET_CREDENTIALS_OPTIONS" Type="Pointer" Base="WEBAUTHN_GET_CREDENTIALS_OPTIONS" />
+    <Variable Name="PCWEBAUTHN_GET_CREDENTIALS_OPTIONS" Type="Pointer" Base="WEBAUTHN_GET_CREDENTIALS_OPTIONS" />
+
+    <Variable Name="WEBAUTHN_CREDENTIAL_DETAILS" Type="Struct">
+      <Field Type="[WEBAUTHN_CREDENTIAL_DETAILS_VERSION]" Name="dwVersion" />
+      <Field Type="DWORD" Name="cbCredentialID" />
+      <Field Type="PBYTE" Name="pbCredentialID" Length="cbCredentialID" Display="PUCHAR" />
+      <Field Type="PWEBAUTHN_RP_ENTITY_INFORMATION" Name="pRpInformation" />
+      <Field Type="PWEBAUTHN_USER_ENTITY_INFORMATION" Name="pUserInformation" />
+      <Field Type="BOOL" Name="bRemovable" />
+      <Field Type="BOOL" Name="bBackedUp" />
+    </Variable>
+    <Variable Name="PWEBAUTHN_CREDENTIAL_DETAILS" Type="Pointer" Base="WEBAUTHN_CREDENTIAL_DETAILS" />
+    <Variable Name="PWEBAUTHN_CREDENTIAL_DETAILS*" Type="Pointer" Base="PWEBAUTHN_CREDENTIAL_DETAILS" />
+
+    <Variable Name="WEBAUTHN_CREDENTIAL_DETAILS_LIST" Type="Struct">
+      <Field Type="DWORD" Name="cCredentialDetails" />
+      <Field Type="PWEBAUTHN_CREDENTIAL_DETAILS*" Name="ppCredentialDetails" Count="cCredentialDetails" />
+    </Variable>
+    <Variable Name="PWEBAUTHN_CREDENTIAL_DETAILS_LIST" Type="Pointer" Base="WEBAUTHN_CREDENTIAL_DETAILS_LIST" />
+    <Variable Name="PWEBAUTHN_CREDENTIAL_DETAILS_LIST*" Type="Pointer" Base="PWEBAUTHN_CREDENTIAL_DETAILS_LIST" />
 
     <!-- Documented APIs (webauthn.h) -->
     <Category Name="WebAuthn/Public" />
@@ -391,8 +541,8 @@
       <Param Type="LPCWSTR" Name="pwszRpId" />
       <Param Type="PCWEBAUTHN_CLIENT_DATA" Name="pWebAuthNClientData" />
       <Param Type="PCWEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS" Name="pWebAuthNGetAssertionOptions" />
-      <Param Type="PWEBAUTHN_ASSERTION" Name="ppWebAuthNAssertion" />
-      <Return Type="PWEBAUTHN_ASSERTION" />
+      <Param Type="PWEBAUTHN_ASSERTION*" Name="ppWebAuthNAssertion" OutputOnly="True" />
+      <Return Type="HRESULT" />
     </Api>
     <Api Name="WebAuthNAuthenticatorMakeCredential">
       <Param Type="HWND" Name="hWnd" />
@@ -401,19 +551,19 @@
       <Param Type="PCWEBAUTHN_COSE_CREDENTIAL_PARAMETERS" Name="pPubKeyCredParams" />
       <Param Type="PCWEBAUTHN_CLIENT_DATA" Name="pWebAuthNClientData" />
       <Param Type="PCWEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS" Name="pWebAuthNMakeCredentialOptions" />
-      <Param Type="PWEBAUTHN_CREDENTIAL_ATTESTATION" Name="ppWebAuthNCredentialAttestation" />
+      <Param Type="PWEBAUTHN_CREDENTIAL_ATTESTATION*" Name="ppWebAuthNCredentialAttestation" OutputOnly="True" />
       <Return Type="HRESULT" />
     </Api>
     <Api Name="WebAuthNGetApiVersionNumber">
       <Return Type="[WEBAUTHN_API_VERSION]" />
     </Api>
     <Api Name="WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable">
-      <Param Type="BOOL*" Name="pbIsUserVerifyingPlatformAuthenticatorAvailable" />
+      <Param Type="BOOL*" Name="pbIsUserVerifyingPlatformAuthenticatorAvailable" OutputOnly="True" />
       <Return Type="HRESULT" />
     </Api>
     <Api Name="WebAuthNGetPlatformCredentialList">
       <Param Type="PCWEBAUTHN_GET_CREDENTIALS_OPTIONS" Name="pGetCredentialsOptions" />
-      <Param Type="PWEBAUTHN_CREDENTIAL_DETAILS_LIST" Name="ppCredentialDetailsList" />
+      <Param Type="PWEBAUTHN_CREDENTIAL_DETAILS_LIST*" Name="ppCredentialDetailsList" OutputOnly="True" />
       <Return Type="HRESULT" />
     </Api>
     <Api Name="WebAuthNDeletePlatformCredential">
@@ -434,7 +584,7 @@
       <Return Type="void" />
     </Api>
     <Api Name="WebAuthNGetCancellationId">
-      <Param Type="GUID*" Name="pCancellationId" />
+      <Param Type="GUID*" Name="pCancellationId" OutputOnly="True" />
       <Return Type="HRESULT" />
     </Api>
     <Api Name="WebAuthNCancelCurrentOperation">
@@ -449,6 +599,7 @@
       <Param Type="HRESULT" Name="hr" />
       <Return Type="HRESULT" />
     </Api>
+
     <!-- Undocumented APIs (webauthn.dll exports) -->
     <Category Name="WebAuthn/Internal" />
     <Api Name="I_WebAuthNCtapDecodeGetAssertionRpcResponse">
