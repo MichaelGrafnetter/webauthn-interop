@@ -97,7 +97,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// PRF values which will be converted into HMAC-SECRET values according to WebAuthn Specification.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6.</remarks>
-        private HmacSecretSaltValuesIn _hmacSecretSaltValues;
+        private IntPtr _hmacSecretSaltValues;
 
         /// <summary>
         /// Indicates whether the browser is in private mode. Defaulting to false.
@@ -109,7 +109,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Linked Device Connection Info.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
-        public HybridStorageLinkedData LinkedDevice { get; set; }
+        private IntPtr _linkedDevice { get; set; }
 
         /// <summary>
         /// Allowlist MUST contain 1 credential applicable for Hybrid transport.
@@ -169,11 +169,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 }
                 else
                 {
-                    if (_cancellationId != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(_cancellationId);
-                        _cancellationId = IntPtr.Zero;
-                    }
+                    FreeCancellationId();
                 }
             }
         }
@@ -208,11 +204,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 }
                 else
                 {
-                    if (_allowCredentialList != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(_allowCredentialList);
-                        _allowCredentialList = IntPtr.Zero;
-                    }
+                    FreeAllowCredentialList();
                 }
             }
         }
@@ -265,23 +257,65 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 // Get rid of any previous blob first
                 _largeBlob?.Dispose();
 
-                // Now replace the previous value with a new one
+                // Now replace the previous value with the new one
                 _largeBlobLength = value?.Length ?? 0;
                 _largeBlob = new ByteArrayIn(value);
             }
         }
 
+        /// <summary>
+        /// PRF values which will be converted into HMAC-SECRET values according to WebAuthn Specification.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6.</remarks>
+
         public HmacSecretSaltValuesIn HmacSecretSaltValues
         {
             set
             {
-                _hmacSecretSaltValues?.Dispose();
-                _hmacSecretSaltValues = value;
+                if (value?.HasGlobalHmacSalt ?? false)
+                {
+                    if (_hmacSecretSaltValues == IntPtr.Zero)
+                    {
+                        _hmacSecretSaltValues = Marshal.AllocHGlobal(Marshal.SizeOf<HmacSecretSaltValuesIn>());
+                    }
 
-                // Set or unset the corresponding flag
-                _flags = value != null ?
-                    _flags | AssertionOptionsFlags.AuthenticatorHmacSecretValues :
-                    _flags & ~AssertionOptionsFlags.AuthenticatorHmacSecretValues;
+                    Marshal.StructureToPtr<HmacSecretSaltValuesIn>(value, _hmacSecretSaltValues, false);
+
+                    // Set flag
+                    _flags |= AssertionOptionsFlags.AuthenticatorHmacSecretValues;
+                }
+                else
+                {
+                    FreeHmacSecretSaltValues();
+
+                    // Unset flag
+                    _flags &= ~AssertionOptionsFlags.AuthenticatorHmacSecretValues;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Linked Device Connection Info.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+
+        public HybridStorageLinkedData LinkedDevice
+        {
+            set
+            {
+                if (value != null)
+                {
+                    if (_linkedDevice == IntPtr.Zero)
+                    {
+                        _linkedDevice = Marshal.AllocHGlobal(Marshal.SizeOf<HybridStorageLinkedData>());
+                    }
+
+                    Marshal.StructureToPtr<HybridStorageLinkedData>(value, _linkedDevice, false);
+                }
+                else
+                {
+                    FreeLinkedDevice();
+                }
             }
         }
 
@@ -320,14 +354,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
             _jsonExt?.Dispose();
             _jsonExt = null;
 
-            if (_allowCredentialList != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(_allowCredentialList);
-                _allowCredentialList = IntPtr.Zero;
-            }
+            FreeAllowCredentialList();
 
-            _hmacSecretSaltValues?.Dispose();
-            _hmacSecretSaltValues = null;
+            FreeHmacSecretSaltValues();
+
+            FreeLinkedDevice();
 
             if (_isU2fAppIdUsed != IntPtr.Zero)
             {
@@ -335,6 +366,38 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 _isU2fAppIdUsed = IntPtr.Zero;
             }
 
+            FreeCancellationId();
+        }
+
+        private void FreeLinkedDevice()
+        {
+            if (_linkedDevice != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_linkedDevice);
+                _linkedDevice = IntPtr.Zero;
+            }
+        }
+
+        private void FreeHmacSecretSaltValues()
+        {
+            if (_hmacSecretSaltValues != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_hmacSecretSaltValues);
+                _hmacSecretSaltValues = IntPtr.Zero;
+            }
+        }
+
+        private void FreeAllowCredentialList()
+        {
+            if (_allowCredentialList != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_allowCredentialList);
+                _allowCredentialList = IntPtr.Zero;
+            }
+        }
+
+        private void FreeCancellationId()
+        {
             if (_cancellationId != IntPtr.Zero)
             {
                 Marshal.FreeHGlobal(_cancellationId);

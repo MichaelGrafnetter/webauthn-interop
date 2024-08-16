@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace DSInternals.Win32.WebAuthn.Interop
@@ -48,10 +48,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private CredentialLargeBlobStatus _largeBlobStatus;
 
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_3.</remarks>
-        private HmacSecretSaltOut _hmacSecret;
+        private IntPtr _hmacSecret;
 
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_4.</remarks>
-        public TransportContext _usedTransport;
+        private AuthenticatorTransport _usedTransport;
 
         /// <summary>
         /// The instantiation of this class is blocked by this private constructor.

@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace DSInternals.Win32.WebAuthn.Interop
@@ -79,13 +79,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// A salt used to generate the HMAC secret.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_3.</remarks>
-        public HmacSecretSaltOut HmacSecret { get; private set; }
+        private IntPtr _hmacSecret;
 
         /// <summary>
         /// The transport that was used.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_4.</remarks>
-        public TransportContext UsedTransport { get; private set; }
+        public AuthenticatorTransport UsedTransport { get; private set; }
 
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_5.</remarks>
         private int _unsignedExtensionOutputsLength;
@@ -118,5 +118,22 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_5.</remarks>
         public byte[] UnsignedExtensionOutputs => _unsignedExtensionOutputs?.Read(_unsignedExtensionOutputsLength);
+
+        /// <summary>
+        /// A salt used to generate the HMAC secret.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_3.</remarks>
+        public HmacSecretSaltOut HmacSecret
+        {
+            get
+            {
+                if (_hmacSecret == IntPtr.Zero)
+                {
+                    return null;
+                }
+
+                return Marshal.PtrToStructure<HmacSecretSaltOut>(_hmacSecret);
+            }
+        }
     }
 }

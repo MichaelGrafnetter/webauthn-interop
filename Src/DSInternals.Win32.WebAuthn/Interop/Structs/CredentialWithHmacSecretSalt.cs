@@ -20,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// PRF Values for above credential
         /// </summary>
-        private HmacSecretSaltIn _hmacSecretSalt;
+        private IntPtr _hmacSecretSalt;
 
         /// <summary>
         /// Credential ID.
@@ -42,21 +42,42 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
+        /// <summary>
+        /// PRF Values for above credential
+        /// </summary>
         public HmacSecretSaltIn HmacSecretSalt
         {
             set
             {
-                _hmacSecretSalt?.Dispose();
-                _hmacSecretSalt = value;
+                if(value != null)
+                {
+                    if (_hmacSecretSalt == IntPtr.Zero)
+                    {
+                        _hmacSecretSalt = Marshal.AllocHGlobal(Marshal.SizeOf<HmacSecretSaltIn>());
+                    }
+
+                    Marshal.StructureToPtr<HmacSecretSaltIn>(value, _hmacSecretSalt, false);
+                }
+                else
+                {
+                    FreeHmacSecretSalt();
+                }
             }
         }
 
-        public CredentialWithHmacSecretSaltIn(byte[] credentialId, byte[] first, byte[] second)
+        public CredentialWithHmacSecretSaltIn(byte[] credentialId, HmacSecretSaltIn hmacSecretSalt)
         {
-            // TODO: Validate that all parameters are present
             this.CredentialId = credentialId;
-            this.HmacSecretSalt = new HmacSecretSaltIn(first, second);
-            // TODO: Use tuples here
+            this.HmacSecretSalt = hmacSecretSalt;
+        }
+
+        private void FreeHmacSecretSalt()
+        {
+            if (_hmacSecretSalt != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_hmacSecretSalt);
+                _hmacSecretSalt = IntPtr.Zero;
+            }
         }
 
         public void Dispose()
@@ -64,8 +85,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             _credentialId?.Dispose();
             _credentialId = null;
 
-            _hmacSecretSalt?.Dispose();
-            _hmacSecretSalt = null;
+            FreeHmacSecretSalt();
         }
     }
 

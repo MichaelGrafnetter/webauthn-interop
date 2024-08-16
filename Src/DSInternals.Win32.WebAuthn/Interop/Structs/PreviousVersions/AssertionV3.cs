@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -47,7 +48,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private CredentialLargeBlobStatus _largeBlobStatus;
 
         /// <remarks>This field has been added in WEBAUTHN_ASSERTION_VERSION_3.</remarks>
-        private HmacSecretSaltOut _hmacSecret;
+        private IntPtr _hmacSecret;
 
         /// <summary>
         /// The instantiation of this class is blocked by this private constructor.

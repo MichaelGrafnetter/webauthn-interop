@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.3] - 2024-08-16
+
+### Fixed
+
+- Resolved issues with HMAC secret and linked device information processing.
+
 ## [1.0.2] - 2024-08-13
 
 ### Fixed
@@ -18,6 +24,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0...v1.0.2
 [1.0]: https://github.com/MichaelGrafnetter/webauthn-interop/releases/tag/v1.0

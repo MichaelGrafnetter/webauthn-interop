@@ -6,12 +6,12 @@
     <PackageId>DSInternals.Win32.WebAuthn.Adapter</PackageId>
     <Product>WebAuthn Interop Assembly Adapter</Product>
     <Title>WebAuthn Interop Assembly Adapter</Title>
-    <Version>1.0.2</Version>
-    <AssemblyVersion>1.0.2</AssemblyVersion>
-    <ProductVersion>1.0.2</ProductVersion>
-    <FileVersion>1.0.2</FileVersion>
+    <Version>1.0.3</Version>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <ProductVersion>1.0.3</ProductVersion>
+    <FileVersion>1.0.3</FileVersion>
     <Description>Bridge between Fido2.Models and DSInternals.Win32.WebAuthn packages</Description>
-    <PackageReleaseNotes>- Initial release.
+    <PackageReleaseNotes>- Fixed issues with HMAC secret processing.
 - Windows 10 1903 or newer is required.</PackageReleaseNotes>
   </PropertyGroup>
 

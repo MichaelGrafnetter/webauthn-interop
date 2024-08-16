@@ -102,7 +102,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Linked Device Connection Info.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
-        public HybridStorageLinkedData LinkedDevice { get; set; }
+        private IntPtr _linkedDevice { get; set; }
 
         /// <summary>
         /// Size of JSON extension.
@@ -137,11 +137,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 }
                 else
                 {
-                    if(_cancellationId != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(_cancellationId);
-                        _cancellationId = IntPtr.Zero;
-                    }
+                    FreeCancellationId();
                 }
             }
         }
@@ -192,11 +188,31 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 }
                 else
                 {
-                    if (_excludeCredentialList != IntPtr.Zero)
+                    FreeExcludeCredentialList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Linked Device Connection Info.
+        /// </summary>
+        /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
+        public HybridStorageLinkedData LinkedDevice
+        {
+            set
+            {
+                if (value != null)
+                {
+                    if (_linkedDevice == IntPtr.Zero)
                     {
-                        Marshal.FreeHGlobal(_excludeCredentialList);
-                        _excludeCredentialList = IntPtr.Zero;
+                        _linkedDevice = Marshal.AllocHGlobal(Marshal.SizeOf<HybridStorageLinkedData>());
                     }
+
+                    Marshal.StructureToPtr<HybridStorageLinkedData>(value, _linkedDevice, false);
+                }
+                else
+                {
+                    FreeLinkedDevice();
                 }
             }
         }
@@ -255,16 +271,35 @@ namespace DSInternals.Win32.WebAuthn.Interop
             _jsonExt?.Dispose();
             _jsonExt = null;
 
+            FreeExcludeCredentialList();
+            FreeCancellationId();
+            FreeLinkedDevice();
+        }
+
+        private void FreeExcludeCredentialList()
+        {
             if (_excludeCredentialList != IntPtr.Zero)
             {
                 Marshal.FreeHGlobal(_excludeCredentialList);
                 _excludeCredentialList = IntPtr.Zero;
             }
+        }
 
+        private void FreeCancellationId()
+        {
             if (_cancellationId != IntPtr.Zero)
             {
                 Marshal.FreeHGlobal(_cancellationId);
                 _cancellationId = IntPtr.Zero;
+            }
+        }
+
+        private void FreeLinkedDevice()
+        {
+            if (_linkedDevice != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_linkedDevice);
+                _linkedDevice = IntPtr.Zero;
             }
         }
     }

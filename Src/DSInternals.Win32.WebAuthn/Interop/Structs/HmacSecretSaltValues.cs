@@ -13,28 +13,33 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// The global HMAC SALT.
         /// </summary>
-        private HmacSecretSaltIn _globalHmacSalt;
-
-        /// <summary>
-        /// Size of _credWithHmacSecretSaltList.
-        /// </summary>
-        private int _credWithHmacSecretSaltListSize;
+        private IntPtr _globalHmacSalt;
 
         /// <summary>
         /// List of credentials with HMAC secret SALT.
         /// </summary>
         private CredentialsWithHmacSecretSaltIn _credWithHmacSecretSaltList;
 
-        public HmacSecretSaltValuesIn(HmacSecretSaltIn globalHmacSalt, CredentialWithHmacSecretSaltIn[] credsWithHmacSecretSalt) {
-            this._globalHmacSalt = globalHmacSalt;
-            this._credWithHmacSecretSaltListSize = credsWithHmacSecretSalt?.Length ?? 0;
-            this._credWithHmacSecretSaltList = new CredentialsWithHmacSecretSaltIn(credsWithHmacSecretSalt);
+        public HmacSecretSaltValuesIn(HmacSecretSaltIn globalHmacSalt, CredentialWithHmacSecretSaltIn[] credsWithHmacSecretSalt)
+        {
+            if (globalHmacSalt != null)
+            {
+                _globalHmacSalt = Marshal.AllocHGlobal(Marshal.SizeOf<HmacSecretSaltIn>());
+                Marshal.StructureToPtr(globalHmacSalt, _globalHmacSalt, false);
+            }
+
+            _credWithHmacSecretSaltList = new CredentialsWithHmacSecretSaltIn(credsWithHmacSecretSalt);
         }
+
+        public bool HasGlobalHmacSalt => _globalHmacSalt != IntPtr.Zero;
 
         public void Dispose()
         {
-            _globalHmacSalt?.Dispose();
-            _globalHmacSalt = null;
+            if(this._globalHmacSalt != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(this._globalHmacSalt);
+                this._globalHmacSalt = IntPtr.Zero;
+            }
 
             _credWithHmacSecretSaltList?.Dispose();
             _credWithHmacSecretSaltList = null;
