@@ -53,7 +53,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Restore Strong Name Key
-      if: ${{ github.event.inputs.strong_name_sign }}
+      if: ${{ inputs.strong_name_sign }}
       working-directory: Keys
       shell: powershell
       env:
@@ -92,28 +92,28 @@ jobs:
     - name: Cache DotNet Global Tools
       id: cache-dotnet-globaltools
       uses: actions/cache@v4
-      if: ${{ github.event.inputs.certificate_sign }}
+      if: ${{ inputs.certificate_sign }}
       with:
         path: ~/.dotnet/tools
         # Heuristics: The current list of required global tools is defined in this workflow file.
         key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ hashFiles('.github/workflows/release.yml') }}
 
     - name: Install Azure KeyVault Code Signing Tools
-      if: ${{ github.event.inputs.certificate_sign && steps.cache-dotnet-globaltools.outputs.cache-hit != 'true' }}
+      if: ${{ inputs.certificate_sign && steps.cache-dotnet-globaltools.outputs.cache-hit != 'true' }}
       run: |
         dotnet tool install --global AzureSignTool
         dotnet tool install --global NuGetKeyVaultSignTool
 
     - name: Azure Login
       uses: azure/login@v2
-      if: ${{ github.event.inputs.certificate_sign }}
+      if: ${{ inputs.certificate_sign }}
       with:
         client-id: ${{ secrets.SIGNING_CLIENT_ID }}
         tenant-id: ${{ secrets.SIGNING_TENANT_ID }}
         allow-no-subscriptions: true
 
     - name: Sign Binaries and Scripts
-      if: ${{ github.event.inputs.certificate_sign }}
+      if: ${{ inputs.certificate_sign }}
       shell: cmd
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
@@ -166,7 +166,7 @@ jobs:
       run: dotnet pack --configuration Release --no-build
 
     - name: Sign NuGet Packages
-      if: ${{ github.event.inputs.certificate_sign }}
+      if: ${{ inputs.certificate_sign }}
       shell: cmd
       env:
         SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
@@ -197,7 +197,7 @@ jobs:
 
   nuget:
     name: 'Publish to NuGet Gallery'
-    if: ${{ github.event.inputs.publish_nuget }}
+    if: ${{ inputs.publish_nuget }}
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -217,7 +217,7 @@ jobs:
 
   psgallery:
     name: 'Publish to PowerShell Gallery'
-    if: ${{ github.event.inputs.publish_powershell }}
+    if: ${{ inputs.publish_powershell }}
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -233,7 +233,7 @@ jobs:
 
   release:
     name: 'Create GitHub Release Draft'
-    if: ${{ github.event.inputs.create_github_release }}
+    if: ${{ inputs.create_github_release }}
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -245,7 +245,7 @@ jobs:
 
     - name: Create Module ZIP for GitHub Release
       shell: pwsh
-      run: Compress-Archive -Path ./Module/* -DestinationPath ./DSInternals.Passkeys_v${{ github.event.inputs.release_version }}.zip -CompressionLevel Optimal -Force
+      run: Compress-Archive -Path ./Module/* -DestinationPath ./DSInternals.Passkeys_v${{ inputs.release_version }}.zip -CompressionLevel Optimal -Force
 
     - name: Download Desktop App
       uses: actions/download-artifact@v4
@@ -255,7 +255,7 @@ jobs:
 
     - name: Create Application ZIP for GitHub Release
       shell: pwsh
-      run: Compress-Archive -Path ./Fido2UI/* -DestinationPath ./FIDO2UI${{ github.event.inputs.release_version }}.zip -CompressionLevel Optimal -Force
+      run: Compress-Archive -Path ./Fido2UI/* -DestinationPath ./FIDO2UI${{ inputs.release_version }}.zip -CompressionLevel Optimal -Force
 
     - name: Create GitHub Release
       shell: pwsh
@@ -269,14 +269,14 @@ jobs:
         ## DSInternals.Passkeys PowerShell Module
 
         - The module is available in the [PowerShell Gallery](https://www.powershellgallery.com/packages/DSInternals.Passkeys).
-        - As an alternative, the attached `DSInternals.Passkeys_v${{ github.event.inputs.release_version }}.zip` file can be used for offline module installation.
+        - As an alternative, the attached `DSInternals.Passkeys_v${{ inputs.release_version }}.zip` file can be used for offline module installation.
 
         ## FIDO2 UI Desktop Application
 
-        - Application binaries are in the attached `FIDO2UI_v${{ github.event.inputs.release_version }}.zip` file.
+        - Application binaries are in the attached `FIDO2UI_v${{ inputs.release_version }}.zip` file.
 
         ## NuGet Packages
 
         - Packages are [published in the NuGet Gallery](https://www.nuget.org/packages?q=DSInternals.Win32.WebAuthn).
         '@ > release-notes.md
-        gh release create v${{ github.event.inputs.release_version }} ./*.zip --draft --latest --title "WebAuthn Interop Assembly ${{ github.event.inputs.release_version }}" --notes-file release-notes.md
+        gh release create v${{ inputs.release_version }} ./*.zip --draft --latest --title "WebAuthn Interop Assembly ${{ inputs.release_version }}" --notes-file release-notes.md
