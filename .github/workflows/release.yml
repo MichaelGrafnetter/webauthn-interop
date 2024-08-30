@@ -208,6 +208,8 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
 
       - name: Publish NuGet Packages
         run: |
@@ -248,12 +250,12 @@ jobs:
     - name: Download Desktop App
       uses: actions/download-artifact@v4
       with:
-        name: FIDO2UI
-        path: FIDO2UI
+        name: Fido2UI
+        path: Fido2UI
 
     - name: Create Application ZIP for GitHub Release
       shell: pwsh
-      run: Compress-Archive -Path ./FIDO2UI/* -DestinationPath ./FIDO2UI_v${{ github.event.inputs.release_version }}.zip -CompressionLevel Optimal -Force
+      run: Compress-Archive -Path ./Fido2UI/* -DestinationPath ./FIDO2UI${{ github.event.inputs.release_version }}.zip -CompressionLevel Optimal -Force
 
     - name: Create GitHub Release
       shell: pwsh
