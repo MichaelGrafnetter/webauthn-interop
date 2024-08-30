@@ -213,7 +213,7 @@ jobs:
 
       - name: Publish NuGet Packages
         run: |
-          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_GALLERY_APIKEY }}
+          dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_GALLERY_APIKEY }} --skip-duplicate
 
   psgallery:
     name: 'Publish to PowerShell Gallery'
@@ -237,28 +237,34 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
     - name: Download PowerShell Module
       uses: actions/download-artifact@v4
       with:
         name: PowerShell
-        path: Module
-
-    - name: Create Module ZIP for GitHub Release
-      shell: pwsh
-      run: Compress-Archive -Path ./Module/* -DestinationPath ./DSInternals.Passkeys_v${{ inputs.release_version }}.zip -CompressionLevel Optimal -Force
+        path: GitHub/Module
 
     - name: Download Desktop App
       uses: actions/download-artifact@v4
       with:
         name: Fido2UI
-        path: Fido2UI
+        path: GitHub/Fido2UI
+
+    - name: Create Module ZIP for GitHub Release
+      shell: pwsh
+      working-directory: GitHub
+      run: Compress-Archive -Path ./Module/* -DestinationPath ./DSInternals.Passkeys_v${{ inputs.release_version }}.zip -CompressionLevel Optimal -Force
 
     - name: Create Application ZIP for GitHub Release
       shell: pwsh
+      working-directory: GitHub
       run: Compress-Archive -Path ./Fido2UI/* -DestinationPath ./FIDO2UI${{ inputs.release_version }}.zip -CompressionLevel Optimal -Force
 
     - name: Create GitHub Release
       shell: pwsh
+      working-directory: GitHub
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
