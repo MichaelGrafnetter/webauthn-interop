@@ -27,10 +27,15 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
           cache: true
+          cache-dependency-path: 'Src/*/packages.lock.json'
+
+    - name: Restore NuGet Packages
+      working-directory: Src
+      run: dotnet restore --locked-mode
 
     - name: Build Binaries
       working-directory: Src
-      run: dotnet build --configuration Release --nologo
+      run: dotnet build --configuration Release --no-restore
 
     - name: Upload Desktop App as Artifact
       uses: actions/upload-artifact@v4
@@ -51,7 +56,7 @@ jobs:
 
     - name: Create NuGet Packages
       working-directory: Src
-      run: dotnet pack --configuration Release --no-build --nologo
+      run: dotnet pack --configuration Release --no-build
 
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4
@@ -61,7 +66,7 @@ jobs:
 
     - name: Run Non-Interactive Unit Tests
       working-directory: Src
-      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --nologo
+      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --no-build
       continue-on-error: true
 
     - name: Publish Test Results

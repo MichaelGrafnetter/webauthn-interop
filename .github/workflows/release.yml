@@ -74,10 +74,15 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
           cache: true
+          cache-dependency-path: 'Src/*/packages.lock.json'
+
+    - name: Restore NuGet Packages
+      working-directory: Src
+      run: dotnet restore --locked-mode
 
     - name: Build Binaries
       working-directory: Src
-      run: dotnet build --configuration Release --nologo
+      run: dotnet build --configuration Release --no-restore
 
     - name: Build PowerShell Module
       working-directory: Scripts
@@ -158,7 +163,7 @@ jobs:
 
     - name: Create NuGet Packages
       working-directory: Src
-      run: dotnet pack --configuration Release --no-build --nologo
+      run: dotnet pack --configuration Release --no-build
 
     - name: Sign NuGet Packages
       if: ${{ github.event.inputs.certificate_sign }}
