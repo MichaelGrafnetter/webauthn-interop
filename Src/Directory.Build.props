@@ -24,6 +24,8 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NeutralLanguage>en-US</NeutralLanguage>
     <IncludeSymbols>true</IncludeSymbols>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <EnablePackageValidation>true</EnablePackageValidation>
 
     <!-- Configure publishing options -->
     <PublishRelease>true</PublishRelease>
