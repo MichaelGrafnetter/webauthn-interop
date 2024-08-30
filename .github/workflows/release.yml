@@ -202,7 +202,7 @@ jobs:
     needs: build
     steps:
       - name: Download NuGet Packages
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: NuGet
 
@@ -220,7 +220,7 @@ jobs:
     needs: build
     steps:
       - name: Download PowerShell Module
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: PowerShell
 
@@ -236,7 +236,7 @@ jobs:
     needs: build
     steps:
     - name: Download PowerShell Module
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: PowerShell
         path: Module
@@ -246,7 +246,7 @@ jobs:
       run: Compress-Archive -Path ./Module/* -DestinationPath ./DSInternals.Passkeys_v${{ github.event.inputs.release_version }}.zip -CompressionLevel Optimal -Force
 
     - name: Download Desktop App
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: FIDO2UI
         path: FIDO2UI
