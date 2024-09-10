@@ -47,6 +47,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                 if (AlgorithmPS512Enabled)
                     result.Add(Algorithm.PS512);
 
+                if (AlgorithmEdDSAEnabled)
+                    result.Add(Algorithm.EdDSA);
+
                 return result;
             }
             set
@@ -90,6 +93,9 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
                             break;
                         case Algorithm.PS512:
                             AlgorithmPS512Enabled = true;
+                            break;
+                        case Algorithm.EdDSA:
+                            AlgorithmEdDSAEnabled = true;
                             break;
                     }
                 }
@@ -224,6 +230,21 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             }
         }
 
+        private bool _algorithmEdDSAEnabled;
+        public bool AlgorithmEdDSAEnabled
+        {
+            get => _algorithmEdDSAEnabled;
+            set
+            {
+                bool changed = SetProperty(ref _algorithmEdDSAEnabled, value);
+
+                if (changed)
+                {
+                    RaisePropertyChanged(nameof(SelectedAlgorithms));
+                }
+            }
+        }
+
         private void ClearSelectedAlgorithms()
         {
             AlgorithmES256Enabled = false;
@@ -235,6 +256,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             AlgorithmRS256Enabled = false;
             AlgorithmRS384Enabled = false;
             AlgorithmRS512Enabled = false;
+            AlgorithmEdDSAEnabled = false;
         }
 
         private void SelectDefaultAlgorithms()
@@ -242,6 +264,7 @@ namespace DSInternals.Win32.WebAuthn.Fido2UI
             ClearSelectedAlgorithms();
             AlgorithmRS256Enabled = true;
             AlgorithmES256Enabled = true;
+            AlgorithmEdDSAEnabled = true;
         }
     }
 }
