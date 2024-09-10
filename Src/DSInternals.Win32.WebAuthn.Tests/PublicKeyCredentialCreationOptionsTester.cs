@@ -29,7 +29,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                         ""type"": ""public-key"",
                         ""alg"": -257
                     },
-{
+                    {
                         ""type"": ""public-key"",
                         ""alg"": -8
                     }
