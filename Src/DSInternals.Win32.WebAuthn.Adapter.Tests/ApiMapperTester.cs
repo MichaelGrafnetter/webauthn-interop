@@ -35,7 +35,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             {
                 new PubKeyCredParam(Fido2NetLib.Objects.COSE.Algorithm.ES256, PublicKeyCredentialType.PublicKey),
                 new PubKeyCredParam(Fido2NetLib.Objects.COSE.Algorithm.RS256, PublicKeyCredentialType.PublicKey),
-                new PubKeyCredParam(Fido2NetLib.Objects.COSE.Algorithm.EdDSA, PublicKeyCredentialType.PublicKey),
+                new PubKeyCredParam(Fido2NetLib.Objects.COSE.Algorithm.EdDSA, PublicKeyCredentialType.PublicKey)
             };
 
             var expected = new[] { Algorithm.ES256, Algorithm.RS256, Algorithm.EdDSA };
