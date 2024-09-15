@@ -74,6 +74,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 
             options.PubKeyCredParams =
             [
+                new(Fido2NetLib.Objects.COSE.Algorithm.EdDSA, PublicKeyCredentialType.PublicKey),
                 new(Fido2NetLib.Objects.COSE.Algorithm.ES256, PublicKeyCredentialType.PublicKey),
                 new(Fido2NetLib.Objects.COSE.Algorithm.RS256, PublicKeyCredentialType.PublicKey)
             ];

@@ -19,5 +19,6 @@
         <CheckBox x:Name="ES512CheckBox" Content="ES512" ToolTip="ECDSA P-521 with SHA-512" IsChecked="{Binding AlgorithmES512Enabled, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="2" />
         <CheckBox x:Name="RS512CheckBox" Content="RS512" ToolTip="RSASSA-PKCS1-v1_5 with SHA-512" IsChecked="{Binding AlgorithmRS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="5" />
         <CheckBox x:Name="PS512CheckBox" Content="PS512" ToolTip="RSASSA-PSS with SHA-512" IsChecked="{Binding AlgorithmPS512Enabled, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="8" />
+        <CheckBox x:Name="EdDSACheckBox" Content="EdDSA" ToolTip="EdDSA" IsChecked="{Binding AlgorithmEdDSAEnabled, Mode=TwoWay}" VerticalAlignment="Center" TabIndex="9" />
     </UniformGrid>
 </UserControl>

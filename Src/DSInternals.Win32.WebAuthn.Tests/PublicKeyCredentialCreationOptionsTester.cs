@@ -28,6 +28,10 @@ namespace DSInternals.Win32.WebAuthn.Tests
                     {
                         ""type"": ""public-key"",
                         ""alg"": -257
+                    },
+                    {
+                        ""type"": ""public-key"",
+                        ""alg"": -8
                     }
                 ],
                 ""timeout"": 60000,
@@ -73,9 +77,10 @@ namespace DSInternals.Win32.WebAuthn.Tests
             Assert.IsTrue(options.AuthenticatorSelection.RequireResidentKey);
             Assert.AreEqual(AuthenticatorAttachment.CrossPlatform, options.AuthenticatorSelection.AuthenticatorAttachment);
             Assert.AreEqual(UserVerificationRequirement.Required, options.AuthenticatorSelection.UserVerificationRequirement);
-            Assert.AreEqual(2, options.PublicKeyCredentialParameters.Count);
+            Assert.AreEqual(3, options.PublicKeyCredentialParameters.Count);
             Assert.AreEqual(COSE.Algorithm.ES256, options.PublicKeyCredentialParameters[0].Algorithm);
             Assert.AreEqual(COSE.Algorithm.RS256, options.PublicKeyCredentialParameters[1].Algorithm);
+            Assert.AreEqual(COSE.Algorithm.EdDSA, options.PublicKeyCredentialParameters[2].Algorithm);
         }
     }
 }
