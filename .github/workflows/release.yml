@@ -111,12 +111,12 @@ jobs:
         exclude-azure-powershell-credential: true
         exclude-azure-developer-cli-credential: true
         exclude-interactive-browser-credential: true
-        endpoint: https://weu.codesigning.azure.net/
-        trusted-signing-account-name: dsinternals-signing
-        certificate-profile-name: DSInternals
+        endpoint: ${{ secrets.SIGNING_ENDPOINT }}
+        trusted-signing-account-name: ${{ secrets.SIGNING_ACCOUNT_NAME }}
+        certificate-profile-name: ${{ secrets.SIGNING_PROFILE_NAME }}
         files: |
-          ${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psd1 ^
-          ${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psm1 ^
+          ${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psd1
+          ${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psm1
           ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net472/DSInternals.Win32.WebAuthn.dll
           ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net48/DSInternals.Win32.WebAuthn.dll
           ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_netcoreapp3.1/DSInternals.Win32.WebAuthn.dll
@@ -175,9 +175,9 @@ jobs:
         exclude-azure-powershell-credential: true
         exclude-azure-developer-cli-credential: true
         exclude-interactive-browser-credential: true
-        endpoint: https://weu.codesigning.azure.net/
-        trusted-signing-account-name: dsinternals-signing
-        certificate-profile-name: DSInternals
+        endpoint: ${{ secrets.SIGNING_ENDPOINT }}
+        trusted-signing-account-name: ${{ secrets.SIGNING_ACCOUNT_NAME }}
+        certificate-profile-name: ${{ secrets.SIGNING_PROFILE_NAME }}
         files-folder: ${{ github.workspace }}/Build/package/release
         files-folder-filter: nupkg,snupkg
         file-digest: SHA256

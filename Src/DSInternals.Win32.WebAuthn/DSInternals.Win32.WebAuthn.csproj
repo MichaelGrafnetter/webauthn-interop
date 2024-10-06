@@ -8,12 +8,12 @@
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
     <Product>WebAuthn Interop Assembly</Product>
     <Title>WebAuthn Interop Assembly</Title>
-    <Version>1.0.3</Version>
-    <AssemblyVersion>1.0.3</AssemblyVersion>
-    <ProductVersion>1.0.3</ProductVersion>
-    <FileVersion>1.0.3</FileVersion>
+    <Version>1.0.4</Version>
+    <AssemblyVersion>1.0.4</AssemblyVersion>
+    <ProductVersion>1.0.4</ProductVersion>
+    <FileVersion>1.0.4</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>- Resolved issues with HMAC secret and linked device information processing.
+    <PackageReleaseNotes>- Added EdDSA support.
 - Windows 10 1903 or newer is required.
 - A standalone package providing an adapter for data model defined in Fido2.Models is also available.</PackageReleaseNotes>
   </PropertyGroup>
