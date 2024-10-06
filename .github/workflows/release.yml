@@ -111,22 +111,57 @@ jobs:
         tenant-id: ${{ secrets.SIGNING_TENANT_ID }}
         allow-no-subscriptions: true
 
-    - name: Sign Scripts and Binaries
+    - name: Sign PowerShell Scripts
       shell: cmd
       run: >
         sign code trusted-signing
-        PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psd1
-        PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psm1
-        DSInternals.Win32.WebAuthn/release_*/DSInternals.Win32.WebAuthn.dll
-        DSInternals.Win32.WebAuthn.Adapter/release_*/DSInternals.Win32.WebAuthn.Adapter.dll
-        Fido2UI/release/Fido2UI.exe
-        --base-directory "${{ github.workspace }}/Build/bin"
+        DSInternals.Passkeys.ps*1
+        --base-directory "${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys"
         --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
         --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
         --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
         --file-digest SHA256
         --timestamp-digest SHA256
-        --timestamp-rfc3161 http://timestamp.acs.microsoft.com
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+
+    - name: Sign DSInternals.Win32.WebAuthn Libraries
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        release_*/DSInternals.Win32.WebAuthn.dll
+        --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+
+    - name: Sign DSInternals.Win32.WebAuthn.Adapter Libraries
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        release_*/DSInternals.Win32.WebAuthn.Adapter.dll
+        --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+
+    - name: Sign Fido2UI Binary
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        Fido2UI.exe
+        --base-directory "${{ github.workspace }}/Build/bin/Fido2UI/release"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
 
     - name: Copy Signed Libraries to Module and App Directories
       shell: cmd
@@ -158,15 +193,14 @@ jobs:
       shell: cmd
       run: >
         sign code trusted-signing
-        **/*.nupkg
-        **/*.snupkg
+        *.*nupkg
         --base-directory "${{ github.workspace }}/Build/package/release"
         --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
         --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
         --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
         --file-digest SHA256
         --timestamp-digest SHA256
-        --timestamp-rfc3161 http://timestamp.acs.microsoft.com
+        --timestamp-url "http://timestamp.acs.microsoft.com"
 
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4
