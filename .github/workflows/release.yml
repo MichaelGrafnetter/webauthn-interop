@@ -89,6 +89,20 @@ jobs:
       shell: powershell
       run: .\Build-PowerShellModule.ps1 -Configuration Release
 
+    - name: Cache DotNet Global Tools
+      id: cache-dotnet-globaltools
+      uses: actions/cache@v4
+      if: ${{ inputs.certificate_sign }}
+      with:
+        path: ~/.dotnet/tools
+        # Heuristics: The current list of required global tools is defined in this workflow file.
+        key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ hashFiles('.github/workflows/release.yml') }}
+
+    - name: Install Code Signing Tools
+      if: ${{ inputs.certificate_sign && steps.cache-dotnet-globaltools.outputs.cache-hit != 'true' }}
+      run: |
+        dotnet tool install --global --prerelease sign
+
     - name: Azure Login
       uses: azure/login@v2
       if: ${{ inputs.certificate_sign }}
@@ -98,44 +112,23 @@ jobs:
         allow-no-subscriptions: true
 
     - name: Sign Scripts and Binaries
-      uses: azure/trusted-signing-action@v0.4.0
-      if: ${{ inputs.certificate_sign }}
-      with:
-        exclude-azure-cli-credential: false
-        exclude-environment-credential: true
-        exclude-workload-identity-credential: true
-        exclude-managed-identity-credential: true
-        exclude-shared-token-cache-credential: true
-        exclude-visual-studio-credential: true
-        exclude-visual-studio-code-credential: true
-        exclude-azure-powershell-credential: true
-        exclude-azure-developer-cli-credential: true
-        exclude-interactive-browser-credential: true
-        endpoint: ${{ secrets.SIGNING_ENDPOINT }}
-        trusted-signing-account-name: ${{ secrets.SIGNING_ACCOUNT_NAME }}
-        certificate-profile-name: ${{ secrets.SIGNING_PROFILE_NAME }}
-        files: |
-          ${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psd1
-          ${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psm1
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net472/DSInternals.Win32.WebAuthn.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net48/DSInternals.Win32.WebAuthn.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_netcoreapp3.1/DSInternals.Win32.WebAuthn.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net5.0/DSInternals.Win32.WebAuthn.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net6.0/DSInternals.Win32.WebAuthn.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net7.0/DSInternals.Win32.WebAuthn.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn/release_net8.0/DSInternals.Win32.WebAuthn.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter/release_net472/DSInternals.Win32.WebAuthn.Adapter.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter/release_net48/DSInternals.Win32.WebAuthn.Adapter.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter/release_netcoreapp3.1/DSInternals.Win32.WebAuthn.Adapter.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter/release_net5.0/DSInternals.Win32.WebAuthn.Adapter.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter/release_net6.0/DSInternals.Win32.WebAuthn.Adapter.dll
-          ${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter/release_net7.0/DSInternals.Win32.WebAuthn.Adapter.dll
-          ${{ github.workspace }}/Build/bin/Fido2UI/release/Fido2UI.exe
-        file-digest: SHA256
-        timestamp-rfc3161: http://timestamp.acs.microsoft.com
-        timestamp-digest: SHA256
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psd1
+        PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psm1
+        DSInternals.Win32.WebAuthn/release_*/DSInternals.Win32.WebAuthn.dll
+        DSInternals.Win32.WebAuthn.Adapter/release_*/DSInternals.Win32.WebAuthn.Adapter.dll
+        Fido2UI/release/Fido2UI.exe
+        --base-directory "${{ github.workspace }}/Build/bin"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-rfc3161 http://timestamp.acs.microsoft.com
 
-    - name: Copy Signed Binaries to PowerShell Module
+    - name: Copy Signed Libraries to Module and App Directories
       shell: cmd
       if: ${{ inputs.certificate_sign }}
       working-directory: Build/bin
@@ -162,27 +155,18 @@ jobs:
       run: dotnet pack --configuration Release --no-build
 
     - name: Sign NuGet Packages
-      uses: azure/trusted-signing-action@v0.4.0
-      if: ${{ inputs.certificate_sign }}
-      with:
-        exclude-azure-cli-credential: false
-        exclude-environment-credential: true
-        exclude-workload-identity-credential: true
-        exclude-managed-identity-credential: true
-        exclude-shared-token-cache-credential: true
-        exclude-visual-studio-credential: true
-        exclude-visual-studio-code-credential: true
-        exclude-azure-powershell-credential: true
-        exclude-azure-developer-cli-credential: true
-        exclude-interactive-browser-credential: true
-        endpoint: ${{ secrets.SIGNING_ENDPOINT }}
-        trusted-signing-account-name: ${{ secrets.SIGNING_ACCOUNT_NAME }}
-        certificate-profile-name: ${{ secrets.SIGNING_PROFILE_NAME }}
-        files-folder: ${{ github.workspace }}/Build/package/release
-        files-folder-filter: nupkg,snupkg
-        file-digest: SHA256
-        timestamp-rfc3161: http://timestamp.acs.microsoft.com
-        timestamp-digest: SHA256
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        **/*.nupkg
+        **/*.snupkg
+        --base-directory "${{ github.workspace }}/Build/package/release"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-rfc3161 http://timestamp.acs.microsoft.com
 
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4
@@ -232,9 +216,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
     - name: Download PowerShell Module
       uses: actions/download-artifact@v4
       with:
