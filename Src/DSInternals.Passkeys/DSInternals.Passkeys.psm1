@@ -65,6 +65,80 @@ function Get-PasskeyRegistrationOptions
 
 <#
 .SYNOPSIS
+Retrieves creation options required to generate and register an Okta-compatible passkey.
+
+.PARAMETER Tenant
+The unique identifier of Okta tenant, like 'example.okta.com'
+
+.PARAMETER UserId
+The unique identifier of Okta user.
+
+.PARAMETER ChallengeTimeout
+Overrides the timeout of the server-generated challenge returned in the request.
+The default value is 300 seconds
+
+.PARAMETER Token
+The SSWS token from Okta with okta.users.manage permissions.
+
+.EXAMPLE
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -OktaTenant example.okta.com -Token your_ssws_token
+
+.EXAMPLE
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout 60 -OktaTenant example.okta.com -Token your_ssws_token
+
+.NOTES
+More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
+
+#>
+function Get-OktaPasskeyRegistrationOptions
+{
+    [CmdletBinding()]
+    [OutputType([DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Alias('Tenant')]
+        [string] $OktaTenantURI,
+
+        [Parameter(Mandatory = $true)]
+        [Alias('User')]
+        [string] $UserId,
+
+        [Parameter(Mandatory = $false)]
+        [Alias('Timeout')]
+        [string] $ChallengeTimeout = "300",
+
+        [Parameter(Mandatory = $true)]
+        [Alias('Token')]
+        [string] $api_token
+    )
+    try {
+        # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods/creationOptions
+        [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $OktaTenantURI, $UserId, $ChallengeTimeout
+
+        $headers = @{
+            "Accept" = "application/json"
+            "Authorization" = "SSWS ${api_token}"
+        }
+
+        [string] $response = Invoke-WebRequest -Uri $credentialOptionsUrl `
+                    -Method Post `
+                    -Headers $headers `
+                    -ContentType "application/json" `
+                    -Body @{
+                        factorType = "webauthn"
+                        provider = "FIDO"
+                    }
+        # Parse JSON response
+        return [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions]::Create($response)
+    }
+    catch {
+        # TODO: PS Error Record ($PSCmdlet.ThrowTerminatingError())
+        throw
+    }
+}
+
+<#
+.SYNOPSIS
 Registers a new passkey in Microsoft Entra ID.
 
 .PARAMETER UserId
@@ -219,5 +293,5 @@ function Get-MgGraphEndpoint
 
 New-Alias -Name Register-MgUserAuthenticationFido2Method -Value Register-Passkey
 
-Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','New-Passkey','Register-Passkey' `
+Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','Get-OktaPasskeyRegistrationOptions','New-Passkey','Register-Passkey' `
                     -Alias 'Register-MgUserAuthenticationFido2Method'

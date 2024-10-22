@@ -7,7 +7,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
     public class PublicKeyCredentialCreationOptionsTester
     {
         [TestMethod]
-        public void PublicKeyCredentialCreationOptions_Deserialize()
+        public void EntraIdPublicKeyCredentialCreationOptions_Deserialize()
         {
             var options = JsonSerializer.Deserialize<PublicKeyCredentialCreationOptions>(@"{
                 ""rp"": {
@@ -82,5 +82,62 @@ namespace DSInternals.Win32.WebAuthn.Tests
             Assert.AreEqual(COSE.Algorithm.RS256, options.PublicKeyCredentialParameters[1].Algorithm);
             Assert.AreEqual(COSE.Algorithm.EdDSA, options.PublicKeyCredentialParameters[2].Algorithm);
         }
+
+        [TestMethod]
+        public void OktaPublicKeyCredentialCreationOptions_Deserialize()
+        {
+            var options = JsonSerializer.Deserialize<PublicKeyCredentialCreationOptions>(@"{
+                ""rp"": {
+                    ""name"": ""Okta Tenant Name -- Environment"",
+                    ""id"": ""example.okta.com""
+                },
+                ""user"": {
+                    ""displayName"": ""Okta Doe"",
+                    ""name"": ""okta@contoso.com"",
+                    ""id"": ""00eDuihq64pgP1gVD0x7""
+                },
+                ""pubKeyCredParams"": [
+                    {
+                        ""type"": ""public-key"",
+                        ""alg"": -7
+                    },
+                    {
+                        ""type"": ""public-key"",
+                        ""alg"": -257
+                    }
+                ],
+                ""challenge"": ""AVun-poGmJKZOAT0r-KBSs-94BPqMf3j"",
+                ""attestation"": ""direct"",
+                ""authenticatorSelection"": {
+                    ""userVerification"": ""required"",
+                    ""requireResidentKey"": false
+                },
+                ""u2fParams"": {
+                    ""appid"": ""https://example.okta.com""
+                },
+                ""excludeCredentials"": [
+                    {
+                        ""type"": ""public-key"",
+                        ""id"": ""VX_AlCL9qUx2ox_Ekth4NYngvwpUswaBqcfb4XsHglI""
+                    },
+                    {
+                        ""type"": ""public-key"",
+                        ""id"": ""kFPT5CL3-I30e22QQ0WYo4C9EFCTcbWM0-G-wTBslVNzKzf-FsJ1CBVrgN2k5RJH2dTFJxyzgI06XxIbrcbpAA""
+                    }
+                ]
+            }");
+
+            Assert.AreEqual("example.okta.com", options.RelyingParty.Id);
+            Assert.AreEqual("okta@contoso.com", options.User.Name);
+            Assert.AreEqual(AttestationConveyancePreference.Direct, options.Attestation);
+            Assert.IsNotNull(options.ExcludeCredentials);
+            Assert.IsFalse(options.AuthenticatorSelection.RequireResidentKey);
+            Assert.AreEqual(AuthenticatorAttachment.Any, options.AuthenticatorSelection.AuthenticatorAttachment);
+            Assert.AreEqual(UserVerificationRequirement.Required, options.AuthenticatorSelection.UserVerificationRequirement);
+            Assert.AreEqual(2, options.PublicKeyCredentialParameters.Count);
+            Assert.AreEqual(COSE.Algorithm.ES256, options.PublicKeyCredentialParameters[0].Algorithm);
+            Assert.AreEqual(COSE.Algorithm.RS256, options.PublicKeyCredentialParameters[1].Algorithm);
+        }
+
     }
 }
