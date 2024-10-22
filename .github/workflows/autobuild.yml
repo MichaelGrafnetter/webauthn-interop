@@ -37,7 +37,9 @@ jobs:
 
     - name: Build Binaries
       working-directory: Src
-      run: dotnet build --configuration Release --no-restore
+      run: |
+        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Debug --no-restore
 
     - name: Upload Desktop App as Artifact
       uses: actions/upload-artifact@v4
@@ -47,7 +49,7 @@ jobs:
 
     - name: Build PowerShell Module
       working-directory: Scripts
-      shell: PowerShell
+      shell: powershell
       run: .\Build-PowerShellModule.ps1 -Configuration Release
 
     - name: Upload PowerShell Module as Artifact

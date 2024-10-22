@@ -86,7 +86,7 @@ jobs:
 
     - name: Build PowerShell Module
       working-directory: Scripts
-      shell: PowerShell
+      shell: powershell
       run: .\Build-PowerShellModule.ps1 -Configuration Release
 
     - name: Cache DotNet Global Tools
@@ -98,11 +98,10 @@ jobs:
         # Heuristics: The current list of required global tools is defined in this workflow file.
         key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ hashFiles('.github/workflows/release.yml') }}
 
-    - name: Install Azure KeyVault Code Signing Tools
+    - name: Install Code Signing Tools
       if: ${{ inputs.certificate_sign && steps.cache-dotnet-globaltools.outputs.cache-hit != 'true' }}
       run: |
-        dotnet tool install --global AzureSignTool
-        dotnet tool install --global NuGetKeyVaultSignTool
+        dotnet tool install --global --prerelease sign
 
     - name: Azure Login
       uses: azure/login@v2
@@ -112,39 +111,68 @@ jobs:
         tenant-id: ${{ secrets.SIGNING_TENANT_ID }}
         allow-no-subscriptions: true
 
-    - name: Sign Binaries and Scripts
-      if: ${{ inputs.certificate_sign }}
+    - name: Sign PowerShell Scripts
       shell: cmd
-      env:
-        SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
-        SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
+      run: >
+        sign code trusted-signing
+        DSInternals.Passkeys.ps*1
+        --base-directory "${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
+
+    - name: Sign DSInternals.Win32.WebAuthn Libraries
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        release_*/DSInternals.Win32.WebAuthn.dll
+        --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
+
+    - name: Sign DSInternals.Win32.WebAuthn.Adapter Libraries
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        release_*/DSInternals.Win32.WebAuthn.Adapter.dll
+        --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
+
+    - name: Sign Fido2UI Binary
+      shell: cmd
+      run: >
+        sign code trusted-signing
+        Fido2UI.exe
+        --base-directory "${{ github.workspace }}/Build/bin/Fido2UI/release"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
+
+    - name: Copy Signed Libraries to Module and App Directories
+      shell: cmd
+      if: ${{ inputs.certificate_sign }}
       working-directory: Build/bin
       timeout-minutes: 1
       run: |
-        for /f %%i in ('az account get-access-token --resource "https://vault.azure.net" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
-        AzureSignTool sign ^
-        DSInternals.Win32.WebAuthn/release_net472/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn/release_net48/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn/release_netcoreapp3.1/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn/release_net5.0/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn/release_net6.0/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn/release_net7.0/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn/release_net8.0/DSInternals.Win32.WebAuthn.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/release_net472/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/release_net48/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/release_netcoreapp3.1/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/release_net5.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/release_net6.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        DSInternals.Win32.WebAuthn.Adapter/release_net7.0/DSInternals.Win32.WebAuthn.Adapter.dll ^
-        Fido2UI/release/Fido2UI.exe ^
-        PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psd1 ^
-        PSModule/Release/DSInternals.Passkeys/DSInternals.Passkeys.psm1 ^
-        --file-digest sha256 ^
-        --timestamp-digest sha256 ^
-        --timestamp-rfc3161 http://timestamp.digicert.com ^
-        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
-        --azure-key-vault-accesstoken "%KEYVAULT_TOKEN%" ^
-        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
         xcopy "DSInternals.Win32.WebAuthn/release_net48/DSInternals.Win32.WebAuthn.dll" "Fido2UI/release/" /Y /I /F
         xcopy "DSInternals.Win32.WebAuthn/release_net48/DSInternals.Win32.WebAuthn.dll" "PSModule/Release/DSInternals.Passkeys/net48/" /Y /I /F
         xcopy "DSInternals.Win32.WebAuthn/release_net6.0/DSInternals.Win32.WebAuthn.dll" "PSModule/Release/DSInternals.Passkeys/net6.0/" /Y /I /F
@@ -166,28 +194,18 @@ jobs:
       run: dotnet pack --configuration Release --no-build
 
     - name: Sign NuGet Packages
-      if: ${{ inputs.certificate_sign }}
       shell: cmd
-      env:
-        SIGNING_VAULT_URL: ${{ secrets.SIGNING_VAULT_URL }}
-        SIGNING_CERTIFICATE_NAME: ${{ secrets.SIGNING_CERTIFICATE_NAME }}
-      working-directory: Build/package/release
-      run: |
-        for /f %%i in ('az account get-access-token --resource "https://vault.azure.net" --query accessToken --output tsv') do set KEYVAULT_TOKEN=%%i
-        NuGetKeyVaultSignTool sign *.nupkg ^
-        --file-digest sha256 ^
-        --timestamp-digest sha256 ^
-        --timestamp-rfc3161 http://timestamp.digicert.com ^
-        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
-        --azure-key-vault-accesstoken "%KEYVAULT_TOKEN%" ^
-        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
-        NuGetKeyVaultSignTool sign *.snupkg ^
-        --file-digest sha256 ^
-        --timestamp-digest sha256 ^
-        --timestamp-rfc3161 http://timestamp.digicert.com ^
-        --azure-key-vault-url "%SIGNING_VAULT_URL%" ^
-        --azure-key-vault-accesstoken "%KEYVAULT_TOKEN%" ^
-        --azure-key-vault-certificate "%SIGNING_CERTIFICATE_NAME%"
+      run: >
+        sign code trusted-signing
+        *.*nupkg
+        --base-directory "${{ github.workspace }}/Build/package/release"
+        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
 
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4

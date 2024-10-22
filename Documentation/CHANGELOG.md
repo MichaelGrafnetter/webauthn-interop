@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.4] - 2024-10-06
+
+### Added
+
+- Implemented EdDSA support (Thanks to @aseigler)
+
+### Changed
+
+- Switched to EV code signing certificate hosted at Azure Trusted Signing.
+
 ## [1.0.3] - 2024-08-16
 
 ### Fixed
@@ -24,7 +34,8 @@ All notable changes to this project will be documented in this file. The format 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0...v1.0.2
 [1.0]: https://github.com/MichaelGrafnetter/webauthn-interop/releases/tag/v1.0

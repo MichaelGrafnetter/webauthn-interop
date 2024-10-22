@@ -9,9 +9,9 @@
     <IsPackable>false</IsPackable>
     <ApplicationIcon>../Icons/app.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
-    <AssemblyVersion>1.0.3</AssemblyVersion>
-    <ProductVersion>1.0.3</ProductVersion>
-    <FileVersion>1.0.3</FileVersion>
+    <AssemblyVersion>1.0.4</AssemblyVersion>
+    <ProductVersion>1.0.4</ProductVersion>
+    <FileVersion>1.0.4</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
