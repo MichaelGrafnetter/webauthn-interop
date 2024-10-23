@@ -8,19 +8,47 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// The display name of the key as given by the user.
         /// </summary>
-        [JsonPropertyName("displayName")]
+        [JsonIgnore]
         public string DisplayName { get; set; }
 
         /// <summary>
         /// Contains the WebAuthn public key credential information being registered.
         /// </summary>
-        [JsonPropertyName("publicKeyCredential")]
+        [JsonIgnore]
         public PublicKeyCredential PublicKeyCredential { get; set; }
 
-        public OktaWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, string displayName)
+        /// <summary>
+        /// ID of an existing Okta user.
+        /// </summary>
+        [JsonIgnore]
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// ID of an existing user Factor.
+        /// </summary>
+        [JsonIgnore]
+        public string FactorId { get; set; }
+
+        /// <summary>
+        /// ID of an existing user Factor.
+        /// </summary>
+        [JsonPropertyName("attestation")]
+        [JsonConverter(typeof(Base64UrlConverter))]
+        public byte[] Attestation => PublicKeyCredential.AuthenticatorResponse.AttestationObject;
+
+        /// <summary>
+        /// ID of an existing user Factor.
+        /// </summary>
+        [JsonPropertyName("clientData")]
+        [JsonConverter(typeof(Base64UrlConverter))]
+        public byte[] ClientData => PublicKeyCredential.AuthenticatorResponse.ClientDataJson;
+
+        public OktaWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, string displayName, byte[] userId, string factorId)
         {
             PublicKeyCredential = publicKeyCredential;
             DisplayName = displayName;
+            UserId = Base64UrlConverter.ToBase64UrlString(userId);
+            FactorId = factorId;
         }
 
         override public string ToString()

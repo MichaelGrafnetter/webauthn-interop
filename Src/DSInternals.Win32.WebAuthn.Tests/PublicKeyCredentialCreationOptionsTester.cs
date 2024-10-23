@@ -138,6 +138,5 @@ namespace DSInternals.Win32.WebAuthn.Tests
             Assert.AreEqual(COSE.Algorithm.ES256, options.PublicKeyCredentialParameters[0].Algorithm);
             Assert.AreEqual(COSE.Algorithm.RS256, options.PublicKeyCredentialParameters[1].Algorithm);
         }
-
     }
 }
