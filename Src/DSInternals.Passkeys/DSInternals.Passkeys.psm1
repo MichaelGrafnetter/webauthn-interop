@@ -71,7 +71,7 @@ Retrieves creation options required to generate and register an Okta-compatible 
 The unique identifier of Okta tenant, like 'example.okta.com'
 
 .PARAMETER UserId
-The unique identifier of Okta user.
+The unique identifier of Okta user, like '00ub61wm1aqmawzRC5d7'.
 
 .PARAMETER ChallengeTimeout
 Overrides the timeout of the server-generated challenge returned in the request.
@@ -81,10 +81,10 @@ The default value is 300 seconds
 The SSWS token from Okta with okta.users.manage permissions.
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -OktaTenant example.okta.com -Token your_ssws_token
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout 60 -OktaTenant example.okta.com -Token your_ssws_token
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout 60 -Tenant example.okta.com -Token your_ssws_token
 
 .NOTES
 More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
@@ -97,7 +97,7 @@ function Get-OktaPasskeyRegistrationOptions
     param(
         [Parameter(Mandatory = $true)]
         [Alias('Tenant')]
-        [string] $OktaTenantURI,
+        [string] $Tenant,
 
         [Parameter(Mandatory = $true)]
         [Alias('User')]
@@ -109,14 +109,14 @@ function Get-OktaPasskeyRegistrationOptions
 
         [Parameter(Mandatory = $true)]
         [Alias('Token')]
-        [string] $api_token
+        [string] $Token
     )
     try {
-        [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $OktaTenantURI, $UserId, $ChallengeTimeout
+        [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $Tenant, $UserId, $ChallengeTimeout
 
         $headers = @{
             "Accept" = "application/json"
-            "Authorization" = "SSWS ${api_token}"
+            "Authorization" = "SSWS ${Token}"
         }
 
         $body = @{
@@ -130,11 +130,15 @@ function Get-OktaPasskeyRegistrationOptions
                     -Headers $headers `
                     -ContentType "application/json" `
                     -Body $body
+
         # Parse JSON response
         $options = [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions]::Create($response)
+
+        # Okta appears to omit relying party id in the options, but it is required for credential creation
+        # So set default to the tenant we are talking to, which is probably what the user wants anyway
         if ($options.Embedded.PublicKeyOptions.RelyingParty.Id -eq $null)
         {
-            $options.Embedded.PublicKeyOptions.RelyingParty.Id = $OktaTenantURI
+            $options.Embedded.PublicKeyOptions.RelyingParty.Id = $Tenant
         }
         return $options
     }
@@ -241,24 +245,18 @@ The unique identifier of user.
 .PARAMETER Passkey
 The passkey to be registered.
 
-.PARAMETER DisplayName
-Custom name given to the registered passkey.
-
 .PARAMETER ChallengeTimeout
 Overrides the timeout of the server-generated challenge returned in the request.
 The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
 
 .EXAMPLE
-PS \> Register-OktaPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+PS \> Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token
 
 .EXAMPLE
-PS \> Register-OktaPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
-
-.EXAMPLE
-PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token | New-OktaPasskey | Register-OktaPasskey -Tenant example.okta.com -Token your_ssws_token
 
 .NOTES
-More info at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
+More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor
 
 #>
 function Register-OktaPasskey
@@ -275,9 +273,6 @@ function Register-OktaPasskey
         [DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse]
         $Passkey,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'New')]
-        [string] $DisplayName,
-
         [Parameter(Mandatory = $false, ParameterSetName = 'New')]
         [Alias('Timeout')]
         [string] $ChallengeTimeout = "300",
@@ -285,23 +280,23 @@ function Register-OktaPasskey
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
         [Alias('Tenant')]
-        [string] $OktaTenantURI,
+        [string] $Tenant,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
         [Alias('Token')]
-        [string] $api_token
+        [string] $Token
     )
     process
     {
         # TODO: Write-Error
         switch ($PSCmdlet.ParameterSetName) {
             'Existing' {
-                [string] $registrationUrl = 'https://{0}/api/v1/users/{1}/factors/{2}/lifecycle/activate' -f $OktaTenantURI, $Passkey.UserId, $Passkey.FactorId
+                [string] $registrationUrl = 'https://{0}/api/v1/users/{1}/factors/{2}/lifecycle/activate' -f $Tenant, $Passkey.UserId, $Passkey.FactorId
                 
                 $headers = @{
                     "Accept" = "application/json"
-                    "Authorization" = "SSWS ${api_token}"
+                    "Authorization" = "SSWS ${Token}"
                 }
                 
                 [string] $response = Invoke-WebRequest -Uri $registrationUrl `
@@ -314,13 +309,13 @@ function Register-OktaPasskey
             }
             'New' {
                 [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions] $registrationOptions =
-                    Get-OktaPasskeyRegistrationOptions -OktaTenantURI $OktaTenantURI -UserId $UserId -ChallengeTimeout $ChallengeTimeout -api_token $api_token
+                    Get-OktaPasskeyRegistrationOptions -Tenant $Tenant -UserId $UserId -ChallengeTimeout $ChallengeTimeout -Token $Token
 
                 [DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse] $passkey =
-                    New-OktaPasskey -Options $registrationOptions -DisplayName $DisplayName
+                    New-OktaPasskey -Options $registrationOptions
 
                 # Recursive call with the 'Existing' parameter set
-                return Register-OktaPasskey -UserId $UserId -Passkey $passkey -OktaTenantURI $OktaTenantURI -api_token $api_token
+                return Register-OktaPasskey -UserId $UserId -Passkey $passkey -Tenant $Tenant -Token $Token
             }
         }
     }
@@ -375,11 +370,11 @@ Creates a new Okta-compatible passkey.
 .PARAMETER Options
 Options required to generate an Okta-compatible passkey.
 
-.PARAMETER DisplayName
-Custom name given to the registered passkey.
+.EXAMPLE
+PS \> New-OktaPasskey -Options $options
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -OktaTenant example.okta.com -Token your_ssws_token | New-OktaPasskey -DisplayName 'YubiKey 5 Nano' 
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token | New-OktaPasskey 
 
 #>
 function New-OktaPasskey
@@ -390,9 +385,6 @@ function New-OktaPasskey
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions]
         $Options,
-
-        [Parameter(Mandatory = $true)]
-        [string] $DisplayName
     )
 
     process

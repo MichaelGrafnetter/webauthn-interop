@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -7,6 +6,9 @@ namespace DSInternals.Win32.WebAuthn
 {
     public class Embedded
     {
+        /// <summary>
+        /// Defines public key options for the creation of a new WebAuthn public key credential.
+        /// </summary>
         [JsonPropertyName("activation")]
         public PublicKeyCredentialCreationOptions PublicKeyOptions { get; set; }
     }
@@ -15,23 +17,14 @@ namespace DSInternals.Win32.WebAuthn
     /// </summary>
     public class OktaWebauthnCredentialCreationOptions
     {
+        /// <summary>
+        /// The factor id of the Okta factor being registered.
+        /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; }
-        [JsonPropertyName("factorType")]
-        public string FactorType { get; set; }
-        [JsonPropertyName("provider")]
-        public string Provider { get; set; }
-        [JsonPropertyName("vendorName")]
-        public string VendorName { get; set; }
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
-        [JsonPropertyName("created")]
-        public string Created { get; set; }
-        [JsonPropertyName("lastUpdated")]
-        public string LastUpdated { get; set; }
-        
+
         /// <summary>
-        /// Defines public key options for the creation of a new WebAuthn public key credential.
+        /// A wrapper around the PublicKeyCredentialCreationOptions
         /// </summary>
         [JsonPropertyName("_embedded")]
         public Embedded Embedded { get; set; }

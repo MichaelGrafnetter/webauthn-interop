@@ -6,12 +6,6 @@ namespace DSInternals.Win32.WebAuthn
     public class OktaWebauthnAttestationResponse
     {
         /// <summary>
-        /// The display name of the key as given by the user.
-        /// </summary>
-        [JsonIgnore]
-        public string DisplayName { get; set; }
-
-        /// <summary>
         /// Contains the WebAuthn public key credential information being registered.
         /// </summary>
         [JsonIgnore]
@@ -43,10 +37,9 @@ namespace DSInternals.Win32.WebAuthn
         [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] ClientData => PublicKeyCredential.AuthenticatorResponse.ClientDataJson;
 
-        public OktaWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, string displayName, byte[] userId, string factorId)
+        public OktaWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, byte[] userId, string factorId)
         {
             PublicKeyCredential = publicKeyCredential;
-            DisplayName = displayName;
             UserId = Base64UrlConverter.ToBase64UrlString(userId);
             FactorId = factorId;
         }
