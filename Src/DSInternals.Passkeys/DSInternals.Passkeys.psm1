@@ -49,10 +49,14 @@ function Get-PasskeyRegistrationOptions
         # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods/creationOptions
         [string] $credentialOptionsUrl = '{0}/beta/users/{1}/authentication/fido2Methods/creationOptions' -f (Get-MgGraphEndpoint), [uri]::EscapeDataString($UserId)
 
+        Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
+
         [string] $response = Invoke-MgGraphRequest -Method GET `
                                                 -Uri $credentialOptionsUrl `
                                                 -Body @{ challengeTimeoutInMinutes = $ChallengeTimeout.TotalMinutes } `
                                                 -OutputType Json
+
+        Write-Debug ('Credential options response: ' + $response)
 
         # Parse JSON response
         return [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions]::Create($response)
@@ -96,7 +100,6 @@ function Get-OktaPasskeyRegistrationOptions
     [OutputType([DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions])]
     param(
         [Parameter(Mandatory = $true)]
-        [Alias('Tenant')]
         [string] $Tenant,
 
         [Parameter(Mandatory = $true)]
@@ -108,11 +111,12 @@ function Get-OktaPasskeyRegistrationOptions
         [string] $ChallengeTimeout = "300",
 
         [Parameter(Mandatory = $true)]
-        [Alias('Token')]
         [string] $Token
     )
     try {
         [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $Tenant, $UserId, $ChallengeTimeout
+
+        Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
 
         $headers = @{
             "Accept" = "application/json"
@@ -130,6 +134,8 @@ function Get-OktaPasskeyRegistrationOptions
                     -Headers $headers `
                     -ContentType "application/json" `
                     -Body $body
+
+        Write-Debug ('Credential options response: ' + $response)
 
         # Parse JSON response
         $options = [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions]::Create($response)
@@ -212,12 +218,16 @@ function Register-Passkey
                 # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods
                 [string] $registrationUrl = '{0}/beta/users/{1}/authentication/fido2Methods' -f $endpoint, [uri]::EscapeDataString($UserId)
 
+                Write-Debug ('Registration URL: ' + $registrationUrl)
+
                 [string] $response = Invoke-MgGraphRequest `
                                         -Method POST `
                                         -Uri $registrationUrl `
                                         -OutputType Json `
                                         -ContentType 'application/json' `
                                         -Body $Passkey.ToString()
+
+                Write-Debug ('Registration response: ' + $response)
 
                 return [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]::FromJsonString($response)
             }
@@ -279,12 +289,10 @@ function Register-OktaPasskey
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
-        [Alias('Tenant')]
         [string] $Tenant,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
-        [Alias('Token')]
         [string] $Token
     )
     process
@@ -293,7 +301,9 @@ function Register-OktaPasskey
         switch ($PSCmdlet.ParameterSetName) {
             'Existing' {
                 [string] $registrationUrl = 'https://{0}/api/v1/users/{1}/factors/{2}/lifecycle/activate' -f $Tenant, $Passkey.UserId, $Passkey.FactorId
-                
+
+                Write-Debug ('Registration URL: ' + $registrationUrl)
+
                 $headers = @{
                     "Accept" = "application/json"
                     "Authorization" = "SSWS ${Token}"
@@ -304,6 +314,8 @@ function Register-OktaPasskey
                             -Headers $headers `
                             -ContentType "application/json" `
                             -Body $Passkey.ToString()
+
+                Write-Debug ('Registration response: ' + $response)
 
                 return $response
             }
@@ -384,7 +396,7 @@ function New-OktaPasskey
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions]
-        $Options,
+        $Options
     )
 
     process
@@ -392,7 +404,7 @@ function New-OktaPasskey
         try {
             [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
             [DSInternals.Win32.WebAuthn.PublicKeyCredential] $credential = $api.AuthenticatorMakeCredential($Options.Embedded.PublicKeyOptions)
-            return [DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse]::new($credential, $DisplayName, $Options.Embedded.PublicKeyOptions.User.Id, $Options.Id)
+            return [DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse]::new($credential, $Options.Embedded.PublicKeyOptions.User.Id, $Options.Id)
         }
         catch {
             # TODO: PS Error Record (Write-Error)
