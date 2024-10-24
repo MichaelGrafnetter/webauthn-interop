@@ -88,7 +88,7 @@ The SSWS token from Okta with okta.users.manage permissions.
 PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout 60 -Tenant example.okta.com -Token your_ssws_token
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_ssws_token
 
 .NOTES
 More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
@@ -108,13 +108,13 @@ function Get-OktaPasskeyRegistrationOptions
 
         [Parameter(Mandatory = $false)]
         [Alias('Timeout')]
-        [string] $ChallengeTimeout = "300",
+        [timespan] $ChallengeTimeout = (New-TimeSpan -Seconds 300),
 
         [Parameter(Mandatory = $true)]
         [string] $Token
     )
     try {
-        [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $Tenant, $UserId, $ChallengeTimeout
+        [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $Tenant, $UserId, $ChallengeTimeout.TotalSeconds
 
         Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
 
@@ -285,7 +285,7 @@ function Register-OktaPasskey
 
         [Parameter(Mandatory = $false, ParameterSetName = 'New')]
         [Alias('Timeout')]
-        [string] $ChallengeTimeout = "300",
+        [timespan] $ChallengeTimeout = (New-TimeSpan -Seconds 300),
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
