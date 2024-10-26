@@ -13,7 +13,8 @@ Retrieves creation options required to generate and register a Microsoft Entra I
 ## SYNTAX
 
 ```
-Get-PasskeyRegistrationOptions [-UserId] <String> [[-ChallengeTimeout] <TimeSpan>] [<CommonParameters>]
+Get-PasskeyRegistrationOptions [-UserId] <String> [[-ChallengeTimeout] <TimeSpan>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,11 +43,26 @@ The default value is 5 minutes, with the accepted range being between 5 minutes 
 ```yaml
 Type: TimeSpan
 Parameter Sets: (All)
-Aliases:
+Aliases: Timeout
 
 Required: False
 Position: 2
 Default value: (New-TimeSpan -Minutes 5)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -57,7 +73,7 @@ The unique identifier of user.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: User
 
 Required: True
 Position: 1

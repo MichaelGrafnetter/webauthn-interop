@@ -42,6 +42,16 @@ function Get-PasskeyRegistrationOptions
         [string] $UserId,
 
         [Parameter(Mandatory = $false)]
+        [ValidateScript({
+            if ($_ -is [TimeSpan]) {
+                $min = New-TimeSpan -Minutes 5
+                $max = New-TimeSpan -Minutes 43200
+                return $_ -ge $min -and $_ -le $max
+            }
+            else {
+                throw "Parameter must be a TimeSpan object."
+            }
+        })]
         [Alias('Timeout')]
         [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
     )
@@ -82,13 +92,13 @@ Overrides the timeout of the server-generated challenge returned in the request.
 The default value is 300 seconds
 
 .PARAMETER Token
-The SSWS token from Okta with okta.users.manage permissions.
+The SSWS or Bearer token from Okta with okta.users.manage permissions.
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_ssws_token
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token
 
 .NOTES
 More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
@@ -100,17 +110,30 @@ function Get-OktaPasskeyRegistrationOptions
     [OutputType([DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions])]
     param(
         [Parameter(Mandatory = $true)]
+        [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
         [string] $Tenant,
 
         [Parameter(Mandatory = $true)]
         [Alias('User')]
+        [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
         [string] $UserId,
 
         [Parameter(Mandatory = $false)]
+        [ValidateScript({
+            if ($_ -is [TimeSpan]) {
+                $min = New-TimeSpan -Seconds 1
+                $max = New-TimeSpan -Seconds 86400
+                return $_ -ge $min -and $_ -le $max
+            }
+            else {
+                throw "Parameter must be a TimeSpan object."
+            }
+        })]
         [Alias('Timeout')]
         [timespan] $ChallengeTimeout = (New-TimeSpan -Seconds 300),
 
         [Parameter(Mandatory = $true)]
+        [ValidateLength(42, 8192)]
         [string] $Token
     )
     try {
@@ -118,9 +141,11 @@ function Get-OktaPasskeyRegistrationOptions
 
         Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
 
+        $token_type = if ($Token -match "^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+$") { "Bearer" } else { "SSWS" }
+
         $headers = @{
             "Accept" = "application/json"
-            "Authorization" = "SSWS ${Token}"
+            "Authorization" = "${token_type} ${Token}"
         }
 
         $body = @{
@@ -206,6 +231,16 @@ function Register-Passkey
 
         [Parameter(Mandatory = $false, ParameterSetName = 'New')]
         [Alias('Timeout')]
+        [ValidateScript({
+            if ($_ -is [TimeSpan]) {
+                $min = New-TimeSpan -Minutes 5
+                $max = New-TimeSpan -Minutes 43200
+                return $_ -ge $min -and $_ -le $max
+            }
+            else {
+                throw "Parameter must be a TimeSpan object."
+            }
+        })]
         [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
     )
     process
@@ -259,11 +294,14 @@ The passkey to be registered.
 Overrides the timeout of the server-generated challenge returned in the request.
 The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
 
-.EXAMPLE
-PS \> Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token
+.PARAMETER Token
+The SSWS or Bearer token from Okta with okta.users.manage permissions.
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token | New-OktaPasskey | Register-OktaPasskey -Tenant example.okta.com -Token your_ssws_token
+PS \> Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
+
+.EXAMPLE
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-OktaPasskey | Register-OktaPasskey -Tenant example.okta.com -Token your_okta_token
 
 .NOTES
 More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor
@@ -276,6 +314,7 @@ function Register-OktaPasskey
     param(
         [Parameter(Mandatory = $false, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
+        [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
         [Alias('User')]
         [string] $UserId,
 
@@ -285,14 +324,26 @@ function Register-OktaPasskey
 
         [Parameter(Mandatory = $false, ParameterSetName = 'New')]
         [Alias('Timeout')]
+        [ValidateScript({
+            if ($_ -is [TimeSpan]) {
+                $min = New-TimeSpan -Seconds 1
+                $max = New-TimeSpan -Seconds 86400
+                return $_ -ge $min -and $_ -le $max
+            }
+            else {
+                throw "Parameter must be a TimeSpan object."
+            }
+        })]
         [timespan] $ChallengeTimeout = (New-TimeSpan -Seconds 300),
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
+        [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
         [string] $Tenant,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
         [Parameter(Mandatory = $true, ParameterSetName = 'New')]
+        [ValidateLength(42, 8192)]
         [string] $Token
     )
     process
@@ -304,9 +355,11 @@ function Register-OktaPasskey
 
                 Write-Debug ('Registration URL: ' + $registrationUrl)
 
+                $token_type = if ($Token -match "^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+$") { "Bearer" } else { "SSWS" }
+
                 $headers = @{
                     "Accept" = "application/json"
-                    "Authorization" = "SSWS ${Token}"
+                    "Authorization" = "${token_type} ${Token}"
                 }
                 
                 [string] $response = Invoke-WebRequest -Uri $registrationUrl `
@@ -386,7 +439,7 @@ Options required to generate an Okta-compatible passkey.
 PS \> New-OktaPasskey -Options $options
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_ssws_token | New-OktaPasskey 
+PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-OktaPasskey 
 
 #>
 function New-OktaPasskey
@@ -438,7 +491,229 @@ function Get-MgGraphEndpoint
     }
 }
 
+function Get-OktaAuthorizationCodeUrl
+{
+    [CmdletBinding()]
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string]
+        $Tenant,
+
+        [Parameter(Mandatory = $true)]
+        [string]
+        $Client_Id,
+
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string]
+        $State,
+
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string]
+        $Code_Verifier        
+    )
+
+    try {
+        # Start building uri for token endpoint
+        $uriBuilder = [System.UriBuilder]::new("https",$Tenant,-1,"oauth2/v1/authorize")
+        
+        # Hash the code verifier UTF8 bytes with SHA256, convert the digest to base64url, and collect the first 44 characters as the code_challenge
+        $hashAlgo = [System.Security.Cryptography.HashAlgorithm]::Create('sha256')
+        $hash = $hashAlgo.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($Code_Verifier))
+        $b64Hash = [System.Convert]::ToBase64String($hash)
+        $code_challenge = $b64Hash.Substring(0, 43).Replace("/","_").Replace("+","-").Replace("=","")
+
+        $queryParams = @{
+            client_id = $Client_Id
+            response_type = "code"
+            scope = "okta.users.manage"
+            redirect_uri = "http://localhost:8080/login/callback/"
+            state = $State
+            code_challenge_method = "S256"
+            code_challenge = $code_challenge
+        }
+
+        # Put together the query string from the hashtable
+        $uriBuilder.Query = ($queryParams.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "&"
+        
+        return $uriBuilder.ToString()
+    }
+    catch {
+        # TODO: PS Error Record (Write-Error)
+        throw
+    }
+}
+
+function Invoke-AuthorizationCodeListener
+{
+    param (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string]
+        $State
+    )
+
+    process 
+    {
+        try {
+            $listener = New-Object System.Net.HttpListener
+            $listener.Prefixes.Add("http://localhost:8080/login/callback/")
+            $listener.Start()
+            $context = $listener.getContext()
+            # Verify state matches the state we sent
+            $valid = $context.Request.QueryString["state"] -eq $State
+            # Save code
+            $code = $context.Request.QueryString["code"]
+            $response = $context.response
+            $webPageResponse = "<!DOCTYPE html><html lang=`"en`"><head><title>Login Successful</title></head><body>It's now safe to close this browser window.</body></html>"
+            $webPageResponseEncoded =  [System.Text.Encoding]::UTF8.GetBytes($webPageResponse)
+            $webPageResponseLength = $webPageResponseEncoded.Length
+            $response.ContentLength64 = $webPageResponseLength
+            $response.ContentType = "text/html; charset=UTF-8"
+            $response.StatusCode = 200
+            $response.OutputStream.Write($webPageResponseEncoded, 0, $webPageResponseLength)
+            $response.OutputStream.Close()
+            $response.Close()
+            $listener.Stop()
+            # Check state validity
+            if ($valid)
+            {
+                return $code
+            }
+            else 
+            { 
+                throw [System.InvalidOperationException] "Invalid state."
+            } 
+        }
+        catch {
+            # TODO: PS Error Record (Write-Error)
+            throw
+        }
+    }
+}
+
+function Get-OktaTokenUrl
+{
+    [CmdletBinding()]
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string]
+        $Tenant,
+
+        [Parameter(Mandatory = $true)]
+        [string]
+        $Client_Id,
+
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string]
+        $Code,
+
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string]
+        $Code_Verifier        
+    )
+
+    try {
+        # Start building uri for token endpoint
+        $uriBuilder = [System.UriBuilder]::new("https",$Tenant,-1,"oauth2/v1/token")
+        
+        $queryParams = @{
+            grant_type = "authorization_code"
+            redirect_uri = "http://localhost:8080/login/callback/"
+            client_id = $Client_Id
+            code = $Code
+            code_verifier = $Code_Verifier
+        }
+
+        # Put together the query string from the hashtable
+        $uriBuilder.Query = ($queryParams.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "&"
+        
+        return $uriBuilder.ToString()
+    }
+    catch {
+        # TODO: PS Error Record (Write-Error)
+        throw        
+    }
+}
+
+<#
+.SYNOPSIS
+Authenticates user using the OAuth2 authorization code flow with PKCE, returning a bearer token with scope "okta.users.manage".
+
+.PARAMETER Tenant
+The unique identifier of Okta tenant, like 'example.okta.com'
+
+.PARAMETER Client_Id
+The unique identifier of an Okta native or single-page application within the supplied Okta tenant, with the (default) grant type "Authorization Code" enabled, Proof Key for Code Exchange (PKCE) enabled, the (default) sign-in redirect URI containing "http://localhost:8080/login/callback", the Okta API scope "okta.users.manage" granted, and the application assigned to the user running the script.
+
+.EXAMPLE
+PS \> $token = Get-OktaBearerToken -Tenant example.okta.com -Client_Id 0oakmj8hvxvtvCy3P5d7
+
+.NOTES
+More info at https://developer.okta.com/docs/guides/implement-grant-type/authcodepkce/main/
+
+.RELATED LINKS
+https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce
+
+#>
+function Get-OktaBearerToken
+{
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
+        [string]
+        $Tenant,
+
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
+        [string]
+        $Client_Id
+    )
+
+    process 
+    {
+        try {
+            # Used to verify the server returns the authorization code to the caller with matching state
+            $state = (New-Guid).ToString()
+
+            # Used to ensure the client retrieving the token is the same as the client who retrieved the authorization code
+            $code_verifier = -join (((48..57) * 4) + ((65..90) * 4) + ((97..122) * 4) | Get-Random -Count 43 | ForEach-Object { [char]$_ })
+
+            # Build url to obtain authorization code from
+            $authorizationCodeUrl = Get-OktaAuthorizationCodeUrl -Tenant $tenant -Client_Id $Client_Id -State $state -Code_Verifier $code_verifier
+
+            # TODO: Switch this to something better...webview 800x600?
+            # Launch browser to authorization code url
+            Start-Process $authorizationCodeUrl
+
+            # Start http listener for the sign-in redirect on the callback uri, verify state and collect authorization code
+            $code = Invoke-AuthorizationCodeListener -State $state
+
+            # Build token url to obtain bearer token using authorization code, and code verifier
+            $tokenUrl = Get-OktaTokenUrl -Tenant $tenant -Client_Id $Client_Id -Code $code -Code_Verifier $code_verifier
+
+            # Retrieve bearer token
+            $tokenResponse = Invoke-WebRequest -Method Post -Uri $tokenUrl
+
+            # Verify token type
+            $token = ($tokenResponse.Content | ConvertFrom-Json)
+            if ($token.token_type -eq "Bearer")
+            {
+                return $token.access_token
+            }
+            else
+            { 
+                throw [System.InvalidOperationException] "Invalid token type."
+            }
+        }
+        catch {
+            # TODO: PS Error Record (Write-Error)
+            throw
+        }
+    }
+}
+
 New-Alias -Name Register-MgUserAuthenticationFido2Method -Value Register-Passkey
 
-Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','Get-OktaPasskeyRegistrationOptions','New-Passkey','New-OktaPasskey','Register-Passkey','Register-OktaPasskey' `
+Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','Get-OktaPasskeyRegistrationOptions','New-Passkey','New-OktaPasskey','Register-Passkey','Register-OktaPasskey','Get-OktaBearerToken' `
                     -Alias 'Register-MgUserAuthenticationFido2Method'

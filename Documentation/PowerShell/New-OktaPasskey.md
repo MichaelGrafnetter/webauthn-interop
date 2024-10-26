@@ -1,60 +1,44 @@
 ---
 external help file: DSInternals.Passkeys-help.xml
 Module Name: DSInternals.Passkeys
-online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-Passkey.md
+online version:
 schema: 2.0.0
 ---
 
-# New-Passkey
+# New-OktaPasskey
 
 ## SYNOPSIS
-
-Creates a new Microsoft Entra ID-compatible passkey.
+Creates a new Okta-compatible passkey.
 
 ## SYNTAX
 
 ```
-New-Passkey [-Options] <MicrosoftGraphWebauthnCredentialCreationOptions> [-DisplayName] <String>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-OktaPasskey [-Options] <OktaWebauthnCredentialCreationOptions> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
 {{ Fill in the Description }}
 
 ## EXAMPLES
 
 ### EXAMPLE 1
+```
+New-OktaPasskey -Options $options
+```
 
-```powershell
-Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+### EXAMPLE 2
+```
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-OktaPasskey
 ```
 
 ## PARAMETERS
 
-### -DisplayName
-
-Custom name given to the registered passkey.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Options
-
-Options required to generate a Microsoft Entra ID-compatible passkey.
+Options required to generate an Okta-compatible passkey.
 
 ```yaml
-Type: MicrosoftGraphWebauthnCredentialCreationOptions
+Type: OktaWebauthnCredentialCreationOptions
 Parameter Sets: (All)
 Aliases:
 
@@ -87,7 +71,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse
+### DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse
 ## NOTES
 
 ## RELATED LINKS

@@ -1,55 +1,42 @@
 ---
 external help file: DSInternals.Passkeys-help.xml
 Module Name: DSInternals.Passkeys
-online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Register-Passkey.md
+online version:
 schema: 2.0.0
 ---
 
-# Register-Passkey
+# Register-OktaPasskey
 
 ## SYNOPSIS
-
-Registers a new passkey in Microsoft Entra ID.
+Registers a new passkey in Okta.
 
 ## SYNTAX
 
 ### New (Default)
 ```
-Register-Passkey -UserId <String> -DisplayName <String> [-ChallengeTimeout <TimeSpan>]
+Register-OktaPasskey -UserId <String> [-ChallengeTimeout <TimeSpan>] -Tenant <String> -Token <String>
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Existing
 ```
-Register-Passkey -UserId <String> -Passkey <MicrosoftGraphWebauthnAttestationResponse>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Register-OktaPasskey [-UserId <String>] -Passkey <OktaWebauthnAttestationResponse> -Tenant <String>
+ -Token <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
 {{ Fill in the Description }}
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-
-```powershell
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+```
+Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
 ```
 
 ### EXAMPLE 2
-
-```powershell
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
 ```
-
-### EXAMPLE 3
-
-```powershell
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-OktaPasskey | Register-OktaPasskey -Tenant example.okta.com -Token your_okta_token
 ```
 
 ## PARAMETERS
@@ -65,22 +52,7 @@ Aliases: Timeout
 
 Required: False
 Position: Named
-Default value: (New-TimeSpan -Minutes 5)
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-Custom name given to the registered passkey.
-
-```yaml
-Type: String
-Parameter Sets: New
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
+Default value: (New-TimeSpan -Seconds 300)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -89,7 +61,7 @@ Accept wildcard characters: False
 The passkey to be registered.
 
 ```yaml
-Type: MicrosoftGraphWebauthnAttestationResponse
+Type: OktaWebauthnAttestationResponse
 Parameter Sets: Existing
 Aliases:
 
@@ -115,15 +87,57 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Tenant
+{{ Fill Tenant Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+The SSWS or Bearer token from Okta with okta.users.manage permissions.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -UserId
 The unique identifier of user.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: New
 Aliases: User
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: String
+Parameter Sets: Existing
+Aliases: User
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -137,8 +151,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod
+### System.String
 ## NOTES
-More info at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
+More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor
 
 ## RELATED LINKS
