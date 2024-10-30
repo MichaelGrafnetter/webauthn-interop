@@ -1,7 +1,7 @@
 ---
 external help file: DSInternals.Passkeys-help.xml
 Module Name: DSInternals.Passkeys
-online version:
+online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-Passkey.md
 schema: 2.0.0
 ---
 
