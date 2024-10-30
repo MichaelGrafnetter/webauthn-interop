@@ -15,37 +15,35 @@ Retrieves creation options required to generate and register a Microsoft Entra I
 ### EntraID (Default)
 ```
 Get-PasskeyRegistrationOptions -UserId <String> [-ChallengeTimeout <TimeSpan>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Okta
 ```
 Get-PasskeyRegistrationOptions -Tenant <String> -UserId <String> [-ChallengeTimeout <TimeSpan>] -Token <String>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## EXAMPLES
 
 ### EXAMPLE 1 (Entra ID)
 ```
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com'
 ```
 
 ### EXAMPLE 2 (Entra ID)
 ```
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeTimeout (New-TimeSpan -Minutes 10)
 ```
 
 ### EXAMPLE 3 (Okta)
 ```
-Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
 ```
 
 ### EXAMPLE 4 (Okta)
 ```
-Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token
 ```
 
 ## PARAMETERS
@@ -66,19 +64,6 @@ Default value: (New-TimeSpan -Minutes 5)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Tenant
 The unique identifier of Okta tenant.
 
@@ -125,9 +110,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -15,24 +15,21 @@ Registers a new passkey in Microsoft Entra ID, or Okta.
 ### EntraIDNew (Default)
 ```
 Register-Passkey -UserId <String> -DisplayName <String> [-ChallengeTimeout <TimeSpan>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### OktaNew
 ```
-Register-Passkey -UserId <String> -Tenant <String> -Token <String> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Register-Passkey -UserId <String> -Tenant <String> -Token <String> 
 ```
 
 ### OktaExisting
 ```
-Register-Passkey -UserId <String> -Passkey <Object> -Tenant <String> -Token <String>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Register-Passkey -UserId <String> -Passkey <OktaWebauthnAttestationResponse> -Tenant <String> -Token <String>
 ```
 
 ### EntraIDExisting
 ```
-Register-Passkey -UserId <String> -Passkey <Object> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Register-Passkey -UserId <String> -Passkey <MicrosoftGraphWebauthnAttestationResponse>
 ```
 
 ## DESCRIPTION
@@ -42,30 +39,30 @@ Takes a created credential from New-Passkey and registers it as a usable authent
 
 ### EXAMPLE 1 (Entra ID)
 ```
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 ```
 
 ### EXAMPLE 2 (Entra ID)
 ```
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
 ```
 
 ### EXAMPLE 3 (Entra ID)
 ```
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
 ```
 
-### EXAMPLE 4 (Entra ID)
+### EXAMPLE 4 (Okta)
 ```
-Register-Passkey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
+PS \> Register-Passkey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
 ```
 
-### EXAMPLE 5 (Entra ID)
+### EXAMPLE 5 (Okta)
 ```
-Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey | Register-Passkey -Tenant example.okta.com -Token your_okta_token
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey | Register-Passkey -Tenant example.okta.com -Token your_okta_token
 ```
 
 ## PARAMETERS
@@ -116,19 +113,6 @@ Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Tenant
 The unique identifier of Okta tenant.
 
@@ -175,9 +159,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 ### DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse
