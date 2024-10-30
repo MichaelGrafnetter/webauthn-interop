@@ -8,16 +8,24 @@ else {
     Add-Type -Path "$PSScriptRoot/net48/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
 }
 
+# Needed for [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] type
+Import-Module Microsoft.Graph.Identity.SignIns -ErrorAction Stop
+
 <#
 .SYNOPSIS
-Retrieves creation options required to generate and register a Microsoft Entra ID-compatible passkey.
+Retrieves creation options required to generate and register a Microsoft Entra ID or Okta compatible passkey.
+
+.PARAMETER Tenant
+The unique identifier of Okta tenant.
 
 .PARAMETER UserId
-The unique identifier of user.
+The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.
 
 .PARAMETER ChallengeTimeout
-Overrides the timeout of the server-generated challenge returned in the request.
-The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
+Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 second, with the accepted range being between 1 second and 1 day.
+
+.PARAMETER Token
+The SSWS or Bearer token from Okta with okta.users.manage permissions.
 
 .EXAMPLE
 PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
@@ -27,174 +35,153 @@ PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com'
 PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeTimeout (New-TimeSpan -Minutes 10)
 
+.EXAMPLE
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
+
+.EXAMPLE
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token
+
 .NOTES
 Self-service operations aren't supported.
-More info at https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
+More info about Entra ID at https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
+More info about Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
 
 #>
 function Get-PasskeyRegistrationOptions
 {
-    [CmdletBinding()]
-    [OutputType([DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions])]
+    [CmdletBinding(DefaultParameterSetName = 'EntraID')]
+    [OutputType([DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions],ParameterSetName = 'EntraID')]
+    [OutputType([DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions], ParameterSetName = 'Okta')]
     param(
-        [Parameter(Mandatory = $true)]
-        [Alias('User')]
-        [string] $UserId,
-
-        [Parameter(Mandatory = $false)]
-        [ValidateScript({
-            if ($_ -is [TimeSpan]) {
-                $min = New-TimeSpan -Minutes 5
-                $max = New-TimeSpan -Minutes 43200
-                return $_ -ge $min -and $_ -le $max
-            }
-            else {
-                throw "Parameter must be a TimeSpan object."
-            }
-        })]
-        [Alias('Timeout')]
-        [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
-    )
-    try {
-        # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods/creationOptions
-        [string] $credentialOptionsUrl = '{0}/beta/users/{1}/authentication/fido2Methods/creationOptions' -f (Get-MgGraphEndpoint), [uri]::EscapeDataString($UserId)
-
-        Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
-
-        [string] $response = Invoke-MgGraphRequest -Method GET `
-                                                -Uri $credentialOptionsUrl `
-                                                -Body @{ challengeTimeoutInMinutes = $ChallengeTimeout.TotalMinutes } `
-                                                -OutputType Json
-
-        Write-Debug ('Credential options response: ' + $response)
-
-        # Parse JSON response
-        return [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions]::Create($response)
-    }
-    catch {
-        # TODO: PS Error Record ($PSCmdlet.ThrowTerminatingError())
-        throw
-    }
-}
-
-<#
-.SYNOPSIS
-Retrieves creation options required to generate and register an Okta-compatible passkey.
-
-.PARAMETER Tenant
-The unique identifier of Okta tenant, like 'example.okta.com'
-
-.PARAMETER UserId
-The unique identifier of Okta user, like '00ub61wm1aqmawzRC5d7'.
-
-.PARAMETER ChallengeTimeout
-Overrides the timeout of the server-generated challenge returned in the request.
-The default value is 300 seconds
-
-.PARAMETER Token
-The SSWS or Bearer token from Okta with okta.users.manage permissions.
-
-.EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
-
-.EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token
-
-.NOTES
-More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
-
-#>
-function Get-OktaPasskeyRegistrationOptions
-{
-    [CmdletBinding()]
-    [OutputType([DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions])]
-    param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Okta')]
         [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
         [string] $Tenant,
-
-        [Parameter(Mandatory = $true)]
+        
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraID')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Okta')]
         [Alias('User')]
-        [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
         [string] $UserId,
 
-        [Parameter(Mandatory = $false)]
-        [ValidateScript({
-            if ($_ -is [TimeSpan]) {
-                $min = New-TimeSpan -Seconds 1
-                $max = New-TimeSpan -Seconds 86400
-                return $_ -ge $min -and $_ -le $max
-            }
-            else {
-                throw "Parameter must be a TimeSpan object."
-            }
-        })]
+        [Parameter(Mandatory = $false, ParameterSetName = 'EntraID')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Okta')]
         [Alias('Timeout')]
-        [timespan] $ChallengeTimeout = (New-TimeSpan -Seconds 300),
+        [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5),
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Okta')]
         [ValidateLength(42, 8192)]
         [string] $Token
     )
-    try {
-        [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $Tenant, $UserId, $ChallengeTimeout.TotalSeconds
-
-        Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
-
-        $token_type = if ($Token -match "^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+$") { "Bearer" } else { "SSWS" }
-
-        $headers = @{
-            "Accept" = "application/json"
-            "Authorization" = "${token_type} ${Token}"
-        }
-
-        $body = @{
-            factorType = "webauthn"
-            provider = "FIDO"
-        }
-        $body = $body | ConvertTo-Json
-
-        [string] $response = Invoke-WebRequest -Uri $credentialOptionsUrl `
-                    -Method Post `
-                    -Headers $headers `
-                    -ContentType "application/json" `
-                    -Body $body
-
-        Write-Debug ('Credential options response: ' + $response)
-
-        # Parse JSON response
-        $options = [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions]::Create($response)
-
-        # Okta appears to omit relying party id in the options, but it is required for credential creation
-        # So set default to the tenant we are talking to, which is probably what the user wants anyway
-        if ($options.Embedded.PublicKeyOptions.RelyingParty.Id -eq $null)
+    begin {
+        switch ($PSCmdlet.ParameterSetName)
         {
-            $options.Embedded.PublicKeyOptions.RelyingParty.Id = $Tenant
+            'EntraID' {
+                $min = New-TimeSpan -Minutes 5
+                $max = New-TimeSpan -Minutes 43200
+                if ($ChallengeTimeout -gt $max -or $ChallengeTimeout -lt $min) {
+                    Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 5 and 43200 minutes for $_." -ErrorAction Stop
+                }
+                if ($UserId -notmatch "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" -and $false -eq [guid]::TryParse($UserId, $([ref][guid]::Empty))) {
+                    Write-Error "Cannot validate argument on parameter 'UserID' which must be an object id or UPN for $_." -ErrorAction Stop
+                }
+            }
+            'Okta'{
+                $min = New-TimeSpan -Seconds 1
+                $max = New-TimeSpan -Seconds 86400
+                if ($ChallengeTimeout -gt $max -or $ChallengeTimeout -lt $min) {
+                    Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 1 and 86400 seconds for $_." -ErrorAction Stop
+                }
+                if ($UserId -notmatch "^[A-Za-z0-9_-]{20}$") {
+                    Write-Error "Cannot validate argument on parameter 'UserID' which must the unique idenitier for the user for $_." -ErrorAction Stop
+                }
+            }
         }
-        return $options
     }
-    catch {
-        # TODO: PS Error Record ($PSCmdlet.ThrowTerminatingError())
-        throw
+    process {
+        try {
+            switch ($PSCmdlet.ParameterSetName) {
+                'EntraID' {
+                    # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods/creationOptions
+                    [string] $credentialOptionsUrl = '{0}/beta/users/{1}/authentication/fido2Methods/creationOptions' -f (Get-MgGraphEndpoint), [uri]::EscapeDataString($UserId)
+
+                    Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
+
+                    [string] $response = Invoke-MgGraphRequest -Method GET `
+                                                            -Uri $credentialOptionsUrl `
+                                                            -Body @{ challengeTimeoutInMinutes = $ChallengeTimeout.TotalMinutes } `
+                                                            -OutputType Json
+
+                    Write-Debug ('Credential options response: ' + $response)
+
+                    # Parse JSON response
+                    return [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions]::Create($response)
+                }
+                'Okta' {
+                    [string] $credentialOptionsUrl = 'https://{0}/api/v1/users/{1}/factors?tokenLifetimeSeconds={2}&activate=true' -f $Tenant, $UserId, $ChallengeTimeout.TotalSeconds
+
+                    Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
+            
+                    $token_type = if ($Token -match "^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+$") { "Bearer" } else { "SSWS" }
+            
+                    $headers = @{
+                        "Accept" = "application/json"
+                        "Authorization" = "${token_type} ${Token}"
+                    }
+            
+                    $body = @{
+                        factorType = "webauthn"
+                        provider = "FIDO"
+                    }
+                    $body = $body | ConvertTo-Json
+            
+                    [string] $response = Invoke-WebRequest -Uri $credentialOptionsUrl `
+                                -Method Post `
+                                -Headers $headers `
+                                -ContentType "application/json" `
+                                -Body $body
+            
+                    Write-Debug ('Credential options response: ' + $response)
+            
+                    # Parse JSON response
+                    $options = [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]::Create($response)
+            
+                    # Okta appears to omit relying party id in the options, but it is required for credential creation
+                    # So set default to the tenant we are talking to, which is probably what the user wants anyway
+                    if ($null -eq $options.Embedded.PublicKeyOptions.RelyingParty.Id)
+                    {
+                        $options.Embedded.PublicKeyOptions.RelyingParty.Id = $Tenant
+                    }
+                    return $options                    
+                }
+            }
+        }
+        catch {
+            # TODO: PS Error Record ($PSCmdlet.ThrowTerminatingError())
+            throw
+        }
     }
 }
 
 <#
 .SYNOPSIS
-Registers a new passkey in Microsoft Entra ID.
+Registers a new passkey in Microsoft Entra ID, or Okta.
+
+.PARAMETER Tenant
+The unique identifier of Okta tenant.
 
 .PARAMETER UserId
-The unique identifier of user.
+The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.
+
+.PARAMETER ChallengeTimeout
+Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 second, with the accepted range being between 1 second and 1 day.
+
+.PARAMETER Token
+The SSWS or Bearer token from Okta with okta.users.manage permissions.
 
 .PARAMETER Passkey
 The passkey to be registered.
 
 .PARAMETER DisplayName
-Custom name given to the registered passkey.
-
-.PARAMETER ChallengeTimeout
-Overrides the timeout of the server-generated challenge returned in the request.
-The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
+Custom name given to the Entra ID registered passkey.
 
 .EXAMPLE
 PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
@@ -208,46 +195,89 @@ PS \> Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano
 PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
 
+.EXAMPLE
+PS \> Register-Passkey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
+
+.EXAMPLE
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey | Register-Passkey -Tenant example.okta.com -Token your_okta_token
+
 .NOTES
-More info at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
+More info for Entra ID at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
+More info for Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor
 
 #>
 function Register-Passkey
 {
-    [CmdletBinding(DefaultParameterSetName = 'New')]
-    [OutputType([Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod])]
+    [CmdletBinding(DefaultParameterSetName = 'EntraIDNew')]
+    [OutputType([DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod], ParameterSetName = 'OktaNew')]
+    [OutputType([DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod], ParameterSetName = 'OktaExisting')]
+    [OutputType([Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] , ParameterSetName = 'EntraIDExisting')]
+    [OutputType([Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] , ParameterSetName = 'EntraIDNew')]
     param(
-        [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'New')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIDExisting')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIDNew')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'OktaExisting')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'OktaNew')]
         [Alias('User')]
         [string] $UserId,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Existing', ValueFromPipeline = $true)]
-        [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse]
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIDExisting', ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'OktaExisting', ValueFromPipeline = $true)]
         $Passkey,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'New')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIDNew')]
         [string] $DisplayName,
 
-        [Parameter(Mandatory = $false, ParameterSetName = 'New')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'EntraIDNew')]
         [Alias('Timeout')]
-        [ValidateScript({
-            if ($_ -is [TimeSpan]) {
+        [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5),
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'OktaExisting')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'OktaNew')]
+        [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
+        [string] $Tenant,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'OktaExisting')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'OktaNew')]
+        [ValidateLength(42, 8192)]
+        [string] $Token
+    )
+    begin {
+        switch ($PSCmdlet.ParameterSetName)
+        {
+            'EntraIDExisting' {
+                [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse]$Passkey = $Passkey
+            }
+            'EntraIDNew' {
                 $min = New-TimeSpan -Minutes 5
                 $max = New-TimeSpan -Minutes 43200
-                return $_ -ge $min -and $_ -le $max
+                if ($ChallengeTimeout -gt $max -or $ChallengeTimeout -lt $min) {
+                    Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 5 and 43200 minutes for $_." -ErrorAction Stop
+                }
+                if ($UserId -notmatch "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" -and $false -eq [guid]::TryParse($UserId, $([ref][guid]::Empty))) {
+                    Write-Error "Cannot validate argument on parameter 'UserID' which must be an object id or UPN for $_." -ErrorAction Stop
+                }
             }
-            else {
-                throw "Parameter must be a TimeSpan object."
+            'OktaExisting' {
+                [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]$Passkey = $Passkey
             }
-        })]
-        [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
-    )
+            'OktaNew'{
+                $min = New-TimeSpan -Seconds 1
+                $max = New-TimeSpan -Seconds 86400
+                if ($ChallengeTimeout -gt $max -or $ChallengeTimeout -lt $min) {
+                    Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 1 and 86400 seconds for $_." -ErrorAction Stop
+                }
+                if ($UserId -notmatch "^[A-Za-z0-9_-]{20}$") {
+                    Write-Error "Cannot validate argument on parameter 'UserID' which must the unique idenitier for the user for $_." -ErrorAction Stop
+                }
+            }
+        }
+    }
     process
     {
         # TODO: Write-Error
         switch ($PSCmdlet.ParameterSetName) {
-            'Existing' {
+            'EntraIDExisting' {
                 [string] $endpoint = Get-MgGraphEndpoint
 
                 # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods
@@ -266,91 +296,17 @@ function Register-Passkey
 
                 return [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]::FromJsonString($response)
             }
-            'New' {
-                [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions] $registrationOptions =
+            'EntraIDNew' {
+                [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions] $registrationOptions =
                     Get-PasskeyRegistrationOptions -UserId $UserId -ChallengeTimeout $ChallengeTimeout
 
-                [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse] $passkey =
+                [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse] $passkey =
                     New-Passkey -Options $registrationOptions -DisplayName $DisplayName
 
                 # Recursive call with the 'Existing' parameter set
                 return Register-Passkey -UserId $UserId -Passkey $passkey
             }
-        }
-    }
-}
-
-<#
-.SYNOPSIS
-Registers a new passkey in Okta.
-
-.PARAMETER UserId
-The unique identifier of user.
-
-.PARAMETER Passkey
-The passkey to be registered.
-
-.PARAMETER ChallengeTimeout
-Overrides the timeout of the server-generated challenge returned in the request.
-The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
-
-.PARAMETER Token
-The SSWS or Bearer token from Okta with okta.users.manage permissions.
-
-.EXAMPLE
-PS \> Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
-
-.EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-OktaPasskey | Register-OktaPasskey -Tenant example.okta.com -Token your_okta_token
-
-.NOTES
-More info at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor
-
-#>
-function Register-OktaPasskey
-{
-    [CmdletBinding(DefaultParameterSetName = 'New')]
-    [OutputType([string])]
-    param(
-        [Parameter(Mandatory = $false, ParameterSetName = 'Existing')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'New')]
-        [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
-        [Alias('User')]
-        [string] $UserId,
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Existing', ValueFromPipeline = $true)]
-        [DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse]
-        $Passkey,
-
-        [Parameter(Mandatory = $false, ParameterSetName = 'New')]
-        [Alias('Timeout')]
-        [ValidateScript({
-            if ($_ -is [TimeSpan]) {
-                $min = New-TimeSpan -Seconds 1
-                $max = New-TimeSpan -Seconds 86400
-                return $_ -ge $min -and $_ -le $max
-            }
-            else {
-                throw "Parameter must be a TimeSpan object."
-            }
-        })]
-        [timespan] $ChallengeTimeout = (New-TimeSpan -Seconds 300),
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'New')]
-        [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
-        [string] $Tenant,
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Existing')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'New')]
-        [ValidateLength(42, 8192)]
-        [string] $Token
-    )
-    process
-    {
-        # TODO: Write-Error
-        switch ($PSCmdlet.ParameterSetName) {
-            'Existing' {
+            'OktaExisting' {
                 [string] $registrationUrl = 'https://{0}/api/v1/users/{1}/factors/{2}/lifecycle/activate' -f $Tenant, $Passkey.UserId, $Passkey.FactorId
 
                 Write-Debug ('Registration URL: ' + $registrationUrl)
@@ -370,17 +326,17 @@ function Register-OktaPasskey
 
                 Write-Debug ('Registration response: ' + $response)
 
-                return $response
+                return [DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod]::FromJsonString($response)
             }
-            'New' {
-                [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions] $registrationOptions =
-                    Get-OktaPasskeyRegistrationOptions -Tenant $Tenant -UserId $UserId -ChallengeTimeout $ChallengeTimeout -Token $Token
+            'OktaNew' {
+                [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions] $registrationOptions =
+                    Get-PasskeyRegistrationOptions -Tenant $Tenant -UserId $UserId -ChallengeTimeout $ChallengeTimeout -Token $Token
 
-                [DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse] $passkey =
-                    New-OktaPasskey -Options $registrationOptions
+                [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse] $passkey =
+                    New-Passkey -Options $registrationOptions
 
                 # Recursive call with the 'Existing' parameter set
-                return Register-OktaPasskey -UserId $UserId -Passkey $passkey -Tenant $Tenant -Token $Token
+                return Register-Passkey -UserId $UserId -Passkey $passkey -Tenant $Tenant -Token $Token
             }
         }
     }
@@ -388,76 +344,63 @@ function Register-OktaPasskey
 
 <#
 .SYNOPSIS
-Creates a new Microsoft Entra ID-compatible passkey.
+Creates a new Microsoft Entra ID or Okta compatible passkey.
 
 .PARAMETER Options
-Options required to generate a Microsoft Entra ID-compatible passkey.
+Options required to generate a Microsoft Entra ID or Okta compatible passkey.
 
 .PARAMETER DisplayName
-Custom name given to the registered passkey.
+Custom name given to the Entra ID registered passkey.
 
 .EXAMPLE
 PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
 
+.EXAMPLE
+PS \> New-Passkey -Options $options
+
+.EXAMPLE
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey 
+
 #>
 function New-Passkey
 {
     [CmdletBinding()]
-    [OutputType([DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse])]
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions]
+        [Validatescript({
+            $ValidateSet = @('MicrosoftGraphWebauthnCredentialCreationOptions','OktaWebauthnCredentialCreationOptions')
+            if ($ValidateSet -contains $PSItem.GetType().Name) { 
+                return $true
+            }
+            else { 
+                throw $ValidateSet
+            }
+        })]
         $Options,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [string] $DisplayName
     )
-
+    begin {
+        if ($Options.GetType().Name -eq 'MicrosoftGraphWebauthnCredentialCreationOptions' -and [string]::IsNullOrEmpty($DisplayName)) {
+            throw "Parameter 'DisplayName' may not be null or empty."
+        }
+    }
     process
     {
         try {
             [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
             [DSInternals.Win32.WebAuthn.PublicKeyCredential] $credential = $api.AuthenticatorMakeCredential($Options.PublicKeyOptions)
-            return [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnAttestationResponse]::new($credential, $DisplayName)
-        }
-        catch {
-            # TODO: PS Error Record (Write-Error)
-            throw
-        }
-    }
-}
 
-<#
-.SYNOPSIS
-Creates a new Okta-compatible passkey.
-
-.PARAMETER Options
-Options required to generate an Okta-compatible passkey.
-
-.EXAMPLE
-PS \> New-OktaPasskey -Options $options
-
-.EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-OktaPasskey 
-
-#>
-function New-OktaPasskey
-{
-    [CmdletBinding()]
-    [OutputType([DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse])]
-    param(
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [DSInternals.Win32.WebAuthn.OktaWebauthnCredentialCreationOptions]
-        $Options
-    )
-
-    process
-    {
-        try {
-            [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
-            [DSInternals.Win32.WebAuthn.PublicKeyCredential] $credential = $api.AuthenticatorMakeCredential($Options.Embedded.PublicKeyOptions)
-            return [DSInternals.Win32.WebAuthn.OktaWebauthnAttestationResponse]::new($credential, $Options.Embedded.PublicKeyOptions.User.Id, $Options.Id)
+            switch ($Options.GetType().Name) {
+                'MicrosoftGraphWebauthnCredentialCreationOptions' {
+                    return [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse]::new($credential, $DisplayName)
+                }
+                'OktaWebauthnCredentialCreationOptions' {
+                    return [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]::new($credential, $Options.PublicKeyOptions.User.Id, $Options.Id)
+                }
+            }
         }
         catch {
             # TODO: PS Error Record (Write-Error)
@@ -491,229 +434,7 @@ function Get-MgGraphEndpoint
     }
 }
 
-function Get-OktaAuthorizationCodeUrl
-{
-    [CmdletBinding()]
-    [OutputType([string])]
-    param(
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string]
-        $Tenant,
-
-        [Parameter(Mandatory = $true)]
-        [string]
-        $Client_Id,
-
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string]
-        $State,
-
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string]
-        $Code_Verifier        
-    )
-
-    try {
-        # Start building uri for token endpoint
-        $uriBuilder = [System.UriBuilder]::new("https",$Tenant,-1,"oauth2/v1/authorize")
-        
-        # Hash the code verifier UTF8 bytes with SHA256, convert the digest to base64url, and collect the first 44 characters as the code_challenge
-        $hashAlgo = [System.Security.Cryptography.HashAlgorithm]::Create('sha256')
-        $hash = $hashAlgo.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($Code_Verifier))
-        $b64Hash = [System.Convert]::ToBase64String($hash)
-        $code_challenge = $b64Hash.Substring(0, 43).Replace("/","_").Replace("+","-").Replace("=","")
-
-        $queryParams = @{
-            client_id = $Client_Id
-            response_type = "code"
-            scope = "okta.users.manage"
-            redirect_uri = "http://localhost:8080/login/callback/"
-            state = $State
-            code_challenge_method = "S256"
-            code_challenge = $code_challenge
-        }
-
-        # Put together the query string from the hashtable
-        $uriBuilder.Query = ($queryParams.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "&"
-        
-        return $uriBuilder.ToString()
-    }
-    catch {
-        # TODO: PS Error Record (Write-Error)
-        throw
-    }
-}
-
-function Invoke-AuthorizationCodeListener
-{
-    param (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string]
-        $State
-    )
-
-    process 
-    {
-        try {
-            $listener = New-Object System.Net.HttpListener
-            $listener.Prefixes.Add("http://localhost:8080/login/callback/")
-            $listener.Start()
-            $context = $listener.getContext()
-            # Verify state matches the state we sent
-            $valid = $context.Request.QueryString["state"] -eq $State
-            # Save code
-            $code = $context.Request.QueryString["code"]
-            $response = $context.response
-            $webPageResponse = "<!DOCTYPE html><html lang=`"en`"><head><title>Login Successful</title></head><body>It's now safe to close this browser window.</body></html>"
-            $webPageResponseEncoded =  [System.Text.Encoding]::UTF8.GetBytes($webPageResponse)
-            $webPageResponseLength = $webPageResponseEncoded.Length
-            $response.ContentLength64 = $webPageResponseLength
-            $response.ContentType = "text/html; charset=UTF-8"
-            $response.StatusCode = 200
-            $response.OutputStream.Write($webPageResponseEncoded, 0, $webPageResponseLength)
-            $response.OutputStream.Close()
-            $response.Close()
-            $listener.Stop()
-            # Check state validity
-            if ($valid)
-            {
-                return $code
-            }
-            else 
-            { 
-                throw [System.InvalidOperationException] "Invalid state."
-            } 
-        }
-        catch {
-            # TODO: PS Error Record (Write-Error)
-            throw
-        }
-    }
-}
-
-function Get-OktaTokenUrl
-{
-    [CmdletBinding()]
-    [OutputType([string])]
-    param(
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string]
-        $Tenant,
-
-        [Parameter(Mandatory = $true)]
-        [string]
-        $Client_Id,
-
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string]
-        $Code,
-
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string]
-        $Code_Verifier        
-    )
-
-    try {
-        # Start building uri for token endpoint
-        $uriBuilder = [System.UriBuilder]::new("https",$Tenant,-1,"oauth2/v1/token")
-        
-        $queryParams = @{
-            grant_type = "authorization_code"
-            redirect_uri = "http://localhost:8080/login/callback/"
-            client_id = $Client_Id
-            code = $Code
-            code_verifier = $Code_Verifier
-        }
-
-        # Put together the query string from the hashtable
-        $uriBuilder.Query = ($queryParams.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "&"
-        
-        return $uriBuilder.ToString()
-    }
-    catch {
-        # TODO: PS Error Record (Write-Error)
-        throw        
-    }
-}
-
-<#
-.SYNOPSIS
-Authenticates user using the OAuth2 authorization code flow with PKCE, returning a bearer token with scope "okta.users.manage".
-
-.PARAMETER Tenant
-The unique identifier of Okta tenant, like 'example.okta.com'
-
-.PARAMETER Client_Id
-The unique identifier of an Okta native or single-page application within the supplied Okta tenant, with the (default) grant type "Authorization Code" enabled, Proof Key for Code Exchange (PKCE) enabled, the (default) sign-in redirect URI containing "http://localhost:8080/login/callback", the Okta API scope "okta.users.manage" granted, and the application assigned to the user running the script.
-
-.EXAMPLE
-PS \> $token = Get-OktaBearerToken -Tenant example.okta.com -Client_Id 0oakmj8hvxvtvCy3P5d7
-
-.NOTES
-More info at https://developer.okta.com/docs/guides/implement-grant-type/authcodepkce/main/
-
-.RELATED LINKS
-https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce
-
-#>
-function Get-OktaBearerToken
-{
-    param(
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
-        [string]
-        $Tenant,
-
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
-        [string]
-        $Client_Id
-    )
-
-    process 
-    {
-        try {
-            # Used to verify the server returns the authorization code to the caller with matching state
-            $state = (New-Guid).ToString()
-
-            # Used to ensure the client retrieving the token is the same as the client who retrieved the authorization code
-            $code_verifier = -join (((48..57) * 4) + ((65..90) * 4) + ((97..122) * 4) | Get-Random -Count 43 | ForEach-Object { [char]$_ })
-
-            # Build url to obtain authorization code from
-            $authorizationCodeUrl = Get-OktaAuthorizationCodeUrl -Tenant $tenant -Client_Id $Client_Id -State $state -Code_Verifier $code_verifier
-
-            # TODO: Switch this to something better...webview 800x600?
-            # Launch browser to authorization code url
-            Start-Process $authorizationCodeUrl
-
-            # Start http listener for the sign-in redirect on the callback uri, verify state and collect authorization code
-            $code = Invoke-AuthorizationCodeListener -State $state
-
-            # Build token url to obtain bearer token using authorization code, and code verifier
-            $tokenUrl = Get-OktaTokenUrl -Tenant $tenant -Client_Id $Client_Id -Code $code -Code_Verifier $code_verifier
-
-            # Retrieve bearer token
-            $tokenResponse = Invoke-WebRequest -Method Post -Uri $tokenUrl
-
-            # Verify token type
-            $token = ($tokenResponse.Content | ConvertFrom-Json)
-            if ($token.token_type -eq "Bearer")
-            {
-                return $token.access_token
-            }
-            else
-            { 
-                throw [System.InvalidOperationException] "Invalid token type."
-            }
-        }
-        catch {
-            # TODO: PS Error Record (Write-Error)
-            throw
-        }
-    }
-}
-
 New-Alias -Name Register-MgUserAuthenticationFido2Method -Value Register-Passkey
 
-Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','Get-OktaPasskeyRegistrationOptions','New-Passkey','New-OktaPasskey','Register-Passkey','Register-OktaPasskey','Get-OktaBearerToken' `
+Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','New-Passkey','Register-Passkey' `
                     -Alias 'Register-MgUserAuthenticationFido2Method'

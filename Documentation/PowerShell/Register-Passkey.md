@@ -1,66 +1,83 @@
 ---
 external help file: DSInternals.Passkeys-help.xml
 Module Name: DSInternals.Passkeys
-online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Register-Passkey.md
+online version:
 schema: 2.0.0
 ---
 
 # Register-Passkey
 
 ## SYNOPSIS
-
-Registers a new passkey in Microsoft Entra ID.
+Registers a new passkey in Microsoft Entra ID, or Okta.
 
 ## SYNTAX
 
-### New (Default)
+### EntraIDNew (Default)
 ```
 Register-Passkey -UserId <String> -DisplayName <String> [-ChallengeTimeout <TimeSpan>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Existing
+### OktaNew
 ```
-Register-Passkey -UserId <String> -Passkey <MicrosoftGraphWebauthnAttestationResponse>
+Register-Passkey -UserId <String> -Tenant <String> -Token <String> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
+```
+
+### OktaExisting
+```
+Register-Passkey -UserId <String> -Passkey <Object> -Tenant <String> -Token <String>
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-## DESCRIPTION
+### EntraIDExisting
+```
+Register-Passkey -UserId <String> -Passkey <Object> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
 
-{{ Fill in the Description }}
+## DESCRIPTION
+Takes a created credential from New-Passkey and registers it as a usable authentication factor with Entra ID or Okta.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-
-```powershell
+### EXAMPLE 1 (Entra ID)
+```
 Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+PS \> Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 ```
 
-### EXAMPLE 2
-
-```powershell
+### EXAMPLE 2 (Entra ID)
+```
 Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
+PS \> Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
 ```
 
-### EXAMPLE 3
-
-```powershell
+### EXAMPLE 3 (Entra ID)
+```
 Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
+PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
+```
+
+### EXAMPLE 4 (Entra ID)
+```
+Register-Passkey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token
+```
+
+### EXAMPLE 5 (Entra ID)
+```
+Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey | Register-Passkey -Tenant example.okta.com -Token your_okta_token
 ```
 
 ## PARAMETERS
 
 ### -ChallengeTimeout
-Overrides the timeout of the server-generated challenge returned in the request.
-The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
+Overrides the timeout of the server-generated challenge returned in the request. 
+For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days. 
+For Okta, the default value is 300 second, with the accepted range being between 1 second and 1 day.
 
 ```yaml
 Type: TimeSpan
-Parameter Sets: New
+Parameter Sets: EntraIDNew
 Aliases: Timeout
 
 Required: False
@@ -71,11 +88,11 @@ Accept wildcard characters: False
 ```
 
 ### -DisplayName
-Custom name given to the registered passkey.
+Custom name given to the Entra ID registered passkey.
 
 ```yaml
 Type: String
-Parameter Sets: New
+Parameter Sets: EntraIDNew
 Aliases:
 
 Required: True
@@ -89,8 +106,8 @@ Accept wildcard characters: False
 The passkey to be registered.
 
 ```yaml
-Type: MicrosoftGraphWebauthnAttestationResponse
-Parameter Sets: Existing
+Type: DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse or DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse
+Parameter Sets: OktaExisting, EntraIDExisting
 Aliases:
 
 Required: True
@@ -99,9 +116,6 @@ Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
 
 ```yaml
 Type: ActionPreference
@@ -115,8 +129,40 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Tenant
+The unique identifier of Okta tenant.
+
+```yaml
+Type: String
+Parameter Sets: OktaNew, OktaExisting
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+The SSWS or Bearer token from Okta with okta.users.manage permissions.
+
+```yaml
+Type: String
+Parameter Sets: OktaNew, OktaExisting
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -UserId
-The unique identifier of user.
+The unique identifier of user. 
+For Entra ID, this is the object id (guid) or UPN. 
+For Okta, this is the unique identifier of Okta user.
 
 ```yaml
 Type: String
@@ -134,11 +180,23 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+### DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse
+
+OR
+
+### DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse
 
 ## OUTPUTS
 
 ### Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod
+
+OR
+
+### DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod
+
 ## NOTES
-More info at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
+For the Okta token, you should not use SSWS but intead use a bearer token.
 
 ## RELATED LINKS
+More info for Entra ID at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
+More info for Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor

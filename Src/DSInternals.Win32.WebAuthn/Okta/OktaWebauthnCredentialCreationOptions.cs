@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.Okta
 {
     public class Embedded
     {
@@ -28,6 +28,8 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         [JsonPropertyName("_embedded")]
         public Embedded Embedded { get; set; }
+
+        public PublicKeyCredentialCreationOptions PublicKeyOptions => Embedded.PublicKeyOptions;
 
         public static OktaWebauthnCredentialCreationOptions Create(string json)
         {
