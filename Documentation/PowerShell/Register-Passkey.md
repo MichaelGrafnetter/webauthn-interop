@@ -15,21 +15,19 @@ Registers a new passkey in Microsoft Entra ID, or Okta.
 ### EntraIDNew (Default)
 ```
 Register-Passkey -UserId <String> -DisplayName <String> [-ChallengeTimeout <TimeSpan>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### OktaNew
 ```
-Register-Passkey -UserId <String> -Tenant <String> -Token <String> 
+Register-Passkey -UserId <String> [-ChallengeTimeout <TimeSpan>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
-### OktaExisting
+### Existing
 ```
-Register-Passkey -UserId <String> -Passkey <OktaWebauthnAttestationResponse> -Tenant <String> -Token <String>
-```
-
-### EntraIDExisting
-```
-Register-Passkey -UserId <String> -Passkey <MicrosoftGraphWebauthnAttestationResponse>
+Register-Passkey -UserId <String> -Passkey <WebauthnAttestationResponse> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -74,7 +72,7 @@ For Okta, the default value is 300 seconds, with the accepted range being betwee
 
 ```yaml
 Type: TimeSpan
-Parameter Sets: EntraIDNew
+Parameter Sets: EntraIDNew, OktaNew
 Aliases: Timeout
 
 Required: False
@@ -103,8 +101,8 @@ Accept wildcard characters: False
 The passkey to be registered.
 
 ```yaml
-Type: DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse or DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse
-Parameter Sets: OktaExisting, EntraIDExisting
+Type: WebauthnAttestationResponse
+Parameter Sets: Existing
 Aliases:
 
 Required: True
@@ -113,14 +111,21 @@ Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
+<<<<<<< HEAD
 ### -Tenant
 The unique identifier of the Okta tenant.
+=======
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+>>>>>>> 4ac6f7f (Add Microsoft.Identity.Client)
 
 ```yaml
-Type: String
-Parameter Sets: OktaNew, OktaExisting
-Aliases:
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
+<<<<<<< HEAD
 Required: True
 Position: Named
 Default value: None
@@ -137,6 +142,9 @@ Parameter Sets: OktaNew, OktaExisting
 Aliases:
 
 Required: True
+=======
+Required: False
+>>>>>>> 4ac6f7f (Add Microsoft.Identity.Client)
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -160,24 +168,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
-### DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse
-
-OR
-
-### DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse
 
 ## OUTPUTS
 
-### Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod
-
-OR
-
 ### DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod
-
+### Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod
 ## NOTES
 For the Okta token, you should not use SSWS but instead use a bearer token.
 
 ## RELATED LINKS
+
 More info for Entra ID at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
 More info for Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor

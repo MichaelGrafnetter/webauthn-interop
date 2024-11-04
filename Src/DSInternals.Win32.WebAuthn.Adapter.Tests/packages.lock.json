@@ -135,6 +135,20 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
       },
+      "Microsoft.Identity.Client": {
+        "type": "Transitive",
+        "resolved": "4.66.1",
+        "contentHash": "mE+m3pZ7zSKocSubKXxwZcUrCzLflC86IdLxrVjS8tialy0b1L+aECBqRBC/ykcPlB4y7skg49TaTiA+O2UfDw==",
+        "dependencies": {
+          "Microsoft.IdentityModel.Abstractions": "6.35.0",
+          "System.Diagnostics.DiagnosticSource": "6.0.1"
+        }
+      },
+      "Microsoft.IdentityModel.Abstractions": {
+        "type": "Transitive",
+        "resolved": "6.35.0",
+        "contentHash": "xuR8E4Rd96M41CnUSCiOJ2DBh+z+zQSmyrYHdYhD6K4fXBcQGVnRCFQ0efROUYpP+p0zC1BLKr0JRpVuujTZSg=="
+      },
       "Microsoft.IdentityModel.JsonWebTokens": {
         "type": "Transitive",
         "resolved": "6.17.0",
@@ -251,8 +265,8 @@
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "frQDfv0rl209cKm1lnwTgFPzNigy2EKk1BS3uAvHvlBVKe5cymGyHO+Sj+NLv5VF/AhHsqPIUUwya5oV4CHMUw==",
+        "resolved": "6.0.1",
+        "contentHash": "KiLYDu2k2J82Q9BJpWiuQqCkFjRBWVq4jDzKKWawVi9KWzyD0XG3cmfX0vqTQlL14Wi9EufJrbL0+KCLTbqWiQ==",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
@@ -310,6 +324,7 @@
       "dsinternals.win32.webauthn": {
         "type": "Project",
         "dependencies": {
+          "Microsoft.Identity.Client": "[4.66.1, )",
           "PeterO.Cbor": "[4.5.3, )",
           "System.Security.Cryptography.Cng": "[5.0.0, )",
           "System.Text.Json": "[8.0.5, )"
@@ -318,7 +333,7 @@
       "dsinternals.win32.webauthn.adapter": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Win32.WebAuthn": "[1.0.3, )",
+          "DSInternals.Win32.WebAuthn": "[1.0.4, )",
           "Fido2.Models": "[3.0.1, )",
           "PeterO.Cbor": "[4.5.3, )",
           "System.Security.Cryptography.Cng": "[5.0.0, )"

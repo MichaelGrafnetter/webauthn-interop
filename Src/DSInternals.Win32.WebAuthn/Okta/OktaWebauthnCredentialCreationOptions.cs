@@ -15,7 +15,7 @@ namespace DSInternals.Win32.WebAuthn.Okta
     /// <summary>
     /// 
     /// </summary>
-    public class OktaWebauthnCredentialCreationOptions
+    public class OktaWebauthnCredentialCreationOptions : WebauthnCredentialCreationOptions
     {
         /// <summary>
         /// The factor id of the Okta factor being registered.
@@ -29,7 +29,7 @@ namespace DSInternals.Win32.WebAuthn.Okta
         [JsonPropertyName("_embedded")]
         public Embedded Embedded { get; set; }
 
-        public PublicKeyCredentialCreationOptions PublicKeyOptions => Embedded.PublicKeyOptions;
+        public override PublicKeyCredentialCreationOptions PublicKeyOptions { get => Embedded.PublicKeyOptions; set { }}
 
         public static OktaWebauthnCredentialCreationOptions Create(string json)
         {

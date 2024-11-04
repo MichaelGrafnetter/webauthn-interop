@@ -8,7 +8,7 @@ namespace DSInternals.Win32.WebAuthn.EntraID
     /// 
     /// </summary>
     /// <remarks>OData Object: https://graph.microsoft.com/beta/$metadata#microsoft.graph.webauthnCredentialCreationOptions</remarks>
-    public class MicrosoftGraphWebauthnCredentialCreationOptions
+    public class MicrosoftGraphWebauthnCredentialCreationOptions : WebauthnCredentialCreationOptions
     {
         /// <summary>
         /// Defines when the challenge in the creation options is no longer valid.
@@ -20,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.EntraID
         /// Defines public key options for the creation of a new WebAuthn public key credential.
         /// </summary>
         [JsonPropertyName("publicKey")]
-        public PublicKeyCredentialCreationOptions PublicKeyOptions { get; set; }
+        public override PublicKeyCredentialCreationOptions PublicKeyOptions { get; set;  }
 
         public static MicrosoftGraphWebauthnCredentialCreationOptions Create(string json)
         {

@@ -12,15 +12,12 @@ Retrieves creation options required to generate and register a Microsoft Entra I
 
 ## SYNTAX
 
-### EntraID (Default)
 ```
-Get-PasskeyRegistrationOptions -UserId <String> [-ChallengeTimeout <TimeSpan>]
+Get-PasskeyRegistrationOptions [-UserId] <String> [[-ChallengeTimeout] <TimeSpan>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Okta
-```
-Get-PasskeyRegistrationOptions -Tenant <String> -UserId <String> [-ChallengeTimeout <TimeSpan>] -Token <String>
-```
+## DESCRIPTION
 
 ## EXAMPLES
 
@@ -59,35 +56,21 @@ Parameter Sets: (All)
 Aliases: Timeout
 
 Required: False
-Position: Named
+Position: 2
 Default value: (New-TimeSpan -Minutes 5)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-### -Tenant
-The unique identifier of the Okta tenant.
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: String
-Parameter Sets: Okta
-Aliases:
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Token
-The SSWS or Bearer token from Okta with okta.users.manage permissions. You should uee a bearer token. 
-
-```yaml
-Type: String
-Parameter Sets: Okta
-Aliases:
-
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -105,26 +88,25 @@ Parameter Sets: (All)
 Aliases: User
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ## OUTPUTS
 
-### DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions
-
-OR
-
-### DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions
-
+### DSInternals.Win32.WebAuthn.WebauthnCredentialCreationOptions
 ## NOTES
 Self-service operations aren't supported.
 For the Okta token, you should not use SSWS but instead use a bearer token.
 
 ## RELATED LINKS
+
 More info about Entra ID at https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
 More info about Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor

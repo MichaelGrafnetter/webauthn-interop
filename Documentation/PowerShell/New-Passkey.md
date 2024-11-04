@@ -13,7 +13,8 @@ Creates a new Microsoft Entra ID or Okta compatible passkey.
 ## SYNTAX
 
 ```
-New-Passkey [-Options] <MicrosoftGraphWebauthnCredentialCreationOptions or OktaWebauthnCredentialCreationOptions> [[-DisplayName] <String>]
+New-Passkey [-Options] <WebauthnCredentialCreationOptions> [[-DisplayName] <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -44,10 +45,10 @@ Custom name given to the Entra ID registered passkey.
 
 ```yaml
 Type: String
-Parameter Sets: (EntraID)
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 2
 Default value: None
 Accept pipeline input: False
@@ -58,7 +59,7 @@ Accept wildcard characters: False
 Options required to generate a Microsoft Entra ID or Okta compatible passkey.
 
 ```yaml
-Type: MicrosoftGraphWebauthnCredentialCreationOptions or OktaWebauthnCredentialCreationOptions
+Type: WebauthnCredentialCreationOptions
 Parameter Sets: (All)
 Aliases:
 
@@ -69,20 +70,31 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
-### DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions
-
-OR
-
-### DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions
 
 ## OUTPUTS
-### DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse
 
-OR
-
-### DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse
+### DSInternals.Win32.WebAuthn.WebauthnAttestationResponse
 ## NOTES
 
 ## RELATED LINKS
+
 https://learn.microsoft.com/en-us/windows/win32/webauthn/-webauthn-portal

@@ -3,13 +3,13 @@ using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn.Okta
 {
-    public class OktaWebauthnAttestationResponse
+    public class OktaWebauthnAttestationResponse : WebauthnAttestationResponse
     {
         /// <summary>
         /// Contains the WebAuthn public key credential information being registered.
         /// </summary>
         [JsonIgnore]
-        public PublicKeyCredential PublicKeyCredential { get; set; }
+        public override PublicKeyCredential PublicKeyCred { get; set; }
 
         /// <summary>
         /// ID of an existing Okta user.
@@ -28,18 +28,18 @@ namespace DSInternals.Win32.WebAuthn.Okta
         /// </summary>
         [JsonPropertyName("attestation")]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] Attestation => PublicKeyCredential.AuthenticatorResponse.AttestationObject;
+        public byte[] Attestation => PublicKeyCred.AuthenticatorResponse.AttestationObject;
 
         /// <summary>
         /// ID of an existing user Factor.
         /// </summary>
         [JsonPropertyName("clientData")]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] ClientData => PublicKeyCredential.AuthenticatorResponse.ClientDataJson;
+        public byte[] ClientData => PublicKeyCred.AuthenticatorResponse.ClientDataJson;
 
         public OktaWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, byte[] userId, string factorId)
         {
-            PublicKeyCredential = publicKeyCredential;
+            PublicKeyCred = publicKeyCredential;
             UserId = Base64UrlConverter.ToBase64UrlString(userId);
             FactorId = factorId;
         }
