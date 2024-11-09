@@ -68,6 +68,7 @@ function Get-OktaPasskeyRegistrationOptions
     [OutputType([DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions])]
     param(
     [Parameter(Mandatory = $true)]
+    [ValidatePattern("^[A-Za-z0-9_-]{20}$")]
     [Alias('User')]
     [string] $UserId,
 
@@ -118,6 +119,8 @@ function Get-OktaPasskeyRegistrationOptions
                 provider = "FIDO"
             }
             $body = $body | ConvertTo-Json
+
+            Write-Debug ('Credential options payload: ' + $body)
 
             [string] $response = Invoke-WebRequest -Uri $credentialOptionsUrl `
                         -Method Post `
@@ -171,7 +174,7 @@ PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
 PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60)
 
 .NOTES
-Self-service operations aren't supported.
+Self-service operations aren't supported for Entra ID.
 More info about Entra ID at https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
 More info about Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
 
@@ -182,6 +185,11 @@ function Get-PasskeyRegistrationOptions
     param(
         [Parameter(Mandatory = $true)]
         [Alias('User')]
+        [ValidateScript({
+            if ($_ -match "^[A-Za-z0-9_-]{20}$" -or $true -eq [guid]::TryParse($_, $([ref][guid]::Empty)) -or $_ -match "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
+                {return $true}
+                return $false
+        })]
         [string] $UserId,
 
         [Parameter(Mandatory = $false)]
@@ -209,6 +217,9 @@ function Get-PasskeyRegistrationOptions
             }
             if ($UserId -notmatch "^[A-Za-z0-9_-]{20}$") {
                 Write-Error "Cannot validate argument on parameter 'UserID' which must the unique idenitier for the user for Okta." -ErrorAction Stop
+            }
+            if ($null -eq $Script:OktaToken) {
+                throw 'Not connected to Okta, call Connnect-Okta to get started.'
             }
         }
     }
@@ -414,6 +425,9 @@ function Register-Passkey
                 
                 ([DSInternals.Win32.WebAuthn.OKta.OktaWebauthnAttestationResponse])
                 {
+                    if ($null -eq $Script:OktaToken) {
+                        throw 'Not connected to Okta, call Connnect-Okta to get started.'
+                    }
                     return Register-OktaPasskey -UserId $UserId -Passkey $Passkey
                 }
             }
@@ -516,22 +530,43 @@ function Get-MgGraphEndpoint
     }
 }
 
+<#
+.SYNOPSIS
+Retrieves an access token to interact with Okta APIs.
+
+.PARAMETER Tenant
+The unique identifier of Okta tenant, like 'example.okta.com'.
+
+.PARAMETER ClientId
+The client id of the Okta application used to obtain an access token.
+
+.PARAMETER Scopes
+Scopes to request for the access token.  Defaults to 'okta.users.manage'.
+
+.PARAMETER JsonWebKey
+The JSON Web Key used to authenticate to the Okta application, in order to obtain access token using the client credentials OAuth flow.
+
+#>
+
 function Connect-Okta
 {
     param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ClientCredentials')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AuthorizationCode')]
         [ValidatePattern('^[a-zA-Z0-9-]+\.okta(?:-emea|preview|\.mil)?\.com$')]
         [string] $Tenant,
 
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientCredentials')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'AuthorizationCode')]
         [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
         [string]
         $ClientId,
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'ClientCredentials')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'AuthorizationCode')]
         [string[]] $Scopes = @('okta.users.manage'),
 
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientCredentials')]
         [ValidateNotNullOrEmpty]
         [Alias('jwk')]
         [string]

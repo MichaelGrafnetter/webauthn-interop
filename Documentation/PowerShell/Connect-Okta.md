@@ -12,9 +12,16 @@ schema: 2.0.0
 
 ## SYNTAX
 
+### AuthorizationCode
 ```
-Connect-Okta [-Tenant] <String> [-ClientId] <String> [[-Scopes] <String[]>]
- [[-JsonWebKey] <ValidateNotNullOrEmptyAttribute>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Connect-Okta -Tenant <String> -ClientId <String> [-Scopes <String[]>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
+```
+
+### ClientCredentials
+```
+Connect-Okta -Tenant <String> -ClientId <String> [-Scopes <String[]>]
+ -JsonWebKey <ValidateNotNullOrEmptyAttribute> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,7 +47,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -51,11 +58,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: ValidateNotNullOrEmptyAttribute
-Parameter Sets: (All)
+Parameter Sets: ClientCredentials
 Aliases: jwk
 
-Required: False
-Position: 3
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -85,7 +92,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -100,7 +107,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -111,13 +118,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
-
-### System.Management.Automation.ValidateNotNullOrEmptyAttribute
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
