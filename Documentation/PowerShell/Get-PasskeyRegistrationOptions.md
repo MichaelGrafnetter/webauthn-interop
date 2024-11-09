@@ -108,5 +108,5 @@ For the Okta token, you should not use SSWS but instead use a bearer token.
 
 ## RELATED LINKS
 
-More info about Entra ID at https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
-More info about Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
+[More info about Entra ID](https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions)
+[More info about Okta](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor)

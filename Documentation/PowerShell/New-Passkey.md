@@ -97,4 +97,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-https://learn.microsoft.com/en-us/windows/win32/webauthn/-webauthn-portal
+[Microsoft WebAuthn portal](https://learn.microsoft.com/en-us/windows/win32/webauthn/-webauthn-portal)

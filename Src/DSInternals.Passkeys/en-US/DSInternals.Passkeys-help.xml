@@ -2,6 +2,163 @@
 <helpItems schema="maml" xmlns="http://msh">
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Connect-Okta</command:name>
+      <command:verb>Connect</command:verb>
+      <command:noun>Okta</command:noun>
+      <maml:description>
+        <maml:para>{{ Fill in the Synopsis }}</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>{{ Fill in the Description }}</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Connect-Okta</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>ClientId</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ClientId Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="jwk">
+          <maml:name>JsonWebKey</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill JsonWebKey Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ValidateNotNullOrEmptyAttribute</command:parameterValue>
+          <dev:type>
+            <maml:name>ValidateNotNullOrEmptyAttribute</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Scopes</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Scopes Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Tenant</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Tenant Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>ClientId</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ClientId Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="jwk">
+        <maml:name>JsonWebKey</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill JsonWebKey Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ValidateNotNullOrEmptyAttribute</command:parameterValue>
+        <dev:type>
+          <maml:name>ValidateNotNullOrEmptyAttribute</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Scopes</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill Scopes Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Tenant</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill Tenant Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:remarks>
+          <maml:para>{{ Add example description here }}</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Get-PasskeyRegistrationOptions</command:name>
       <command:verb>Get</command:verb>
       <command:noun>PasskeyRegistrationOptions</command:noun>
@@ -10,15 +167,27 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{ Fill in the Description }}</maml:para>
+      <maml:para></maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-PasskeyRegistrationOptions</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of user.  For Entra ID, this is the object id (GUID) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Timeout">
           <maml:name>ChallengeTimeout</maml:name>
           <maml:description>
-            <maml:para>Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 second, with the accepted range being between 1 second and 1 day.</maml:para>
+            <maml:para>Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 seconds, with the accepted range being between 1 second and 1 day.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
           <dev:type>
@@ -39,49 +208,13 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Tenant</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of Okta tenant.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Token</maml:name>
-          <maml:description>
-            <maml:para>The SSWS or Bearer token from Okta with okta.users.manage permissions.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
-          <maml:name>UserId</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Timeout">
         <maml:name>ChallengeTimeout</maml:name>
         <maml:description>
-          <maml:para>Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 second, with the accepted range being between 1 second and 1 day.</maml:para>
+          <maml:para>Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 seconds, with the accepted range being between 1 second and 1 day.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
         <dev:type>
@@ -102,34 +235,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Tenant</maml:name>
-        <maml:description>
-          <maml:para>The unique identifier of Okta tenant.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Token</maml:name>
-        <maml:description>
-          <maml:para>The SSWS or Bearer token from Okta with okta.users.manage permissions.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
         <maml:name>UserId</maml:name>
         <maml:description>
-          <maml:para>The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
+          <maml:para>The unique identifier of user.  For Entra ID, this is the object id (GUID) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -143,15 +252,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions</maml:name>
+          <maml:name>DSInternals.Win32.WebAuthn.WebauthnCredentialCreationOptions</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -160,42 +261,55 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Self-service operations aren't supported. More info about Entra ID at https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions More info about Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor</maml:para>
+        <maml:para>Self-service operations aren't supported. For the Okta token, you should not use SSWS but instead use a bearer token.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+        <maml:title>--------------------- EXAMPLE 1 (Entra ID) ---------------------</maml:title>
+        <dev:code>PS \&gt; Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com'</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+        <maml:title>--------------------- EXAMPLE 2 (Entra ID) ---------------------</maml:title>
+        <dev:code>PS \&gt; Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeTimeout (New-TimeSpan -Minutes 10)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token</dev:code>
+        <maml:title>----------------------- EXAMPLE 3 (Okta) -----------------------</maml:title>
+        <dev:code>PS \&gt; Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token</dev:code>
+        <maml:title>----------------------- EXAMPLE 4 (Okta) -----------------------</maml:title>
+        <dev:code>PS \&gt; Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyRegistrationOptions.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>More info about Entra ID</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>More info about Okta</maml:linkText>
+        <maml:uri>https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -207,7 +321,7 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeT
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{ Fill in the Description }}</maml:para>
+      <maml:para>Takes the MicrosoftGraphWebauthnCredentialCreationOptions or OktaWebauthnCredentialCreationOptions object from Get-PasskeyRegistrationOptions and uses them to create a credential using the system dialogs.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -217,9 +331,9 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeT
           <maml:description>
             <maml:para>Options required to generate a Microsoft Entra ID or Okta compatible passkey.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">WebauthnCredentialCreationOptions</command:parameterValue>
           <dev:type>
-            <maml:name>Object</maml:name>
+            <maml:name>WebauthnCredentialCreationOptions</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -268,9 +382,9 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeT
         <maml:description>
           <maml:para>Options required to generate a Microsoft Entra ID or Okta compatible passkey.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">WebauthnCredentialCreationOptions</command:parameterValue>
         <dev:type>
-          <maml:name>Object</maml:name>
+          <maml:name>WebauthnCredentialCreationOptions</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -289,7 +403,16 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeT
       </command:parameter>
     </command:parameters>
     <command:inputTypes />
-    <command:returnValues />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.WebauthnAttestationResponse</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
     <maml:alertSet>
       <maml:alert>
         <maml:para></maml:para>
@@ -297,58 +420,67 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeT
     </maml:alertSet>
     <command:examples>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+        <maml:title>--------------------- EXAMPLE 1 (Entra ID) ---------------------</maml:title>
+        <dev:code>PS \&gt; Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>New-Passkey -Options $options</dev:code>
+        <maml:title>----------------------- EXAMPLE 2 (Okta) -----------------------</maml:title>
+        <dev:code>PS \&gt; New-Passkey -Options $options</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey</dev:code>
+        <maml:title>----------------------- EXAMPLE 3 (Okta) -----------------------</maml:title>
+        <dev:code>PS \&gt; Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-Passkey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Microsoft WebAuthn portal</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/windows/win32/webauthn/-webauthn-portal</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Register-Passkey</command:name>
-      <command:verb>Register</command:verb>
+      <command:name>New-Passkey</command:name>
+      <command:verb>New</command:verb>
       <command:noun>Passkey</command:noun>
       <maml:description>
-        <maml:para>Registers a new passkey in Microsoft Entra ID, or Okta.</maml:para>
+        <maml:para>Creates a new Microsoft Entra ID or Okta compatible passkey.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{ Fill in the Description }}</maml:para>
+      <maml:para>Takes the MicrosoftGraphWebauthnCredentialCreationOptions or OktaWebauthnCredentialCreationOptions object from Get-PasskeyRegistrationOptions and uses them to create a credential using the system dialogs.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Register-Passkey</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
-          <maml:name>ChallengeTimeout</maml:name>
+        <maml:name>New-Passkey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+          <maml:name>Options</maml:name>
           <maml:description>
-            <maml:para>Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 second, with the accepted range being between 1 second and 1 day.</maml:para>
+            <maml:para>Options required to generate a Microsoft Entra ID or Okta compatible passkey.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">WebauthnCredentialCreationOptions</command:parameterValue>
           <dev:type>
-            <maml:name>TimeSpan</maml:name>
+            <maml:name>WebauthnCredentialCreationOptions</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>DisplayName</maml:name>
           <maml:description>
             <maml:para>Custom name given to the Entra ID registered passkey.</maml:para>
@@ -372,187 +504,10 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passk
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
-          <maml:name>UserId</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Register-Passkey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
-          <maml:name>Passkey</maml:name>
-          <maml:description>
-            <maml:para>The passkey to be registered.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
-          <dev:type>
-            <maml:name>Object</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
-          <maml:name>ProgressAction</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
-          <dev:type>
-            <maml:name>ActionPreference</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Tenant</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of Okta tenant.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Token</maml:name>
-          <maml:description>
-            <maml:para>The SSWS or Bearer token from Okta with okta.users.manage permissions.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
-          <maml:name>UserId</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Register-Passkey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
-          <maml:name>Passkey</maml:name>
-          <maml:description>
-            <maml:para>The passkey to be registered.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
-          <dev:type>
-            <maml:name>Object</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
-          <maml:name>ProgressAction</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
-          <dev:type>
-            <maml:name>ActionPreference</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
-          <maml:name>UserId</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Register-Passkey</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
-          <maml:name>ProgressAction</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
-          <dev:type>
-            <maml:name>ActionPreference</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Tenant</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of Okta tenant.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Token</maml:name>
-          <maml:description>
-            <maml:para>The SSWS or Bearer token from Okta with okta.users.manage permissions.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
-          <maml:name>UserId</maml:name>
-          <maml:description>
-            <maml:para>The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
-        <maml:name>ChallengeTimeout</maml:name>
-        <maml:description>
-          <maml:para>Overrides the timeout of the server-generated challenge returned in the request.  For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.  For Okta, the default value is 300 second, with the accepted range being between 1 second and 1 day.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
-        <dev:type>
-          <maml:name>TimeSpan</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>DisplayName</maml:name>
         <maml:description>
           <maml:para>Custom name given to the Entra ID registered passkey.</maml:para>
@@ -564,14 +519,14 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passk
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
-        <maml:name>Passkey</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+        <maml:name>Options</maml:name>
         <maml:description>
-          <maml:para>The passkey to be registered.</maml:para>
+          <maml:para>Options required to generate a Microsoft Entra ID or Okta compatible passkey.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">WebauthnCredentialCreationOptions</command:parameterValue>
         <dev:type>
-          <maml:name>Object</maml:name>
+          <maml:name>WebauthnCredentialCreationOptions</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -588,72 +543,12 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passk
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Tenant</maml:name>
-        <maml:description>
-          <maml:para>The unique identifier of Okta tenant.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Token</maml:name>
-        <maml:description>
-          <maml:para>The SSWS or Bearer token from Okta with okta.users.manage permissions.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
-        <maml:name>UserId</maml:name>
-        <maml:description>
-          <maml:para>The unique identifier of user.  For Entra ID, this is the object id (guid) or UPN.  For Okta, this is the unique identifier of Okta user.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
     </command:parameters>
     <command:inputTypes />
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod</maml:name>
+          <maml:name>DSInternals.Win32.WebAuthn.WebauthnAttestationResponse</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -662,49 +557,42 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passk
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>More info for Entra ID at https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods More info for Okta at https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \&gt; Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \&gt; Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+        <maml:title>--------------------- EXAMPLE 1 (Entra ID) ---------------------</maml:title>
+        <dev:code>PS \&gt; Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Register-Passkey -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token</dev:code>
+        <maml:title>----------------------- EXAMPLE 2 (Okta) -----------------------</maml:title>
+        <dev:code>PS \&gt; New-Passkey -Options $options</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
-        <dev:code>Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey | Register-Passkey -Tenant example.okta.com -Token your_okta_token</dev:code>
+        <maml:title>----------------------- EXAMPLE 3 (Okta) -----------------------</maml:title>
+        <dev:code>PS \&gt; Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-Passkey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Microsoft WebAuthn portal</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/windows/win32/webauthn/-webauthn-portal</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
 </helpItems>

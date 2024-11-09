@@ -168,9 +168,11 @@ PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeTimeout (New-TimeSpan -Minutes 10)
 
 .EXAMPLE
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
 
 .EXAMPLE
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60)
 
 .NOTES
@@ -378,9 +380,11 @@ PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
 PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
 
 .EXAMPLE
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 PS \> Register-Passkey -UserId 00eDuihq64pgP1gVD0x7 
 
 .EXAMPLE
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-Passkey 
 
 .NOTES
@@ -463,6 +467,7 @@ PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey 
 PS \> New-Passkey -Options $options
 
 .EXAMPLE
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey 
 
 #>
@@ -545,6 +550,16 @@ Scopes to request for the access token.  Defaults to 'okta.users.manage'.
 
 .PARAMETER JsonWebKey
 The JSON Web Key used to authenticate to the Okta application, in order to obtain access token using the client credentials OAuth flow.
+
+.EXAMPLE
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+
+.EXAMPLE
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else')
+
+.EXAMPLE
+PS \> $jwk = '{"kty":"RSA","kid":"EE3QB0WvhuOwR9DuR6717OERKbDrBemrDKOK4Xvbf8c","d":"TmljZSB0cnkhICBCdXQgdGhpcyBpc...'
+PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else') -JsonWebKey $jwk
 
 #>
 
