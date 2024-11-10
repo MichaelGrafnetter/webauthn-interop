@@ -90,7 +90,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.Win32.WebAuthn.WebauthnCredentialCreationOptions, which can be of type DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions or DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions depending on input values.
+### DSInternals.Win32.WebAuthn.WebauthnCredentialCreationOption
 
 ## NOTES
 Self-service operations aren't supported with Entra ID.
