@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-Passkey
 
 ## SYNOPSIS
-Creates a new Microsoft Entra ID or Okta compatible passkey.
+Creates a new Microsoft Entra ID or Okta-compatible passkey.
 
 ## SYNTAX
 
@@ -18,7 +18,7 @@ New-Passkey [-Options] <WebauthnCredentialCreationOptions> [[-DisplayName] <Stri
 ```
 
 ## DESCRIPTION
-Takes the MicrosoftGraphWebauthnCredentialCreationOptions or OktaWebauthnCredentialCreationOptions object from Get-PasskeyRegistrationOptions and uses them to create a credential using the system dialogs.
+Takes the `MicrosoftGraphWebauthnCredentialCreationOptions` or `OktaWebauthnCredentialCreationOptions` object from `Get-PasskeyRegistrationOptions` and uses them to create a credential using the system dialogs.
 
 ## EXAMPLES
 
@@ -30,12 +30,14 @@ PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey 
 
 ### EXAMPLE 2 (Okta)
 ```
+PS C:\> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 PS \> New-Passkey -Options $options
 ```
 
 ### EXAMPLE 3 (Okta)
 ```
-PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -Tenant example.okta.com -Token your_okta_token | New-Passkey
+PS C:\> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey
 ```
 
 ## PARAMETERS
@@ -70,25 +72,11 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+### DSInternals.Win32.WebAuthn.WebauthnCredentialCreationOptions
 
 ## OUTPUTS
 
