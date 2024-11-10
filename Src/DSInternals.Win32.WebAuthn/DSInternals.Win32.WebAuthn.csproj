@@ -50,6 +50,7 @@
     </PackageReference>
     <!-- TODO: Replace with System.Formats.Cbor -->
     <PackageReference Include="PeterO.Cbor" Version="4.5.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
     <!-- Note: Classes from this namespace are part of .NET Framework -->
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" Condition="'$(TargetFramework)' != 'net472' AND '$(TargetFramework)' != 'net48'" />
       <PackageReference Include="System.Text.Json" Version="8.0.5" />

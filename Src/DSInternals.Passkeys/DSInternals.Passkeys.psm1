@@ -3,17 +3,20 @@ if ($PSVersionTable.PSVersion.Major -ge 6) {
     # PowerShell Core
     Add-Type -Path "$PSScriptRoot/net6.0/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
     Add-Type -Path "$PSScriptRoot/net6.0/Microsoft.Identity.Client.dll" -ErrorAction Stop
+    Add-Type -Path "$PSScriptRoot/net6.0/System.IdentityModel.Tokens.Jwt.dll" -ErrorAction Stop
 }
 else {
     # PowerShell Desktop
     Add-Type -Path "$PSScriptRoot/net48/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
     Add-Type -Path "$PSScriptRoot/net48/Microsoft.Identity.Client.dll" -ErrorAction Stop
+    Add-Type -Path "$PSScriptRoot/net48/System.IdentityModel.Tokens.Jwt.dll" -ErrorAction Stop
 }
 
 # Needed for [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] type
 Import-Module Microsoft.Graph.Identity.SignIns -ErrorAction Stop
 
 New-Variable -Name OktaToken -Value $null -Scope Script
+New-Variable -Name OktaRevocationInfo -Value $null -Scope Script
 
 function Get-EntraIDPasskeyRegistrationOptions
 {
@@ -106,7 +109,7 @@ function Get-OktaPasskeyRegistrationOptions
 
             Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
 
-            $token_type = if ($Script:OktaToken.AccessToken -match "^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+$") { "Bearer" } else { "SSWS" }
+            $token_type = $Script:OktaToken.TokenType
             $AccessToken = $Script:OktaToken.AccessToken
 
             $headers = @{
@@ -319,15 +322,11 @@ function Register-OktaPasskey
             throw 'Not connected to Okta, call Connnect-Okta to get started.'
         }
     
-        $headers = @{
-            "Accept" = "application/json"
-            "Authorization" = "${token_type} ${AccessToken}"
-        }
         [string] $registrationUrl = 'https://{0}/api/v1/users/{1}/factors/{2}/lifecycle/activate' -f $Script:OktaToken.Account.Environment, $Passkey.UserId, $Passkey.FactorId
 
         Write-Debug ('Registration URL: ' + $registrationUrl)
 
-        $token_type = if ($Script:OktaToken.AccessToken -match "^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+$") { "Bearer" } else { "SSWS" }
+        $token_type = $Script:OktaToken.TokenType
         $AccessToken = $Script:OktaToken.AccessToken
 
         $headers = @{
@@ -470,6 +469,9 @@ PS \> New-Passkey -Options $options
 PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey 
 
+.INPUTS 
+DSInternals.Win32.WebAuthn.WebauthnCredentialCreationOptions
+
 #>
 function New-Passkey
 {
@@ -582,45 +584,61 @@ function Connect-Okta
         [string[]] $Scopes = @('okta.users.manage'),
 
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientCredentials')]
-        [ValidateNotNullOrEmpty]
         [Alias('jwk')]
         [string]
         $JsonWebKey
     )
 
     try {
-        if ($null -eq $JsonWebKey)
-        {
-            $publicClientApp = [Microsoft.Identity.Client.PublicClientApplicationBuilder]::Create($ClientId).
-                WithExperimentalFeatures().
-                WithOidcAuthority("https://${tenant}/").
-                WithRedirectUri("http://localhost:8080/login/callback").
-                Build()
-            
-            $Script:OktaToken = $publicClientApp.AcquireTokenInteractive($Scopes).ExecuteAsync().GetAwaiter().GetResult()
+        $Script:OktaRevocationInfo = [PSCustomObject] @{
+            ClientId = $ClientId
+            RevocationToken = $null
         }
-        else
-        {
-            $jwk = [Microsoft.IdentityModel.Tokens.JsonWebKey]::new($JsonWebKey)  
-            $signingCredentials = [Microsoft.IdentityModel.Tokens.SigningCredentials]::new($jwk,'RS256')
-            $issuer = $ClientId
-            $audience = "https://${tenant}/oauth2/v1/token"
-            $subject = [System.Security.Claims.ClaimsIdentity]::new()
-            $subject.Claims.Add([System.Security.Claims.Claim]::new('sub',$ClientId))
-            $notBefore = (Get-Date)
-            $expires = (Get-Date).AddMinutes(30)
-            $issuedAt = $notBefore
+        switch ($PSCmdlet.ParameterSetName){
+            'AuthorizationCode'
+            {
+                Write-Debug "No JWK found, assuming public client intended"
+                $publicClientApp = [Microsoft.Identity.Client.PublicClientApplicationBuilder]::Create($ClientId).
+                    WithExperimentalFeatures().
+                    WithOidcAuthority("https://${tenant}/").
+                    WithRedirectUri("http://localhost:8080/login/callback").
+                    Build()
+                
+                $Script:OktaToken = $publicClientApp.AcquireTokenInteractive($Scopes).ExecuteAsync().GetAwaiter().GetResult()
+                if ($null -ne $Script:OktaToken)
+                {
+                    Write-Host 'Okta access token successfully retrieved.'
+                }
+            }
+            'ClientCredentials' 
+            {
+                Write-Debug "JWK found, assuming confidential client intended"
+                $jwk = [Microsoft.IdentityModel.Tokens.JsonWebKey]::new($JsonWebKey)  
+                $signingCredentials = [Microsoft.IdentityModel.Tokens.SigningCredentials]::new($jwk,'RS256')
+                $issuer = $ClientId
+                $audience = "https://${tenant}/oauth2/v1/token"
+                $subject = [System.Security.Claims.ClaimsIdentity]::new()
+                $subject.Claims.Add([System.Security.Claims.Claim]::new('sub',$ClientId))
+                $notBefore = (Get-Date)
+                $expires = (Get-Date).AddMinutes(60)
+                $issuedAt = $notBefore
 
-            $tokenHandler = [System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler]::new() 
-            $securityToken = $tokenHandler.CreateJwtSecurityToken($issuer, $audience, $subject, $notBefore, $expires, $issuedAt, $signingCredentials)
-            $assertion = $tokenHandler.WriteToken($securityToken)
-            $confidentialClientApp = [Microsoft.Identity.Client.ConfidentialClientApplicationBuilder]::Create($ClientId).
-                WithRedirectUri("http://localhost:8080/login/callback").
-                WithClientAssertion($assertion).
-                WithOidcAuthority("https://${tenant}").
-                Build()
+                $tokenHandler = [System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler]::new() 
+                $securityToken = $tokenHandler.CreateJwtSecurityToken($issuer, $audience, $subject, $notBefore, $expires, $issuedAt, $signingCredentials)
+                $revocationToken = $tokenHandler.CreateJwtSecurityToken($issuer, "https://${tenant}/oauth2/v1/revoke", $subject, $notBefore, $expires, $issuedAt, $signingCredentials)
+                $assertion = $tokenHandler.WriteToken($securityToken)
+                $Script:OktaRevocationInfo.RevocationToken = $tokenHandler.WriteToken($revocationToken)
+                $confidentialClientApp = [Microsoft.Identity.Client.ConfidentialClientApplicationBuilder]::Create($ClientId).
+                    WithClientAssertion($assertion).
+                    WithOidcAuthority("https://${tenant}").
+                    Build()
 
-            $Script:OktaToken = $confidentialClientApp.AcquireTokenForClient($Scopes).ExecuteAsync().GetAwaiter().GetResult()
+                $Script:OktaToken = $confidentialClientApp.AcquireTokenForClient($Scopes).ExecuteAsync().GetAwaiter().GetResult()
+                if ($null -ne $Script:OktaToken -and $null -ne $Script:OktaRevocationInfo.RevocationToken)
+                {
+                    Write-Host 'Okta access and revocation tokens successfully retrieved.'
+                }
+            }
         }
     }
     catch {
@@ -628,7 +646,65 @@ function Connect-Okta
      }
 }
 
+<#
+.SYNOPSIS
+Revokes Okta access token.
+
+.EXAMPLE
+PS \> Disconnect-Okta
+
+.DESCRIPTION
+Revokes the Okta access token cached from the call to `Connect-Okta`.
+
+.LINK
+https://developer.okta.com/docs/guides/revoke-tokens/main/
+
+#>
+function Disconnect-Okta
+{
+    if ($null -ne $Script:OktaToken)
+    {
+        $tenant = ([System.UriBuilder]($Script:OktaToken.AuthenticationResultMetadata.TokenEndpoint)).Host
+        
+        [string] $revocationUrl = 'https://{0}/oauth2/v1/revoke' -f $tenant
+
+        Write-Debug ('Revocation URL: ' + $revocationUrl)
+
+        $headers = @{
+            "Accept" = "application/json"
+        }
+        
+        $body = @{
+            client_id = $Script:OktaRevocationInfo.ClientId
+            token = $Script:OktaToken.AccessToken
+            token_type_hint = "access_token"
+        }
+
+        if ($null -ne $Script:OktaRevocationInfo.RevocationToken)
+        {
+            $body.Add('client_assertion_type',"urn:ietf:params:oauth:client-assertion-type:jwt-bearer")
+            $body.Add('client_assertion',$Script:OktaRevocationInfo.RevocationToken)
+        }
+
+        Write-Debug ('Revocation payload: ' + ($body | ConvertTo-Json))
+
+        [string] $response = Invoke-WebRequest -Uri $revocationUrl `
+                    -Method Post `
+                    -Headers $headers `
+                    -ContentType "application/x-www-form-urlencoded" `
+                    -Body $body
+
+        $Script:OktaToken = $null
+        $Script:OktaRevocationInfo.RevocationToken = $null
+
+        if ($response.Length -eq 0 -and $null -eq $Script:OktaToken)
+        {
+            Write-Host 'Okta access token successfully revoked.'
+        }
+    }
+}
+
 New-Alias -Name Register-MgUserAuthenticationFido2Method -Value Register-Passkey
 
-Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','New-Passkey','Register-Passkey','Connect-Okta' `
+Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','New-Passkey','Register-Passkey','Connect-Okta','Disconnect-Okta' `
                     -Alias 'Register-MgUserAuthenticationFido2Method'
