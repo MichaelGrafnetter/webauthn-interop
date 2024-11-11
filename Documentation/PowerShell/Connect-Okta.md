@@ -99,9 +99,12 @@ PS C:\> $jwk = @'
 ```
 On the Okta API Scopes tab, scroll down to the okta.users.manage scope and click the `Grant` button to the right of the scope name.  This is the minimal permission required to use this library, since the whole point of the library is to register a passkey on behalf of someone else.  This scope allows the app to create new users and to manage all users' profile and credentials information. Okta API scopes should look approximately like this:
 <br><br>
-<img width="506" alt="Okta API scopes: okta.users.manage" src="https://github.com/user-attachments/assets/434bdeb4-fe12-4578-b1c6-dc5f313936f6">
+Okta API scopes: okta.users.manage" src="https://github.com/user-attachments/assets/434bdeb4-fe12-4578-b1c6-dc5f313936f6">
 <br><br>
-
+On the Admin roles tab, you will need to assign an admin role to this app. The `Help Desk Administrator` role seems to work well for this module.
+<br><br>
+<img width="506" alt="Admin assignment help desk administrator role" src="https://github.com/user-attachments/assets/8ffb2acb-67cb-4cb4-9aef-6747540a0fdd">
+<br>
 ## EXAMPLES
 
 ### Example 1
