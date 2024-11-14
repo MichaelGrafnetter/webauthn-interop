@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.5] - 2024-11-14
+
+### Fixed
+
+- Resolved a bug which prevented the `DeletePlatformCredential()` method from working. (Thanks @aseigler for reporting it.)
+- Upgraded System.Text.Json to mitigate [CVE-2024-43485](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-43485).
+
 ## [1.0.4] - 2024-10-06
 
 ### Added
@@ -34,7 +41,8 @@ All notable changes to this project will be documented in this file. The format 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.5...HEAD
+[1.0.4]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0...v1.0.2
