@@ -56,7 +56,7 @@ The samples are not ready for production use, as they are missing validation and
 
 ### Registration (Attestation)
 
-Credential registration is performed by calling the [AuthenticatorMakeCredential](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorMakeCredential.md) or [AuthenticatorMakeCredentialAsync](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorMakeCredentialAsync.md) method:
+Credential registration is performed by calling the [AuthenticatorMakeCredential](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) or [AuthenticatorMakeCredentialAsync](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) method:
 
 ```cs
 var rp = new RelyingPartyInformation()
@@ -80,15 +80,13 @@ var response = api.AuthenticatorMakeCredential(rp, user, challenge, UserVerifica
 
 ### Authentication (Assertion)
 
-Authentication using a previously registered credential is performed by calling the [AuthenticatorGetAssertion](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorGetAssertion.md) or [AuthenticatorGetAssertionAsync](../Documentation/API/DSInternals.Win32.WebAuthn/WebAuthnApi/AuthenticatorGetAssertionAsync.md) method:
+Authentication using a previously registered credential is performed by calling the [AuthenticatorGetAssertion](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) or [AuthenticatorGetAssertionAsync](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) method:
 
 ```cs
 var api = new WebAuthnApi();
 var challenge = new byte[] { 0, 1, 2, 3 };
 var response = api.AuthenticatorGetAssertion("login.microsoft.com", challenge, UserVerificationRequirement.Required, AuthenticatorAttachment.CrossPlatform);
 ```
-
-See the [full API documentation](../Documentation/API/DSInternals.Win32.WebAuthn.md) for more information on using this library.
 
 ## Troubleshooting
 
