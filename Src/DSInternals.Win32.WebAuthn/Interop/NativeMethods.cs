@@ -152,7 +152,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNDeletePlatformCredential")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult DeletePlatformCredential(int credentialIdLength, in byte[] credentialId);
+        public static extern HResult DeletePlatformCredential(int credentialIdLength, byte[] credentialId);
 
 
         /// <summary>

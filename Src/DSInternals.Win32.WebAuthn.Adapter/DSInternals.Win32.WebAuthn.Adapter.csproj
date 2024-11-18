@@ -6,12 +6,13 @@
     <PackageId>DSInternals.Win32.WebAuthn.Adapter</PackageId>
     <Product>WebAuthn Interop Assembly Adapter</Product>
     <Title>WebAuthn Interop Assembly Adapter</Title>
-    <Version>1.0.4</Version>
-    <AssemblyVersion>1.0.4</AssemblyVersion>
-    <ProductVersion>1.0.4</ProductVersion>
-    <FileVersion>1.0.4</FileVersion>
+    <Version>1.0.5</Version>
+    <AssemblyVersion>1.0.5</AssemblyVersion>
+    <ProductVersion>1.0.5</ProductVersion>
+    <FileVersion>1.0.5</FileVersion>
     <Description>Bridge between Fido2.Models and DSInternals.Win32.WebAuthn packages</Description>
-    <PackageReleaseNotes>- Added EdDSA support.
+    <PackageReleaseNotes>- Resolved a bug which prevented the DeletePlatformCredential() method from working.
+- Upgraded System.Text.Json to mitigate CVE-2024-43485.
 - Windows 10 1903 or newer is required.</PackageReleaseNotes>
   </PropertyGroup>
 
