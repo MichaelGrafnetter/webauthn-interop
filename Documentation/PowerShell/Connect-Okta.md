@@ -25,7 +25,7 @@ Connect-Okta -Tenant <String> -ClientId <String> [-Scopes <String[]>]
 ```
 
 ## DESCRIPTION
-In order to use this module with Okta, you will need to create an application within your Okta tenant.  You may use the authorization code flow with PKCE (highly recommended for interactive login), or the client credentials flow (for headless use).  If you are unsure which to choose, select the authentication flow, as it is the most secure option.
+In order to use this module with Okta, you will need to create an application within your Okta tenant.  You may use the authorization code flow with PKCE (highly recommended for interactive login), or the client credentials flow (for headless use).  If you are unsure which to choose, select the authorization code flow, as it is the most secure option.
 
 ### Setup to use the authorization code flow with PKCE
 To use the authorization code flow, you will need to create a Single Page App (SPA).  In the application area in the Okta admin console, click `Create App Integration`, then select `OIDC - OpenID Connect` for the sign-in method, then `Single-Page Application` for the application type, and click next. Note:  This process is nearly identical to [User-based API access setup](https://developer.okta.com/docs/reference/rest/#user-based-api-access-setup) in the Okta developer documentation.
