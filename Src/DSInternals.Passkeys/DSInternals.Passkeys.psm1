@@ -8,6 +8,9 @@ else {
     Add-Type -Path "$PSScriptRoot/net48/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
 }
 
+# Needed for [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] type
+Import-Module Microsoft.Graph.Identity.SignIns -ErrorAction Stop
+
 <#
 .SYNOPSIS
 Retrieves creation options required to generate and register a Microsoft Entra ID-compatible passkey.
@@ -47,7 +50,7 @@ function Get-PasskeyRegistrationOptions
     )
     try {
         # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods/creationOptions
-        [string] $credentialOptionsUrl = '{0}/beta/users/{1}/authentication/fido2Methods/creationOptions' -f (Get-MgGraphEndpoint), [uri]::EscapeDataString($UserId)
+        [string] $credentialOptionsUrl = '/beta/users/{0}/authentication/fido2Methods/creationOptions' -f [uri]::EscapeDataString($UserId)
 
         [string] $response = Invoke-MgGraphRequest -Method GET `
                                                 -Uri $credentialOptionsUrl `
@@ -122,10 +125,8 @@ function Register-Passkey
         # TODO: Write-Error
         switch ($PSCmdlet.ParameterSetName) {
             'Existing' {
-                [string] $endpoint = Get-MgGraphEndpoint
-
                 # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods
-                [string] $registrationUrl = '{0}/beta/users/{1}/authentication/fido2Methods' -f $endpoint, [uri]::EscapeDataString($UserId)
+                [string] $registrationUrl = '/beta/users/{0}/authentication/fido2Methods' -f [uri]::EscapeDataString($UserId)
 
                 [string] $response = Invoke-MgGraphRequest `
                                         -Method POST `
@@ -189,31 +190,6 @@ function New-Passkey
             # TODO: PS Error Record (Write-Error)
             throw
         }
-    }
-}
-
-<#
-.SYNOPSIS
-Retrieves the Microsoft Graph endpoint URL.
-
-.NOTES
-Dynamic URL retrieval is used to support Azure environments, like Azure Public, Azure Government, or Azure China.
-
-#>
-function Get-MgGraphEndpoint
-{
-    [CmdletBinding()]
-    [OutputType([string])]
-    param()
-
-    [Microsoft.Graph.PowerShell.Authentication.AuthContext] $context = Get-MgContext -ErrorAction Stop
-
-    if($null -ne $context) {
-        return (Get-MgEnvironment -Name $context.Environment -ErrorAction Stop).GraphEndpoint
-    }
-    else {
-        # TODO: PS Error Record ($PSCmdlet.ThrowTerminatingError())
-        throw 'Not connected to Microsoft Graph.'
     }
 }
 
