@@ -46,7 +46,7 @@ function Get-EntraIDPasskeyRegistrationOptions
     try {
         Write-Debug "UserId ${UserId} TokenLifetimeSeconds ${ChallengeTimeout}"
         # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods/creationOptions
-        [string] $credentialOptionsUrl = '{0}/beta/users/{1}/authentication/fido2Methods/creationOptions' -f (Get-MgGraphEndpoint), [uri]::EscapeDataString($UserId)
+        [string] $credentialOptionsUrl = '/beta/users/{0}/authentication/fido2Methods/creationOptions' -f [uri]::EscapeDataString($UserId)
 
         Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
 
@@ -63,6 +63,48 @@ function Get-EntraIDPasskeyRegistrationOptions
     catch {
         throw $_
     }
+}
+
+function Invoke-OktaWebRequest
+{
+    param(
+        $Path,
+        $Query,
+        $Method = [Microsoft.PowerShell.Commands.WebRequestMethod]::Post,
+        $Body,
+        $ContentType = "application/json"
+    )
+
+    Write-Debug "Path ${Path}"
+    Write-Debug "Query ${Query}"
+    Write-Debug "Method ${Method}"
+    Write-Debug ('Body ' + ($Body | ConvertTo-Json))
+    Write-Debug "Content type ${ContentType}"
+
+    $tokenType = $Script:OktaToken.TokenType
+    $token = $Script:OktaToken.AccessToken
+    $headers = @{
+        "Accept" = "application/json"
+        "Authorization" = "${tokenType} ${token}"
+    }
+
+    $tenant = ([System.UriBuilder]($Script:OktaToken.AuthenticationResultMetadata.TokenEndpoint)).Host
+    Write-Debug "Tenant ${Tenant}"
+
+    $uriBuilder = New-Object System.UriBuilder
+    $uriBuilder.Scheme = "https"
+    $uriBuilder.Host = $tenant
+    $uriBuilder.Path = $Path
+    $uriBuilder.Query = $Query
+
+    $uri = $uriBuilder.ToString()
+    Write-Debug "Uri ${uri}"
+
+    return Invoke-WebRequest -Uri $uri `
+    -Method $Method `
+    -Headers $headers `
+    -ContentType $ContentType `
+    -Body $Body
 }
 
 function Get-OktaPasskeyRegistrationOptions
@@ -99,36 +141,24 @@ function Get-OktaPasskeyRegistrationOptions
         {
             Write-Debug "In Get-OktaPasskeyRegistrationOptions with ${UserId} and ${ChallengeTimeout}"
 
-            $Tenant = ([System.UriBuilder]($Script:OktaToken.AuthenticationResultMetadata.TokenEndpoint)).Host
             $TokenLifetimeSeconds = $ChallengeTimeout.TotalSeconds
 
-            Write-Debug "Tenant ${Tenant} TokenLifetimeSeconds ${TokenLifetimeSeconds}"
+            Write-Debug "TokenLifetimeSeconds ${TokenLifetimeSeconds}"
 
-            [string] $credentialOptionsUrl = "https://${Tenant}/api/v1/users/${UserId}/factors?tokenLifetimeSeconds=${TokenLifetimeSeconds}&activate=true"
-
-            Write-Debug ('Credential options url: ' + $credentialOptionsUrl)
-
-            $token_type = $Script:OktaToken.TokenType
-            $AccessToken = $Script:OktaToken.AccessToken
-
-            $headers = @{
-                "Accept" = "application/json"
-                "Authorization" = "${token_type} ${AccessToken}"
-            }
-
-            Write-Debug ('Credential options headers: ' + ($headers | ConvertTo-Json))
+            [string] $credentialOptionsPath = "/api/v1/users/${UserId}/factors"
+            [string] $credentialOptionsQuery = "tokenLifetimeSeconds=${TokenLifetimeSeconds}&activate=true"
+            Write-Debug ('Credential options path: ' + $credentialOptionsPath)
+            Write-Debug ('Credential options query: ' + $credentialOptionsQuery)
 
             $body = @{
                 factorType = "webauthn"
                 provider = "FIDO"
             } | ConvertTo-Json -Compress
 
-            Write-Debug ('Credential options payload: ' + ($body | ConvertTo-Json))
+            Write-Debug ('Credential options payload: ' + $body)
 
-            [string] $response = Invoke-WebRequest -Uri $credentialOptionsUrl `
-                        -Method Post `
-                        -Headers $headers `
-                        -ContentType "application/json" `
+            [string] $response = Invoke-OktaWebRequest -Path $credentialOptionsPath `
+                        -Query $credentialOptionsQuery `
                         -Body $body
 
             Write-Debug ('Credential options response: ' + $response)
@@ -245,8 +275,8 @@ function Get-PasskeyRegistrationOptions
         }
         catch {
             $errorRecord = New-Object Management.Automation.ErrorRecord(
-                $_,
-                $_.Message,
+                $_.Exception,
+                $_.Exception.Message,
                 [Management.Automation.ErrorCategory]::InvalidArgument,
                 $Options
             )
@@ -279,10 +309,8 @@ function Register-EntraIDPasskey
     )
     try
     {
-        [string] $endpoint = Get-MgGraphEndpoint
-
         # Generate the user-specific URL, e.g., https://graph.microsoft.com/beta/users/af4cf208-16e0-429d-b574-2a09c5f30dea/authentication/fido2Methods
-        [string] $registrationUrl = '{0}/beta/users/{1}/authentication/fido2Methods' -f $endpoint, [uri]::EscapeDataString($UserId)
+        [string] $registrationUrl = '/beta/users/{0}/authentication/fido2Methods' -f [uri]::EscapeDataString($UserId)
 
         Write-Debug ('Registration URL: ' + $registrationUrl)
 
@@ -338,22 +366,13 @@ function Register-OktaPasskey
             throw 'Not connected to Okta, call Connnect-Okta to get started.'
         }
 
-        [string] $registrationUrl = 'https://{0}/api/v1/users/{1}/factors/{2}/lifecycle/activate' -f ([System.UriBuilder]($Script:OktaToken.AuthenticationResultMetadata.TokenEndpoint)).Host, $Passkey.UserId, $Passkey.FactorId
+        $userId = $Passkey.UserId
+        $factorId = $Passkey.FactorId
+        [string] $registrationPath = "/api/v1/users/${userId}/factors/${factorId}/lifecycle/activate"
 
-        Write-Debug ('Registration URL: ' + $registrationUrl)
+        Write-Debug ('Registration path: ' + $registrationPath)
 
-        $token_type = $Script:OktaToken.TokenType
-        $AccessToken = $Script:OktaToken.AccessToken
-
-        $headers = @{
-            "Accept" = "application/json"
-            "Authorization" = "${token_type} ${AccessToken}"
-        }
-
-        [string] $response = Invoke-WebRequest -Uri $registrationUrl `
-                    -Method Post `
-                    -Headers $headers `
-                    -ContentType "application/json" `
+        [string] $response = Invoke-OktaWebRequest -Path $registrationPath `
                     -Body $Passkey.ToString()
 
         Write-Debug ('Registration response: ' + $response)
@@ -505,6 +524,7 @@ function New-Passkey
         $Options,
 
         [Parameter(Mandatory = $false)]
+        [ValidateLength(1, 30)]
         [string] $DisplayName
     )
 
@@ -699,15 +719,9 @@ function Disconnect-Okta
 {
     if ($null -ne $Script:OktaToken)
     {
-        $tenant = ([System.UriBuilder]($Script:OktaToken.AuthenticationResultMetadata.TokenEndpoint)).Host
+        [string] $revocationPath = "/oauth2/v1/revoke"
 
-        [string] $revocationUrl = 'https://{0}/oauth2/v1/revoke' -f $tenant
-
-        Write-Debug ('Revocation URL: ' + $revocationUrl)
-
-        $headers = @{
-            "Accept" = "application/json"
-        }
+        Write-Debug ('Revocation path: ' + $revocationPath)
 
         $body = @{
             client_id = $Script:OktaRevocationInfo.ClientId
@@ -723,9 +737,7 @@ function Disconnect-Okta
 
         Write-Debug ('Revocation payload: ' + ($body | ConvertTo-Json))
 
-        [string] $response = Invoke-WebRequest -Uri $revocationUrl `
-                    -Method Post `
-                    -Headers $headers `
+        [string] $response = Invoke-OktaWebRequest -Uri $revocationPath `
                     -ContentType "application/x-www-form-urlencoded" `
                     -Body $body
 
@@ -741,5 +753,5 @@ function Disconnect-Okta
 
 New-Alias -Name Register-MgUserAuthenticationFido2Method -Value Register-Passkey
 
-Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','New-Passkey','Register-Passkey','Connect-Okta','Disconnect-Okta' `
+Export-ModuleMember -Function 'Get-PasskeyRegistrationOptions','New-Passkey','Register-Passkey','Connect-Okta','Disconnect-Okta','Invoke-OktaWebRequest' `
                     -Alias 'Register-MgUserAuthenticationFido2Method'

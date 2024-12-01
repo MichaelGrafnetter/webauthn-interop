@@ -1,8 +1,299 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Buffers;
+using System.Buffers.Binary;
+using System.Formats.Asn1;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Text.Json;
+using DSInternals.Win32.WebAuthn.EntraID;
+using DSInternals.Win32.WebAuthn.FIDO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PeterO.Cbor;
+using DSInternals.Win32.WebAuthn.Okta;
 
 namespace DSInternals.Win32.WebAuthn.Tests
 {
+    [TestClass]
+    public class PasskeyFactory
+    {
+        internal WebauthnCredentialCreationOptions _options;
+        internal CBORObject _attestationObject => CBORObject.NewMap().
+            Add("fmt", "packed").
+            Add("authData", _authData).
+            Add("attStmt", CBORObject.NewMap().
+                Add("alg", _alg).
+                Add("sig", _sig).
+                Add("x5c", _x5c)
+            );
+
+        internal COSE.Algorithm _alg;
+        internal COSE.KeyType _kty
+        {
+            get
+            {
+                return _alg switch
+                {
+                    COSE.Algorithm.RS1 or COSE.Algorithm.RS256 or COSE.Algorithm.RS384 or COSE.Algorithm.RS512 or COSE.Algorithm.PS256 or COSE.Algorithm.PS384 or COSE.Algorithm.PS512 => COSE.KeyType.RSA,
+                    COSE.Algorithm.ES256 or COSE.Algorithm.ES384 or COSE.Algorithm.ES512 => COSE.KeyType.EC2,
+                    COSE.Algorithm.EdDSA => COSE.KeyType.OKP,
+                    _ => throw new ArgumentOutOfRangeException(nameof(_alg)),
+                };
+            }
+        }
+        internal COSE.EllipticCurve _crv
+        {
+            get
+            {
+                return _alg switch
+                {
+                    COSE.Algorithm.ES256 => COSE.EllipticCurve.P256,
+                    COSE.Algorithm.ES384 => COSE.EllipticCurve.P384,
+                    COSE.Algorithm.ES512 => COSE.EllipticCurve.P521,
+                    _ => throw new ArgumentOutOfRangeException(nameof(_alg)),
+                };
+            }
+        }
+
+        internal RSASignaturePadding _padding
+        {
+            get
+            {
+                return _alg switch
+                {
+                    COSE.Algorithm.RS1 or COSE.Algorithm.RS256 or COSE.Algorithm.RS384 or COSE.Algorithm.RS512 => RSASignaturePadding.Pkcs1,
+                    COSE.Algorithm.PS256 or COSE.Algorithm.PS384 or COSE.Algorithm.PS512 => RSASignaturePadding.Pss,
+                    _ => throw new ArgumentOutOfRangeException(nameof(_alg)),
+                };
+            }
+        }
+
+        internal CredentialPublicKey _credentialPublicKey;
+
+        internal string _rp => _options.PublicKeyOptions.RelyingParty.Id;
+        internal string _origin => new UriBuilder("https", _options.PublicKeyOptions.RelyingParty.Id).ToString();
+        internal byte[] _challenge => _options.PublicKeyOptions.Challenge;
+        internal CertificateRequest _certReq;
+        internal static X500DistinguishedName _rootDN = new X500DistinguishedName("CN=Testing, O=DSInternals, OU=Passkeys, C=US");
+        internal static byte[] _asnEncodedAaguid = [0x04, 0x10, 0x44, 0x53, 0x49, 0x6E, 0x74, 0x65, 0x72, 0x6E, 0x61, 0x6C, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00,];
+        internal byte[] _sig;
+        internal CBORObject _x5c
+        {
+            get
+            {
+                _certReq.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, false));
+                _certReq.CertificateExtensions.Add(new X509Extension(new Oid("1.3.6.1.4.1.45724.1.1.4"), _asnEncodedAaguid, true));
+                using X509Certificate2 root = _certReq.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddDays(2));
+                return CBORObject.NewArray().Add(root.RawData);
+            }
+        }
+
+        internal byte[] _rpIdHash => SHA256.HashData(Encoding.UTF8.GetBytes(_rp));
+        internal byte[] _clientDataJson
+        {
+            get
+            {
+                return JsonSerializer.SerializeToUtf8Bytes(new CollectedClientData()
+                {
+                    Type = "webauthn.create",
+                    Challenge = _challenge,
+                    Origin = _origin
+                });
+            }
+        }
+
+        internal byte[] _clientDataHash => SHA256.HashData(_clientDataJson);
+
+        internal byte[] _attToBeSigned {
+            get
+            {
+                byte[] toBeSigned = new byte[_authData.Length + _clientDataHash.Length];
+                _authData.CopyTo(toBeSigned, 0);
+                _clientDataHash.CopyTo(toBeSigned, _authData.Length);
+                return toBeSigned;
+            }
+        }
+
+        internal static byte[] HashData(HashAlgorithmName hashName, ReadOnlySpan<byte> data)
+        {
+            return hashName.Name switch
+            {
+                "SHA1" => SHA1.HashData(data),
+                "SHA256" or "HS256" or "RS256" or "ES256" or "PS256" => SHA256.HashData(data),
+                "SHA384" or "HS384" or "RS384" or "ES384" or "PS384" => SHA384.HashData(data),
+                "SHA512" or "HS512" or "RS512" or "ES512" or "PS512" => SHA512.HashData(data),
+                _ => throw new ArgumentOutOfRangeException(nameof(hashName)),
+            };
+        }
+
+        internal byte[] _attToBeSignedHash(HashAlgorithmName alg)
+        {
+            return HashData(alg, _attToBeSigned);
+        }
+
+        internal byte[] _credentialID;
+        internal const AuthenticatorFlags _flags = AuthenticatorFlags.AttestationData | AuthenticatorFlags.ExtensionData | AuthenticatorFlags.UserPresent | AuthenticatorFlags.UserVerified;
+        internal ushort _signCount;
+        internal static byte[] _aaguid = [0x44, 0x53, 0x49, 0x6E, 0x74, 0x65, 0x72, 0x6E, 0x61, 0x6C, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00,];
+
+        internal byte[] _authData
+        {
+            get
+            {
+                var writer = new ArrayBufferWriter<byte>(512);
+                writer.Write(_rpIdHash);
+                writer.Write(stackalloc byte[1] { (byte)_flags });
+                var buffer = writer.GetSpan(4);
+                BinaryPrimitives.WriteUInt32BigEndian(buffer, _signCount);
+                writer.Advance(4);
+                writer.Write(_acd);
+                CBORObject exts = CBORObject.NewMap().Add("testing", true);
+                writer.Write(exts.EncodeToBytes());
+                return writer.WrittenSpan.ToArray();
+            }
+        }
+        internal byte[] _acd
+        {
+            get
+            {
+                var writer = new ArrayBufferWriter<byte>(16 + 2 + _credentialID.Length + _credentialPublicKey.GetBytes().Length);
+
+                writer.Write(_aaguid);
+
+                // Write the length of credential ID, as big endian bytes of a 16-bit unsigned integer
+                var credentialIDLen = (ushort)_credentialID.Length;
+                var credentialIDLenBytes = BitConverter.GetBytes(credentialIDLen);
+                if (BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(credentialIDLenBytes);
+                }
+
+                writer.Write(credentialIDLenBytes);
+                // Write CredentialID bytes
+                writer.Write(_credentialID);
+
+                // Write credential public key bytes
+                writer.Write(_credentialPublicKey.GetBytes());
+                return writer.WrittenSpan.ToArray();
+            }
+        }
+
+        internal static HashAlgorithmName HashAlgFromCOSEAlg(COSE.Algorithm alg)
+        {
+            return alg switch
+            {
+                COSE.Algorithm.RS1 => HashAlgorithmName.SHA1,
+                COSE.Algorithm.ES256 => HashAlgorithmName.SHA256,
+                COSE.Algorithm.ES384 => HashAlgorithmName.SHA384,
+                COSE.Algorithm.ES512 => HashAlgorithmName.SHA512,
+                COSE.Algorithm.PS256 => HashAlgorithmName.SHA256,
+                COSE.Algorithm.PS384 => HashAlgorithmName.SHA384,
+                COSE.Algorithm.PS512 => HashAlgorithmName.SHA512,
+                COSE.Algorithm.RS256 => HashAlgorithmName.SHA256,
+                COSE.Algorithm.RS384 => HashAlgorithmName.SHA384,
+                COSE.Algorithm.RS512 => HashAlgorithmName.SHA512,
+                (COSE.Algorithm)4 => HashAlgorithmName.SHA1,
+                (COSE.Algorithm)11 => HashAlgorithmName.SHA256,
+                (COSE.Algorithm)12 => HashAlgorithmName.SHA384,
+                (COSE.Algorithm)13 => HashAlgorithmName.SHA512,
+                COSE.Algorithm.EdDSA => HashAlgorithmName.SHA512,
+                _ => throw new ArgumentOutOfRangeException(nameof(alg)),
+            };
+        }
+
+        internal void MakeCredentialPublicKey()
+        {
+            var cpk = CBORObject.NewMap().
+                Add(COSE.KeyCommonParameter.KeyType, _kty).
+                Add(COSE.KeyCommonParameter.Alg, _alg);
+
+            switch (_kty)
+            {
+                case COSE.KeyType.EC2:
+                    ECCurve curve = _crv switch
+                    {
+                        COSE.EllipticCurve.P256 => ECCurve.NamedCurves.nistP256,
+                        COSE.EllipticCurve.P384 => ECCurve.NamedCurves.nistP384,
+                        COSE.EllipticCurve.P521 => ECCurve.NamedCurves.nistP521,
+                        _ => throw new ArgumentOutOfRangeException(nameof(_crv)),
+                    };
+
+                    var ecdsa = ECDsa.Create(curve);
+                    _certReq = new CertificateRequest(_rootDN, ecdsa, HashAlgorithmName.SHA256);
+                    var ecparams = ecdsa.ExportParameters(true);
+
+                    cpk.Add(COSE.KeyTypeParameter.X, ecparams.Q.X);
+                    cpk.Add(COSE.KeyTypeParameter.Y, ecparams.Q.Y);
+                    cpk.Add((int)COSE.KeyTypeParameter.Crv, (int)_crv);
+                    _credentialPublicKey = new CredentialPublicKey(cpk);
+                    var sig = ecdsa.SignData(_attToBeSigned, HashAlgFromCOSEAlg(_alg));
+                    var coefficientSize = (int)Math.Ceiling((decimal)ecdsa.KeySize / 8);
+                    var r = sig[0..coefficientSize];
+                    var s = sig[(sig.Length - coefficientSize)..sig.Length];
+
+                    var asnwriter = new AsnWriter(AsnEncodingRules.BER);
+                    ReadOnlySpan<byte> zero = new byte[1] { 0 };
+                    using (asnwriter.PushSequence())
+                    {
+                        asnwriter.WriteIntegerUnsigned(r);
+                        asnwriter.WriteIntegerUnsigned(s);
+                    }
+                    _sig = asnwriter.Encode();
+                    break;
+                case COSE.KeyType.RSA:
+                    var rsa = RSA.Create();
+              
+                    var padding = _alg switch // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+                    {
+                        COSE.Algorithm.RS1 or COSE.Algorithm.RS256 or COSE.Algorithm.RS384 or COSE.Algorithm.RS512 => RSASignaturePadding.Pkcs1,
+                        COSE.Algorithm.PS256 or COSE.Algorithm.PS384 or COSE.Algorithm.PS512 => RSASignaturePadding.Pss,
+                        _ => throw new ArgumentOutOfRangeException(nameof(_alg)),
+                    };
+                    _certReq = new CertificateRequest(_rootDN, rsa, HashAlgorithmName.SHA256, padding);
+                    var rsaparams = rsa.ExportParameters(true);
+                    cpk.Add(COSE.KeyTypeParameter.N, rsaparams.Modulus);
+                    cpk.Add(COSE.KeyTypeParameter.E, rsaparams.Exponent);
+                    _credentialPublicKey = new CredentialPublicKey(cpk);
+                    _sig = rsa.SignData(_attToBeSigned, HashAlgFromCOSEAlg(_alg), _padding);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(_kty), _kty, "Invalid COSE key type");
+            }
+        }
+
+        public WebauthnAttestationResponse MakePasskey(WebauthnCredentialCreationOptions options, int algIndex = 0)
+        {
+            WebauthnAttestationResponse response;
+            _credentialID = RandomNumberGenerator.GetBytes(32);
+            _options = options;
+            _alg = _options.PublicKeyOptions.PublicKeyCredentialParameters[algIndex].Algorithm;
+            MakeCredentialPublicKey();
+
+            PublicKeyCredential pkc = new()
+            {
+                AuthenticatorResponse = new AuthenticatorAttestationResponse()
+                {
+                    AttestationObject = _attestationObject.EncodeToBytes(),
+                    ClientDataJson = _clientDataJson
+                },
+                ClientExtensionResults = new()
+                {
+                    HmacSecret = true
+                },
+                Id = _credentialID
+            };
+
+            response = options.GetType().Name switch
+            {
+                nameof(MicrosoftGraphWebauthnCredentialCreationOptions) => new MicrosoftGraphWebauthnAttestationResponse(pkc, $"DSInternals.Passkeys {_alg}"),
+                nameof(OktaWebauthnCredentialCreationOptions) => new OktaWebauthnAttestationResponse(pkc, options.PublicKeyOptions.User.Id, (options as OktaWebauthnCredentialCreationOptions).Id),
+                _ => throw new ArgumentOutOfRangeException(nameof(options)),
+            };
+
+            return response;
+        }
+    }
+
     [TestClass]
     public class PublicKeyCredentialCreationOptionsTester
     {

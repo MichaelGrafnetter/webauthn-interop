@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace DSInternals.Win32.WebAuthn
+﻿namespace DSInternals.Win32.WebAuthn
 {
     public abstract class WebauthnCredentialCreationOptions
     {
