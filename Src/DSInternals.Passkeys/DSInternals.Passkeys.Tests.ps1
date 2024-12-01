@@ -27,15 +27,19 @@ Describe 'EntraID Tests' {
         $factory1 | Should -BeOfType [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]
         $passkey1 = $factory1.MakePasskey($options, 1)
         $passkey1 | Should -BeOfType [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse]
-        $passkey0.DisplayName | Should -BeLike 'DSInternals.Passkeys*'
+        $passkey1.DisplayName | Should -BeLike 'DSInternals.Passkeys*'
 
         $result0 = Register-Passkey -Passkey $passkey0 -UserId $EntraIdUserId
+        $result0 | Should -Not -BeNullOrEmpty
+        $result0 | Should -BeOfType [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]
         $result0.AaGuid | Should -Be "4453496e-7465-726e-616c-730000000000"
         $result0.CreatedDateTime | Should -BeLessThan $options.ChallengeTimeout
         $result0.AttestationCertificates.Count | Should -Be 1
         $credentialId0 = $result0.Id
 
         $result1 = Register-Passkey -Passkey $passkey1 -UserId $EntraIdUserId
+        $result1 | Should -Not -BeNullOrEmpty
+        $result1 | Should -BeOfType [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]
         $result1.AaGuid | Should -Be "4453496e-7465-726e-616c-730000000000"
         $result1.CreatedDateTime | Should -BeLessThan $options.ChallengeTimeout
         $result1.AttestationCertificates.Count | Should -Be 1
