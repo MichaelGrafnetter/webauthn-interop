@@ -52,6 +52,11 @@ jobs:
       shell: powershell
       run: .\Build-PowerShellModule.ps1 -Configuration Release
 
+    - name: Test PowerShell Module
+      shell: pwsh
+      run: |
+        Invoke-Pester .\Build\bin\PSModule\Release\DSInternals.Passkeys\DSInternals.Passkeys.Tests.ps1 -Passthru
+
     - name: Upload PowerShell Module as Artifact
       uses: actions/upload-artifact@v4
       with:
