@@ -5,13 +5,13 @@ BeforeAll {
 
 Describe 'EntraID Tests' {
     BeforeAll {
-        $SecureClientSecret = ConvertTo-SecureString -String $EntraIdClientSecret -AsPlainText -Force
-        $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $EntraIdClientId, $SecureClientSecret
-        Connect-MgGraph -TenantId $EntraIdTenantId -ClientSecretCredential $ClientSecretCredential
+        $SecureClientSecret = ConvertTo-SecureString -String $env:EntraIdClientSecret -AsPlainText -Force
+        $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $env:EntraIdClientId, $SecureClientSecret
+        Connect-MgGraph -TenantId $env:EntraIdTenantId -ClientSecretCredential $ClientSecretCredential
     }
 
     It "Registers passkeys to Entra ID for each credential parameter option" {
-        $options = Get-PasskeyRegistrationOptions -UserId $EntraIdUserId
+        $options = Get-PasskeyRegistrationOptions -UserId $env:EntraIdUserId
         $options | Should -BeOfType [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions]
         $options.ChallengeTimeout | Should -BeGreaterThan (Get-Date)
         $options.PublicKeyOptions.RelyingParty.Id | Should -Be "login.microsoft.com"
@@ -29,7 +29,7 @@ Describe 'EntraID Tests' {
         $passkey1 | Should -BeOfType [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse]
         $passkey1.DisplayName | Should -BeLike 'DSInternals.Passkeys*'
 
-        $result0 = Register-Passkey -Passkey $passkey0 -UserId $EntraIdUserId
+        $result0 = Register-Passkey -Passkey $passkey0 -UserId $env:EntraIdUserId
         $result0 | Should -Not -BeNullOrEmpty
         $result0 | Should -BeOfType [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]
         $result0.AaGuid | Should -Be "4453496e-7465-726e-616c-730000000000"
@@ -37,7 +37,7 @@ Describe 'EntraID Tests' {
         $result0.AttestationCertificates.Count | Should -Be 1
         $credentialId0 = $result0.Id
 
-        $result1 = Register-Passkey -Passkey $passkey1 -UserId $EntraIdUserId
+        $result1 = Register-Passkey -Passkey $passkey1 -UserId $env:EntraIdUserId
         $result1 | Should -Not -BeNullOrEmpty
         $result1 | Should -BeOfType [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]
         $result1.AaGuid | Should -Be "4453496e-7465-726e-616c-730000000000"
@@ -48,11 +48,11 @@ Describe 'EntraID Tests' {
         $result0.AttestationCertificates[0] | Should -Not -Be $result1.AttestationCertificates[0]
         $result0.Id | Should -Not -Be $result1.Id
 
-        [string] $credentialDeletionUrl0 = '/beta/users/{0}/authentication/fido2Methods/{1}' -f [uri]::EscapeDataString($EntraIdUserId), $credentialId0
+        [string] $credentialDeletionUrl0 = '/beta/users/{0}/authentication/fido2Methods/{1}' -f [uri]::EscapeDataString($env:EntraIdUserId), $credentialId0
         $response0 = Invoke-MgGraphRequest -Method Delete -Uri $credentialDeletionUrl0
         $response0 | Should -BeNullOrEmpty
 
-        [string] $credentialDeletionUrl1 = '/beta/users/{0}/authentication/fido2Methods/{1}' -f [uri]::EscapeDataString($EntraIdUserId), $credentialId1
+        [string] $credentialDeletionUrl1 = '/beta/users/{0}/authentication/fido2Methods/{1}' -f [uri]::EscapeDataString($env:EntraIdUserId), $credentialId1
         $response1 = Invoke-MgGraphRequest -Method Delete -Uri $credentialDeletionUrl1
         $response1 | Should -BeNullOrEmpty
     }
@@ -64,13 +64,13 @@ Describe 'EntraID Tests' {
 
 Describe "Okta Tests" {
     BeforeAll {
-        Connect-Okta -Tenant $OktaTenantId -ClientId $OKtaClientId -Scopes @('okta.users.manage') -JsonWebKey $OktaJsonWebKey
+        Connect-Okta -Tenant $env:OktaTenantId -ClientId $env:OKtaClientId -Scopes @('okta.users.manage') -JsonWebKey $env:OktaJsonWebKey
     }
 
     It "Registers passkeys to Okta for each credential parameter option" {
-        $options0 = Get-PasskeyRegistrationOptions -UserId $OktaUserId
+        $options0 = Get-PasskeyRegistrationOptions -UserId $env:OktaUserId
         $options0 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]
-        $options0.PublicKeyOptions.RelyingParty.Id | Should -Be $OktaTenantId
+        $options0.PublicKeyOptions.RelyingParty.Id | Should -Be $env:OktaTenantId
         $options0.PublicKeyOptions.PublicKeyCredentialParameters.Count | Should -Be 2
 
         $factory0 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
@@ -81,7 +81,7 @@ Describe "Okta Tests" {
         $passkey0 | Should -Not -BeNullOrEmpty
         $factorId0 = $passkey0.FactorId
 
-        $result0 = Register-Passkey -Passkey $passkey0 -UserId $OktaUserId
+        $result0 = Register-Passkey -Passkey $passkey0 -UserId $env:OktaUserId
         $result0 | Should -Not -BeNullOrEmpty
         $result0 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod]
         $result0.Id | Should -Be $factorId0
@@ -93,14 +93,15 @@ Describe "Okta Tests" {
         $result0.Profile.CredentialId | Should -Not -BeNullOrEmpty
         $result0.Profile.CredentialId | Should -Be ([Convert]::ToBase64String($passkey0.PublicKeyCred.Id)).Replace('+', '-').Replace('/', '_').Replace('=', '')
 
+        $OktaUserId = $env:OktaUserId
         [string] $credentialDeletionPath0 = "/api/v1/users/${OktaUserId}/factors/${factorId0}"
         $response0 = Invoke-OktaWebRequest -Method ([Microsoft.PowerShell.Commands.WebRequestMethod]::Delete) -Path $credentialDeletionPath0
         $response0.StatusCode | Should -Be 204
         $response0.RawContentLength | Should -Be 0
 
-        $options1 = Get-PasskeyRegistrationOptions -UserId $OktaUserId
+        $options1 = Get-PasskeyRegistrationOptions -UserId $env:OktaUserId
         $options1 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]
-        $options1.PublicKeyOptions.RelyingParty.Id | Should -Be $OktaTenantId
+        $options1.PublicKeyOptions.RelyingParty.Id | Should -Be $env:OktaTenantId
         $options1.PublicKeyOptions.PublicKeyCredentialParameters.Count | Should -Be 2
 
         $factory1 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
@@ -111,7 +112,7 @@ Describe "Okta Tests" {
         $passkey1 | Should -Not -BeNullOrEmpty
         $factorId1 = $passkey1.FactorId
 
-        $result1 = Register-Passkey -Passkey $passkey1 -UserId $OktaUserId
+        $result1 = Register-Passkey -Passkey $passkey1 -UserId $env:OktaUserId
         $result1 | Should -Not -BeNullOrEmpty
         $result1 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod]
         $result1.Id | Should -Be $factorId1
@@ -135,4 +136,3 @@ Describe "Okta Tests" {
         Disconnect-Okta
     }
 }
-
