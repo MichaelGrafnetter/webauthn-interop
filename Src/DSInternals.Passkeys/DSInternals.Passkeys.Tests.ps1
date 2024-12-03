@@ -1,6 +1,6 @@
 BeforeAll {
-    Add-Type -Path "./build/bin/DSInternals.Win32.WebAuthn.Tests/debug/DSInternals.Win32.WebAuthn.Tests.dll" -ErrorAction Stop
-    Import-Module .\Build\bin\PSModule\Debug\DSInternals.Passkeys\DSInternals.Passkeys.psm1 -Force
+    Add-Type -Path "./build/bin/DSInternals.Win32.WebAuthn.Tests/release/DSInternals.Win32.WebAuthn.Tests.dll" -ErrorAction Stop
+    Import-Module .\Build\bin\PSModule\Release\DSInternals.Passkeys\DSInternals.Passkeys.psm1 -Force
 }
 
 Describe 'EntraID Tests' {
