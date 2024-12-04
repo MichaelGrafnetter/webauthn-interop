@@ -76,7 +76,7 @@ Describe "Okta Tests" {
         $factory0 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
         $factory0 | Should -BeOfType [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]
 
-        $passkey0 = $factory0.MakePasskey($options0, $0)
+        $passkey0 = $factory0.MakePasskey($options0, 0)
         $passkey0 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]
         $passkey0 | Should -Not -BeNullOrEmpty
         $factorId0 = $passkey0.FactorId
@@ -107,7 +107,7 @@ Describe "Okta Tests" {
         $factory1 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
         $factory1 | Should -BeOfType [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]
 
-        $passkey1 = $factory1.MakePasskey($options1, $1)
+        $passkey1 = $factory1.MakePasskey($options1, 1)
         $passkey1 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]
         $passkey1 | Should -Not -BeNullOrEmpty
         $factorId1 = $passkey1.FactorId
