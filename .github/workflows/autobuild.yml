@@ -52,6 +52,20 @@ jobs:
       shell: powershell
       run: .\Build-PowerShellModule.ps1 -Configuration Release
 
+    - name: Test PowerShell Module
+      env:
+        EntraIdTenantId: ${{ secrets.ENTRAIDTENANTID }}
+        EntraIdClientId: ${{ secrets.ENTRAIDCLIENTID }}
+        EntraIdClientSecret: ${{ secrets.ENTRAIDCLIENTSECRET }}
+        EntraIdUserId: ${{ secrets.ENTRAIDUSERID }}
+        OktaTenantId: ${{ secrets.OKTATENANTID }}
+        OktaClientId: ${{ secrets.OKTACLIENTID }}
+        OktaJsonWebKey: ${{ secrets.OKTAJSONWEBKEY }}
+        OktaUserId: ${{ secrets.OKTAUSERID }}
+      shell: pwsh
+      run: |
+        Invoke-Pester .\Build\bin\PSModule\Release\DSInternals.Passkeys\DSInternals.Passkeys.Tests.ps1 -Passthru
+
     - name: Upload PowerShell Module as Artifact
       uses: actions/upload-artifact@v4
       with:

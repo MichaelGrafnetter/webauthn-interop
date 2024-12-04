@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using DSInternals.Win32.WebAuthn.EntraID;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Win32.WebAuthn.Tests

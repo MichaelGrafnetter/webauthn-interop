@@ -21,7 +21,7 @@ The `DSInternals.Win32.WebAuthn.Adapter` library additionally uses classes defin
 
 ## PowerShell Module
 
-The [DSInternals.Passkeys](https://www.powershellgallery.com/packages/DSInternals.Passkeys) PowerShell module uses the `DSInternals.Win32.WebAuthn` library together with the [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod?view=graph-rest-beta) to provide Microsoft Entra ID administrators the capability of registering Passkeys on behalf of other users:
+The [DSInternals.Passkeys](https://www.powershellgallery.com/packages/DSInternals.Passkeys) PowerShell module uses the `DSInternals.Win32.WebAuthn` library together with the [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod?view=graph-rest-beta) and the [Okta API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor) to provide Microsoft Entra ID and Okta administrators respectively the capability of registering passkeys on behalf of other users:
 
 ![PowerShell Passkey Registration Screenshot](../Documentation/Screenshots/powershell.png)
 

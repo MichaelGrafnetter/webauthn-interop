@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn.EntraID
 {
-    public class MicrosoftGraphWebauthnAttestationResponse
+    public class MicrosoftGraphWebauthnAttestationResponse : WebauthnAttestationResponse
     {
         /// <summary>
         /// The display name of the key as given by the user.
@@ -15,11 +15,11 @@ namespace DSInternals.Win32.WebAuthn
         /// Contains the WebAuthn public key credential information being registered.
         /// </summary>
         [JsonPropertyName("publicKeyCredential")]
-        public PublicKeyCredential PublicKeyCredential { get; set; }
+        public override PublicKeyCredential PublicKeyCred { get; set; }
 
         public MicrosoftGraphWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, string displayName)
         {
-            PublicKeyCredential = publicKeyCredential;
+            PublicKeyCred = publicKeyCredential;
             DisplayName = displayName;
         }
 
