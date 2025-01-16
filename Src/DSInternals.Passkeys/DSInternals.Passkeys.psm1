@@ -9,7 +9,7 @@ else {
 }
 
 # Needed for [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] type
-Import-Module Microsoft.Graph.Identity.SignIns -ErrorAction Stop
+Import-Module -Name Microsoft.Graph.Identity.SignIns -ErrorAction Stop
 
 <#
 .SYNOPSIS
@@ -53,9 +53,9 @@ function Get-PasskeyRegistrationOptions
         [string] $credentialOptionsUrl = '/beta/users/{0}/authentication/fido2Methods/creationOptions' -f [uri]::EscapeDataString($UserId)
 
         [string] $response = Invoke-MgGraphRequest -Method GET `
-                                                -Uri $credentialOptionsUrl `
-                                                -Body @{ challengeTimeoutInMinutes = $ChallengeTimeout.TotalMinutes } `
-                                                -OutputType Json
+                                                   -Uri $credentialOptionsUrl `
+                                                   -Body @{ challengeTimeoutInMinutes = $ChallengeTimeout.TotalMinutes } `
+                                                   -OutputType Json
 
         # Parse JSON response
         return [DSInternals.Win32.WebAuthn.MicrosoftGraphWebauthnCredentialCreationOptions]::Create($response)
