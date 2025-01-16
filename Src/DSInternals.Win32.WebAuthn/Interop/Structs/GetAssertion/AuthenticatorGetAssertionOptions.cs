@@ -121,7 +121,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Size of JSON extension.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
-        private int _jsonExtLength = 0;
+        private int _jsonExtLength;
 
         /// <summary>
         /// JSON extension.

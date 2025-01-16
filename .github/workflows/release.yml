@@ -113,13 +113,14 @@ jobs:
 
     - name: Sign PowerShell Scripts
       shell: cmd
+      if: ${{ inputs.certificate_sign }}
       run: >
         sign code trusted-signing
         DSInternals.Passkeys.ps*1
         --base-directory "${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys"
-        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -127,13 +128,14 @@ jobs:
 
     - name: Sign DSInternals.Win32.WebAuthn Libraries
       shell: cmd
+      if: ${{ inputs.certificate_sign }}
       run: >
         sign code trusted-signing
         release_*/DSInternals.Win32.WebAuthn.dll
         --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn"
-        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -141,13 +143,14 @@ jobs:
 
     - name: Sign DSInternals.Win32.WebAuthn.Adapter Libraries
       shell: cmd
+      if: ${{ inputs.certificate_sign }}
       run: >
         sign code trusted-signing
         release_*/DSInternals.Win32.WebAuthn.Adapter.dll
         --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter"
-        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -155,13 +158,14 @@ jobs:
 
     - name: Sign Fido2UI Binary
       shell: cmd
+      if: ${{ inputs.certificate_sign }}
       run: >
         sign code trusted-signing
         Fido2UI.exe
         --base-directory "${{ github.workspace }}/Build/bin/Fido2UI/release"
-        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -195,13 +199,14 @@ jobs:
 
     - name: Sign NuGet Packages
       shell: cmd
+      if: ${{ inputs.certificate_sign }}
       run: >
         sign code trusted-signing
         *.*nupkg
         --base-directory "${{ github.workspace }}/Build/package/release"
-        --trusted-signing-endpoint "${{ secrets.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ secrets.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ secrets.SIGNING_PROFILE_NAME }}"
+        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
+        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
+        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"

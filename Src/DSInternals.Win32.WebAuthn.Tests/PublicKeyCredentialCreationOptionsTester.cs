@@ -346,6 +346,21 @@ namespace DSInternals.Win32.WebAuthn.Tests
                         ""type"": ""public-key"",
                         ""id"": ""9ccVagkzE02vPo+qoonYDv8FoREd9QYOn8RFSsbLr8Y="",
                         ""transports"":[]
+                    },
+                    {
+                        ""type"": ""public-key"",
+                        ""id"": ""prXptqCfm_ohEAcE2Jw6CUtUb4uWpb2vaS-cFB82ruMhcIRAE17S0g1bkPjtsC6S0"",
+                        ""transports"":[]
+                    },
+                    {
+                        ""type"": ""public-key"",
+                        ""id"": ""MMeD8wrNCZ-0hbfdYvvAIzrsrTGd_uXdt2iXbYlGJSs1"",
+                        ""transports"":[]
+                    },
+                    {
+                        ""type"": ""public-key"",
+                        ""id"": ""owBYhYk51YPpOdLDJ-mcaIFdZVcCZ63YFogBU0VyJ42UkiptLxN5l7ZkRu4KtEo4XFJfJcahJ5C5uTj4YKxTmeISUiuOSgtBHlUh_RndhweyQJ8UY3HWwqvN57T3cvqXy_nG2VsR-Gw2upzNUW4LHGFjfSXj3rEe3B6KltliX1c68aDqDh3dquwBTAK9roaQzq3XZBZT_AJQKX2qop1j1Fh2-xOdeFR7aQ2"",
+                        ""transports"":[]
                     }
                 ],
                 ""authenticatorSelection"": {

@@ -13,7 +13,7 @@ else {
 }
 
 # Needed for [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] type
-Import-Module Microsoft.Graph.Identity.SignIns -ErrorAction Stop
+Import-Module -Name Microsoft.Graph.Identity.SignIns -ErrorAction Stop
 
 New-Variable -Name OktaToken -Value $null -Scope Script
 New-Variable -Name OktaRevocationInfo -Value $null -Scope Script
