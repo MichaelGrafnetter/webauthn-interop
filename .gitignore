@@ -354,3 +354,4 @@ MigrationBackup/
 # Private Keys and API Keys
 *.Private.snk
 *.key
+.vscode/launch.json
