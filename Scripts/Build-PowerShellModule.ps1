@@ -13,7 +13,7 @@ param(
     [string[]] $Configuration = @('Release', 'Debug')
 )
 
-[string[]] $frameworks = @('net48', 'net6.0')
+[string[]] $frameworks = @('net48', 'net6.0') # Corresponds to PowerShell Desktop and Core
 [string] $repositoryRoot = Split-Path -Path $PSScriptRoot -Parent
 [string] $buildRoot = Join-Path -Path $repositoryRoot -ChildPath 'Build\bin\PSModule'
 [string] $moduleSourcePath = Join-Path -Path $repositoryRoot -ChildPath 'Src\DSInternals.Passkeys'

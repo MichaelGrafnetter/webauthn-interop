@@ -5,6 +5,10 @@
     "GitHub.vscode-pull-request-github",
     "GitHub.vscode-github-actions",
     "EditorConfig.EditorConfig",
-    "DavidAnson.vscode-markdownlint"
+    "DavidAnson.vscode-markdownlint",
+    "bierner.markdown-preview-github-styles",
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
+    "PKief.material-icon-theme"
   ]
 }

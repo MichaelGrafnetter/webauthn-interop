@@ -88,6 +88,16 @@ FileList = @(
     'en-US/DSInternals.Passkeys-help.xml',
     'net6.0/DSInternals.Win32.WebAuthn.dll',
     'net48/DSInternals.Win32.WebAuthn.dll'
+    'net6.0/DSInternals.Win32.WebAuthn.pdb',
+    'net48/DSInternals.Win32.WebAuthn.pdb',
+    'net6.0/CBOR.dll',
+    'net48/CBOR.dll',
+    'net6.0/Numbers.dll',
+    'net48/Numbers.dll',
+    'net6.0/System.Text.Json.dll',
+    'net48/System.Text.Json.dll',
+    'net6.0/URIUtility.dll',
+    'net48/URIUtility.dll'
 )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.

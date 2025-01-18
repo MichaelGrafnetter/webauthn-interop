@@ -13,7 +13,7 @@ This PowerShell module allows administrative registration of passkeys (i.e. FIDO
 
 ## DSInternals.Passkeys Cmdlets
 
-### [Register-Passkey](Register-Passkey.md)
+### [Register-Passkey](Register-Passkey.md#register-passkey)
 
 Registers a new passkey in Microsoft Entra ID or Okta.
 
@@ -29,10 +29,10 @@ Register-Passkey -UserId 00ub61wm1aqmawzRC5d7'
 Disconnect-Okta
 ```
 
-### [Get-PasskeyRegistrationOptions](Get-PasskeyRegistrationOptions.md)
+### [Get-PasskeyRegistrationOptions](Get-PasskeyRegistrationOptions.md#get-passkeyregistrationoptions)
 
 Retrieves creation options required to generate and register a Microsoft Entra ID or Okta-compatible passkey.
 
-### [New-Passkey](New-Passkey.md)
+### [New-Passkey](New-Passkey.md#new-passkey)
 
 Creates a new Microsoft Entra ID or Okta-compatible passkey.

@@ -23,7 +23,7 @@ The `DSInternals.Win32.WebAuthn.Adapter` library additionally uses classes defin
 
 The [DSInternals.Passkeys](https://www.powershellgallery.com/packages/DSInternals.Passkeys) PowerShell module uses the `DSInternals.Win32.WebAuthn` library together with the [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod?view=graph-rest-beta) and the [Okta API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor) to provide Microsoft Entra ID and Okta administrators respectively the capability of registering passkeys on behalf of other users:
 
-![PowerShell Passkey Registration Screenshot](../Documentation/Screenshots/powershell.png)
+![PowerShell Passkey Registration Screenshot](../Documentation/Screenshots/powershell-entra.png)
 
 See [Yubico's blog](https://www.yubico.com/blog/microsoft-strengthens-phishing-resistant-security-for-entra-id-with-fido2-provisioning-apis/) for more details on the API.
 
@@ -31,7 +31,7 @@ See [Yubico's blog](https://www.yubico.com/blog/microsoft-strengthens-phishing-r
 
 The project also contains a simple Windows GUI tool called `FIDO2 UI`, which is built on top of the `DSInternals.Win32.WebAuthn` library:
 
-![FIDO2 UI Screenshot](../Documentation/Screenshots/fido2_ui.png)
+![FIDO2 UI Screenshot](../Documentation/Screenshots/fido2-ui.png)
 
 The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 
@@ -94,14 +94,14 @@ var response = api.AuthenticatorGetAssertion("login.microsoft.com", challenge, U
 
 Rohitab API Monitor can be used to [analyze WebAuthn API calls made by browsers](../Documentation/Rohitab/README.md):
 
-![API Monitor Screenshot](../Documentation/Screenshots/api_monitor.png)
+![API Monitor Screenshot](../Documentation/Screenshots/api-monitor.png)
 
 ### Windows Event Viewer
 
 Windows 10 creates very detailed logs of WebAuthn API calls and CTAP commands. The logs can be displayed in the built-in
 **Event Viewer** console under **Applications and Services Logs &rarr; Microsoft &rarr; Windows &rarr; WebAuthN &rarr; Operational**:
 
-![WebAuthn Event Viewer Screenshot](../Documentation/Screenshots/webauthn_event_viewer.png)
+![WebAuthn Event Viewer Screenshot](../Documentation/Screenshots/webauthn-event-viewer.png)
 
 ## Microsoft's Documentation
 
