@@ -290,7 +290,7 @@ PS \&gt; Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeT
       </command:example>
       <command:example>
         <maml:title>----------------------- EXAMPLE 4 (Okta) -----------------------</maml:title>
-        <dev:code>PS \&gt; Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60) -Tenant example.okta.com -Token your_okta_token</dev:code>
+        <dev:code>PS \&gt; Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1) -Tenant example.okta.com -Token your_okta_token</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>

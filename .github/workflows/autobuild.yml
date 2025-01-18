@@ -62,9 +62,9 @@ jobs:
         OktaClientId: ${{ secrets.OKTACLIENTID }}
         OktaJsonWebKey: ${{ secrets.OKTAJSONWEBKEY }}
         OktaUserId: ${{ secrets.OKTAUSERID }}
-      shell: pwsh
-      run: |
-        Invoke-Pester .\Build\bin\PSModule\Release\DSInternals.Passkeys\DSInternals.Passkeys.Tests.ps1 -Passthru
+      shell: powershell
+      working-directory: Scripts
+      run: .\Test-PowerShellModule.ps1
 
     - name: Upload PowerShell Module as Artifact
       uses: actions/upload-artifact@v4

@@ -31,9 +31,9 @@ function Get-EntraIDPasskeyRegistrationOptions
 
     [Parameter(Mandatory = $false)]
     [ValidateScript({
-        if ($_ -is [TimeSpan]) {
+        if ($_ -is [timespan]) {
             $min = New-TimeSpan -Minutes 5
-            $max = New-TimeSpan -Minutes 43200
+            $max = New-TimeSpan -Days 30
             return $_ -ge $min -and $_ -le $max
         }
         else {
@@ -41,7 +41,7 @@ function Get-EntraIDPasskeyRegistrationOptions
         }
     })]
     [Alias('Timeout')]
-    [TimeSpan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
+    [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
     )
     try {
         Write-Debug "UserId ${UserId} TokenLifetimeSeconds ${ChallengeTimeout}"
@@ -118,9 +118,9 @@ function Get-OktaPasskeyRegistrationOptions
 
     [Parameter(Mandatory = $false)]
     [ValidateScript({
-        if ($_ -is [TimeSpan]) {
+        if ($_ -is [timespan]) {
             $min = New-TimeSpan -Seconds 1
-            $max = New-TimeSpan -Seconds 86400
+            $max = New-TimeSpan -Days 1
             return $_ -ge $min -and $_ -le $max
         }
         else {
@@ -128,7 +128,7 @@ function Get-OktaPasskeyRegistrationOptions
         }
     })]
     [Alias('Timeout')]
-    [TimeSpan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
+    [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
     )
     begin {
         if ($null -eq $Script:OktaToken)
@@ -207,7 +207,7 @@ PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
 
 .EXAMPLE
 PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60)
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)
 
 .NOTES
 Self-service operations aren't supported for Entra ID.
@@ -240,17 +240,17 @@ function Get-PasskeyRegistrationOptions
         if ($IsEntraID)
         {
             $min = New-TimeSpan -Minutes 5
-            $max = New-TimeSpan -Minutes 43200
+            $max = New-TimeSpan -Days 30
             if ($ChallengeTimeout -gt $max -or $ChallengeTimeout -lt $min) {
-                Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 5 and 43200 minutes for $_." -ErrorAction Stop
+                Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 5 minutes and 30 days for $_." -ErrorAction Stop
             }
         }
         else
         {
             $min = New-TimeSpan -Seconds 1
-            $max = New-TimeSpan -Seconds 86400
+            $max = New-TimeSpan -Days 1
             if ($ChallengeTimeout -gt $max -or $ChallengeTimeout -lt $min) {
-                Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 1 and 86400 seconds for $_." -ErrorAction Stop
+                Write-Error "Cannot validate argument on parameter 'ChallengeTimeout' which must be a valid TimeSpan between 1 second and 1 day for $_." -ErrorAction Stop
             }
             if ($UserId -notmatch "^[A-Za-z0-9_-]{20}$") {
                 Write-Error "Cannot validate argument on parameter 'UserID' which must the unique idenitier for the user for Okta." -ErrorAction Stop
@@ -347,9 +347,9 @@ function Register-OktaPasskey
 
         [Parameter(Mandatory = $false, ParameterSetName = 'New')]
         [ValidateScript({
-            if ($_ -is [TimeSpan]) {
+            if ($_ -is [timespan]) {
                 $min = New-TimeSpan -Seconds 1
-                $max = New-TimeSpan -Seconds 86400
+                $max = New-TimeSpan -Days 1
                 return $_ -ge $min -and $_ -le $max
             }
             else {

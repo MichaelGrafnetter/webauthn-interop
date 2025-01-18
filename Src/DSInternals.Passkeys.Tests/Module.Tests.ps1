@@ -125,11 +125,7 @@ Describe 'PowerShell Module' {
         It 'contains proper description of the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
             param([string] $Cmdlet, [string] $Description)
 
-            # Remove markdown links before searching
-            $modulePage |
-                ForEach-Object { $PSItem -replace '\[([a-zA-Z\-]+)\]\(([([a-zA-Z\-]+)\.md#[a-z\-]+\)','$1' } |
-                Where-Object { $PSItem -ceq $Description } |
-                Should -HaveCount 1
+            $modulePage | Should -FileContentMatchMultilineExactly -ExpectedContent $Description
         }
     }
 }
