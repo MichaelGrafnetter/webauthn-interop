@@ -9,7 +9,7 @@ Refreshes MD documentation files and builds MAML files.
 # Set directory paths
 [string] $rootDir = Split-Path -Path $PSScriptRoot -Parent -ErrorAction Stop
 [string] $locale = 'en-US'
-[string] $modulePath = Join-Path -Path $rootDir -ChildPath 'Src\DSInternals.Passkeys'
+[string] $modulePath = Join-Path -Path $rootDir -ChildPath 'Build\bin\PSModule\Release\DSInternals.Passkeys'
 [string] $mdHelpPath = Join-Path -Path $rootDir -ChildPath 'Documentation\PowerShell' -ErrorAction Stop
 [string] $modulePagePath = Join-Path -Path $mdHelpPath -ChildPath 'README.md' -ErrorAction Stop
 [string] $xmlHelpPath = Join-Path -Path $modulePath -ChildPath $locale -ErrorAction Stop

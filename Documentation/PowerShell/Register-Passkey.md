@@ -67,8 +67,8 @@ PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey 
 ## PARAMETERS
 
 ### -ChallengeTimeout
-Overrides the timeout of the server-generated challenge returned in the request. 
-For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days. 
+Overrides the timeout of the server-generated challenge returned in the request.
+For Entra ID, the default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
 For Okta, the default value is 300 seconds, with the accepted range being between 1 second and 1 day.
 
 ```yaml
@@ -129,8 +129,8 @@ Accept wildcard characters: False
 ```
 
 ### -UserId
-The unique identifier of user. 
-For Entra ID, this is the object id (GUID) or UPN. 
+The unique identifier of user.
+For Entra ID, this is the object id (GUID) or UPN.
 For Okta, this is the unique identifier of Okta user.
 
 ```yaml
@@ -159,5 +159,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [More info for Entra ID](https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods)
-<br>
 [More info for Okta](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor)

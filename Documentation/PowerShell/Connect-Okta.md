@@ -14,12 +14,14 @@ Retrieves an access token to interact with Okta APIs.
 
 ### AuthorizationCode
 ```
-Connect-Okta -Tenant <String> -ClientId <String> [-Scopes <String[]>] [<CommonParameters>]
+Connect-Okta -Tenant <String> -ClientId <String> [-Scopes <String[]>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### ClientCredentials
 ```
-Connect-Okta -Tenant <String> -ClientId <String> [-Scopes <String[]>] -JsonWebKey <String> [<CommonParameters>]
+Connect-Okta -Tenant <String> -ClientId <String> [-Scopes <String[]>] -JsonWebKey <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -81,6 +83,21 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Scopes
 Scopes to request for the access token.  Defaults to `'okta.users.manage'`.
 
@@ -122,4 +139,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-https://developer.okta.com/docs/reference/rest/
+[Test the Okta REST APIs with Postman](https://developer.okta.com/docs/reference/rest)
