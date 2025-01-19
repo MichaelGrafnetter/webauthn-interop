@@ -8,16 +8,16 @@
         "script": "${file}",
         "cwd": "${cwd}"
       },
-        {
-            "name": "Debug FIDO2 UI",
-            "type": "clr",
-            "request": "launch",
-            "program": "${workspaceFolder}/Build/bin/Debug/Fido2UI/Fido2UI.exe",
-            "args": [],
-            "cwd": "${workspaceFolder}/Build/bin/Debug/Fido2UI",
-            "stopAtEntry": false,
-            "console": "internalConsole",
-            "preLaunchTask": "build"
-        }
+      {
+          "name": "Debug FIDO2 UI",
+          "type": "clr",
+          "request": "launch",
+          "program": "${workspaceFolder}/Build/bin/Debug/Fido2UI/Fido2UI.exe",
+          "args": [],
+          "cwd": "${workspaceFolder}/Build/bin/Debug/Fido2UI",
+          "stopAtEntry": false,
+          "console": "internalConsole",
+          "preLaunchTask": "build"
+      }
     ]
 }
