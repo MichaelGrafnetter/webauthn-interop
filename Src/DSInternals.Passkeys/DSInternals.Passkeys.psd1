@@ -96,8 +96,35 @@ FileList = @(
     'net48/Numbers.dll',
     'net6.0/System.Text.Json.dll',
     'net48/System.Text.Json.dll',
+    'net6.0/System.Text.Encodings.Web.dll',
+    'net48/System.Text.Encodings.Web.dll',
     'net6.0/URIUtility.dll',
-    'net48/URIUtility.dll'
+    'net48/URIUtility.dll',
+    'net6.0/Microsoft.Bcl.AsyncInterfaces.dll',
+    'net48/Microsoft.Bcl.AsyncInterfaces.dll',
+    'net6.0/Microsoft.Bcl.TimeProvider.dll',
+    'net48/Microsoft.Bcl.TimeProvider.dll',
+    'net6.0/Microsoft.Identity.Client.dll',
+    'net48/Microsoft.Identity.Client.dll',
+    'net6.0/Microsoft.IdentityModel.Abstractions.dll',
+    'net48/Microsoft.IdentityModel.Abstractions.dll',
+    'net6.0/Microsoft.IdentityModel.JsonWebTokens.dll',
+    'net48/Microsoft.IdentityModel.JsonWebTokens.dll',
+    'net6.0/System.IdentityModel.Tokens.Jwt.dll',
+    'net48/System.IdentityModel.Tokens.Jwt.dll',
+    'net6.0/Microsoft.IdentityModel.Logging.dll',
+    'net48/Microsoft.IdentityModel.Logging.dll',
+    'net6.0/Microsoft.IdentityModel.Tokens.dll',
+    'net48/Microsoft.IdentityModel.Tokens.dll',
+    'net6.0/System.Diagnostics.DiagnosticSource.dll',
+    'net48/System.Diagnostics.DiagnosticSource.dll',
+    'net48/System.Buffers.dll',
+    'net48/System.Memory.dll',
+    'net48/System.Numerics.Vectors.dll',
+    'net48/System.ValueTuple.dll',
+    'net48/System.Runtime.CompilerServices.Unsafe.dll',
+    'net48/System.Threading.Tasks.Extensions.dll'
+
 )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.

@@ -92,7 +92,7 @@ function Invoke-OktaWebRequest
     Write-Debug "Tenant ${Tenant}"
 
     $uriBuilder = New-Object System.UriBuilder
-    $uriBuilder.Scheme = "https"
+    $uriBuilder.Scheme = [uri]::UriSchemeHttps
     $uriBuilder.Host = $tenant
     $uriBuilder.Path = $Path
     $uriBuilder.Query = $Query
@@ -561,39 +561,6 @@ function New-Passkey
 
 <#
 .SYNOPSIS
-Retrieves the Microsoft Graph endpoint URL.
-
-.NOTES
-Dynamic URL retrieval is used to support Azure environments, like Azure Public, Azure Government, or Azure China.
-
-#>
-function Get-MgGraphEndpoint
-{
-    [CmdletBinding()]
-    [OutputType([string])]
-    param()
-
-    try {
-        [Microsoft.Graph.PowerShell.Authentication.AuthContext] $context = Get-MgContext -ErrorAction Stop
-
-        if($null -ne $context) {
-            return (Get-MgEnvironment -Name $context.Environment -ErrorAction Stop).GraphEndpoint
-        }
-    }
-    catch {
-        $errorRecord = New-Object Management.Automation.ErrorRecord(
-            (New-Object Exception('Not connected to Microsoft Graph.')),
-            'Not connected to Microsoft Graph.',
-            [Management.Automation.ErrorCategory]::ConnectionError,
-            $context
-        )
-
-        $PSCmdlet.ThrowTerminatingError($errorRecord)
-    }
-}
-
-<#
-.SYNOPSIS
 Retrieves an access token to interact with Okta APIs.
 
 .PARAMETER Tenant
@@ -619,7 +586,6 @@ PS \> $jwk = '{"kty":"RSA","kid":"EE3QB0WvhuOwR9DuR6717OERKbDrBemrDKOK4Xvbf8c","
 PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else') -JsonWebKey $jwk
 
 #>
-
 function Connect-Okta
 {
     param(

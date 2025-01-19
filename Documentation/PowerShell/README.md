@@ -31,8 +31,8 @@ Disconnect-Okta
 
 ### [Get-PasskeyRegistrationOptions](Get-PasskeyRegistrationOptions.md#get-passkeyregistrationoptions)
 
-Retrieves creation options required to generate and register a Microsoft Entra ID or Okta-compatible passkey.
+Retrieves creation options required to generate and register a Microsoft Entra ID or Okta compatible passkey.
 
 ### [New-Passkey](New-Passkey.md#new-passkey)
 
-Creates a new Microsoft Entra ID or Okta-compatible passkey.
+Creates a new Microsoft Entra ID or Okta compatible passkey.

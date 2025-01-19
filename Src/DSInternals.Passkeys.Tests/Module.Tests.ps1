@@ -26,7 +26,6 @@ param(
 [hashtable] $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
 [string] $aboutPagePath = Join-Path -Path $ModulePath -ChildPath 'en-US\about_DSInternals.Passkeys.help.txt'
 [string] $modulePagePath = Join-Path -Path $MarkdownDocumentationPath -ChildPath 'PowerShell\README.md'
-[string[]] $modulePage = Get-Content -Path $modulePagePath -ErrorAction Stop
 
 Describe 'PowerShell Module' {
     Context 'Manifest' {
@@ -36,7 +35,7 @@ Describe 'PowerShell Module' {
                 ForEach-Object { @{ FileName = $PSItem.Name } }
 
             [hashtable[]] $moduleAliases =
-                Select-String -Path $moduleFilePath -Pattern 'New-Alias -Name ([a-zA-Z\-]+) ' |
+                Select-String -Path $moduleFilePath -Pattern 'New-Alias -Name ([a-zA-Z0-9\-]+) ' |
                 ForEach-Object { @{ AliasName = $PSItem.Matches.Groups[1].Value } }
         }
 
@@ -125,7 +124,7 @@ Describe 'PowerShell Module' {
         It 'contains proper description of the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
             param([string] $Cmdlet, [string] $Description)
 
-            $modulePage | Should -FileContentMatchMultilineExactly -ExpectedContent $Description
+            $modulePagePath | Should -FileContentMatchMultilineExactly -ExpectedContent $Description
         }
     }
 }

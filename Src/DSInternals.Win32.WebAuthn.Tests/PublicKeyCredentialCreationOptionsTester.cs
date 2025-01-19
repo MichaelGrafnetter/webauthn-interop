@@ -71,7 +71,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
         internal CredentialPublicKey _credentialPublicKey;
 
         internal string _rp => _options.PublicKeyOptions.RelyingParty.Id;
-        internal string _origin => new UriBuilder("https", _options.PublicKeyOptions.RelyingParty.Id).ToString();
+        internal string _origin => new UriBuilder(Uri.UriSchemeHttps, _options.PublicKeyOptions.RelyingParty.Id).ToString();
         internal byte[] _challenge => _options.PublicKeyOptions.Challenge;
         internal CertificateRequest _certReq;
         internal static X500DistinguishedName _rootDN = new X500DistinguishedName("CN=Testing, O=DSInternals, OU=Passkeys, C=US");
@@ -242,7 +242,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                     break;
                 case COSE.KeyType.RSA:
                     var rsa = RSA.Create();
-              
+
                     var padding = _alg switch // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
                     {
                         COSE.Algorithm.RS1 or COSE.Algorithm.RS256 or COSE.Algorithm.RS384 or COSE.Algorithm.RS512 => RSASignaturePadding.Pkcs1,

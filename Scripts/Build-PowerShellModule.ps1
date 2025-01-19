@@ -34,3 +34,7 @@ foreach($currentConfiguration in $Configuration) {
         dotnet.exe publish $libraryProject --output $frameworkSpecificPath --nologo --framework $framework --configuration $currentConfiguration --property:PublishDocumentationFile=false --no-restore --no-build --self-contained false
     }
 }
+
+# Remove any *.deps.json files
+# TODO: Could they be skipped in the publishing process?
+Get-ChildItem -Path $buildRoot -Filter *.deps.json -File -Recurse | Remove-Item -Verbose -Force
