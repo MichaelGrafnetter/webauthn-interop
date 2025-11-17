@@ -19,7 +19,37 @@ namespace DSInternals.Win32.WebAuthn
             }
             else
             {
-                return FromBase64UrlString(reader.ValueSpan);
+                try
+                {
+                    return FromBase64UrlString(reader.ValueSpan);
+                }
+                catch (ArgumentException)
+                {
+                    // If we could not decode the string from base64 url, perhaps this is one of the weird MSFT
+                    // "formatted in Base64URL with a padding number suffix" strings.
+
+                    // https://github.com/MichaelGrafnetter/webauthn-interop/issues/28#issuecomment-3529633518
+
+                    // Checking to see if the last character is a digit and if we removed it, would there be anything left
+                    if (reader.ValueSpan.Length > 1 && char.IsDigit((char)reader.ValueSpan[reader.ValueSpan.Length - 1]))
+                    {
+                        // Looking for last character to be 0, 1, or 2
+                        char lastChar = (char)reader.ValueSpan[reader.ValueSpan.Length - 1];
+
+                        // If we removed the last character, calculate the padding required for the remaining string
+                        int potentialPaddingLength = (reader.ValueSpan.Length - 1) % 4;
+
+                        // If the last character matches the padding length of the remaining string, this is very likely the case we are looking for
+                        if ((lastChar == '0' && potentialPaddingLength == 0) ||
+                            (lastChar == '1' && potentialPaddingLength == 3) ||
+                            (lastChar == '2' && potentialPaddingLength == 2))
+                        {
+                            // Try again this time removing the last character
+                            return FromBase64UrlString(reader.ValueSpan.Slice(0, reader.ValueSpan.Length - 1));
+                        }
+                    }
+                    throw;
+                }
             }
         }
 
@@ -75,27 +105,6 @@ namespace DSInternals.Win32.WebAuthn
                 throw new ArgumentNullException(nameof(input));
             }
 
-            // START temporary workaround for MSFT bug (https://github.com/MichaelGrafnetter/webauthn-interop/issues/21)
-            // Checking to see if the last character is a digit and if we removed it, would there be anything left
-            if (input.Length > 1 && char.IsDigit((char)input[input.Length - 1]))
-            {
-                // Looking for last character to be 0, 1, or 2
-                char lastChar = (char)input[input.Length - 1];
-
-                // If we removed the last character, calculate the padding required for the remaining string
-                int potentialPaddingLength = (input.Length - 1) % 4;
-
-                // If the last character matches the padding length of the remaining string, this is very likely the case we are looking for
-                if ((lastChar == '0' && potentialPaddingLength == 0) ||
-                    (lastChar == '1' && potentialPaddingLength == 3) ||
-                    (lastChar == '2' && potentialPaddingLength == 2))
-                {
-                    // Update the input to remove the last character
-                    input = input.Slice(0, input.Length - 1);
-                }
-            }
-            // END temporary workaround
-                
             int paddingLength = (input.Length % 4) switch
             {
                 0 => 0, // Padding is not needed
