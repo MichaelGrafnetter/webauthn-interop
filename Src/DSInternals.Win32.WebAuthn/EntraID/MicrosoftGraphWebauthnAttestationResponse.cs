@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.Serialization;
 
 namespace DSInternals.Win32.WebAuthn.EntraID
 {
@@ -25,7 +26,11 @@ namespace DSInternals.Win32.WebAuthn.EntraID
 
         override public string ToString()
         {
+            #if NET7_0_OR_GREATER
+            return JsonSerializer.Serialize(this, WebAuthnJsonSerializerContext.Default.MicrosoftGraphWebauthnAttestationResponse);
+            #else
             return JsonSerializer.Serialize(this);
+            #endif
         }
     }
 }

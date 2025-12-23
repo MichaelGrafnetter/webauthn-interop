@@ -15,6 +15,13 @@
 - Upgraded System.Text.Json to mitigate CVE-2024-43485.
 - Windows 10 1903 or newer is required.</PackageReleaseNotes>
   </PropertyGroup>
+  
+  <!-- Enable AOT for .NET 7.0 and above -->
+  <PropertyGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals('$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)'))','7.0'))">
+    <IsAotCompatible>true</IsAotCompatible>
+    <PublishAot>true</PublishAot>
+    <VerifyReferenceAotCompatibility>true</VerifyReferenceAotCompatibility>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

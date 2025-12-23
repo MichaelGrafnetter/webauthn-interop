@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.Serialization;
 
 namespace DSInternals.Win32.WebAuthn.Okta
 {
@@ -38,7 +39,11 @@ namespace DSInternals.Win32.WebAuthn.Okta
                 throw new ArgumentNullException(nameof(json));
             }
 
+            #if NET7_0_OR_GREATER
+            return JsonSerializer.Deserialize(json, WebAuthnJsonSerializerContext.Default.OktaWebauthnCredentialCreationOptions);
+            #else
             return JsonSerializer.Deserialize<OktaWebauthnCredentialCreationOptions>(json);
+            #endif
         }
     }
 }

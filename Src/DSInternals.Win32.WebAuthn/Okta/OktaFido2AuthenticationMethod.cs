@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.Serialization;
 
 
 namespace DSInternals.Win32.WebAuthn.Okta
@@ -93,7 +94,11 @@ namespace DSInternals.Win32.WebAuthn.Okta
                 throw new ArgumentNullException(nameof(json));
             }
 
+            #if NET7_0_OR_GREATER
+            return JsonSerializer.Deserialize(json, WebAuthnJsonSerializerContext.Default.OktaFido2AuthenticationMethod);
+            #else
             return JsonSerializer.Deserialize<OktaFido2AuthenticationMethod>(json);
+            #endif
         }
         /// <summary>
         /// ID of the Factor

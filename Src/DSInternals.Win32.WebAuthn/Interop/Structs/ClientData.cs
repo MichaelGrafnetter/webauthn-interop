@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using DSInternals.Win32.WebAuthn.FIDO;
+using DSInternals.Win32.WebAuthn.Serialization;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -60,7 +61,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
         public ClientData(CollectedClientData clientData)
         {
+#if NET7_0_OR_GREATER
+            this.ClientDataJson = JsonSerializer.Serialize(clientData, WebAuthnJsonSerializerContext.Default.CollectedClientData);
+#else
             this.ClientDataJson = JsonSerializer.Serialize(clientData);
+#endif
             // Note that SHA-256 is currently hardcoded in Chromium and Firefox.
             this.HashAlgId = ApiConstants.HashAlgorithmSha256;
         }

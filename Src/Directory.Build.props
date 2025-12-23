@@ -37,8 +37,9 @@
 
     <!-- Turn off reference assembly generation -->
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-  </PropertyGroup>
 
+  </PropertyGroup>
+  
   <!-- Note: Fido2.Models is currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
   <PropertyGroup Condition="
                    '$(Configuration)' == 'Release' AND
