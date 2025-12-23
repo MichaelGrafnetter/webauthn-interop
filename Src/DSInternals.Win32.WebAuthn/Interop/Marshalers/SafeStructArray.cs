@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
+#if NET7_0_OR_GREATER
+    internal abstract class SafeStructArrayOut<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>
+#else
     internal abstract class SafeStructArrayOut<T>
+#endif
     {
         protected int _length;
         protected IntPtr _nativeArray = IntPtr.Zero;

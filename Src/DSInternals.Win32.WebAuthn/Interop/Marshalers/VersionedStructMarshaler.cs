@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal static class VersionedStructMarshaler
     {
+#if NET7_0_OR_GREATER
+        public static T PtrToStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(IntPtr ptr, int sourceStructSize) where T : class
+#else
         public static T PtrToStructure<T>(IntPtr ptr, int sourceStructSize) where T : class
+#endif
         {
             if (ptr == IntPtr.Zero || sourceStructSize == 0)
             {
                 return null;
             }
 
-            if(sourceStructSize < 0)
+            if (sourceStructSize < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(sourceStructSize));
             }

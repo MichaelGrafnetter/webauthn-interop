@@ -55,7 +55,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             }
 
             // First 16 bytes is AAGUID
-            byte[] aaguidBytes = reader.ReadBytes(Marshal.SizeOf(typeof(Guid)));
+            byte[] aaguidBytes = reader.ReadBytes(Marshal.SizeOf<Guid>());
 
             // GUID from authenticator is big endian. If we are on a little endian system, convert.
             this.AaGuid = aaguidBytes.ToGuidBigEndian();
