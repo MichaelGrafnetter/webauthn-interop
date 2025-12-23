@@ -40,13 +40,6 @@
 
   </PropertyGroup>
   
-  <!-- Enable AOT for .NET 7.0 and above -->
-  <PropertyGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals('$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)'))','7.0'))">
-    <IsAotCompatible>true</IsAotCompatible>
-    <PublishAot>true</PublishAot>
-    <VerifyReferenceAotCompatibility>true</VerifyReferenceAotCompatibility>
-  </PropertyGroup>
-
   <!-- Note: Fido2.Models is currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
   <PropertyGroup Condition="
                    '$(Configuration)' == 'Release' AND

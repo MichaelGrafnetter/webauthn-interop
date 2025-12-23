@@ -18,6 +18,13 @@
 - A standalone package providing an adapter for data model defined in Fido2.Models is also available.</PackageReleaseNotes>
   </PropertyGroup>
 
+  <!-- Enable AOT for .NET 7.0 and above -->
+  <PropertyGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals('$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)'))','7.0')) AND '$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
+    <IsAotCompatible>true</IsAotCompatible>
+    <PublishAot>true</PublishAot>
+    <VerifyReferenceAotCompatibility>true</VerifyReferenceAotCompatibility>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
