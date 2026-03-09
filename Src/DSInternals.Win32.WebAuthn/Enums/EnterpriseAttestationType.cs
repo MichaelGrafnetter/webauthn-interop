@@ -1,5 +1,4 @@
-﻿using System;
-using Windows.Win32;
+﻿using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -7,7 +6,6 @@ namespace DSInternals.Win32.WebAuthn
     /// Enterprise Attestation Capabilities
     /// </summary>
     /// <see>https://fidoalliance.org/specs/fido-v2.1-rd-20201208/fido-client-to-authenticator-protocol-v2.1-rd-20201208.html#sctn-feature-descriptions-enterp-attstn</see>
-    [Flags]
     public enum EnterpriseAttestationType : uint
     {
         /// <remarks>
