@@ -33,5 +33,7 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
         ICommand GenerateHmacSecretSalt1Command { get; }
 
         ICommand GenerateHmacSecretSalt2Command { get; }
+
+        bool IsFormValid { get; }
     }
 }

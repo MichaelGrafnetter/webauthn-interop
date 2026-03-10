@@ -64,7 +64,11 @@ public class AssertionOptionsViewModel : BindableBase, IAssertionOptionsViewMode
     public string RelyingPartyId
     {
         get;
-        set => SetProperty(ref field, value);
+        set
+        {
+            if (SetProperty(ref field, value))
+                RaisePropertyChanged(nameof(IsFormValid));
+        }
     }
 
     private byte[] _challenge;
@@ -76,6 +80,7 @@ public class AssertionOptionsViewModel : BindableBase, IAssertionOptionsViewMode
             if (SetProperty(ref _challenge, value, nameof(Challenge)))
             {
                 RaisePropertyChanged(nameof(ChallengeString));
+                RaisePropertyChanged(nameof(IsFormValid));
             }
         }
     }
@@ -299,6 +304,10 @@ public class AssertionOptionsViewModel : BindableBase, IAssertionOptionsViewMode
         get;
         set => SetProperty(ref field, value);
     }
+
+    public bool IsFormValid =>
+        !string.IsNullOrWhiteSpace(RelyingPartyId) &&
+        _challenge is { Length: > 0 };
 
     private static byte[] GetRandomBytes(uint count)
     {

@@ -14,7 +14,15 @@
             <UniformGrid Rows="1" DockPanel.Dock="Top">
                 <DockPanel>
                     <Label Name="RpIdLabel" Content="Relying party:" Width="130" VerticalAlignment="Center" />
-                    <TextBox x:Name="RpIdTextBox" Text="{Binding RelyingPartyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="0" />
+                    <TextBox x:Name="RpIdTextBox" VerticalAlignment="Center" TabIndex="0">
+                        <TextBox.Text>
+                            <Binding Path="RelyingPartyId" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </DockPanel>
                 <DockPanel>
                     <Label x:Name="AppIdLabel" Content="U2F AppID:" VerticalAlignment="Center" />
@@ -75,6 +83,7 @@
                         <TextBox.Text>
                             <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
+                                    <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
                                     <ExceptionValidationRule />
                                 </Binding.ValidationRules>
                             </Binding>

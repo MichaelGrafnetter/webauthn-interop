@@ -25,6 +25,8 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
             // Dialogs
             containerRegistry.RegisterDialog<NotificationDialog>();
             containerRegistry.RegisterDialog<ConfirmationDialog>();
+            containerRegistry.RegisterDialog<AttestationSigningDialog>();
+            containerRegistry.RegisterDialog<AssertionSigningDialog>();
 
             // Services
             containerRegistry.RegisterSingleton<WebAuthnApi>();

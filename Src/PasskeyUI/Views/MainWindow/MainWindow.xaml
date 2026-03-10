@@ -33,12 +33,20 @@
             <TabItem Header="Registration">
                 <DockPanel>
                     <local:AttestationOptionsView x:Name="AttestationOptionsEditor" DockPanel.Dock="Top" DataContext="{Binding AttestationOptionsViewModel}" />
-                    <Button x:Name="RegisterButton" DockPanel.Dock="Top" Command="{Binding RegisterCommand}" HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE8FA;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
-                            <AccessText Text="_Register" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Top">
+                        <Button x:Name="RegisterButton" Command="{Binding RegisterCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE8FA;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <AccessText Text="_Register" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="SignAttestationButton" Command="{Binding SignAttestationCommand}" Margin="10,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xED25;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <AccessText Text="Sign with _File" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                     <GroupBox Name="AttestationResponseGroupBox" Header="Response">
                         <TextBox Name="AttestationResponseTextBox" IsReadOnly="true" Text="{Binding AttestationResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>
@@ -47,12 +55,20 @@
             <TabItem Header="Authentication">
                 <DockPanel>
                     <local:AssertionOptionsView x:Name="AssertionOptionsEditor" DockPanel.Dock="Top" DataContext="{Binding AssertionOptionsViewModel}" />
-                    <Button x:Name="AuthenticateButton" DockPanel.Dock="Top" Command="{Binding AuthenticateCommand}" HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE785;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
-                            <AccessText Text="_Authenticate" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Top">
+                        <Button x:Name="AuthenticateButton" Command="{Binding AuthenticateCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE785;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <AccessText Text="_Authenticate" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="SignAssertionButton" Command="{Binding SignAssertionCommand}" Margin="10,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xED25;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <AccessText Text="Sign with F_ile" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                     <GroupBox Name="AssertionResponseGroupBox" Header="Response">
                         <TextBox Name="AssertionResponseTextBox" IsReadOnly="True" Text="{Binding AssertionResponse, Mode=OneWay}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" />
                     </GroupBox>

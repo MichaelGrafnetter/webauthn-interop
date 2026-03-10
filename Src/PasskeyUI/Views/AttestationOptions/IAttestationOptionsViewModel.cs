@@ -45,5 +45,7 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
         ICommand GenerateChallengeCommand { get; }
 
         ICommand GenerateUserIdCommand { get; }
+
+        bool IsFormValid { get; }
     }
 }

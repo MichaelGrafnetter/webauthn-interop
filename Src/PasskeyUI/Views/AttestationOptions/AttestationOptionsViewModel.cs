@@ -73,7 +73,11 @@ public class AttestationOptionsViewModel : BindableBase, IAttestationOptionsView
     public string RpId
     {
         get;
-        set => SetProperty(ref field, value);
+        set
+        {
+            if (SetProperty(ref field, value))
+                RaisePropertyChanged(nameof(IsFormValid));
+        }
     }
 
     public string RpName
@@ -85,7 +89,11 @@ public class AttestationOptionsViewModel : BindableBase, IAttestationOptionsView
     public string UserName
     {
         get;
-        set => SetProperty(ref field, value);
+        set
+        {
+            if (SetProperty(ref field, value))
+                RaisePropertyChanged(nameof(IsFormValid));
+        }
     }
 
     public string UserDisplayName
@@ -130,6 +138,7 @@ public class AttestationOptionsViewModel : BindableBase, IAttestationOptionsView
             if (SetProperty(ref _challenge, value, nameof(Challenge)))
             {
                 RaisePropertyChanged(nameof(ChallengeString));
+                RaisePropertyChanged(nameof(IsFormValid));
             }
         }
     }
@@ -408,6 +417,11 @@ public class AttestationOptionsViewModel : BindableBase, IAttestationOptionsView
         get;
         set => SetProperty(ref field, value);
     }
+
+    public bool IsFormValid =>
+        !string.IsNullOrWhiteSpace(RpId) &&
+        _challenge is { Length: > 0 } &&
+        !string.IsNullOrWhiteSpace(UserName);
 
     private static byte[] GetRandomBytes(int count)
     {

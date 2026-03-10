@@ -38,7 +38,15 @@
                         <StackPanel>
                             <DockPanel>
                                 <Label Content="Name:" Width="100" VerticalAlignment="Center" />
-                                <TextBox Name="UserNameTextBox" Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="0" />
+                                <TextBox Name="UserNameTextBox" VerticalAlignment="Center" TabIndex="0">
+                                    <TextBox.Text>
+                                        <Binding Path="UserName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Display name:" Width="100" VerticalAlignment="Center" />
@@ -63,7 +71,15 @@
                         <StackPanel>
                             <DockPanel>
                                 <Label Content="Domain name:" Width="100" VerticalAlignment="Center" />
-                                <TextBox Name="RpDomainNameTextBox" Text="{Binding RpId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TabIndex="4" />
+                                <TextBox Name="RpDomainNameTextBox" VerticalAlignment="Center" TabIndex="4">
+                                    <TextBox.Text>
+                                        <Binding Path="RpId" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="Display name:" Width="100" VerticalAlignment="Center" />
@@ -135,6 +151,7 @@
                             <TextBox.Text>
                                 <Binding Path="ChallengeString" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
+                                        <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
                                         <ExceptionValidationRule />
                                     </Binding.ValidationRules>
                                 </Binding>

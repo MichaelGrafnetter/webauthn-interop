@@ -355,3 +355,6 @@ MigrationBackup/
 *.Private.snk
 *.key
 .vscode/launch.json
+
+# Claude Code
+.claude/

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
@@ -43,8 +44,10 @@ public class MainWindowViewModel : BindableBase
 
         // Initialize commands
         ResetCommand = new DelegateCommand(OnReset);
-        RegisterCommand = new DelegateCommand(OnRegister);
-        AuthenticateCommand = new DelegateCommand(OnAuthenticate);
+        RegisterCommand = new DelegateCommand(OnRegister, () => AttestationOptionsViewModel.IsFormValid);
+        AuthenticateCommand = new DelegateCommand(OnAuthenticate, () => AssertionOptionsViewModel.IsFormValid);
+        SignAttestationCommand = new DelegateCommand(OnSignAttestation, () => AttestationOptionsViewModel.IsFormValid);
+        SignAssertionCommand = new DelegateCommand(OnSignAssertion, () => AssertionOptionsViewModel.IsFormValid);
         ListPlatformCredentialsCommand = new DelegateCommand(OnListCredentials);
         LoadMicrosoftOptionsCommand = new DelegateCommand(OnLoadMicrosoftOptions);
         LoadGoogleOptionsCommand = new DelegateCommand(OnLoadGoogleOptions);
@@ -52,6 +55,31 @@ public class MainWindowViewModel : BindableBase
         OpenHyperLinkCommand = new DelegateCommand<string>(OnOpenHyperLink);
         DeleteCredentialCommand = new DelegateCommand<CredentialDetails>(OnDeleteCredential);
         TestCredentialCommand = new DelegateCommand<CredentialDetails>(OnTestCredential);
+
+        // Subscribe to form validity changes to update button states
+        if (attestationOptionsViewModel is INotifyPropertyChanged attestationNotify)
+        {
+            attestationNotify.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(IAttestationOptionsViewModel.IsFormValid))
+                {
+                    ((DelegateCommand)RegisterCommand).RaiseCanExecuteChanged();
+                    ((DelegateCommand)SignAttestationCommand).RaiseCanExecuteChanged();
+                }
+            };
+        }
+
+        if (assertionOptionsViewModel is INotifyPropertyChanged assertionNotify)
+        {
+            assertionNotify.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(IAssertionOptionsViewModel.IsFormValid))
+                {
+                    ((DelegateCommand)AuthenticateCommand).RaiseCanExecuteChanged();
+                    ((DelegateCommand)SignAssertionCommand).RaiseCanExecuteChanged();
+                }
+            };
+        }
     }
 
     public IAttestationOptionsViewModel AttestationOptionsViewModel { get; private set; }
@@ -61,6 +89,8 @@ public class MainWindowViewModel : BindableBase
     public ICommand ResetCommand { get; private set; }
     public ICommand RegisterCommand { get; private set; }
     public ICommand AuthenticateCommand { get; private set; }
+    public ICommand SignAttestationCommand { get; private set; }
+    public ICommand SignAssertionCommand { get; private set; }
     public ICommand ListPlatformCredentialsCommand { get; private set; }
     public ICommand LoadMicrosoftOptionsCommand { get; private set; }
     public ICommand LoadGoogleOptionsCommand { get; private set; }
@@ -278,6 +308,52 @@ public class MainWindowViewModel : BindableBase
             DialogParameters parameters = new($"Message={ex.Message}");
             DialogService.ShowDialog(nameof(NotificationDialog), parameters);
         }
+    }
+
+    private void OnSignAttestation()
+    {
+        var parameters = new DialogParameters
+        {
+            { "RelyingParty", AttestationOptionsViewModel.RelyingPartyEntity },
+            { "User", AttestationOptionsViewModel.UserEntity },
+            { "Challenge", AttestationOptionsViewModel.Challenge },
+            { "Algorithms", AttestationOptionsViewModel.PublicKeyCredentialParameters },
+            { "UserVerificationRequirement", AttestationOptionsViewModel.UserVerificationRequirement }
+        };
+
+        DialogService.ShowDialog(nameof(AttestationSigningDialog), parameters, result =>
+        {
+            if (result.Result == ButtonResult.OK)
+            {
+                this.AttestationResponse = result.Parameters.GetValue<string>("Response");
+            }
+        });
+    }
+
+    private void OnSignAssertion()
+    {
+        // Get credential ID from attestation options if present
+        string? credentialId = null;
+        if (AttestationOptionsViewModel.UserEntity?.Id is { Length: > 0 } userId)
+        {
+            credentialId = Base64UrlConverter.ToBase64UrlString(userId);
+        }
+
+        var parameters = new DialogParameters
+        {
+            { "RelyingPartyId", AssertionOptionsViewModel.RelyingPartyId },
+            { "Challenge", AssertionOptionsViewModel.Challenge },
+            { "UserVerificationRequirement", AssertionOptionsViewModel.UserVerificationRequirement },
+            { "CredentialId", credentialId }
+        };
+
+        DialogService.ShowDialog(nameof(AssertionSigningDialog), parameters, result =>
+        {
+            if (result.Result == ButtonResult.OK)
+            {
+                this.AssertionResponse = result.Parameters.GetValue<string>("Response");
+            }
+        });
     }
 
     private void OnListCredentials()
