@@ -31,19 +31,22 @@ namespace DSInternals.Win32.WebAuthn.Events;
 /// <para>Sample event data for CtapCommandError (2103):</para>
 /// <code>
 /// &lt;EventData&gt;
-///   &lt;Data Name="Command"&gt;MakeCredential&lt;/Data&gt;
+///   &lt;Data Name="Command"&gt;WebAuthN&lt;/Data&gt;
 ///   &lt;Data Name="TransactionId"&gt;{aabbccdd-1234-5678-9abc-def012345678}&lt;/Data&gt;
 ///   &lt;Data Name="Error"&gt;0x80090331&lt;/Data&gt;
 ///   &lt;Data Name="Win32Error"&gt;0x80090331&lt;/Data&gt;
 /// &lt;/EventData&gt;
 /// </code>
+/// <para>Known command names: MakeCredential, GetAssertion, GetAllPlatformCredentials,
+/// GetAuthenticatorList, GetPluginAuthenticatorList, CreateTicket, UpdatePluginAuthenticator,
+/// RemoveAllPluginAuthenticatorCredentials, WebAuthN, command.</para>
 /// </remarks>
 public sealed class CtapCommandEvent : WebAuthnEvent
 {
     /// <summary>
-    /// The CTAP command name or identifier.
+    /// The CTAP command name (e.g., "MakeCredential", "GetAssertion", "GetAllPlatformCredentials").
     /// </summary>
-    public int? Command { get; set; }
+    public string? Command { get; set; }
 
     /// <summary>
     /// Command flags.

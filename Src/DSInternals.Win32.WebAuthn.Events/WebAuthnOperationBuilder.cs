@@ -84,13 +84,13 @@ public static class WebAuthnOperationBuilder
         bool? u2fProtocol = deviceInfo?.U2fProtocol ?? usbDevice?.U2fProtocol;
         ParseVidPid(devicePath, out int? vendorId, out int? productId);
         CtapMakeCredentialRequestParser.ParseUserInfo(request?.Request, out string? userName, out string? userDisplayName);
-        DateTime? endTime = events.Where(e => e.TimeCreated.HasValue).Max(e => e.TimeCreated);
+        DateTime? endTime = completed?.TimeCreated ?? events.Where(e => e.TimeCreated.HasValue).Max(e => e.TimeCreated);
 
         return new WebAuthnAttestationOperation
         {
             TransactionId = transactionId,
             TimeStarted = started?.TimeCreated,
-            EndTime = endTime,
+            TimeCompleted = endTime,
             ProcessId = started?.ProcessId ?? events.First().ProcessId,
             RpId = request?.RpId,
             RpIdHash = response?.RpIdHash,
@@ -135,13 +135,13 @@ public static class WebAuthnOperationBuilder
         Guid? aaGuid = deviceInfo?.AAGuid ?? usbDevice?.AAGuid;
         bool? u2fProtocol = deviceInfo?.U2fProtocol ?? usbDevice?.U2fProtocol;
         ParseVidPid(devicePath, out int? vendorId, out int? productId);
-        DateTime? endTime = events.Where(e => e.TimeCreated.HasValue).Max(e => e.TimeCreated);
+        DateTime? endTime = completed?.TimeCreated ?? events.Where(e => e.TimeCreated.HasValue).Max(e => e.TimeCreated);
 
         return new WebAuthnAssertionOperation
         {
             TransactionId = transactionId,
             TimeStarted = started?.TimeCreated,
-            EndTime = endTime,
+            TimeCompleted = endTime,
             ProcessId = started?.ProcessId ?? events.First().ProcessId,
             RpId = request?.RpId,
             RpIdHash = response?.RpIdHash,

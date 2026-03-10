@@ -81,5 +81,7 @@ internal static class CtapMakeCredentialRequestParser
                     break;
             }
         }
+
+        reader.ReadEndMap();
     }
 }

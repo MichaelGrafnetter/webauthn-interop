@@ -26,7 +26,7 @@ public abstract class WebAuthnOperation
     /// <summary>
     /// Timestamp of the last event with this correlation/transaction ID.
     /// </summary>
-    public DateTime? EndTime { get; set; }
+    public DateTime? TimeCompleted { get; set; }
 
     /// <summary>
     /// The process ID that initiated the WebAuthN operation (from the service).
@@ -123,18 +123,4 @@ public abstract class WebAuthnOperation
     /// </summary>
     public int? ProductId { get; set; }
 
-    /// <summary>
-    /// The user ID specified in the request (registration only).
-    /// </summary>
-    public byte[]? UserId { get; set; }
-
-    /// <summary>
-    /// The user name extracted from the CTAP2 CBOR request (registration only).
-    /// </summary>
-    public string? UserName { get; set; }
-
-    /// <summary>
-    /// The user display name extracted from the CTAP2 CBOR request (registration only).
-    /// </summary>
-    public string? UserDisplayName { get; set; }
 }

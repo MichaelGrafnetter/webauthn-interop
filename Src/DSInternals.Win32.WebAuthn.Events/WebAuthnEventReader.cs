@@ -426,7 +426,7 @@ public static class WebAuthnEventReader
             ThreadId = (int)(record.ThreadId ?? 0),
             Level = GetLevel(record),
             Message = message,
-            Command = GetInt32(properties, 0),
+            Command = GetString(properties, 0),
             TransactionId = GetGuid(properties, 1),
             Flags = GetInt32(properties, 2),
             TimeoutMilliseconds = GetInt32(properties, 3),
@@ -446,7 +446,7 @@ public static class WebAuthnEventReader
             ThreadId = (int)(record.ThreadId ?? 0),
             Level = GetLevel(record),
             Message = message,
-            Command = GetInt32(properties, 0),
+            Command = GetString(properties, 0),
             TransactionId = GetGuid(properties, 1),
             Response = GetByteArray(properties, 3) // index 2 is ResponseLength
         };
@@ -463,7 +463,7 @@ public static class WebAuthnEventReader
             ThreadId = (int)(record.ThreadId ?? 0),
             Level = GetLevel(record),
             Message = message,
-            Command = GetInt32(properties, 0),
+            Command = GetString(properties, 0),
             TransactionId = GetGuid(properties, 1),
             Error = GetString(properties, 2),
             HResult = GetInt32(properties, 3)

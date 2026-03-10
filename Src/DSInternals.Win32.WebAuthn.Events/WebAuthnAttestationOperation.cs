@@ -11,6 +11,21 @@ public sealed class WebAuthnAttestationOperation : WebAuthnOperation
     public override string OperationType => "Registration";
 
     /// <summary>
+    /// The user ID specified in the request.
+    /// </summary>
+    public byte[]? UserId { get; set; }
+
+    /// <summary>
+    /// The user name extracted from the CTAP2 CBOR request.
+    /// </summary>
+    public string? UserName { get; set; }
+
+    /// <summary>
+    /// The user display name extracted from the CTAP2 CBOR request.
+    /// </summary>
+    public string? UserDisplayName { get; set; }
+
+    /// <summary>
     /// Whether a resident (discoverable) key was required.
     /// </summary>
     public bool? RequireResidentKey { get; set; }
