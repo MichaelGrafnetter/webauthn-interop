@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DSInternals.Win32.WebAuthn\DSInternals.Win32.WebAuthn.csproj" />
+    <ProjectReference Include="..\DSInternals.Win32.WebAuthn.Events\DSInternals.Win32.WebAuthn.Events.csproj" />
   </ItemGroup>
 
   <ItemGroup>

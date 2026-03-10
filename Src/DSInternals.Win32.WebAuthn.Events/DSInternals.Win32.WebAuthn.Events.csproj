@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>DSInternals.Win32.WebAuthn.Events</AssemblyName>
+    <RootNamespace>DSInternals.Win32.WebAuthn.Events</RootNamespace>
+    <PackageId>DSInternals.Win32.WebAuthn.Events</PackageId>
+    <Product>WebAuthn Event Log Reader</Product>
+    <Title>WebAuthn Event Log Reader</Title>
+    <Version>1.0.6</Version>
+    <AssemblyVersion>1.0.6</AssemblyVersion>
+    <ProductVersion>1.0.6</ProductVersion>
+    <FileVersion>1.0.6</FileVersion>
+    <Description>Reader for the Microsoft-Windows-WebAuthN/Operational event log with typed event models and WebAuthn operation aggregation.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(Configuration)' == 'Release'">
+    <!-- Enable Source Link on CI builds -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <!-- DLLs need to be digitally signed first before a NuGet package is created. -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net48'">
+    <PackageReference Include="System.Diagnostics.EventLog" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Formats.Cbor" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(Configuration)' == 'Release'">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

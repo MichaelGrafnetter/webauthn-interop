@@ -21,6 +21,7 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
             containerRegistry.Register<ICredentialManagementViewModel, CredentialManagementViewModel>();
             containerRegistry.Register<IAlgorithmSelectorViewModel, AlgorithmSelectorViewModel>();
             containerRegistry.Register<IAuthenticatorListViewModel, AuthenticatorListViewModel>();
+            containerRegistry.Register<IEventLogViewModel, EventLogViewModel>();
 
             // Dialogs
             containerRegistry.RegisterDialog<NotificationDialog>();

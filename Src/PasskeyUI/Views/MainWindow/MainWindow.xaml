@@ -130,6 +130,9 @@
             <TabItem Header="Authenticators">
                 <local:AuthenticatorListView />
             </TabItem>
+            <TabItem Header="Event Log">
+                <local:EventLogView />
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

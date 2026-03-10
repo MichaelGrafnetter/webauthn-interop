@@ -29,6 +29,7 @@
   <Project Path="Src/DSInternals.Win32.WebAuthn/DSInternals.Win32.WebAuthn.csproj" />
   <Project Path="Src/DSInternals.Win32.WebAuthn.Tests/DSInternals.Win32.WebAuthn.Tests.csproj" />
   <Project Path="Src/PasskeyUI/PasskeyUI.csproj" DefaultStartup="true" />
+  <Project Path="Src/DSInternals.Win32.WebAuthn.Events/DSInternals.Win32.WebAuthn.Events.csproj" />
   <Project Path="Src/DSInternals.Win32.WebAuthn.Adapter/DSInternals.Win32.WebAuthn.Adapter.csproj" />
   <Project Path="Src/DSInternals.Win32.WebAuthn.Adapter.Tests/DSInternals.Win32.WebAuthn.Adapter.Tests.csproj" />
 </Solution>

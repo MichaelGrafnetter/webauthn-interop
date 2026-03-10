@@ -1,0 +1,80 @@
+<UserControl x:Class="DSInternals.Win32.WebAuthn.PasskeyUI.EventLogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.PasskeyUI"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1400">
+    <UserControl.Resources>
+        <local:ByteArrayToBase64UrlConverter x:Key="ByteArrayToBase64UrlConverter" />
+    </UserControl.Resources>
+    <DockPanel>
+        <Button DockPanel.Dock="Top" Command="{Binding LoadEventsCommand}" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="&#xE72C;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <AccessText Text="Load _Events" VerticalAlignment="Center" />
+            </StackPanel>
+        </Button>
+        <GroupBox Header="Passkey Operations">
+            <DataGrid x:Name="OperationsDataGrid"
+                      ItemsSource="{Binding Operations}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto"
+                      SelectionUnit="FullRow"
+                      SelectionMode="Single"
+                      Focusable="False"
+                      IsTabStop="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time Started" Binding="{Binding TimeStarted, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="160" MinWidth="80" ElementStyle="{StaticResource DataGridTextElementStyle}" />
+                    <DataGridTextColumn Header="Type" Binding="{Binding OperationType}" Width="110" MinWidth="80" ElementStyle="{StaticResource DataGridTextElementStyle}" />
+                    <DataGridTemplateColumn Header="Relying Party" Width="200" MinWidth="80" SortMemberPath="RpId">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:ClipboardEnabledTextBlock Text="{Binding RpId}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="User Name" Width="200" MinWidth="80" SortMemberPath="UserName">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:ClipboardEnabledTextBlock Text="{Binding UserName}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="AAGUID" Width="280" MinWidth="80" SortMemberPath="AAGuid">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:ClipboardEnabledTextBlock Text="{Binding AAGuid}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Provider" Binding="{Binding ProviderName}" Width="200" MinWidth="80" ElementStyle="{StaticResource DataGridTextElementStyle}" />
+                    <DataGridTextColumn Header="Product" Binding="{Binding Product}" Width="200" MinWidth="80" ElementStyle="{StaticResource DataGridTextElementStyle}" />
+                    <DataGridTemplateColumn Header="Credential ID" Width="280" MinWidth="80" SortMemberPath="CredentialId">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:ClipboardEnabledTextBlock Text="{Binding CredentialId, Converter={StaticResource ByteArrayToBase64UrlConverter}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Credentials" Binding="{Binding CredentialCount}" Width="95" MinWidth="60" ElementStyle="{StaticResource DataGridTextElementStyle}" />
+                    <DataGridCheckBoxColumn Header="UP" Binding="{Binding UserPresent, Mode=OneWay}" Width="50" MinWidth="40" />
+                    <DataGridCheckBoxColumn Header="UV" Binding="{Binding UserVerified, Mode=OneWay}" Width="50" MinWidth="40" />
+                    <DataGridCheckBoxColumn Header="AT" Binding="{Binding AttestationData, Mode=OneWay}" Width="50" MinWidth="40" />
+                    <DataGridCheckBoxColumn Header="ED" Binding="{Binding ExtensionData, Mode=OneWay}" Width="50" MinWidth="40" />
+                    <DataGridTextColumn Header="Counter" Binding="{Binding SignCount}" Width="90" MinWidth="60" ElementStyle="{StaticResource DataGridTextElementStyle}" />
+                    <DataGridCheckBoxColumn Header="U2F" Binding="{Binding U2fProtocol, Mode=OneWay}" Width="55" MinWidth="45" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+    </DockPanel>
+</UserControl>

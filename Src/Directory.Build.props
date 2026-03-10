@@ -33,6 +33,9 @@
 
     <!-- Turn off reference assembly generation -->
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+
+    <!-- Only use source-generated JSON serializers, not reflection-based -->
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
   <!-- Note: Fido2.Models is currently not strong-name signed, so the Adapter DLLs cannot be signed. -->
