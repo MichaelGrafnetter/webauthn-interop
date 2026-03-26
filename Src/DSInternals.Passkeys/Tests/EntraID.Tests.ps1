@@ -15,7 +15,7 @@ param(
 )
 
 if ([string]::IsNullOrWhiteSpace($ModulePath)) {
-    # No path has been provided, so use a the default value
+    # No path has been provided, so use the default value
     $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\PSModule\Release\DSInternals.Passkeys' -Resolve -ErrorAction Stop
 }
 
