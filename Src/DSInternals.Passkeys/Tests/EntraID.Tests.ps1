@@ -20,7 +20,20 @@ if ([string]::IsNullOrWhiteSpace($ModulePath)) {
 }
 
 BeforeAll {
-    Add-Type -Path (Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\release\net8.0-windows\DSInternals.Win32.WebAuthn.Tests.dll' -Resolve -ErrorAction Stop) -ErrorAction Stop
+    # Derive build configuration (e.g., Release/Debug) from the module path
+    $moduleConfigDirectory = Split-Path -Path (Split-Path -Path $ModulePath -Parent) -Leaf
+
+    # Select framework based on PowerShell version
+    if ($PSVersionTable.PSVersion.Major -lt 6) {
+        $framework = 'net48'
+    }
+    else {
+        $framework = 'net8.0-windows'
+    }
+
+    $testAssemblyPath = Join-Path -Path $PSScriptRoot -ChildPath ("..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\{0}\{1}\DSInternals.Win32.WebAuthn.Tests.dll" -f $moduleConfigDirectory, $framework) -Resolve -ErrorAction Stop
+
+    Add-Type -Path $testAssemblyPath -ErrorAction Stop
     Import-Module -Name $ModulePath -ErrorAction Stop -Force
 }
 
