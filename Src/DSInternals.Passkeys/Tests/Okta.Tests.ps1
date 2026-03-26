@@ -1,9 +1,27 @@
-#requires -Version 5.1
-#requires -Modules Pester
+<#
+.SYNOPSIS
+    This script contains Pester tests for Okta passkey registration via the DSInternals.Passkeys PowerShell module.
+.PARAMETER ModulePath
+    Path to the compiled module directory.
+#>
+
+#Requires -Version 5.1
+#Requires -Modules @{ ModuleName = 'Pester'; ModuleVersion = '5.0' }
+
+param(
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [string] $ModulePath
+)
+
+if ([string]::IsNullOrWhiteSpace($ModulePath)) {
+    # No path has been provided, so use a the default value
+    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\PSModule\Release\DSInternals.Passkeys' -Resolve -ErrorAction Stop
+}
 
 BeforeAll {
-    Add-Type -Path "./build/bin/DSInternals.Win32.WebAuthn.Tests/release/DSInternals.Win32.WebAuthn.Tests.dll" -ErrorAction Stop
-    Import-Module .\Build\bin\PSModule\Release\DSInternals.Passkeys\DSInternals.Passkeys.psm1 -Force
+    Add-Type -Path (Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\release\net8.0-windows\DSInternals.Win32.WebAuthn.Tests.dll' -Resolve -ErrorAction Stop) -ErrorAction Stop
+    Import-Module -Name $ModulePath -ErrorAction Stop -Force
 }
 
 Describe "Okta Tests" {

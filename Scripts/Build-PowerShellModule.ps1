@@ -41,6 +41,6 @@ foreach($currentConfiguration in $Configuration) {
         [string] $frameworkSpecificPath = Join-Path -Path $moduleDestinationPath -ChildPath $framework
 
         # Copy the compiled binaries
-        dotnet.exe publish $libraryProject --output $frameworkSpecificPath --nologo --framework $framework --configuration $currentConfiguration --property:PublishDocumentationFile=false --no-restore --no-build --self-contained false
+        dotnet.exe publish $libraryProject --output $frameworkSpecificPath --nologo --framework $framework --configuration $currentConfiguration --no-restore --no-build
     }
 }
