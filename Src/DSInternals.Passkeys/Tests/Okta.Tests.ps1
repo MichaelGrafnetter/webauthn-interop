@@ -20,7 +20,29 @@ if ([string]::IsNullOrWhiteSpace($ModulePath)) {
 }
 
 BeforeAll {
-    Add-Type -Path (Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\release\net8.0-windows\DSInternals.Win32.WebAuthn.Tests.dll' -Resolve -ErrorAction Stop) -ErrorAction Stop
+    # Select framework based on PowerShell edition/version
+    if ($PSVersionTable.PSEdition -eq 'Desktop' -or $PSVersionTable.PSVersion.Major -lt 7) {
+        $framework = 'net48'
+    }
+    else {
+        $framework = 'net8.0-windows'
+    }
+
+    # Probe for the assembly in common configurations (Release/Debug)
+    $testAssemblyPath = $null
+    foreach ($config in @('Release', 'Debug')) {
+        $candidate = Join-Path -Path $PSScriptRoot -ChildPath "..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\$config\$framework\DSInternals.Win32.WebAuthn.Tests.dll"
+        if (Test-Path -Path $candidate) {
+            $testAssemblyPath = (Resolve-Path -Path $candidate -ErrorAction Stop).Path
+            break
+        }
+    }
+
+    if (-not $testAssemblyPath) {
+        throw "Could not find DSInternals.Win32.WebAuthn.Tests.dll in any known configuration (Release/Debug) or framework for framework '$framework'."
+    }
+
+    Add-Type -Path $testAssemblyPath -ErrorAction Stop
     Import-Module -Name $ModulePath -ErrorAction Stop -Force
 }
 
