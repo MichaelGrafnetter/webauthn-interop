@@ -83,7 +83,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish PasskeyUI (win-x64)
-      run: dotnet publish --configuration Release --runtime win-x64 --no-restore
+      run: dotnet publish Src/PasskeyUI/PasskeyUI.csproj --configuration Release --runtime win-x64 --no-restore
 
     - name: Build PowerShell Module
       working-directory: Scripts

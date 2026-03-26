@@ -2,8 +2,6 @@ name: 'Build and Test'
 
 on:
   push:
-    branches:
-    - main
     paths:
     - 'Src/**'
     - '.github/workflows/autobuild.yml'
@@ -40,7 +38,7 @@ jobs:
         dotnet build --configuration Debug --no-restore
 
     - name: Publish PasskeyUI (win-x64)
-      run: dotnet publish --configuration Release --runtime win-x64 --no-restore
+      run: dotnet publish Src/PasskeyUI/PasskeyUI.csproj --configuration Release --runtime win-x64 --no-restore
 
     - name: Upload Desktop App as Artifact
       uses: actions/upload-artifact@v7
