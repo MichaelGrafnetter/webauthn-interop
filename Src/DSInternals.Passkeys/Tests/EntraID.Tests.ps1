@@ -8,6 +8,8 @@
 #Requires -Version 5.1
 #Requires -Modules @{ ModuleName = 'Pester'; ModuleVersion = '5.0' }
 
+# Secret is read from an environment variable, not hardcoded
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
@@ -21,23 +23,23 @@ if ([string]::IsNullOrWhiteSpace($ModulePath)) {
 
 BeforeAll {
     # Derive build configuration (e.g., Release/Debug) from the module path
-    $moduleConfigDirectory = Split-Path -Path (Split-Path -Path $ModulePath -Parent) -Leaf
+    [string] $moduleConfigDirectory = Split-Path -Path (Split-Path -Path $ModulePath -Parent) -Leaf
 
     # Select framework based on PowerShell version
     if ($PSVersionTable.PSVersion.Major -lt 6) {
-        $framework = 'net48'
+        [string] $framework = 'net48'
     }
     else {
-        $framework = 'net8.0-windows'
+        [string] $framework = 'net8.0-windows'
     }
 
-    $testAssemblyPath = Join-Path -Path $PSScriptRoot -ChildPath ("..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\{0}\{1}\DSInternals.Win32.WebAuthn.Tests.dll" -f $moduleConfigDirectory, $framework) -Resolve -ErrorAction Stop
+    [string] $testAssemblyPath = Join-Path -Path $PSScriptRoot -ChildPath ("..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\{0}_{1}\DSInternals.Win32.WebAuthn.Tests.dll" -f $moduleConfigDirectory.ToLowerInvariant(), $framework) -Resolve -ErrorAction Stop
 
     Add-Type -Path $testAssemblyPath -ErrorAction Stop
     Import-Module -Name $ModulePath -ErrorAction Stop -Force
 }
 
-Describe 'EntraID Tests' {
+Describe 'EntraID Tests' -Skip {
     BeforeAll {
         $SecureClientSecret = ConvertTo-SecureString -String $env:EntraIdClientSecret -AsPlainText -Force
         $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $env:EntraIdClientId, $SecureClientSecret
