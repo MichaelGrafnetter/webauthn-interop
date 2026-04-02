@@ -50,7 +50,20 @@ ProcessorArchitecture = 'None'
 RequiredModules = @('Microsoft.Graph.Authentication','Microsoft.Graph.Identity.SignIns')
 
 # Assemblies that must be loaded prior to importing this module
-# RequiredAssemblies = @()
+RequiredAssemblies = if ($PSEdition -eq 'Core') {
+    @(
+        'net8.0-windows\DSInternals.Win32.WebAuthn.dll',
+        'net8.0-windows\Microsoft.Identity.Client.dll',
+        'net8.0-windows\System.IdentityModel.Tokens.Jwt.dll'
+    )
+}
+else {
+    @(
+        'net48\DSInternals.Win32.WebAuthn.dll',
+        'net48\Microsoft.Identity.Client.dll',
+        'net48\System.IdentityModel.Tokens.Jwt.dll'
+    )
+}
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.
 # ScriptsToProcess = @()

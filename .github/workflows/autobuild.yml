@@ -61,7 +61,7 @@ jobs:
         OktaClientId: ${{ secrets.OKTACLIENTID }}
         OktaJsonWebKey: ${{ secrets.OKTAJSONWEBKEY }}
         OktaUserId: ${{ secrets.OKTAUSERID }}
-      shell: pwsh
+      shell: powershell
       run: Src/DSInternals.Passkeys/Test.ps1 -ModulePath "${{github.workspace}}/Build/bin/PSModule/Release/DSInternals.Passkeys"
 
     - name: Upload PowerShell Module as Artifact
