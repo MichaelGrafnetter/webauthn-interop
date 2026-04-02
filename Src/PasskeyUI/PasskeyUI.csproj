@@ -14,9 +14,9 @@
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <ApplicationIcon>../Icons/app.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
-    <AssemblyVersion>1.0.6</AssemblyVersion>
-    <ProductVersion>1.0.6</ProductVersion>
-    <FileVersion>1.0.6</FileVersion>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <ProductVersion>2.0.0</ProductVersion>
+    <FileVersion>2.0.0</FileVersion>
     <!-- Suppress WPF0001: ThemeMode is experimental but required for Fluent theme -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
   </PropertyGroup>
