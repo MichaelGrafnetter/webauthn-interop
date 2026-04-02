@@ -80,7 +80,7 @@ jobs:
         path: Build/package/release/*nupkg
 
     - name: Run Non-Interactive Unit Tests
-      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --no-build  --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
+      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --no-build --results-directory Build/TestResults --report-trx --coverage --coverage-output-format cobertura
       continue-on-error: true
 
     - name: Publish Test Results
@@ -103,7 +103,7 @@ jobs:
 
     - name: Generate Code Coverage Reports
       working-directory: Build/TestResults
-      run: reportgenerator -reports:**/coverage.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary" -title:"WebAuthn Interop Assembly"
+      run: reportgenerator -reports:*.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary" -title:"WebAuthn Interop Assembly"
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v7
