@@ -5,11 +5,11 @@ using System.Buffers.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Formats.Cbor;
 using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeterO.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.Tests
 {
@@ -21,6 +21,68 @@ namespace DSInternals.Win32.WebAuthn.Tests
         private static readonly byte[] TestCredentialId = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
         private static readonly byte[] TestUserHandle = new byte[] { 0xAA, 0xBB, 0xCC };
         private static readonly Guid TestAaGuid = new("01020304-0506-0708-090a-0b0c0d0e0f10");
+
+        /// <summary>
+        /// Parses a CBOR-encoded attestation object and extracts fmt, authData, and attStmt fields.
+        /// </summary>
+        private static (string fmt, byte[] authData, int alg, byte[] sig) ParseAttestationObject(byte[] attestationObjectBytes)
+        {
+            string? fmt = null;
+            byte[]? authData = null;
+            int alg = 0;
+            byte[]? sig = null;
+
+            var reader = new CborReader(attestationObjectBytes, CborConformanceMode.Lax);
+            int? mapLength = reader.ReadStartMap();
+            int count = mapLength ?? int.MaxValue;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (reader.PeekState() == CborReaderState.EndMap)
+                    break;
+
+                string key = reader.ReadTextString();
+                switch (key)
+                {
+                    case "fmt":
+                        fmt = reader.ReadTextString();
+                        break;
+                    case "authData":
+                        authData = reader.ReadByteString();
+                        break;
+                    case "attStmt":
+                        int? attStmtLength = reader.ReadStartMap();
+                        int attStmtCount = attStmtLength ?? int.MaxValue;
+                        for (int j = 0; j < attStmtCount; j++)
+                        {
+                            if (reader.PeekState() == CborReaderState.EndMap)
+                                break;
+
+                            string attKey = reader.ReadTextString();
+                            switch (attKey)
+                            {
+                                case "alg":
+                                    alg = reader.ReadInt32();
+                                    break;
+                                case "sig":
+                                    sig = reader.ReadByteString();
+                                    break;
+                                default:
+                                    reader.SkipValue();
+                                    break;
+                            }
+                        }
+                        reader.ReadEndMap();
+                        break;
+                    default:
+                        reader.SkipValue();
+                        break;
+                }
+            }
+
+            reader.ReadEndMap();
+            return (fmt!, authData!, alg, sig!);
+        }
 
         #region MakeCredential Tests
 
@@ -35,7 +97,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var credential = SoftwareAuthenticator.MakeCredential(rp, user, TestChallenge, Algorithm.ES256, TestAaGuid, 1, flags, key);
 
             Assert.IsNotNull(credential);
-            Assert.AreEqual("public-key", credential.Type);
+            Assert.AreEqual(ApiConstants.PublicKeyCredentialType, credential.Type);
             Assert.IsNotNull(credential.Id);
             Assert.IsNotEmpty(credential.Id);
             CollectionAssert.AreEqual(credential.Id, credential.RawId);
@@ -79,10 +141,8 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var response = (AuthenticatorAttestationResponse)credential.Response;
 
             // Decode CBOR attestation object
-            CBORObject attestationObj = CBORObject.DecodeFromBytes(response.AttestationObject);
-            Assert.AreEqual("packed", attestationObj["fmt"].AsString());
-
-            byte[] authData = attestationObj["authData"].GetByteString();
+            var (fmt, authData, _, _) = ParseAttestationObject(response.AttestationObject);
+            Assert.AreEqual("packed", fmt);
 
             // Verify RP ID hash (first 32 bytes)
             byte[] expectedRpIdHash = SHA256.HashData(Encoding.UTF8.GetBytes(TestRpId));
@@ -110,9 +170,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var credential = SoftwareAuthenticator.MakeCredential(rp, user, TestChallenge, Algorithm.ES256, TestAaGuid, 0, AuthenticatorFlags.UserPresent, key);
             var response = (AuthenticatorAttestationResponse)credential.Response;
 
-            CBORObject attestationObj = CBORObject.DecodeFromBytes(response.AttestationObject);
-            byte[] authData = attestationObj["authData"].GetByteString();
-            byte[] signature = attestationObj["attStmt"]["sig"].GetByteString();
+            var (_, authData, _, signature) = ParseAttestationObject(response.AttestationObject);
 
             // Reconstruct signed data: authData || SHA-256(clientDataJSON)
             byte[] clientDataHash = SHA256.HashData(response.ClientDataJson);
@@ -135,9 +193,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var credential = SoftwareAuthenticator.MakeCredential(rp, user, TestChallenge, Algorithm.RS256, TestAaGuid, 0, AuthenticatorFlags.UserPresent, key);
             var response = (AuthenticatorAttestationResponse)credential.Response;
 
-            CBORObject attestationObj = CBORObject.DecodeFromBytes(response.AttestationObject);
-            byte[] authData = attestationObj["authData"].GetByteString();
-            byte[] signature = attestationObj["attStmt"]["sig"].GetByteString();
+            var (_, authData, _, signature) = ParseAttestationObject(response.AttestationObject);
 
             byte[] clientDataHash = SHA256.HashData(response.ClientDataJson);
             byte[] signedData = new byte[authData.Length + clientDataHash.Length];
@@ -182,7 +238,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var credential = SoftwareAuthenticator.GetAssertion(TestRpId, TestChallenge, Algorithm.ES256, 5, flags, TestCredentialId, TestUserHandle, key);
 
             Assert.IsNotNull(credential);
-            Assert.AreEqual("public-key", credential.Type);
+            Assert.AreEqual(ApiConstants.PublicKeyCredentialType, credential.Type);
             CollectionAssert.AreEqual(TestCredentialId, credential.Id);
             CollectionAssert.AreEqual(TestCredentialId, credential.RawId);
 

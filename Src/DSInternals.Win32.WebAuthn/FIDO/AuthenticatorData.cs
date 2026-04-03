@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using DSInternals.Win32.WebAuthn.Interop;
-using PeterO.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {
@@ -60,7 +59,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// Optional extensions to suit particular use cases.
         /// </summary>
         /// <see>https://www.w3.org/TR/webauthn/#extensions</see>
-        public CBORObject Extensions
+        public byte[]? Extensions
         {
             get;
             private set;
@@ -106,11 +105,8 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                     if (this.Flags.HasFlag(AuthenticatorFlags.ExtensionData))
                     {
 
-                        // "CBORObject.Read: This method will read from the stream until the end
-                        // of the CBOR object is reached or an error occurs, whichever happens first."
-                        //
-                        // Read the CBOR object from the stream
-                        this.Extensions = CBORObject.Read(reader.BaseStream);
+                        // Read the CBOR-encoded extension data from the stream
+                        this.Extensions = CborHelper.ReadCborItemBytes(reader.BaseStream);
                     }
 
                     if (stream.Position != stream.Length)

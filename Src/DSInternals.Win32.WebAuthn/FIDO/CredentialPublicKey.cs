@@ -1,9 +1,9 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using DSInternals.Win32.WebAuthn.COSE;
-using PeterO.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {
@@ -12,7 +12,8 @@ namespace DSInternals.Win32.WebAuthn.FIDO
     /// </summary>
     public class CredentialPublicKey
     {
-        private CBORObject _cpk;
+        private readonly byte[] _rawCborBytes;
+        private readonly Dictionary<int, ReadOnlyMemory<byte>> _parameters;
 
         /// <summary>
         /// Gets the COSE key type.
@@ -45,8 +46,8 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                     rsa.ImportParameters(
                         new RSAParameters()
                         {
-                            Modulus = _cpk[CBORObject.FromObject(KeyTypeParameter.N)].GetByteString(),
-                            Exponent = _cpk[CBORObject.FromObject(KeyTypeParameter.E)].GetByteString()
+                            Modulus = CborHelper.DecodeByteString(_parameters[(int)KeyTypeParameter.N]),
+                            Exponent = CborHelper.DecodeByteString(_parameters[(int)KeyTypeParameter.E])
                         }
                     );
                     return rsa;
@@ -66,11 +67,11 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                 {
                     var point = new ECPoint
                     {
-                        X = _cpk[CBORObject.FromObject(KeyTypeParameter.X)].GetByteString(),
-                        Y = _cpk[CBORObject.FromObject(KeyTypeParameter.Y)].GetByteString(),
+                        X = CborHelper.DecodeByteString(_parameters[(int)KeyTypeParameter.X]),
+                        Y = CborHelper.DecodeByteString(_parameters[(int)KeyTypeParameter.Y]),
                     };
                     ECCurve curve;
-                    var crv = (EllipticCurve)_cpk[CBORObject.FromObject(KeyTypeParameter.Crv)].AsInt32();
+                    var crv = (EllipticCurve)CborHelper.DecodeInt32(_parameters[(int)KeyTypeParameter.Crv]);
                     switch (Algorithm)
                     {
                         case Algorithm.ES256:
@@ -81,7 +82,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                                     curve = ECCurve.NamedCurves.nistP256;
                                     break;
                                 default:
-                                    throw new FormatException(String.Format(CultureInfo.InvariantCulture, "Missing or unknown crv {0}", crv.ToString()));
+                                    throw new FormatException($"Missing or unknown crv {crv}");
                             }
                             break;
                         case Algorithm.ES384:
@@ -91,7 +92,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                                     curve = ECCurve.NamedCurves.nistP384;
                                     break;
                                 default:
-                                    throw new FormatException(String.Format(CultureInfo.InvariantCulture, "Missing or unknown crv {0}", crv.ToString()));
+                                    throw new FormatException($"Missing or unknown crv {crv}");
                             }
                             break;
                         case Algorithm.ES512:
@@ -101,11 +102,11 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                                     curve = ECCurve.NamedCurves.nistP521;
                                     break;
                                 default:
-                                    throw new FormatException(String.Format(CultureInfo.InvariantCulture, "Missing or unknown crv {0}", crv.ToString()));
+                                    throw new FormatException($"Missing or unknown crv {crv}");
                             }
                             break;
                         default:
-                            throw new FormatException(String.Format(CultureInfo.InvariantCulture, "Missing or unknown alg {0}", Algorithm.ToString()));
+                            throw new FormatException($"Missing or unknown alg {Algorithm}");
                     }
                     return ECDsa.Create(new ECParameters
                     {
@@ -139,7 +140,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                         case Algorithm.RS512:
                             return RSASignaturePadding.Pkcs1;
                         default:
-                            throw new FormatException(String.Format(CultureInfo.InvariantCulture, "Missing or unknown alg {0}", Algorithm.ToString()));
+                            throw new FormatException($"Missing or unknown alg {Algorithm}");
                     }
                 }
 
@@ -160,17 +161,16 @@ namespace DSInternals.Win32.WebAuthn.FIDO
                     switch (Algorithm) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
                     {
                         case COSE.Algorithm.EdDSA:
-                            var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(KeyTypeParameter.Crv)].AsInt32();
+                            var crv = (COSE.EllipticCurve)CborHelper.DecodeInt32(_parameters[(int)KeyTypeParameter.Crv]);
                             switch (crv) // https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
                             {
                                 case COSE.EllipticCurve.Ed25519:
-                                    var publicKey = _cpk[CBORObject.FromObject(KeyTypeParameter.X)].GetByteString();
-                                    return publicKey;
+                                    return CborHelper.DecodeByteString(_parameters[(int)KeyTypeParameter.X]);
                                 default:
-                                    throw new FormatException(String.Format(CultureInfo.InvariantCulture, "Missing or unknown crv {0}", crv.ToString()));
+                                    throw new FormatException($"Missing or unknown crv {crv}");
                             }
                         default:
-                            throw new FormatException(String.Format(CultureInfo.InvariantCulture, "Missing or unknown alg {0}", Algorithm.ToString()));
+                            throw new FormatException($"Missing or unknown alg {Algorithm}");
                     }
                 }
                 return null;
@@ -178,23 +178,23 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         }
 
         /// <summary>
-        /// Initializes a new instance from a CBOR credential public key object.
+        /// Initializes a new instance from CBOR-encoded credential public key bytes.
         /// </summary>
-        /// <param name="cpk">CBOR representation of <c>credentialPublicKey</c>.</param>
-        public CredentialPublicKey(CBORObject cpk)
+        /// <param name="cborBytes">CBOR-encoded <c>credentialPublicKey</c> (COSE_Key).</param>
+        public CredentialPublicKey(byte[] cborBytes)
         {
-            _cpk = cpk ?? throw new ArgumentNullException(nameof(cpk));
-            this.Type = (KeyType)cpk[CBORObject.FromObject(KeyCommonParameter.KeyType)].AsInt32();
-            this.Algorithm = (Algorithm)cpk[CBORObject.FromObject(KeyCommonParameter.Alg)].AsInt32();
+            _rawCborBytes = cborBytes ?? throw new ArgumentNullException(nameof(cborBytes));
+            _parameters = CborHelper.ReadIntKeyedMap(cborBytes);
+            this.Type = (KeyType)CborHelper.DecodeInt32(_parameters[(int)KeyCommonParameter.KeyType]);
+            this.Algorithm = (Algorithm)CborHelper.DecodeInt32(_parameters[(int)KeyCommonParameter.Alg]);
         }
 
         /// <summary>
-        /// Returns a textual representation of the underlying CBOR object.
+        /// Returns a textual representation of the credential public key.
         /// </summary>
-        /// <returns>CBOR diagnostic notation string.</returns>
         public override string ToString()
         {
-            return _cpk.ToString();
+            return $"Type: {Type}, Algorithm: {Algorithm}";
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         /// <returns>CBOR-encoded key bytes.</returns>
         public byte[] GetBytes()
         {
-            return _cpk.EncodeToBytes();
+            return _rawCborBytes;
         }
     }
 }

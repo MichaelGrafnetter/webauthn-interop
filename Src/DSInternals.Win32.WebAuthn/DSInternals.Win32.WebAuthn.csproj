@@ -39,8 +39,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <!-- TODO: Replace with System.Formats.Cbor -->
-    <PackageReference Include="PeterO.Cbor" />
     <PackageReference Include="System.Formats.Cbor" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
     <PackageReference Include="System.Text.Json" />

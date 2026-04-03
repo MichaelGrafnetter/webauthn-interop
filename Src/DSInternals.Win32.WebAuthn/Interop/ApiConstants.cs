@@ -45,7 +45,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY.
         /// </remarks>
-        public const string CredentialTypePublicKey = PInvoke.WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY;
+        public const string PublicKeyCredentialType = PInvoke.WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY;
 
         /// <remarks>
         /// Corresponds to WEBAUTHN_HASH_ALGORITHM_SHA_256.

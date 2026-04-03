@@ -31,6 +31,6 @@ namespace DSInternals.Win32.WebAuthn
         [JsonPropertyName("userHandle")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] UserHandle { get; set; }
+        public byte[]? UserHandle { get; set; }
     }
 }
