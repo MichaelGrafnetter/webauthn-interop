@@ -35,10 +35,6 @@ on:
         type: string
         default: '1.x'
 
-permissions:
-      id-token: write
-      contents: write
-
 env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -48,6 +44,9 @@ jobs:
     name: 'Build'
     runs-on: windows-latest
     timeout-minutes: 10
+    permissions:
+      id-token: write
+      contents: read
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v6
@@ -163,8 +162,7 @@ jobs:
       run: >
         sign code azure-key-vault
         PasskeyUI.exe
-        --base-directory "${{ github.workspace }}/Build/publish/PasskeyUI/release_net10.0-windows_win-x64"
-        --base-directory "${{ github.workspace }}/Build/bin"
+        --base-directory "${{ github.workspace }}/Build/publish/PasskeyUI/release_win-x64"
         --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
         --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
         --azure-credential-type azure-cli
@@ -186,7 +184,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: PasskeyUI
-        path: Build/publish/PasskeyUI/release_net10.0-windows_win-x64/*
+        path: Build/publish/PasskeyUI/release_win-x64/*
 
     - name: Upload PowerShell Module as Artifact
       uses: actions/upload-artifact@v7
@@ -204,7 +202,6 @@ jobs:
         sign code azure-key-vault
         *.*nupkg
         --base-directory "${{ github.workspace }}/Build/package/release"
-        --base-directory "${{ github.workspace }}/Build/bin"
         --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
         --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
         --azure-credential-type azure-cli
@@ -221,6 +218,7 @@ jobs:
 
   nuget:
     name: 'Publish to NuGet Gallery'
+    permissions: {}
     if: ${{ inputs.publish_nuget }}
     runs-on: ubuntu-latest
     needs: build
@@ -241,6 +239,7 @@ jobs:
 
   psgallery:
     name: 'Publish to PowerShell Gallery'
+    permissions: {}
     if: ${{ inputs.publish_powershell }}
     runs-on: ubuntu-latest
     needs: build
@@ -257,6 +256,8 @@ jobs:
 
   release:
     name: 'Create GitHub Release Draft'
+    permissions:
+      contents: write
     if: ${{ inputs.create_github_release }}
     runs-on: ubuntu-latest
     needs: build
