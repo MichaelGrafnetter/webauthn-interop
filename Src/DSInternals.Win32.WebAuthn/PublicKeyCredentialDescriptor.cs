@@ -47,7 +47,7 @@ namespace DSInternals.Win32.WebAuthn
         public PublicKeyCredentialDescriptor(
             byte[] id,
             AuthenticatorTransport transports = AuthenticatorTransport.NoRestrictions,
-            string type = ApiConstants.CredentialTypePublicKey)
+            string type = ApiConstants.PublicKeyCredentialType)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
             Transports = transports;

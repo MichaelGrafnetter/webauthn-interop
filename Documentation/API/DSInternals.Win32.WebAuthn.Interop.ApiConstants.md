@@ -1,7 +1,7 @@
 # <a id="DSInternals_Win32_WebAuthn_Interop_ApiConstants"></a> Class ApiConstants
 
-Namespace: [DSInternals.Win32.WebAuthn.Interop](DSInternals.Win32.WebAuthn.Interop.md)  
-Assembly: DSInternals.Win32.WebAuthn.dll  
+Namespace: [DSInternals.Win32.WebAuthn.Interop](DSInternals.Win32.WebAuthn.Interop.md)
+Assembly: DSInternals.Win32.WebAuthn.dll
 
 Contains WebAuthn API constants.
 
@@ -11,17 +11,17 @@ public static class ApiConstants
 
 #### Inheritance
 
-[object](https://learn.microsoft.com/dotnet/api/system.object) ← 
+[object](https://learn.microsoft.com/dotnet/api/system.object) ←
 [ApiConstants](DSInternals.Win32.WebAuthn.Interop.ApiConstants.md)
 
 #### Inherited Members
 
-[object.Equals\(object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\)), 
-[object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
-[object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 
-[object.GetType\(\)](https://learn.microsoft.com/dotnet/api/system.object.gettype), 
-[object.MemberwiseClone\(\)](https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone), 
-[object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals), 
+[object.Equals\(object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\)),
+[object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)),
+[object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode),
+[object.GetType\(\)](https://learn.microsoft.com/dotnet/api/system.object.gettype),
+[object.MemberwiseClone\(\)](https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone),
+[object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals),
 [object.ToString\(\)](https://learn.microsoft.com/dotnet/api/system.object.tostring)
 
 ## Fields
@@ -74,10 +74,10 @@ public const string ClientDataCredentialGetU2F = "navigator.id.getAssertion"
 
  [string](https://learn.microsoft.com/dotnet/api/system.string)
 
-### <a id="DSInternals_Win32_WebAuthn_Interop_ApiConstants_CredentialTypePublicKey"></a> CredentialTypePublicKey
+### <a id="DSInternals_Win32_WebAuthn_Interop_ApiConstants_PublicKeyCredentialType"></a> PublicKeyCredentialType
 
 ```csharp
-public const string CredentialTypePublicKey = "public-key"
+public const string PublicKeyCredentialType = "public-key"
 ```
 
 #### Field Value
