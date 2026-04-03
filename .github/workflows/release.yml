@@ -116,12 +116,12 @@ jobs:
       shell: cmd
       if: ${{ inputs.certificate_sign }}
       run: >
-        sign code trusted-signing
+        sign code azure-key-vault
         DSInternals.Passkeys.ps*1
         --base-directory "${{ github.workspace }}/Build/bin/PSModule/Release/DSInternals.Passkeys"
-        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -131,12 +131,12 @@ jobs:
       shell: cmd
       if: ${{ inputs.certificate_sign }}
       run: >
-        sign code trusted-signing
+        sign code azure-key-vault
         release_*/DSInternals.Win32.WebAuthn.dll
         --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn"
-        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -146,12 +146,12 @@ jobs:
       shell: cmd
       if: ${{ inputs.certificate_sign }}
       run: >
-        sign code trusted-signing
+        sign code azure-key-vault
         release_*/DSInternals.Win32.WebAuthn.Adapter.dll
         --base-directory "${{ github.workspace }}/Build/bin/DSInternals.Win32.WebAuthn.Adapter"
-        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -161,12 +161,13 @@ jobs:
       shell: cmd
       if: ${{ inputs.certificate_sign }}
       run: >
-        sign code trusted-signing
+        sign code azure-key-vault
         PasskeyUI.exe
         --base-directory "${{ github.workspace }}/Build/publish/PasskeyUI/release_net10.0-windows_win-x64"
-        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
+        --base-directory "${{ github.workspace }}/Build/bin"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
@@ -200,12 +201,13 @@ jobs:
       shell: cmd
       if: ${{ inputs.certificate_sign }}
       run: >
-        sign code trusted-signing
+        sign code azure-key-vault
         *.*nupkg
         --base-directory "${{ github.workspace }}/Build/package/release"
-        --trusted-signing-endpoint "${{ vars.SIGNING_ENDPOINT }}"
-        --trusted-signing-account "${{ vars.SIGNING_ACCOUNT_NAME }}"
-        --trusted-signing-certificate-profile "${{ vars.SIGNING_PROFILE_NAME }}"
+        --base-directory "${{ github.workspace }}/Build/bin"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
         --file-digest SHA256
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
