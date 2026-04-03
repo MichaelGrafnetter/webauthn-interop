@@ -30,7 +30,7 @@ namespace DSInternals.Win32.WebAuthn
         [JsonConstructor]
         public PublicKeyCredentialParameter(Algorithm algorithm, string type)
         {
-            ArgumentOutOfRangeException.ThrowIfNotEqual(type, ApiConstants.CredentialTypePublicKey);
+            ArgumentOutOfRangeException.ThrowIfNotEqual(type, ApiConstants.PublicKeyCredentialType);
 
             this.Algorithm = algorithm;
             this.Type = type;

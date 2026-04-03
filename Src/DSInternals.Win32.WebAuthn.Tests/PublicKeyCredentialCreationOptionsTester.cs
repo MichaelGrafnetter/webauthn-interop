@@ -11,7 +11,7 @@ using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using DSInternals.Win32.WebAuthn.Okta;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeterO.Cbor;
+using System.Formats.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.Tests
 {
@@ -19,14 +19,29 @@ namespace DSInternals.Win32.WebAuthn.Tests
     public class PasskeyFactory
     {
         internal WebauthnCredentialCreationOptions _options = null;
-        internal CBORObject _attestationObject => CBORObject.NewMap().
-            Add("fmt", "packed").
-            Add("authData", _authData).
-            Add("attStmt", CBORObject.NewMap().
-                Add("alg", _alg).
-                Add("sig", _sig).
-                Add("x5c", _x5c)
-            );
+        internal byte[] _attestationObjectBytes
+        {
+            get
+            {
+                var writer = new CborWriter(CborConformanceMode.Lax);
+                writer.WriteStartMap(3);
+                writer.WriteTextString("fmt");
+                writer.WriteTextString("packed");
+                writer.WriteTextString("authData");
+                writer.WriteByteString(_authData);
+                writer.WriteTextString("attStmt");
+                writer.WriteStartMap(3);
+                writer.WriteTextString("alg");
+                writer.WriteInt32((int)_alg);
+                writer.WriteTextString("sig");
+                writer.WriteByteString(_sig);
+                writer.WriteTextString("x5c");
+                WriteCborByteArray(writer, _x5cBytes);
+                writer.WriteEndMap();
+                writer.WriteEndMap();
+                return writer.Encode();
+            }
+        }
 
         internal COSE.Algorithm _alg;
         internal COSE.KeyType _kty
@@ -78,15 +93,22 @@ namespace DSInternals.Win32.WebAuthn.Tests
         internal static X500DistinguishedName _rootDN = new X500DistinguishedName("CN=Testing, O=DSInternals, OU=Passkeys, C=US");
         internal static byte[] _asnEncodedAaguid = [0x04, 0x10, 0x44, 0x53, 0x49, 0x6E, 0x74, 0x65, 0x72, 0x6E, 0x61, 0x6C, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00,];
         internal byte[] _sig = null!;
-        internal CBORObject _x5c
+        internal byte[] _x5cBytes
         {
             get
             {
                 _certReq.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, false));
                 _certReq.CertificateExtensions.Add(new X509Extension(new Oid("1.3.6.1.4.1.45724.1.1.4"), _asnEncodedAaguid, true));
                 using X509Certificate2 root = _certReq.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddDays(2));
-                return CBORObject.NewArray().Add(root.RawData);
+                return root.RawData;
             }
+        }
+
+        private static void WriteCborByteArray(CborWriter writer, byte[] item)
+        {
+            writer.WriteStartArray(1);
+            writer.WriteByteString(item);
+            writer.WriteEndArray();
         }
 
         internal byte[] _rpIdHash => SHA256.HashData(Encoding.UTF8.GetBytes(_rp));
@@ -149,8 +171,12 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 BinaryPrimitives.WriteUInt32BigEndian(signCountBytes, _signCount);
                 ms.Write(signCountBytes, 0, signCountBytes.Length);
                 ms.Write(_acd, 0, _acd.Length);
-                CBORObject exts = CBORObject.NewMap().Add("testing", true);
-                byte[] extensionBytes = exts.EncodeToBytes();
+                var extWriter = new CborWriter(CborConformanceMode.Lax);
+                extWriter.WriteStartMap(1);
+                extWriter.WriteTextString("testing");
+                extWriter.WriteBoolean(true);
+                extWriter.WriteEndMap();
+                byte[] extensionBytes = extWriter.Encode();
                 ms.Write(extensionBytes, 0, extensionBytes.Length);
                 return ms.ToArray();
             }
@@ -206,9 +232,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
         internal void MakeCredentialPublicKey()
         {
-            var cpk = CBORObject.NewMap().
-                Add(COSE.KeyCommonParameter.KeyType, _kty).
-                Add(COSE.KeyCommonParameter.Alg, _alg);
+            var cpkWriter = new CborWriter(CborConformanceMode.Lax);
 
             switch (_kty)
             {
@@ -226,10 +250,19 @@ namespace DSInternals.Win32.WebAuthn.Tests
                         _certReq = new CertificateRequest(_rootDN, ecdsa, HashAlgorithmName.SHA256);
                         var ecparams = ecdsa.ExportParameters(true);
 
-                        cpk.Add(COSE.KeyTypeParameter.X, ecparams.Q.X);
-                        cpk.Add(COSE.KeyTypeParameter.Y, ecparams.Q.Y);
-                        cpk.Add((int)COSE.KeyTypeParameter.Crv, (int)_crv);
-                        _credentialPublicKey = new CredentialPublicKey(cpk);
+                        cpkWriter.WriteStartMap(5);
+                        cpkWriter.WriteInt32((int)COSE.KeyCommonParameter.KeyType);
+                        cpkWriter.WriteInt32((int)_kty);
+                        cpkWriter.WriteInt32((int)COSE.KeyCommonParameter.Alg);
+                        cpkWriter.WriteInt32((int)_alg);
+                        cpkWriter.WriteInt32((int)COSE.KeyTypeParameter.Crv);
+                        cpkWriter.WriteInt32((int)_crv);
+                        cpkWriter.WriteInt32((int)COSE.KeyTypeParameter.X);
+                        cpkWriter.WriteByteString(ecparams.Q.X!);
+                        cpkWriter.WriteInt32((int)COSE.KeyTypeParameter.Y);
+                        cpkWriter.WriteByteString(ecparams.Q.Y!);
+                        cpkWriter.WriteEndMap();
+                        _credentialPublicKey = new CredentialPublicKey(cpkWriter.Encode());
                         var sig = ecdsa.SignData(_attToBeSigned, HashAlgFromCOSEAlg(_alg));
                         var coefficientSize = (int)Math.Ceiling((decimal)ecdsa.KeySize / 8);
                         var r = new byte[coefficientSize];
@@ -259,9 +292,18 @@ namespace DSInternals.Win32.WebAuthn.Tests
                         };
                         _certReq = new CertificateRequest(_rootDN, rsa, HashAlgorithmName.SHA256, padding);
                         var rsaparams = rsa.ExportParameters(true);
-                        cpk.Add(COSE.KeyTypeParameter.N, rsaparams.Modulus);
-                        cpk.Add(COSE.KeyTypeParameter.E, rsaparams.Exponent);
-                        _credentialPublicKey = new CredentialPublicKey(cpk);
+
+                        cpkWriter.WriteStartMap(4);
+                        cpkWriter.WriteInt32((int)COSE.KeyCommonParameter.KeyType);
+                        cpkWriter.WriteInt32((int)_kty);
+                        cpkWriter.WriteInt32((int)COSE.KeyCommonParameter.Alg);
+                        cpkWriter.WriteInt32((int)_alg);
+                        cpkWriter.WriteInt32((int)COSE.KeyTypeParameter.N);
+                        cpkWriter.WriteByteString(rsaparams.Modulus!);
+                        cpkWriter.WriteInt32((int)COSE.KeyTypeParameter.E);
+                        cpkWriter.WriteByteString(rsaparams.Exponent!);
+                        cpkWriter.WriteEndMap();
+                        _credentialPublicKey = new CredentialPublicKey(cpkWriter.Encode());
                         _sig = rsa.SignData(_attToBeSigned, HashAlgFromCOSEAlg(_alg), _padding);
                         break;
                     }
@@ -283,7 +325,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             {
                 Response = new AuthenticatorAttestationResponse()
                 {
-                    AttestationObject = _attestationObject.EncodeToBytes(),
+                    AttestationObject = _attestationObjectBytes,
                     ClientDataJson = _clientDataJson
                 },
                 ClientExtensionResults = new()

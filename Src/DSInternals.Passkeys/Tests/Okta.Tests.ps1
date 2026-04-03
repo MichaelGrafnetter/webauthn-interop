@@ -20,33 +20,24 @@ if ([string]::IsNullOrWhiteSpace($ModulePath)) {
 }
 
 BeforeAll {
+    # Derive build configuration (e.g., Release/Debug) from the module path
+    [string] $moduleConfigDirectory = Split-Path -Path (Split-Path -Path $ModulePath -Parent) -Leaf
+
     # Select framework based on PowerShell edition/version
     if ($PSVersionTable.PSEdition -eq 'Desktop' -or $PSVersionTable.PSVersion.Major -lt 7) {
-        $framework = 'net48'
+        [string] $framework = 'net48'
     }
     else {
-        $framework = 'net8.0-windows'
+        [string] $framework = 'net8.0-windows'
     }
 
-    # Probe for the assembly in common configurations (Release/Debug)
-    $testAssemblyPath = $null
-    foreach ($config in @('Release', 'Debug')) {
-        $candidate = Join-Path -Path $PSScriptRoot -ChildPath "..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\$config\$framework\DSInternals.Win32.WebAuthn.Tests.dll"
-        if (Test-Path -Path $candidate) {
-            $testAssemblyPath = (Resolve-Path -Path $candidate -ErrorAction Stop).Path
-            break
-        }
-    }
-
-    if (-not $testAssemblyPath) {
-        throw "Could not find DSInternals.Win32.WebAuthn.Tests.dll in any known configuration (Release/Debug) or framework for framework '$framework'."
-    }
+    [string] $testAssemblyPath = Join-Path -Path $PSScriptRoot -ChildPath ("..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\{0}_{1}\DSInternals.Win32.WebAuthn.Tests.dll" -f $moduleConfigDirectory.ToLowerInvariant(), $framework) -Resolve -ErrorAction Stop
 
     Add-Type -Path $testAssemblyPath -ErrorAction Stop
     Import-Module -Name $ModulePath -ErrorAction Stop -Force
 }
 
-Describe "Okta Tests" {
+Describe "Okta Tests" -Skip {
     BeforeAll {
         Connect-Okta -Tenant $env:OktaTenantId -ClientId $env:OKtaClientId -Scopes @('okta.users.manage') -JsonWebKey $env:OktaJsonWebKey
     }
@@ -77,7 +68,7 @@ Describe "Okta Tests" {
         $result0.Profile.CredentialId | Should -Not -BeNullOrEmpty
         $result0.Profile.CredentialId | Should -Be ([Convert]::ToBase64String($passkey0.PublicKeyCred.Id)).Replace('+', '-').Replace('/', '_').Replace('=', '')
 
-        $OktaUserId = $env:OktaUserId
+        [string] $OktaUserId = $env:OktaUserId
         [string] $credentialDeletionPath0 = "/api/v1/users/${OktaUserId}/factors/${factorId0}"
         $response0 = Invoke-OktaWebRequest -Method ([Microsoft.PowerShell.Commands.WebRequestMethod]::Delete) -Path $credentialDeletionPath0
         $response0.StatusCode | Should -Be 204

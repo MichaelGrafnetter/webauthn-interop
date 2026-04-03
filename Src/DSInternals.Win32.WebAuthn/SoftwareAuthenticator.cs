@@ -1,7 +1,8 @@
-﻿#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER
 
 using System;
 using System.Buffers.Binary;
+using System.Formats.Cbor;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,7 +10,6 @@ using System.Text.Json;
 using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
-using PeterO.Cbor;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -44,7 +44,7 @@ namespace DSInternals.Win32.WebAuthn
             credentialId ??= RandomNumberGenerator.GetBytes(DefaultCredentialIdLength);
 
             // Build COSE public key
-            CBORObject cosePublicKey = BuildCosePublicKey(privateKey, algorithm);
+            byte[] cosePublicKey = BuildCosePublicKey(privateKey, algorithm);
 
             // Build authenticator data with attested credential data
             byte[] authenticatorData = BuildAuthenticatorData(
@@ -60,26 +60,21 @@ namespace DSInternals.Win32.WebAuthn
             byte[] clientDataHash = SHA256.HashData(clientDataJson);
 
             // Sign: authenticatorData || clientDataHash
-            byte[] dataToSign = ConcatArrays(authenticatorData, clientDataHash);
+            byte[] dataToSign = [..authenticatorData, ..clientDataHash];
             byte[] signature = Sign(privateKey, dataToSign, algorithm);
 
             // Build attestation object (packed self-attestation: no x5c)
-            CBORObject attestationObject = CBORObject.NewMap()
-                .Add("fmt", "packed")
-                .Add("authData", authenticatorData)
-                .Add("attStmt", CBORObject.NewMap()
-                    .Add("alg", (int)algorithm)
-                    .Add("sig", signature));
+            byte[] attestationObject = BuildAttestationObject(authenticatorData, algorithm, signature);
 
             return new PublicKeyCredential
             {
                 Id = credentialId,
                 RawId = credentialId,
-                Type = "public-key",
+                Type = ApiConstants.PublicKeyCredentialType,
                 Response = new AuthenticatorAttestationResponse
                 {
                     ClientDataJson = clientDataJson,
-                    AttestationObject = attestationObject.EncodeToBytes()
+                    AttestationObject = attestationObject
                 }
             };
         }
@@ -113,14 +108,14 @@ namespace DSInternals.Win32.WebAuthn
             byte[] clientDataHash = SHA256.HashData(clientDataJson);
 
             // Sign: authenticatorData || clientDataHash
-            byte[] dataToSign = ConcatArrays(authenticatorData, clientDataHash);
+            byte[] dataToSign = [..authenticatorData, ..clientDataHash];
             byte[] signature = Sign(privateKey, dataToSign, algorithm);
 
             return new PublicKeyCredential
             {
                 Id = credentialId,
                 RawId = credentialId,
-                Type = "public-key",
+                Type = ApiConstants.PublicKeyCredentialType,
                 Response = new AuthenticatorAssertionResponse
                 {
                     ClientDataJson = clientDataJson,
@@ -170,7 +165,7 @@ namespace DSInternals.Win32.WebAuthn
                 ecdsa.ImportFromPem(pem);
                 return ecdsa;
             }
-            catch (Exception)
+            catch
             {
                 // Not an EC key, try RSA
             }
@@ -181,7 +176,7 @@ namespace DSInternals.Win32.WebAuthn
                 rsa.ImportFromPem(pem);
                 return rsa;
             }
-            catch (Exception)
+            catch
             {
                 // Not an RSA key either
             }
@@ -268,8 +263,10 @@ namespace DSInternals.Win32.WebAuthn
             };
         }
 
-        private static CBORObject BuildCosePublicKey(AsymmetricAlgorithm key, Algorithm algorithm)
+        private static byte[] BuildCosePublicKey(AsymmetricAlgorithm key, Algorithm algorithm)
         {
+            var writer = new CborWriter(CborConformanceMode.Lax);
+
             if (key is ECDsa ecdsa)
             {
                 var parameters = ecdsa.ExportParameters(false);
@@ -281,23 +278,38 @@ namespace DSInternals.Win32.WebAuthn
                     _ => throw new NotSupportedException($"Unsupported EC algorithm: {algorithm}")
                 };
 
-                return CBORObject.NewMap()
-                    .Add(CBORObject.FromObject((int)KeyCommonParameter.KeyType), (int)KeyType.EC2)
-                    .Add(CBORObject.FromObject((int)KeyCommonParameter.Alg), (int)algorithm)
-                    .Add(CBORObject.FromObject((int)KeyTypeParameter.Crv), (int)curve)
-                    .Add(CBORObject.FromObject((int)KeyTypeParameter.X), parameters.Q.X)
-                    .Add(CBORObject.FromObject((int)KeyTypeParameter.Y), parameters.Q.Y);
+                writer.WriteStartMap(5);
+                writer.WriteInt32((int)KeyCommonParameter.KeyType);
+                writer.WriteInt32((int)KeyType.EC2);
+                writer.WriteInt32((int)KeyCommonParameter.Alg);
+                writer.WriteInt32((int)algorithm);
+                writer.WriteInt32((int)KeyTypeParameter.Crv);
+                writer.WriteInt32((int)curve);
+                writer.WriteInt32((int)KeyTypeParameter.X);
+                writer.WriteByteString(parameters.Q.X!);
+                writer.WriteInt32((int)KeyTypeParameter.Y);
+                writer.WriteByteString(parameters.Q.Y!);
+                writer.WriteEndMap();
+
+                return writer.Encode();
             }
 
             if (key is RSA rsa)
             {
                 var parameters = rsa.ExportParameters(false);
 
-                return CBORObject.NewMap()
-                    .Add(CBORObject.FromObject((int)KeyCommonParameter.KeyType), (int)KeyType.RSA)
-                    .Add(CBORObject.FromObject((int)KeyCommonParameter.Alg), (int)algorithm)
-                    .Add(CBORObject.FromObject((int)KeyTypeParameter.N), parameters.Modulus)
-                    .Add(CBORObject.FromObject((int)KeyTypeParameter.E), parameters.Exponent);
+                writer.WriteStartMap(4);
+                writer.WriteInt32((int)KeyCommonParameter.KeyType);
+                writer.WriteInt32((int)KeyType.RSA);
+                writer.WriteInt32((int)KeyCommonParameter.Alg);
+                writer.WriteInt32((int)algorithm);
+                writer.WriteInt32((int)KeyTypeParameter.N);
+                writer.WriteByteString(parameters.Modulus!);
+                writer.WriteInt32((int)KeyTypeParameter.E);
+                writer.WriteByteString(parameters.Exponent!);
+                writer.WriteEndMap();
+
+                return writer.Encode();
             }
 
             throw new NotSupportedException($"Unsupported key type: {key.GetType().Name}");
@@ -309,7 +321,7 @@ namespace DSInternals.Win32.WebAuthn
             uint signatureCounter,
             Guid? aaGuid = null,
             byte[]? credentialId = null,
-            CBORObject? cosePublicKey = null)
+            byte[]? cosePublicKey = null)
         {
             using var ms = new MemoryStream();
 
@@ -321,39 +333,53 @@ namespace DSInternals.Win32.WebAuthn
             ms.WriteByte((byte)flags);
 
             // Signature counter (4 bytes, big-endian)
-            byte[] signCountBytes = new byte[4];
+            byte[] signCountBytes = new byte[sizeof(uint)];
             BinaryPrimitives.WriteUInt32BigEndian(signCountBytes, signatureCounter);
-            ms.Write(signCountBytes, 0, 4);
+            ms.Write(signCountBytes, 0, sizeof(uint));
 
             // Attested credential data (only for attestation)
             if (aaGuid.HasValue && credentialId != null && cosePublicKey != null)
             {
                 // AAGUID (16 bytes, big-endian)
-                byte[] aaguidBytes = aaGuid.Value.ToByteArray();
-                // Convert from little-endian .NET Guid to big-endian wire format
-                if (BitConverter.IsLittleEndian)
-                {
-                    SwapBytes(aaguidBytes, 0, 3);
-                    SwapBytes(aaguidBytes, 1, 2);
-                    SwapBytes(aaguidBytes, 4, 5);
-                    SwapBytes(aaguidBytes, 6, 7);
-                }
-                ms.Write(aaguidBytes, 0, 16);
+                byte[] aaguidBytes = aaGuid.Value.ToByteArray(bigEndian: true);
+                ms.Write(aaguidBytes, 0, aaguidBytes.Length);
 
                 // Credential ID length (2 bytes, big-endian)
-                byte[] credIdLenBytes = new byte[2];
+                byte[] credIdLenBytes = new byte[sizeof(ushort)];
                 BinaryPrimitives.WriteUInt16BigEndian(credIdLenBytes, (ushort)credentialId.Length);
-                ms.Write(credIdLenBytes, 0, 2);
+                ms.Write(credIdLenBytes, 0, sizeof(ushort));
 
                 // Credential ID
                 ms.Write(credentialId, 0, credentialId.Length);
 
-                // COSE public key (CBOR)
-                byte[] coseKeyBytes = cosePublicKey.EncodeToBytes();
-                ms.Write(coseKeyBytes, 0, coseKeyBytes.Length);
+                // COSE public key (already CBOR-encoded)
+                ms.Write(cosePublicKey, 0, cosePublicKey.Length);
             }
 
             return ms.ToArray();
+        }
+
+        private static byte[] BuildAttestationObject(byte[] authenticatorData, Algorithm algorithm, byte[] signature)
+        {
+            var writer = new CborWriter(CborConformanceMode.Lax);
+            writer.WriteStartMap(3);
+
+            writer.WriteTextString("fmt");
+            writer.WriteTextString("packed");
+
+            writer.WriteTextString("authData");
+            writer.WriteByteString(authenticatorData);
+
+            writer.WriteTextString("attStmt");
+            writer.WriteStartMap(2);
+            writer.WriteTextString("alg");
+            writer.WriteInt32((int)algorithm);
+            writer.WriteTextString("sig");
+            writer.WriteByteString(signature);
+            writer.WriteEndMap();
+
+            writer.WriteEndMap();
+            return writer.Encode();
         }
 
         private static byte[] BuildClientDataJson(string type, byte[] challenge, string rpId)
@@ -407,19 +433,6 @@ namespace DSInternals.Win32.WebAuthn
                 Algorithm.RS256 or Algorithm.RS384 or Algorithm.RS512 or Algorithm.RS1 => RSASignaturePadding.Pkcs1,
                 _ => throw new NotSupportedException($"Algorithm {algorithm} is not an RSA algorithm.")
             };
-        }
-
-        private static byte[] ConcatArrays(byte[] a, byte[] b)
-        {
-            byte[] result = new byte[a.Length + b.Length];
-            Buffer.BlockCopy(a, 0, result, 0, a.Length);
-            Buffer.BlockCopy(b, 0, result, a.Length, b.Length);
-            return result;
-        }
-
-        private static void SwapBytes(byte[] bytes, int index1, int index2)
-        {
-            (bytes[index2], bytes[index1]) = (bytes[index1], bytes[index2]);
         }
     }
 }

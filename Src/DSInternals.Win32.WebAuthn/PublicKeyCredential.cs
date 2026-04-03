@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.Interop;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -39,7 +40,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Credential type string, typically <c>public-key</c>.
         /// </summary>
         [JsonPropertyName("type")]
-        public string Type { get; set; } = "public-key";
+        public string Type { get; set; } = ApiConstants.PublicKeyCredentialType;
 
         /// <summary>
         /// Outputs of client extension processing.

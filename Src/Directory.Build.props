@@ -7,7 +7,6 @@
     <!-- Redirect output directories -->
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <ArtifactsPath>$(MSBuildThisFileDirectory)..\Build</ArtifactsPath>
-    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)..\Build\TestResults</VSTestResultsDirectory>
 
     <!-- Configure NuGet package properties -->
     <Authors>Michael Grafnetter</Authors>

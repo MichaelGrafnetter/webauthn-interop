@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [2.0] - 2026-04-03
+
 ### Added
 
 - Added support for Okta as a passkey identity provider, including `Connect-Okta`, `Disconnect-Okta`, and extended `Get-PasskeyRegistrationOptions`/`Register-Passkey` cmdlets. (Thanks to @aseigler)
@@ -19,6 +21,7 @@ All notable changes to this project will be documented in this file. The format 
 - Updated the application icon to a key emoji (🔑).
 - Renamed the desktop application from "FIDO2 UI" to "Passkey UI".
 - Migrated solution from `.sln` to `.slnx` format.
+- Replaced the `PeterO.Cbor` library with `System.Formats.Cbor`.
 
 ### Fixed
 
@@ -73,7 +76,8 @@ This is a bugfix release. Huge thanks to @aseigler for reporting and fixing the 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.6...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.0...HEAD
+[2.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.6...v2.0
 [1.0.6]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.3...v1.0.4

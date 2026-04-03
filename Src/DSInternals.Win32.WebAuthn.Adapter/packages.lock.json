@@ -66,22 +66,11 @@
           "Microsoft.IdentityModel.Logging": "8.15.0"
         }
       },
-      "PeterO.Numbers": {
-        "type": "Transitive",
-        "resolved": "1.8.2",
-        "contentHash": "d+A5KLoWbwOTpvubPaGXLgCzANE00jXmsT+yneHwLe2OlobBBFLaIHyoDwmekuHM17z9hU++RF6mL+zZ2x69nA=="
-      },
-      "PeterO.URIUtility": {
-        "type": "Transitive",
-        "resolved": "1.0.0",
-        "contentHash": "fpRTBsYACMp7NvTECauYRomubWTC3vUNw4hMXdIedP8ctBGK6tea9HOJwE+qVzis6MZYkL3LIs8qeY3rc6Jdlw=="
-      },
       "dsinternals.win32.webauthn": {
         "type": "Project",
         "dependencies": {
           "Microsoft.Identity.Client": "[4.80.0, )",
           "Microsoft.NET.ILLink.Tasks": "[10.0.3, )",
-          "PeterO.Cbor": "[4.5.5, )",
           "System.Diagnostics.EventLog": "[9.0.3, )",
           "System.Formats.Cbor": "[9.0.3, )",
           "System.IdentityModel.Tokens.Jwt": "[8.15.0, )"
@@ -101,16 +90,6 @@
         "requested": "[10.0.3, )",
         "resolved": "10.0.3",
         "contentHash": "0B6nZyCHWXnvmlB559oduOspVdNOnpNXPjhpWVMovLPAsDVG7A4jJR9rzECf67JUzxP8/ee/wA8clwIzJcWNFA=="
-      },
-      "PeterO.Cbor": {
-        "type": "CentralTransitive",
-        "requested": "[4.5.5, )",
-        "resolved": "4.5.5",
-        "contentHash": "9fMcLg2SUm9ri1j3gVPYxk6+Ev4l4wu93bYwFG1tvntg1Qy4m0rFDdxStG88XR/W4DggOtBXfPVkC3bLF10nqw==",
-        "dependencies": {
-          "PeterO.Numbers": "1.8.2",
-          "PeterO.URIUtility": "1.0.0"
-        }
       },
       "System.Diagnostics.EventLog": {
         "type": "CentralTransitive",

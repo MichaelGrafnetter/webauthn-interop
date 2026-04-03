@@ -52,7 +52,7 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             ArgumentNullException.ThrowIfNull(reader);
 
             // First 16 bytes is AAGUID
-            byte[] aaguidBytes = reader.ReadBytes(Marshal.SizeOf(typeof(Guid)));
+            byte[] aaguidBytes = reader.ReadBytes(Marshal.SizeOf<Guid>());
 
             // GUID from authenticator is big endian. If we are on a little endian system, convert.
             this.AaGuid = aaguidBytes.ToGuidBigEndian();
@@ -70,14 +70,9 @@ namespace DSInternals.Win32.WebAuthn.FIDO
             // credentialPublicKey's beginning location given the preceding credentialId's length, and
             // then determining the credentialPublicKey's length"
 
-            // "CBORObject.Read: This method will read from the stream until the end
-            // of the CBOR object is reached or an error occurs, whichever happens first."
-
-            // Read the CBOR object from the stream
-            var cpk = PeterO.Cbor.CBORObject.Read(reader.BaseStream);
-
-            // Encode the CBOR object back to a byte array.
-            this.CredentialPublicKey = new CredentialPublicKey(cpk);
+            // Read the CBOR-encoded credential public key from the stream
+            byte[] cpkBytes = CborHelper.ReadCborItemBytes(reader.BaseStream);
+            this.CredentialPublicKey = new CredentialPublicKey(cpkBytes);
         }
 
         /// <summary>

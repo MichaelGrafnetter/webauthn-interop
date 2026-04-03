@@ -140,7 +140,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             {
                 case PublicKeyCredentialType.PublicKey:
                 case null:
-                    return ApiConstants.CredentialTypePublicKey;
+                    return ApiConstants.PublicKeyCredentialType;
                 default:
                     throw new NotSupportedException("This credential type is not currently supported.");
             }

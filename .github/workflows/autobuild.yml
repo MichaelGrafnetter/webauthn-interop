@@ -2,8 +2,6 @@ name: 'Build and Test'
 
 on:
   push:
-    branches:
-    - main
     paths:
     - 'Src/**'
     - '.github/workflows/autobuild.yml'
@@ -40,13 +38,13 @@ jobs:
         dotnet build --configuration Debug --no-restore
 
     - name: Publish PasskeyUI (win-x64)
-      run: dotnet publish --configuration Release --runtime win-x64 --no-restore
+      run: dotnet publish Src/PasskeyUI/PasskeyUI.csproj --configuration Release --runtime win-x64 --no-restore
 
     - name: Upload Desktop App as Artifact
       uses: actions/upload-artifact@v7
       with:
         name: PasskeyUI
-        path: Build/publish/PasskeyUI/release_net10.0-windows_win-x64/*
+        path: Build/publish/PasskeyUI/release_win-x64/*
 
     - name: Build PowerShell Module
       working-directory: Scripts
@@ -63,7 +61,7 @@ jobs:
         OktaClientId: ${{ secrets.OKTACLIENTID }}
         OktaJsonWebKey: ${{ secrets.OKTAJSONWEBKEY }}
         OktaUserId: ${{ secrets.OKTAUSERID }}
-      shell: pwsh
+      shell: powershell
       run: Src/DSInternals.Passkeys/Test.ps1 -ModulePath "${{github.workspace}}/Build/bin/PSModule/Release/DSInternals.Passkeys"
 
     - name: Upload PowerShell Module as Artifact
@@ -82,7 +80,7 @@ jobs:
         path: Build/package/release/*nupkg
 
     - name: Run Non-Interactive Unit Tests
-      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --no-build
+      run: dotnet test --filter TestCategory!=Interactive --configuration Debug --no-build --results-directory Build/TestResults --report-trx --coverage --coverage-output-format cobertura
       continue-on-error: true
 
     - name: Publish Test Results
@@ -105,7 +103,7 @@ jobs:
 
     - name: Generate Code Coverage Reports
       working-directory: Build/TestResults
-      run: reportgenerator -reports:*/coverage.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary" -title:"WebAuthn Interop Assembly"
+      run: reportgenerator -reports:*.cobertura.xml -targetdir:. -reporttypes:"HtmlSummary" -title:"WebAuthn Interop Assembly"
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v7

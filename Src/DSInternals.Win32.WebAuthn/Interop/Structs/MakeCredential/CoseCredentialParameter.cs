@@ -27,7 +27,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         private Algorithm _algorithm;
 
-        public CoseCredentialParameter(Algorithm algorithm, string credentialType = ApiConstants.CredentialTypePublicKey)
+        public CoseCredentialParameter(Algorithm algorithm, string credentialType = ApiConstants.PublicKeyCredentialType)
         {
             _algorithm = algorithm;
             _credentialType = credentialType;

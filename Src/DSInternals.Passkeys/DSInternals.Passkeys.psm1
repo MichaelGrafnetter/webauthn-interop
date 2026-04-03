@@ -1,17 +1,3 @@
-# Load PS host-specific assemblies
-if ($PSVersionTable.PSVersion.Major -ge 6) {
-    # PowerShell Core
-    Add-Type -Path "$PSScriptRoot/net8.0-windows/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
-    Add-Type -Path "$PSScriptRoot/net8.0-windows/Microsoft.Identity.Client.dll" -ErrorAction Stop
-    Add-Type -Path "$PSScriptRoot/net8.0-windows/System.IdentityModel.Tokens.Jwt.dll" -ErrorAction Stop
-}
-else {
-    # PowerShell Desktop
-    Add-Type -Path "$PSScriptRoot/net48/DSInternals.Win32.WebAuthn.dll" -ErrorAction Stop
-    Add-Type -Path "$PSScriptRoot/net48/Microsoft.Identity.Client.dll" -ErrorAction Stop
-    Add-Type -Path "$PSScriptRoot/net48/System.IdentityModel.Tokens.Jwt.dll" -ErrorAction Stop
-}
-
 # Needed for [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod] type
 Import-Module -Name Microsoft.Graph.Identity.SignIns -ErrorAction Stop
 
