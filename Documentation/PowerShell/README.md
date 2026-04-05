@@ -15,7 +15,7 @@ This PowerShell module allows administrative registration of passkeys (i.e. FIDO
 
 ### [Register-Passkey](Register-Passkey.md)
 
-Registers a new passkey in Microsoft Entra ID or Okta.
+Registers a newly created passkey with Microsoft Entra ID or Okta.
 
 ```powershell
 Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
@@ -31,8 +31,40 @@ Disconnect-Okta
 
 ### [Get-PasskeyRegistrationOptions](Get-PasskeyRegistrationOptions.md)
 
-Retrieves creation options required to generate and register a Microsoft Entra ID or Okta-compatible passkey.
+Retrieves creation options required to generate and register a Microsoft Entra ID or Okta compatible passkey.
 
 ### [New-Passkey](New-Passkey.md)
 
 Creates a new Microsoft Entra ID or Okta-compatible passkey.
+
+### [Test-Passkey](Test-Passkey.md)
+
+Tests a passkey by performing an authentication assertion.
+
+### [Get-PasskeyWindowsHello](Get-PasskeyWindowsHello.md)
+
+Gets the list of platform credentials (passkeys) stored on the system.
+
+### [Remove-PasskeyWindowsHello](Remove-PasskeyWindowsHello.md)
+
+Removes a platform credential (passkey) from the system.
+
+### [Get-PasskeyAuthenticator](Get-PasskeyAuthenticator.md)
+
+Gets the list of available authenticators from the WebAuthn API.
+
+### [Get-PasskeyAuthenticatorPlugin](Get-PasskeyAuthenticatorPlugin.md)
+
+Gets the list of registered authenticator plugins from the Windows registry.
+
+### [Connect-Okta](Connect-Okta.md)
+
+Retrieves an access token to interact with Okta APIs.
+
+### [Disconnect-Okta](Disconnect-Okta.md)
+
+Revokes Okta access token.
+
+### [New-PasskeyRandomChallenge](New-PasskeyRandomChallenge.md)
+
+Generates a random challenge to be used by WebAuthn.

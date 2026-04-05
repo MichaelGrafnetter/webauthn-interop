@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [2.1.1] - 2026-04-05
+
+### Fixed
+
+- Fixed `CredentialId` and `AuthenticatorId` properties not being displayed as Base64Url strings in the output of `Get-PasskeyWindowsHello` and `Get-PasskeyAuthenticator` cmdlets.
+
 ## [2.1] - 2026-04-05
 
 ### Added

@@ -13,7 +13,7 @@
             <ListItems>
               <ListItem>
                 <Label>AuthenticatorId</Label>
-                <ScriptBlock>[DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($_.AuthenticatorId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.AuthenticatorId)</ScriptBlock>
               </ListItem>
               <ListItem>
                 <PropertyName>AuthenticatorName</PropertyName>
@@ -51,7 +51,7 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <ScriptBlock>[DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($_.AuthenticatorId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.AuthenticatorId)</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>AuthenticatorName</PropertyName>
@@ -173,7 +173,7 @@
             <ListItems>
               <ListItem>
                 <Label>CredentialId</Label>
-                <ScriptBlock>[DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($_.CredentialId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.CredentialId)</ScriptBlock>
               </ListItem>
               <ListItem>
                 <Label>RelyingPartyId</Label>
@@ -236,7 +236,7 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <ScriptBlock>[DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($_.CredentialId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.CredentialId)</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
                 <ScriptBlock>$_.RelyingPartyInformation.Id</ScriptBlock>
