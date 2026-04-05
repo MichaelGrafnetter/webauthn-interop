@@ -59,7 +59,7 @@ Describe 'ConvertFrom-Base64UrlParameter' {
         # Test string that would have + and / in standard Base64
         # Bytes [251, 239] encode to "++" in Base64 but "--" in Base64Url
         $testBytes = [byte[]]@(251, 239)
-        $base64Url = [DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($testBytes)
+        $base64Url = [System.Buffers.Text.Base64Url]::EncodeToString($testBytes)
 
         $result = & $module { param($str) ConvertFrom-Base64UrlParameter -InputObject $str } -str $base64Url
         $result | Should -BeOfType [byte]
@@ -72,7 +72,7 @@ Describe 'ConvertFrom-Base64UrlParameter' {
         # Base64Url omits padding, test various lengths
         # 1 byte -> 2 chars (would need 2 padding in Base64)
         $oneByteInput = [byte[]]@(65)
-        $base64Url1 = [DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($oneByteInput)
+        $base64Url1 = [System.Buffers.Text.Base64Url]::EncodeToString($oneByteInput)
 
         $result1 = & $module { param($str) ConvertFrom-Base64UrlParameter -InputObject $str } -str $base64Url1
         $result1.Length | Should -Be 1
@@ -80,8 +80,7 @@ Describe 'ConvertFrom-Base64UrlParameter' {
 
         # 2 bytes -> 3 chars (would need 1 padding in Base64)
         $twoBytesInput = [byte[]]@(65, 66)
-        $base64Url2 = [DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($twoBytesInput)
-
+        $base64Url2 = [System.Buffers.Text.Base64Url]::EncodeToString($twoBytesInput)
         $result2 = & $module { param($str) ConvertFrom-Base64UrlParameter -InputObject $str } -str $base64Url2
         $result2.Length | Should -Be 2
         $result2[0] | Should -Be 65
@@ -101,7 +100,7 @@ Describe 'ConvertFrom-Base64UrlParameter' {
 
     It 'Should round-trip with byte array and Base64Url conversion' {
         [byte[]] $originalBytes = New-PasskeyRandomChallenge -Length 32
-        [string] $base64Url = [DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($originalBytes)
+        [string] $base64Url = [System.Buffers.Text.Base64Url]::EncodeToString($originalBytes)
 
         [byte[]] $result = & $module { param($str) ConvertFrom-Base64UrlParameter -InputObject $str } -str $base64Url
         [Convert]::ToBase64String($result) | Should -Be ([Convert]::ToBase64String($originalBytes))
