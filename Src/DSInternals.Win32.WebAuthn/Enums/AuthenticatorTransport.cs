@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.Interop;
 using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn
@@ -23,21 +24,21 @@ namespace DSInternals.Win32.WebAuthn
         /// Universal Serial Bus (USB).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_USB.</remarks>
-        [EnumMember(Value = "usb")]
+        [EnumMember(Value = ApiConstants.CtapTransportUsb)]
         USB = PInvoke.WEBAUTHN_CTAP_TRANSPORT_USB,
 
         /// <summary>
         /// Near Field Communication (NFC).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_NFC.</remarks>
-        [EnumMember(Value = "nfc")]
+        [EnumMember(Value = ApiConstants.CtapTransportNfc)]
         NFC = PInvoke.WEBAUTHN_CTAP_TRANSPORT_NFC,
 
         /// <summary>
         /// Bluetooth Low Energy (BLE).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_BLE.</remarks>
-        [EnumMember(Value = "ble")]
+        [EnumMember(Value = ApiConstants.CtapTransportBle)]
         BLE = PInvoke.WEBAUTHN_CTAP_TRANSPORT_BLE,
 
         /// <summary>
@@ -50,21 +51,21 @@ namespace DSInternals.Win32.WebAuthn
         /// Client device-specific transport (platform authenticator).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_INTERNAL.</remarks>
-        [EnumMember(Value = "internal")]
+        [EnumMember(Value = ApiConstants.CtapTransportInternal)]
         Internal = PInvoke.WEBAUTHN_CTAP_TRANSPORT_INTERNAL,
 
         /// <summary>
         /// Hybrid Transport (QR Code / caBLE).
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_HYBRID.</remarks>
-        [EnumMember(Value = "hybrid")]
+        [EnumMember(Value = ApiConstants.CtapTransportHybrid)]
         Hybrid = PInvoke.WEBAUTHN_CTAP_TRANSPORT_HYBRID,
 
         /// <summary>
         /// Smart card transport.
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_CTAP_TRANSPORT_SMART_CARD.</remarks>
-        [EnumMember(Value = "smart-card")]
+        [EnumMember(Value = ApiConstants.CtapTransportSmartCard)]
         SmartCard = PInvoke.WEBAUTHN_CTAP_TRANSPORT_SMART_CARD
     }
 }

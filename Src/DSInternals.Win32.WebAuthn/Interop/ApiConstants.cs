@@ -81,5 +81,75 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Corresponds to WEBAUTHN_EXTENSIONS_IDENTIFIER_HMAC_SECRET.
         /// </remarks>
         public const string ExtensionIdentifierHmacSecret = PInvoke.WEBAUTHN_EXTENSIONS_IDENTIFIER_HMAC_SECRET;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ATTESTATION_TYPE_PACKED.
+        /// </remarks>
+        public const string AttestationTypePacked = PInvoke.WEBAUTHN_ATTESTATION_TYPE_PACKED;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ATTESTATION_TYPE_U2F.
+        /// </remarks>
+        public const string AttestationTypeU2F = PInvoke.WEBAUTHN_ATTESTATION_TYPE_U2F;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ATTESTATION_TYPE_TPM.
+        /// </remarks>
+        public const string AttestationTypeTpm = PInvoke.WEBAUTHN_ATTESTATION_TYPE_TPM;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ATTESTATION_TYPE_NONE.
+        /// </remarks>
+        public const string AttestationTypeNone = PInvoke.WEBAUTHN_ATTESTATION_TYPE_NONE;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_ATTESTATION_VER_TPM_2_0.
+        /// </remarks>
+        public const string AttestationVersionTpm20 = PInvoke.WEBAUTHN_ATTESTATION_VER_TPM_2_0;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_USB_STRING.
+        /// </remarks>
+        public const string CtapTransportUsb = PInvoke.WEBAUTHN_CTAP_TRANSPORT_USB_STRING;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_NFC_STRING.
+        /// </remarks>
+        public const string CtapTransportNfc = PInvoke.WEBAUTHN_CTAP_TRANSPORT_NFC_STRING;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_BLE_STRING.
+        /// </remarks>
+        public const string CtapTransportBle = PInvoke.WEBAUTHN_CTAP_TRANSPORT_BLE_STRING;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_INTERNAL_STRING.
+        /// </remarks>
+        public const string CtapTransportInternal = PInvoke.WEBAUTHN_CTAP_TRANSPORT_INTERNAL_STRING;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_HYBRID_STRING.
+        /// </remarks>
+        public const string CtapTransportHybrid = PInvoke.WEBAUTHN_CTAP_TRANSPORT_HYBRID_STRING;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_SMART_CARD_STRING.
+        /// </remarks>
+        public const string CtapTransportSmartCard = PInvoke.WEBAUTHN_CTAP_TRANSPORT_SMART_CARD_STRING;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_HINT_SECURITY_KEY.
+        /// </remarks>
+        public const string CredentialHintSecurityKey = PInvoke.WEBAUTHN_CREDENTIAL_HINT_SECURITY_KEY;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_HINT_CLIENT_DEVICE.
+        /// </remarks>
+        public const string CredentialHintClientDevice = PInvoke.WEBAUTHN_CREDENTIAL_HINT_CLIENT_DEVICE;
+
+        /// <remarks>
+        /// Corresponds to WEBAUTHN_CREDENTIAL_HINT_HYBRID.
+        /// </remarks>
+        public const string CredentialHintHybrid = PInvoke.WEBAUTHN_CREDENTIAL_HINT_HYBRID;
     }
 }

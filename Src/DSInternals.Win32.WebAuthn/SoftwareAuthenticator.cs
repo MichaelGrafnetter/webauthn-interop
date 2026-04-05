@@ -365,7 +365,7 @@ namespace DSInternals.Win32.WebAuthn
             writer.WriteStartMap(3);
 
             writer.WriteTextString("fmt");
-            writer.WriteTextString("packed");
+            writer.WriteTextString(ApiConstants.AttestationTypePacked);
 
             writer.WriteTextString("authData");
             writer.WriteByteString(authenticatorData);

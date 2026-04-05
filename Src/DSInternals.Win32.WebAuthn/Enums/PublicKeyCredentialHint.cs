@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.Interop;
 
 namespace DSInternals.Win32.WebAuthn;
 
@@ -21,18 +22,18 @@ public enum PublicKeyCredentialHint
     /// <summary>
     /// Indicates that the Relying Party believes that users will satisfy this request with a physical security key.
     /// </summary>
-    [EnumMember(Value = "security-key")]
+    [EnumMember(Value = ApiConstants.CredentialHintSecurityKey)]
     SecurityKey,
 
     /// <summary>
     /// Indicates that the Relying Party believes that users will satisfy this request with a platform authenticator built into the client device.
     /// </summary>
-    [EnumMember(Value = "client-device")]
+    [EnumMember(Value = ApiConstants.CredentialHintClientDevice)]
     ClientDevice,
 
     /// <summary>
     /// Indicates that the Relying Party believes that users will satisfy this request with a general-purpose authenticator such as smartphone (hybrid transport).
     /// </summary>
-    [EnumMember(Value = "hybrid")]
+    [EnumMember(Value = ApiConstants.CredentialHintHybrid)]
     Hybrid
 }
