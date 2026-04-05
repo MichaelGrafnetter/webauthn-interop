@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Buffers.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn.Okta
@@ -52,7 +53,7 @@ namespace DSInternals.Win32.WebAuthn.Okta
         public OktaWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, byte[] userId, string factorId)
         {
             PublicKeyCred = publicKeyCredential;
-            UserId = Base64UrlConverter.ToBase64UrlString(userId);
+            UserId = Base64Url.EncodeToString(userId);
             FactorId = factorId;
         }
 

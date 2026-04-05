@@ -3,42 +3,61 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Security.Principal;
 using System.Text;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal static class ApiHelper
     {
-        public static void Validate(HResult result)
+        /// <summary>
+        /// Validates the HRESULT and throws the appropriate exception if an error occurred.
+        /// </summary>
+        /// <param name="result">The HRESULT to validate.</param>
+        /// <exception cref="OperationCanceledException"></exception>
+        /// <exception cref="TimeoutException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="Win32Exception"></exception>
+        public static void Validate(HRESULT result)
         {
-            if (result == HResult.Success)
+            if (result == HRESULT.S_OK)
             {
                 // No error, so continue with code execution.
                 return;
             }
 
-            var win32Exception = new Win32Exception(unchecked((int)result));
+            var win32Exception = new Win32Exception(result.Value);
 
             // Try to wrap the generic Win32Exception with a more specific .NET exception type.
-            switch (result)
+            if (result == HRESULT.NTE_USER_CANCELLED ||
+                result == PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED))
             {
-                case HResult.ActionCancelled:
-                case HResult.OperationCancelled:
-                    throw new OperationCanceledException(win32Exception.Message, win32Exception);
-                case HResult.OperationTimeout:
-                    throw new TimeoutException(win32Exception.Message, win32Exception);
-                case HResult.RequestNotSupported:
-                case HResult.OperationNotSupported:
-                    throw new NotSupportedException(win32Exception.Message, win32Exception);
-                case HResult.ParameterInvalid:
-                case HResult.InvalidData:
-                    throw new ArgumentException(win32Exception.Message, win32Exception);
-                case HResult.ObjectAlreadyExists:
-                case HResult.KeyStorageFull:
-                case HResult.DeviceNotFound:
-                case HResult.ObjectNotFound:
-                default:
-                    // TODO: Differentiate between more error states using custom exception types.
-                    throw win32Exception;
+                throw new OperationCanceledException(win32Exception.Message, win32Exception);
+            }
+            else if (result == PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_TIMEOUT))
+            {
+                throw new TimeoutException(win32Exception.Message, win32Exception);
+            }
+            else if (result == PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_NOT_SUPPORTED) ||
+                     result == HRESULT.NTE_NOT_SUPPORTED)
+            {
+                throw new NotSupportedException(win32Exception.Message, win32Exception);
+            }
+            else if (result == HRESULT.NTE_INVALID_PARAMETER ||
+                     result == PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_INVALID_DATA))
+            {
+                throw new ArgumentException(win32Exception.Message, win32Exception);
+            }
+            else if (result == HRESULT.RPC_E_ACCESS_DENIED)
+            {
+                throw new UnauthorizedAccessException(win32Exception.Message, win32Exception);
+            }
+            else
+            {
+                // Throw the generic Win32Exception if we don't have a more specific mapping for this error code.
+                throw win32Exception;
             }
         }
 

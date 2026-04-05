@@ -48,9 +48,9 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 
             var excludedCredentials = new List<Fido2NetLib.Objects.PublicKeyCredentialDescriptor>()
             {
-                new(Base64UrlConverter.FromBase64UrlString("lz6_hw1jzaRNhhu9dt_M1Q=")),
-                new(Base64UrlConverter.FromBase64UrlString("Zod6YhgNV2dQeT3v8ekjRpU0nVlEkPlpXF5Vx6f4P9g=")),
-                new(Base64UrlConverter.FromBase64UrlString("sx2P4XkPO6TUoSf0pMEm3zi5gdwVrIRjiYvuTFRAkNMe_jVsntSgkyG5aV8er5GCA_G1X2idph-8lhhMFX3aaAyBCQIAAA="))
+                new(Base64UrlConverter.FromBase64UrlString("lz6_hw1jzaRNhhu9dt_M1Q")),
+                new(Base64UrlConverter.FromBase64UrlString("Zod6YhgNV2dQeT3v8ekjRpU0nVlEkPlpXF5Vx6f4P9g")),
+                new(Base64UrlConverter.FromBase64UrlString("sx2P4XkPO6TUoSf0pMEm3zi5gdwVrIRjiYvuTFRAkNMe_jVsntSgkyG5aV8er5GCA_G1X2idph-8lhhMFX3aaAyBCQIAAA"))
             };
 
             var pubKeyCredParams = new List<PubKeyCredParam>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using Windows.Win32.Foundation;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -29,7 +30,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult IsUserVerifyingPlatformAuthenticatorAvailable(out bool isUserVerifyingPlatformAuthenticatorAvailable);
+        public static extern HRESULT IsUserVerifyingPlatformAuthenticatorAvailable(out bool isUserVerifyingPlatformAuthenticatorAvailable);
 
         /// <summary>
         /// The WebAuthNAuthenticatorMakeCredential operation creates a public key credential source
@@ -47,7 +48,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorMakeCredential", CharSet = CharSet.Unicode)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult AuthenticatorMakeCredential(
+        public static extern HRESULT AuthenticatorMakeCredential(
             WindowHandle windowHandle,
             RelyingPartyInformation rpInformation,
             UserInformationIn userInformation,
@@ -73,7 +74,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </remarks>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNAuthenticatorGetAssertion", CharSet = CharSet.Unicode)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult AuthenticatorGetAssertion(
+        public static extern HRESULT AuthenticatorGetAssertion(
             WindowHandle windowHandle,
             string rpId,
             ClientData clientData,
@@ -104,7 +105,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetCancellationId")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult GetCancellationId(out Guid cancellationId);
+        public static extern HRESULT GetCancellationId(out Guid cancellationId);
 
         /// <summary>
         /// When this operation is invoked by the client in an authenticator session, it has the effect
@@ -121,7 +122,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </remarks>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNCancelCurrentOperation")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult CancelCurrentOperation(in Guid cancellationId);
+        public static extern HRESULT CancelCurrentOperation(in Guid cancellationId);
 
         /// <summary>
         /// Gets the list of WEBAUTHN_CREDENTIAL_DETAILS_LIST currently stored for the user.
@@ -131,7 +132,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetPlatformCredentialList", CharSet = CharSet.Unicode)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult GetPlatformCredentialList(GetCredentialsOptions getCredentialsOptions, [Out] out PlatformCredentialListSafeHandle credentialDetailsList);
+        public static extern HRESULT GetPlatformCredentialList(GetCredentialsOptions getCredentialsOptions, [Out] out PlatformCredentialListSafeHandle credentialDetailsList);
 
         /// <summary>
         /// Frees the allocation for the WEBAUTHN_CREDENTIAL_DETAILS_LIST.
@@ -143,7 +144,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetAuthenticatorList", CharSet = CharSet.Unicode)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult GetAuthenticatorList(GetAuthenticatorListOptions getAuthenticatorListOptions, out AuthenticatorDetailsListSafeHandle authenticatorDetailsList);
+        public static extern HRESULT GetAuthenticatorList(GetAuthenticatorListOptions getAuthenticatorListOptions, out AuthenticatorDetailsListSafeHandle authenticatorDetailsList);
 
         /// <summary>
         /// Frees the allocation for the WEBAUTHN_AUTHENTICATOR_DETAILS_LIST .
@@ -161,7 +162,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>If the function succeeds, it returns S_OK. If the function fails, it returns an HRESULT value that indicates the error.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNDeletePlatformCredential")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult DeletePlatformCredential(int credentialIdLength, byte[] credentialId);
+        public static extern HRESULT DeletePlatformCredential(int credentialIdLength, byte[] credentialId);
 
 
         /// <summary>
@@ -186,7 +187,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetErrorName", CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(PtrToConstStringMarshaler))]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern string GetErrorName(HResult hr);
+        public static extern string GetErrorName(HRESULT hr);
 
         /// <summary>
         /// Gets the W3C DOM error code for the last failed operation in the authenticator session.
@@ -195,7 +196,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <returns>An HRESULT with the failure status.</returns>
         [DllImport(WebAuthn, EntryPoint = "WebAuthNGetW3CExceptionDOMError")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern HResult GetW3CExceptionDOMError(HResult hr);
+        public static extern HRESULT GetW3CExceptionDOMError(HRESULT hr);
 
         /// <summary>
         /// Retrieves a handle to the foreground window (the window with which the user is currently working).

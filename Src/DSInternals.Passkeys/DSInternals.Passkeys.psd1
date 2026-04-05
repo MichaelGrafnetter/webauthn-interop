@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Passkeys.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.0.0'
+ModuleVersion = '2.1.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -52,16 +52,44 @@ RequiredModules = @('Microsoft.Graph.Authentication','Microsoft.Graph.Identity.S
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = if ($PSEdition -eq 'Core') {
     @(
-        'net8.0-windows\DSInternals.Win32.WebAuthn.dll',
+        'net8.0-windows\Microsoft.Bcl.Memory.dll',
+        'net8.0-windows\System.Formats.Cbor.dll',
+        'net8.0-windows\Microsoft.Extensions.Logging.Abstractions.dll',
+        'net8.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll',
+        'net8.0-windows\Microsoft.IdentityModel.Abstractions.dll',
+        'net8.0-windows\Microsoft.IdentityModel.Logging.dll',
+        'net8.0-windows\Microsoft.IdentityModel.Tokens.dll',
+        'net8.0-windows\Microsoft.IdentityModel.JsonWebTokens.dll',
         'net8.0-windows\Microsoft.Identity.Client.dll',
-        'net8.0-windows\System.IdentityModel.Tokens.Jwt.dll'
+        'net8.0-windows\System.IdentityModel.Tokens.Jwt.dll',
+        'net8.0-windows\DSInternals.Win32.WebAuthn.dll'
     )
 }
 else {
     @(
-        'net48\DSInternals.Win32.WebAuthn.dll',
+        'net48\Microsoft.Bcl.AsyncInterfaces.dll',
+        'net48\Microsoft.Bcl.HashCode.dll',
+        'net48\Microsoft.Bcl.Memory.dll',
+        'net48\Microsoft.Bcl.TimeProvider.dll',
+        'net48\System.Buffers.dll',
+        'net48\System.Memory.dll',
+        'net48\System.Numerics.Vectors.dll',
+        'net48\System.Runtime.CompilerServices.Unsafe.dll',
+        'net48\System.Threading.Tasks.Extensions.dll',
+        'net48\System.Text.Encodings.Web.dll',
+        'net48\System.Text.Json.dll',
+        'net48\System.IO.Pipelines.dll',
+        'net48\System.Diagnostics.DiagnosticSource.dll',
+        'net48\System.Formats.Asn1.dll',
+        'net48\System.Formats.Cbor.dll',
+        'net48\Microsoft.Extensions.Logging.Abstractions.dll',
+        'net48\Microsoft.IdentityModel.Abstractions.dll',
+        'net48\Microsoft.IdentityModel.Logging.dll',
+        'net48\Microsoft.IdentityModel.Tokens.dll',
+        'net48\Microsoft.IdentityModel.JsonWebTokens.dll',
         'net48\Microsoft.Identity.Client.dll',
-        'net48\System.IdentityModel.Tokens.Jwt.dll'
+        'net48\System.IdentityModel.Tokens.Jwt.dll',
+        'net48\DSInternals.Win32.WebAuthn.dll'
     )
 }
 
@@ -110,10 +138,43 @@ AliasesToExport = @('Register-MgUserAuthenticationFido2Method')
 # List of all files packaged with this module
 FileList = @(
     'DSInternals.Passkeys.Format.ps1xml',
-    'en-US/about_DSInternals.Passkeys.help.txt'
+    'en-US/about_DSInternals.Passkeys.help.txt',
     'en-US/DSInternals.Passkeys-help.xml',
+    'net48/DSInternals.Win32.WebAuthn.dll',
+    'net48/Microsoft.Bcl.AsyncInterfaces.dll',
+    'net48/Microsoft.Bcl.HashCode.dll',
+    'net48/Microsoft.Bcl.Memory.dll',
+    'net48/Microsoft.Bcl.TimeProvider.dll',
+    'net48/Microsoft.Extensions.Logging.Abstractions.dll',
+    'net48/Microsoft.Identity.Client.dll',
+    'net48/Microsoft.IdentityModel.Abstractions.dll',
+    'net48/Microsoft.IdentityModel.JsonWebTokens.dll',
+    'net48/Microsoft.IdentityModel.Logging.dll',
+    'net48/Microsoft.IdentityModel.Tokens.dll',
+    'net48/System.Buffers.dll',
+    'net48/System.Diagnostics.DiagnosticSource.dll',
+    'net48/System.Formats.Asn1.dll',
+    'net48/System.Formats.Cbor.dll',
+    'net48/System.IdentityModel.Tokens.Jwt.dll',
+    'net48/System.IO.Pipelines.dll',
+    'net48/System.Memory.dll',
+    'net48/System.Numerics.Vectors.dll',
+    'net48/System.Runtime.CompilerServices.Unsafe.dll',
+    'net48/System.Text.Encodings.Web.dll',
+    'net48/System.Text.Json.dll',
+    'net48/System.Threading.Tasks.Extensions.dll',
     'net8.0-windows/DSInternals.Win32.WebAuthn.dll',
-    'net48/DSInternals.Win32.WebAuthn.dll'
+    'net8.0-windows/Microsoft.Bcl.Memory.dll',
+    'net8.0-windows/Microsoft.Extensions.DependencyInjection.Abstractions.dll',
+    'net8.0-windows/Microsoft.Extensions.Logging.Abstractions.dll',
+    'net8.0-windows/Microsoft.Identity.Client.dll',
+    'net8.0-windows/Microsoft.IdentityModel.Abstractions.dll',
+    'net8.0-windows/Microsoft.IdentityModel.JsonWebTokens.dll',
+    'net8.0-windows/Microsoft.IdentityModel.Logging.dll',
+    'net8.0-windows/Microsoft.IdentityModel.Tokens.dll',
+    'net8.0-windows/System.Diagnostics.EventLog.dll',
+    'net8.0-windows/System.Formats.Cbor.dll',
+    'net8.0-windows/System.IdentityModel.Tokens.Jwt.dll'
 )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
@@ -135,9 +196,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-- Added Okta platform support.
-- Added new cmdlets: Get-PasskeyAuthenticator, Get-PasskeyWindowsHello, Remove-PasskeyWindowsHello, Test-Passkey, and more.
-- Updated to WebAuthn API v9 with authenticator hints and large blobs.
+- Added the -Hint parameter to the Test-Passkey cmdlet.
 '@
 
         # Prerelease string of this module

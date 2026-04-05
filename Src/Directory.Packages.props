@@ -19,6 +19,7 @@
     <PackageVersion Include="System.Formats.Cbor" Version="9.0.3" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
     <PackageVersion Include="System.Security.Cryptography.Cng" Version="5.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="10.0.1" />
+    <!-- System.Text.Json is intentionally kept at V9 for PowerShell 7.5 compatibility -->
+    <PackageVersion Include="System.Text.Json" Version="9.0.3" />
   </ItemGroup>
 </Project>

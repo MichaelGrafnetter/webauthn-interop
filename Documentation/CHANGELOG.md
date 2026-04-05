@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [2.1] - 2026-04-05
+
+### Added
+
+- Added the `-Hint` parameter to the `Test-Passkey` cmdlet for specifying which credential source to use (e.g., SecurityKey, ClientDevice, Hybrid).
+
+### Changed
+
+- Added `UnauthorizedAccessException` mapping for `RPC_E_ACCESS_DENIED` in HRESULT error handling. This error occurs when the WebAuthn API is currently being used by another application.
+- Simplified `Base64UrlConverter` by using `Base64Url.DecodeFromUtf8` for decoding.
+
 ## [2.0] - 2026-04-03
 
 ### Added
@@ -76,7 +87,8 @@ This is a bugfix release. Huge thanks to @aseigler for reporting and fixing the 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.0...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1...HEAD
+[2.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.0...v2.1
 [2.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.6...v2.0
 [1.0.6]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.4...v1.0.5

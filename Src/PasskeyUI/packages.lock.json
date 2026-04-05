@@ -136,11 +136,18 @@
       "dsinternals.win32.webauthn": {
         "type": "Project",
         "dependencies": {
+          "Microsoft.Bcl.Memory": "[10.0.5, )",
           "Microsoft.Identity.Client": "[4.80.0, )",
           "Microsoft.NET.ILLink.Tasks": "[10.0.3, )",
           "System.Formats.Cbor": "[9.0.3, )",
           "System.IdentityModel.Tokens.Jwt": "[8.15.0, )"
         }
+      },
+      "Microsoft.Bcl.Memory": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.5, )",
+        "resolved": "10.0.5",
+        "contentHash": "odTrIyDJPgqCKEo6sOOfMzh0TaPufY/SLHrrMkqGlxGWVc5NQbZD5h1fxf/Q+PrGnhct5VWmmfKREA4h6JtTng=="
       },
       "Microsoft.Identity.Client": {
         "type": "CentralTransitive",

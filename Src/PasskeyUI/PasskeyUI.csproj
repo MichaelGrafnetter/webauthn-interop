@@ -14,9 +14,9 @@
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <ApplicationIcon>../Icons/app.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
-    <ProductVersion>2.0.0</ProductVersion>
-    <FileVersion>2.0.0</FileVersion>
+    <AssemblyVersion>2.1.0</AssemblyVersion>
+    <ProductVersion>2.1.0</ProductVersion>
+    <FileVersion>2.1.0</FileVersion>
     <!-- Suppress WPF0001: ThemeMode is experimental but required for Fluent theme -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
   </PropertyGroup>
@@ -41,5 +41,13 @@
   <ItemGroup>
     <Resource Include="..\Icons\app.ico" Link="Icons\app.ico" />
   </ItemGroup>
+
+  <!-- Remove temporary WPF build directories that accumulate in the bin output -->
+  <Target Name="CleanWpfTempDirectories" AfterTargets="Build">
+    <ItemGroup>
+      <WpfTempDirectories Include="$([System.IO.Directory]::GetDirectories('$(ArtifactsPath)\bin', '$(MSBuildProjectName)_*_wpftmp'))" />
+    </ItemGroup>
+    <RemoveDir Directories="@(WpfTempDirectories)" />
+  </Target>
 
 </Project>

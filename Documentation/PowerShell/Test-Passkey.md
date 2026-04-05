@@ -1,7 +1,7 @@
 ---
 external help file: DSInternals.Passkeys-help.xml
 Module Name: DSInternals.Passkeys
-online version:
+online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Test-Passkey.md
 schema: 2.0.0
 ---
 
@@ -15,7 +15,7 @@ Tests a passkey by performing an authentication assertion.
 ```
 Test-Passkey [-RelyingPartyId] <String> [[-Challenge] <Object>]
  [[-UserVerification] <UserVerificationRequirement>] [[-AuthenticatorAttachment] <AuthenticatorAttachment>]
- [[-Timeout] <TimeSpan>] [[-CredentialId] <Object>] [<CommonParameters>]
+ [[-Timeout] <TimeSpan>] [[-CredentialId] <Object>] [[-Hint] <PublicKeyCredentialHint>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -101,6 +101,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Hint
+An optional hint to the client about which credential source to use (e.g., SecurityKey, ClientDevice, Hybrid).
+
+```yaml
+Type: PublicKeyCredentialHint
+Parameter Sets: (All)
+Aliases: AuthenticatorType, CredentialHint, PublicKeyCredentialHint
+Accepted values: None, SecurityKey, ClientDevice, Hybrid
+
+Required: False
+Position: 7
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -RelyingPartyId
 The relying party identifier (e.g., 'login.microsoft.com').
 
@@ -154,7 +170,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.Win32.WebAuthn.AuthenticatorAssertionResponse
+### DSInternals.Win32.WebAuthn.PublicKeyCredential
 ## NOTES
 
 ## RELATED LINKS

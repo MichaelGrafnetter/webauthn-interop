@@ -566,6 +566,9 @@ The timeout for the operation.
 .PARAMETER CredentialId
 An optional credential ID to test a specific credential. Accepts either a byte array or a Base64Url encoded string.
 
+.PARAMETER Hint
+An optional hint to the client about which credential source to use (e.g., SecurityKey, ClientDevice, Hybrid).
+
 .EXAMPLE
 PS \> Test-Passkey -RelyingPartyId 'login.microsoft.com'
 
@@ -582,6 +585,11 @@ PS \> $credential = Get-PasskeyWindowsHello | Select-Object -First 1
 PS \> Test-Passkey -RelyingPartyId $credential.RelyingPartyInformation.Id -CredentialId $credential.CredentialId
 
 Tests a specific platform credential.
+
+.EXAMPLE
+PS \> Test-Passkey -RelyingPartyId 'login.microsoft.com' -Hint SecurityKey
+
+Tests a passkey with a hint that a security key should be used.
 
 #>
 function Test-Passkey
@@ -608,7 +616,11 @@ function Test-Passkey
         [timespan] $Timeout = (New-TimeSpan -Minutes 2),
 
         [Parameter(Mandatory = $false)]
-        [object] $CredentialId
+        [object] $CredentialId,
+
+        [Parameter(Mandatory = $false)]
+        [Alias("AuthenticatorType", "CredentialHint", "PublicKeyCredentialHint")]
+        [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint] $Hint
     )
 
     try {
@@ -643,7 +655,7 @@ function Test-Passkey
             $false, # browserInPrivateMode
             $null,  # linkedDevice
             $false, # autoFill
-            $null,  # credentialHints
+            $Hint,  # credentialHints
             $null,  # remoteWebOrigin
             $null,  # authenticatorId
             $null,  # publicKeyCredentialRequestOptionsJson
@@ -890,7 +902,7 @@ function Remove-PasskeyWindowsHello
         }
 
         # Confirm the operation
-        [string] $credentialIdString = [DSInternals.Win32.WebAuthn.Base64UrlConverter]::ToBase64UrlString($credId)
+        [string] $credentialIdString = [System.Buffers.Text.Base64Url]::EncodeToString($credId)
         if ($PSCmdlet.ShouldProcess($credentialIdString, 'Remove platform credential')) {
             [DSInternals.Win32.WebAuthn.WebAuthnApi]::DeletePlatformCredential($credId)
             Write-Verbose "Successfully removed credential $credentialIdString"

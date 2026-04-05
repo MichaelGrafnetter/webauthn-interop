@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Buffers.Text;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -31,7 +32,7 @@ namespace DSInternals.Win32.WebAuthn
                 {
                     return FromBase64UrlString(reader.ValueSpan);
                 }
-                catch (ArgumentException)
+                catch (FormatException)
                 {
                     // If we could not decode the string from base64 url, perhaps this is one of the weird MSFT
                     // "formatted in Base64URL with a padding number suffix" strings.
@@ -39,21 +40,24 @@ namespace DSInternals.Win32.WebAuthn
                     // https://github.com/MichaelGrafnetter/webauthn-interop/issues/28#issuecomment-3529633518
 
                     // Checking to see if the last character is a digit and if we removed it, would there be anything left
-                    if (reader.ValueSpan.Length > 1 && char.IsDigit((char)reader.ValueSpan[reader.ValueSpan.Length - 1]))
+                    if (reader.ValueSpan.Length > 1)
                     {
                         // Looking for last character to be 0, 1, or 2
-                        char lastChar = (char)reader.ValueSpan[reader.ValueSpan.Length - 1];
+                        char lastChar = (char)reader.ValueSpan[^1];
 
-                        // If we removed the last character, calculate the padding required for the remaining string
-                        int potentialPaddingLength = (reader.ValueSpan.Length - 1) % 4;
-
-                        // If the last character matches the padding length of the remaining string, this is very likely the case we are looking for
-                        if ((lastChar == '0' && potentialPaddingLength == 0) ||
-                            (lastChar == '1' && potentialPaddingLength == 3) ||
-                            (lastChar == '2' && potentialPaddingLength == 2))
+                        if (char.IsDigit(lastChar))
                         {
-                            // Try again this time removing the last character
-                            return FromBase64UrlString(reader.ValueSpan.Slice(0, reader.ValueSpan.Length - 1));
+                            // If we removed the last character, calculate the padding required for the remaining string
+                            int potentialPaddingLength = (reader.ValueSpan.Length - 1) % 4;
+
+                            // If the last character matches the padding length of the remaining string, this is very likely the case we are looking for
+                            if ((lastChar == '0' && potentialPaddingLength == 0) ||
+                                (lastChar == '1' && potentialPaddingLength == 3) ||
+                                (lastChar == '2' && potentialPaddingLength == 2))
+                            {
+                                // Try again this time removing the last character
+                                return FromBase64UrlString(reader.ValueSpan[..^1]);
+                            }
                         }
                     }
                     throw;
@@ -69,24 +73,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <param name="options">Serializer options.</param>
         public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOptions options)
         {
-            writer?.WriteStringValue(ToBase64UrlString(value));
-        }
-
-        /// <summary>
-        /// Converts a byte array to a Base64Url encoded string
-        /// </summary>
-        /// <param name="input">The byte array to convert</param>
-        /// <returns>The Base64Url encoded form of the input</returns>
-#pragma warning disable CA1055 // URI-like return values should not be strings
-        public static string ToBase64UrlString(byte[] input)
-#pragma warning restore CA1055 // URI-like return values should not be strings
-        {
-            ArgumentNullException.ThrowIfNull(input);
-
-            return Convert.ToBase64String(input).
-                TrimEnd('=').
-                Replace('+', '-').
-                Replace('/', '_');
+            writer?.WriteStringValue(Base64Url.EncodeToString(value));
         }
 
         /// <summary>
@@ -94,18 +81,18 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         /// <param name="input">The Base64Url encoded string</param>
         /// <returns>The byte array represented by the encoded string</returns>
-        public static byte[] FromBase64UrlString(string? input)
+        public static byte[] FromBase64UrlString(string input)
         {
             ArgumentNullException.ThrowIfNull(input);
 
             // Remove any whitespace (newlines, spaces, tabs) that might have been introduced by copy-paste
             string cleanedInput = Regex.Replace(input, @"\s", string.Empty);
 
-            return Convert.FromBase64String(Pad(cleanedInput.Replace('-', '+').Replace('_', '/')));
+            return FromBase64UrlString(Encoding.ASCII.GetBytes(cleanedInput));
         }
 
         /// <summary>
-        /// Converts a Base64Url encoded string to a byte array
+        /// Converts a Base64Url or Base64 encoded string to a byte array
         /// </summary>
         /// <param name="input">The Base64Url encoded string</param>
         /// <returns>The byte array represented by the encoded string</returns>
@@ -113,81 +100,45 @@ namespace DSInternals.Win32.WebAuthn
         {
             if (input.IsEmpty)
             {
-                throw new ArgumentNullException(nameof(input));
+                return [];
             }
 
-            int paddingLength = (input.Length % 4) switch
-            {
-                0 => 0, // Padding is not needed
-                2 => 2, // "==" missing in Base64Url vs. Base64
-                3 => 1, // "=" missing in Base64Url vs. Base64
-                _ => throw new ArgumentException("Illegal Base64URL string!", nameof(input))
-            };
+            // Copy input to a mutable buffer for in-place normalization and decoding
+            byte[] buffer = ArrayPool<byte>.Shared.Rent(input.Length);
 
-            // Pad the input to be compatible with BASE64
-            int binaryLength = input.Length + paddingLength;
-            byte[] result = new byte[binaryLength];
-            input.CopyTo(result);
-
-            // Translate Base64Url chars to BASE64 chars
-            for (int i = 0; i < binaryLength; i++)
+            try
             {
-                if ((char)result[i] == '-')
+                input.CopyTo(buffer);
+                int length = input.Length;
+                
+
+                // Normalize standard Base64 to Base64URL: replace '+' with '-', '/' with '_'
+                for (int i = 0; i < length; i++)
                 {
-                    // Replace '-' with '+'
-                    result[i] = (byte)'+';
+
+                    if (buffer[i] == (byte)'+')
+                    {
+                        buffer[i] = (byte)'-';
+                    }
+                    else if (buffer[i] == (byte)'/')
+                    {
+                        buffer[i] = (byte)'_';
+                    }
                 }
-                else if ((char)result[i] == '_')
+
+                // Strip trailing Base64 '=' padding
+                while (length > 0 && buffer[length - 1] == (byte)'=')
                 {
-                    // Replace '_' with '/'
-                    result[i] = (byte)'/';
+                    length--;
                 }
-            }
 
-            // Add padding ("" or "=" or "==")
-            for (int i = binaryLength - paddingLength; i < binaryLength; i++)
+                int bytesWritten = Base64Url.DecodeFromUtf8InPlace(buffer.AsSpan(0, length));
+                return buffer.AsSpan(0, bytesWritten).ToArray();
+            }
+            finally
             {
-                result[i] = (byte)'=';
+                ArrayPool<byte>.Shared.Return(buffer);
             }
-
-            var status = Base64.DecodeFromUtf8InPlace(result, out int bytesWritten);
-
-            if (status != OperationStatus.Done)
-            {
-                throw new ArgumentException("Illegal Base64URL string!", nameof(input));
-            }
-
-            return new Span<byte>(result, 0, bytesWritten).ToArray(); ;
-        }
-
-        /// <summary>
-        /// Adds padding to the input
-        /// </summary>
-        /// <param name="input"> the input string </param>
-        /// <returns> the padded string </returns>
-        private static string Pad(string input)
-        {
-            if (input.TrimEnd().EndsWith("=", StringComparison.InvariantCulture))
-            {
-                throw new ArgumentException("Illegal Base64URL string!", nameof(input));
-            }
-
-            switch (input.Length % 4)
-            {
-                case 0:
-                    // Padding is not needed
-                    break;
-                case 2:
-                    input += "==";
-                    break;
-                case 3:
-                    input += "=";
-                    break;
-                default:
-                    throw new ArgumentException("Illegal Base64URL string!", nameof(input));
-            }
-
-            return input;
         }
     }
 }

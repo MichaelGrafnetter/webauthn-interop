@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Windows.Win32.Foundation;
 
 namespace DSInternals.Win32.WebAuthn.Interop.Tests
 {
@@ -22,8 +23,8 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             try
             {
-                HResult result = NativeMethods.GetCancellationId(out Guid cancellationId);
-                Assert.AreEqual(HResult.Success, result);
+                HRESULT result = NativeMethods.GetCancellationId(out Guid cancellationId);
+                Assert.AreEqual(HRESULT.S_OK, result);
                 Assert.AreNotEqual(Guid.Empty, cancellationId);
             }
             catch (EntryPointNotFoundException ex)
@@ -38,11 +39,11 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             try
             {
-                HResult result = NativeMethods.GetCancellationId(out Guid cancellationId1);
-                Assert.AreEqual(HResult.Success, result);
+                HRESULT result = NativeMethods.GetCancellationId(out Guid cancellationId1);
+                Assert.AreEqual(HRESULT.S_OK, result);
 
                 result = NativeMethods.GetCancellationId(out Guid cancellationId2);
-                Assert.AreEqual(HResult.Success, result);
+                Assert.AreEqual(HRESULT.S_OK, result);
 
                 // We are always getting a different cancellation id.
                 Assert.AreNotEqual(cancellationId1, cancellationId2);
@@ -59,8 +60,8 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             try
             {
-                HResult result = NativeMethods.CancelCurrentOperation(Guid.Empty);
-                Assert.AreEqual(HResult.Success, result);
+                HRESULT result = NativeMethods.CancelCurrentOperation(Guid.Empty);
+                Assert.AreEqual(HRESULT.S_OK, result);
             }
             catch (EntryPointNotFoundException ex)
             {
@@ -74,8 +75,8 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             try
             {
-                HResult result = NativeMethods.CancelCurrentOperation(Guid.NewGuid());
-                Assert.AreEqual(HResult.Success, result);
+                HRESULT result = NativeMethods.CancelCurrentOperation(Guid.NewGuid());
+                Assert.AreEqual(HRESULT.S_OK, result);
             }
             catch (EntryPointNotFoundException ex)
             {
@@ -90,8 +91,8 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             try
             {
                 NativeMethods.GetCancellationId(out Guid cancellationId);
-                HResult result = NativeMethods.CancelCurrentOperation(cancellationId);
-                Assert.AreEqual(HResult.Success, result);
+                HRESULT result = NativeMethods.CancelCurrentOperation(cancellationId);
+                Assert.AreEqual(HRESULT.S_OK, result);
             }
             catch (EntryPointNotFoundException ex)
             {
@@ -102,21 +103,21 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         [TestMethod]
         public void NativeMethods_GetErrorName_Success()
         {
-            string result = NativeMethods.GetErrorName(HResult.Success);
+            string result = NativeMethods.GetErrorName(HRESULT.S_OK);
             Assert.AreEqual("Success", result);
         }
 
         [TestMethod]
         public void NativeMethods_GetErrorName_ActionCancelled()
         {
-            string result = NativeMethods.GetErrorName(HResult.ActionCancelled);
+            string result = NativeMethods.GetErrorName(HRESULT.NTE_USER_CANCELLED);
             Assert.AreEqual("NotAllowedError", result);
         }
 
         [TestMethod]
         public void NativeMethods_GetErrorName_KeyStorageFull()
         {
-            string result = NativeMethods.GetErrorName(HResult.KeyStorageFull);
+            string result = NativeMethods.GetErrorName(HRESULT.NTE_TOKEN_KEYSET_STORAGE_FULL);
             Assert.AreEqual("ConstraintError", result);
         }
 

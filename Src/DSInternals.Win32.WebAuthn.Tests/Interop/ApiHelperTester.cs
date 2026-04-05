@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Windows.Win32.Foundation;
 
 namespace DSInternals.Win32.WebAuthn.Interop.Tests
 {
@@ -11,7 +12,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         public void ApiHelper_Validate_Success()
         {
             // Should not throw
-            ApiHelper.Validate(HResult.Success);
+            ApiHelper.Validate(HRESULT.S_OK);
         }
 
         [TestMethod]
@@ -19,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             Assert.ThrowsExactly<OperationCanceledException>(() =>
             {
-                ApiHelper.Validate(HResult.ActionCancelled);
+                ApiHelper.Validate(HRESULT.NTE_USER_CANCELLED);
             });
         }
 
@@ -28,7 +29,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             Assert.ThrowsExactly<Win32Exception>(() =>
             {
-                ApiHelper.Validate(HResult.KeyStorageFull);
+                ApiHelper.Validate(HRESULT.NTE_TOKEN_KEYSET_STORAGE_FULL);
             });
         }
     }

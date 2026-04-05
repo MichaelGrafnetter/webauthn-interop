@@ -167,6 +167,7 @@
       "dsinternals.win32.webauthn": {
         "type": "Project",
         "dependencies": {
+          "Microsoft.Bcl.Memory": "[10.0.5, )",
           "Microsoft.Identity.Client": "[4.80.0, )",
           "Microsoft.NET.ILLink.Tasks": "[10.0.3, )",
           "System.Diagnostics.EventLog": "[9.0.3, )",

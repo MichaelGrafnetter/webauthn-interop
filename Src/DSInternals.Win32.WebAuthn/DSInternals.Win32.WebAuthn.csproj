@@ -7,14 +7,13 @@
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
     <Product>WebAuthn Interop Assembly</Product>
     <Title>WebAuthn Interop Assembly</Title>
-    <Version>2.0.0</Version>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
-    <ProductVersion>2.0.0</ProductVersion>
-    <FileVersion>2.0.0</FileVersion>
+    <Version>2.1.0</Version>
+    <AssemblyVersion>2.1.0</AssemblyVersion>
+    <ProductVersion>2.1.0</ProductVersion>
+    <FileVersion>2.1.0</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>- Added WebAuthn API v9 support with authenticator hints and large blobs.
-- Added software-based signing for offline testing.
-- Improved JSON serialization.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added UnauthorizedAccessException mapping for RPC_E_ACCESS_DENIED in HRESULT error handling.
+- Simplified Base64UrlConverter by using Base64Url.DecodeFromUtf8 for decoding.</PackageReleaseNotes>
     <!-- The DLL is publishable as part of the PowerShell module -->
     <IsPublishable>true</IsPublishable>
     <PublishDocumentationFile>false</PublishDocumentationFile>
@@ -42,6 +41,7 @@
     <PackageReference Include="System.Formats.Cbor" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
     <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="Microsoft.Bcl.Memory" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net48'">

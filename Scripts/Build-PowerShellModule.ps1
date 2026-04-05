@@ -42,5 +42,27 @@ foreach($currentConfiguration in $Configuration) {
 
         # Copy the compiled binaries
         dotnet.exe publish $libraryProject --output $frameworkSpecificPath --nologo --framework $framework --configuration $currentConfiguration --no-restore --no-build
+
+        if ($framework -ne 'net48') {
+            # Remove assemblies that ship with the .NET runtime and would cause version conflicts in PowerShell 7
+            [string[]] $runtimeProvidedAssemblies = @(
+                'System.Text.Json.dll',
+                'System.Text.Encodings.Web.dll',
+                'System.IO.Pipelines.dll'
+            )
+
+            foreach ($assemblyName in $runtimeProvidedAssemblies) {
+                [string] $assemblyPath = Join-Path -Path $frameworkSpecificPath -ChildPath $assemblyName
+                if (Test-Path -Path $assemblyPath) {
+                    Remove-Item -Path $assemblyPath -Verbose
+                }
+            }
+
+            # Remove the runtimes directory (runtime-specific assets are provided by the .NET runtime)
+            [string] $runtimesPath = Join-Path -Path $frameworkSpecificPath -ChildPath 'runtimes'
+            if (Test-Path -Path $runtimesPath) {
+                Remove-Item -Path $runtimesPath -Recurse -Verbose
+            }
+        }
     }
 }
