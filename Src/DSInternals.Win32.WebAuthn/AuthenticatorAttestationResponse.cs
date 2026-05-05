@@ -1,23 +1,69 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.FIDO;
 
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
-    /// The AuthenticatorAttestationResponse class represents the authenticator's response
-    /// to a client’s request for the creation of a new public key credential.
-    /// It contains information about the new credential that can be used to identify it for later use,
-    /// and metadata that can be used by the WebAuthn Relying Party to assess the characteristics
-    /// of the credential during registration.
+    /// Represents an authenticator attestation response.
     /// </summary>
     public class AuthenticatorAttestationResponse : AuthenticatorResponse
     {
         /// <summary>
-        /// This attribute contains an attestation object, which is opaque to,
-        /// and cryptographically protected against tampering by, the client.
-        /// The attestation object contains both authenticator data and an attestation statement.
+        /// The attestation object returned by the authenticator (Base64Url encoded).
         /// </summary>
         [JsonPropertyName("attestationObject")]
         [JsonConverter(typeof(Base64UrlConverter))]
         public byte[] AttestationObject { get; set; }
+
+        /// <summary>
+        /// The authenticator data if provided separately (Base64Url encoded).
+        /// </summary>
+        [JsonPropertyName("authenticatorData")]
+        [JsonConverter(typeof(Base64UrlConverter))]
+        public byte[]? AuthenticatorData { get; set; }
+
+        /// <summary>
+        /// The parsed authenticator data structure.
+        /// </summary>
+        [JsonIgnore]
+        public AuthenticatorData? AuthenticatorDataParsed => AuthenticatorData != null ? FIDO.AuthenticatorData.Parse(AuthenticatorData) : null;
+
+        /// <summary>
+        /// Optional transports hint provided by the authenticator.
+        /// </summary>
+        [JsonPropertyName("transports")]
+        public string[]? Transports { get; set; }
+
+        /// <summary>
+        /// Optional public key (Base64Url encoded).
+        /// </summary>
+        [JsonPropertyName("publicKey")]
+        public string? PublicKey { get; set; }
+
+        /// <summary>
+        /// Optional public key algorithm identifier.
+        /// </summary>
+        [JsonPropertyName("publicKeyAlgorithm")]
+        public int? PublicKeyAlgorithm { get; set; }
+
+        public static AuthenticatorAttestationResponse? FromJson(string json)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize(json, WebAuthnJsonContext.Default.AuthenticatorAttestationResponse);
+            }
+            catch (JsonException ex)
+            {
+                Debug.WriteLine($"AuthenticatorAttestationResponse JSON deserialization error: {ex.Message}");
+                return null;
+            }
+        }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.AuthenticatorAttestationResponse);
+        }
     }
 }

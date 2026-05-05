@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using Windows.Win32;
@@ -61,7 +62,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
-        public static DisposableList<ExtensionIn> Translate(AuthenticationExtensionsClientInputs? extensions)
+        public static DisposableList<ExtensionIn> Translate(AuthenticationExtensionsClientAttestationInputs? extensions)
         {
             var nativeExtensions = new DisposableList<ExtensionIn>();
 
@@ -89,10 +90,18 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     nativeExtensions.Add(ExtensionIn.CreateCredBlobAttestation(extensions.CredentialBlob));
                 }
 
-                if (extensions.GetCredentialBlob == true)
-                {
-                    nativeExtensions.Add(ExtensionIn.CreateCredBlobAssertion());
-                }
+            }
+
+            return nativeExtensions;
+        }
+
+        public static DisposableList<ExtensionIn> Translate(AuthenticationExtensionsClientAssertionInputs? extensions)
+        {
+            var nativeExtensions = new DisposableList<ExtensionIn>();
+
+            if (extensions?.GetCredentialBlob == true)
+            {
+                nativeExtensions.Add(ExtensionIn.CreateCredBlobAssertion());
             }
 
             return nativeExtensions;
@@ -105,7 +114,65 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 return null;
             }
 
+            if (salts.Salt1 == null)
+            {
+                throw new ArgumentException("The hmacGetSecret extension requires salt1.", nameof(salts));
+            }
+
             return new HmacSecretSaltIn(salts.Salt1, salts.Salt2);
+        }
+
+        public static HmacSecretSaltIn? TranslatePrf(PRFValues? values)
+        {
+            if (values == null)
+            {
+                return null;
+            }
+
+            byte[] first = HashPrfInput(values.First);
+            byte[]? second = values.Second != null ? HashPrfInput(values.Second) : null;
+
+            return new HmacSecretSaltIn(first, second);
+        }
+
+        public static CredentialWithHmacSecretSaltIn[]? Translate(Dictionary<string, PRFValues>? evalByCredential)
+        {
+            if (evalByCredential == null || evalByCredential.Count == 0)
+            {
+                return null;
+            }
+
+            var result = new CredentialWithHmacSecretSaltIn[evalByCredential.Count];
+            int index = 0;
+
+            foreach (var pair in evalByCredential)
+            {
+                if (string.IsNullOrEmpty(pair.Key))
+                {
+                    throw new ArgumentException("The prf evalByCredential key cannot be empty.", nameof(evalByCredential));
+                }
+
+                var credentialId = Base64UrlConverter.FromBase64UrlString(pair.Key);
+                var salt = TranslatePrf(pair.Value)
+                    ?? throw new ArgumentException("The prf evalByCredential value is invalid.", nameof(evalByCredential));
+
+                result[index] = new CredentialWithHmacSecretSaltIn(credentialId, salt);
+                index++;
+            }
+
+            return result;
+        }
+
+        private static byte[] HashPrfInput(byte[] input)
+        {
+            ArgumentNullException.ThrowIfNull(input);
+
+            byte[] context = Encoding.UTF8.GetBytes("WebAuthn PRF");
+            byte[] framedInput = new byte[context.Length + 1 + input.Length];
+            context.CopyTo(framedInput, 0);
+            input.CopyTo(framedInput, context.Length + 1);
+
+            return SHA256.HashData(framedInput);
         }
 
         public static UserInformationIn Translate(UserInformation userInfo)

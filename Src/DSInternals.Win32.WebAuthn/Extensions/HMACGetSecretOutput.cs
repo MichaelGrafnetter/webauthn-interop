@@ -12,6 +12,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Output of HMAC-SHA-256(CredRandom, Salt1)
         /// </summary>
         [JsonPropertyName("output1")]
+        [JsonConverter(typeof(Base64UrlConverter))]
         [JsonRequired]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public byte[]? Output1 { get; set; }
@@ -20,6 +21,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Output of HMAC-SHA-256(CredRandom, Salt2)
         /// </summary>
         [JsonPropertyName("output2")]
+        [JsonConverter(typeof(Base64UrlConverter))]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public byte[]? Output2 { get; set; }
     }

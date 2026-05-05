@@ -1,13 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using DSInternals.Win32.WebAuthn.FIDO;
 
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
-    /// The AuthenticatorAssertionResponse interface represents an authenticator's response
-    /// to a client’s request for generation of a new authentication assertion given
-    /// the WebAuthn Relying Party's challenge and OPTIONAL list of credentials it is aware of.
-    /// This response contains a cryptographic signature proving possession of the credential private key,
-    /// and optionally evidence of user consent to a specific transaction.
+    /// Represents an authenticator assertion response.
     /// </summary>
     public class AuthenticatorAssertionResponse : AuthenticatorResponse
     {
@@ -16,21 +15,45 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         [JsonPropertyName("authenticatorData")]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] AuthenticatorData { get; set; }
+        public byte[]? AuthenticatorData { get; set; }
 
         /// <summary>
-        /// This attribute contains the raw signature returned from the authenticator.
+        /// The parsed authenticator data structure.
+        /// </summary>
+        [JsonIgnore]
+        public AuthenticatorData? AuthenticatorDataParsed => AuthenticatorData != null ? FIDO.AuthenticatorData.Parse(AuthenticatorData) : null;
+
+        /// <summary>
+        /// The raw signature returned by the authenticator (Base64Url encoded).
         /// </summary>
         [JsonPropertyName("signature")]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] Signature { get; set; }
+        public byte[]? Signature { get; set; }
 
         /// <summary>
-        /// This attribute contains the user handle returned from the authenticator, or null if the authenticator did not return a user handle.
+        /// The user handle returned by the authenticator (Base64Url encoded).
         /// </summary>
         [JsonPropertyName("userHandle")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonConverter(typeof(Base64UrlConverter))]
         public byte[]? UserHandle { get; set; }
+
+        public static AuthenticatorAssertionResponse? FromJson(string json)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize(json, WebAuthnJsonContext.Default.AuthenticatorAssertionResponse);
+            }
+            catch (JsonException ex)
+            {
+                Debug.WriteLine($"AuthenticatorAssertionResponse JSON deserialization error: {ex.Message}");
+                return null;
+            }
+        }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.AuthenticatorAssertionResponse);
+        }
     }
 }

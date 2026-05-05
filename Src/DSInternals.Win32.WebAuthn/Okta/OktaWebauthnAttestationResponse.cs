@@ -13,7 +13,7 @@ namespace DSInternals.Win32.WebAuthn.Okta
         /// Contains the WebAuthn public key credential information being registered.
         /// </summary>
         [JsonIgnore]
-        public override PublicKeyCredential PublicKeyCred { get; set; }
+        public override AttestationPublicKeyCredential PublicKeyCred { get; set; }
 
         /// <summary>
         /// ID of an existing Okta user.
@@ -35,14 +35,14 @@ namespace DSInternals.Win32.WebAuthn.Okta
         /// </summary>
         [JsonPropertyName("attestation")]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] Attestation => (PublicKeyCred.Response as AuthenticatorAttestationResponse)?.AttestationObject;
+        public byte[] Attestation => PublicKeyCred.Response.AttestationObject;
 
         /// <summary>
         /// Gets the client data JSON bytes.
         /// </summary>
         [JsonPropertyName("clientData")]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] ClientData => PublicKeyCred.Response.ClientDataJson;
+        public byte[]? ClientData => PublicKeyCred.Response.ClientDataJson;
 
         /// <summary>
         /// Initializes a new Okta attestation response payload.
@@ -50,7 +50,7 @@ namespace DSInternals.Win32.WebAuthn.Okta
         /// <param name="publicKeyCredential">WebAuthn credential returned by the authenticator.</param>
         /// <param name="userId">Raw Okta user identifier bytes.</param>
         /// <param name="factorId">Okta factor identifier.</param>
-        public OktaWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, byte[] userId, string factorId)
+        public OktaWebauthnAttestationResponse(AttestationPublicKeyCredential publicKeyCredential, byte[] userId, string factorId)
         {
             PublicKeyCred = publicKeyCredential;
             UserId = Base64Url.EncodeToString(userId);

@@ -304,7 +304,7 @@ public static class WebAuthnEventReader
             TransactionId = GetGuid(properties, 0),
             AttestationFormatType = GetString(properties, 1),
             RpIdHash = GetByteArray(properties, 3), // index 2 is RpIdHashLength
-            AuthenticatorFlags = GetByte(properties, 4),
+            AuthenticatorFlags = (AuthenticatorFlags?)GetByte(properties, 4),
             SignCount = GetUInt32(properties, 5),
             AAGuid = GetGuid(properties, 6),
             CredentialId = GetByteArray(properties, 8), // index 7 is CredentialIdLength
@@ -328,7 +328,7 @@ public static class WebAuthnEventReader
             TransactionId = GetGuid(properties, 0),
             AttestationFormatType = GetString(properties, 1),
             RpIdHash = GetByteArray(properties, 3), // index 2 is RpIdHashLength
-            AuthenticatorFlags = GetByte(properties, 4),
+            AuthenticatorFlags = (AuthenticatorFlags?)GetByte(properties, 4),
             SignCount = GetUInt32(properties, 5),
             AAGuid = GetGuid(properties, 6),
             CredentialId = GetByteArray(properties, 8), // index 7 is CredentialIdLength
@@ -372,7 +372,7 @@ public static class WebAuthnEventReader
             Message = message,
             TransactionId = GetGuid(properties, 0),
             RpIdHash = GetByteArray(properties, 2), // index 1 is RpIdHashLength
-            AuthenticatorFlags = GetByte(properties, 3),
+            AuthenticatorFlags = (AuthenticatorFlags?)GetByte(properties, 3),
             SignCount = GetUInt32(properties, 4),
             CredentialId = GetByteArray(properties, 6), // index 5 is CredentialIdLength
             Response = GetByteArray(properties, 8) // index 7 is ResponseLength

@@ -1,7 +1,7 @@
-﻿#pragma warning disable CA1027 // Mark enums with FlagsAttribute
-#pragma warning disable CA1008 // Enums should have zero value
+﻿#pragma warning disable CA1008 // Enums should have zero value
 #pragma warning disable CA1069 // Enums values should not be duplicated
 
+using System.Diagnostics.CodeAnalysis;
 using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn;
@@ -9,6 +9,7 @@ namespace DSInternals.Win32.WebAuthn;
 /// <summary>
 /// WebAuthn API Version Information.
 /// </summary>
+[SuppressMessage("Design", "CA1028:Enum Storage should be Int32", Justification = "The version is defined as a DWORD in the WebAuthn API.")]
 public enum ApiVersion : uint
 {
     /// <summary>

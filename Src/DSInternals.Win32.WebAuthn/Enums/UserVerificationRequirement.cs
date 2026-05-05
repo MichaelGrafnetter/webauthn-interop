@@ -8,13 +8,12 @@ namespace DSInternals.Win32.WebAuthn
     /// This enumeration describes the Relying Party's requirements regarding user verification for the create() operation.
     /// Eligible authenticators are filtered to only those capable of satisfying this requirement.
     /// </summary>
-    [JsonConverter(typeof(JsonCustomEnumConverter<UserVerificationRequirement>))]
+    [JsonConverter(typeof(WebAuthnJsonEnumConverter<UserVerificationRequirement>))]
     public enum UserVerificationRequirement : uint
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_ANY.
         /// </remarks>
-        [EnumMember(Value = null)]
         Any = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_ANY,
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_REQUIRED.
         /// </remarks>
-        [EnumMember(Value = "required")]
+        [JsonStringEnumMemberName("required")]
         Required = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_REQUIRED,
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED.
         /// </remarks>
-        [EnumMember(Value = "preferred")]
+        [JsonStringEnumMemberName("preferred")]
         Preferred = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED,
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_USER_VERIFICATION_REQUIREMENT_DISCOURAGED.
         /// </remarks>
-        [EnumMember(Value = "discouraged")]
+        [JsonStringEnumMemberName("discouraged")]
         Discouraged = PInvoke.WEBAUTHN_USER_VERIFICATION_REQUIREMENT_DISCOURAGED
     }
 }

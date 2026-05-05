@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Changed
+
+- Changed WebAuthn data model and Win32 API credential hints to raw strings so future and custom hint values are preserved.
+
 ## [2.1.1] - 2026-04-05
 
 ### Fixed

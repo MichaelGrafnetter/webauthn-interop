@@ -514,7 +514,7 @@ function New-Passkey
 
     try {
         [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
-        [DSInternals.Win32.WebAuthn.PublicKeyCredential] $credential = $api.AuthenticatorMakeCredential($Options.PublicKeyOptions)
+        [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential] $credential = $api.AuthenticatorMakeCredential($Options.PublicKeyOptions)
 
         switch ($Options.GetType()) {
             ([DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions]) {
@@ -594,7 +594,7 @@ Tests a passkey with a hint that a security key should be used.
 #>
 function Test-Passkey
 {
-    [OutputType([DSInternals.Win32.WebAuthn.PublicKeyCredential])]
+    [OutputType([DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential])]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -620,7 +620,7 @@ function Test-Passkey
 
         [Parameter(Mandatory = $false)]
         [Alias("AuthenticatorType", "CredentialHint", "PublicKeyCredentialHint")]
-        [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint] $Hint
+        [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint] $Hint = [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint]::None
     )
 
     try {
@@ -642,6 +642,15 @@ function Test-Passkey
 
         [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
 
+        [string] $credentialHint = switch ($Hint.ToString()) {
+            'None' { $null; break }
+            'SecurityKey' { [DSInternals.Win32.WebAuthn.Interop.ApiConstants]::CredentialHintSecurityKey; break }
+            'ClientDevice' { [DSInternals.Win32.WebAuthn.Interop.ApiConstants]::CredentialHintClientDevice; break }
+            'Hybrid' { [DSInternals.Win32.WebAuthn.Interop.ApiConstants]::CredentialHintHybrid; break }
+            default { throw "Unknown credential hint: $Hint" }
+        }
+        [string[]] $credentialHints = if (![string]::IsNullOrEmpty($credentialHint)) { @($credentialHint) } else { $null }
+
         $response = $api.AuthenticatorGetAssertion(
             $RelyingPartyId,
             $challengeBytes,
@@ -650,12 +659,10 @@ function Test-Passkey
             $timeoutMilliseconds,
             $allowCredentials,
             $null,  # extensions
-            [DSInternals.Win32.WebAuthn.CredentialLargeBlobOperation]::None,
-            $null,  # largeBlob
             $false, # browserInPrivateMode
             $null,  # linkedDevice
             $false, # autoFill
-            $Hint,  # credentialHints
+            $credentialHints,
             $null,  # remoteWebOrigin
             $null,  # authenticatorId
             $null,  # publicKeyCredentialRequestOptionsJson

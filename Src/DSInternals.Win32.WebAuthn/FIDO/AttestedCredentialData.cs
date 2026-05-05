@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Buffers.Binary;
+using System.Diagnostics.CodeAnalysis;
+using System.Formats.Cbor;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
-using DSInternals.Win32.WebAuthn.Interop;
+using DSInternals.Win32.WebAuthn;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {
@@ -11,68 +13,113 @@ namespace DSInternals.Win32.WebAuthn.FIDO
     /// data when generating an attestation object for a given credential.
     /// </summary>
     /// <see>https://www.w3.org/TR/webauthn/#sec-attested-credential-data</see>
-    public class AttestedCredentialData
+    public sealed class AttestedCredentialData
     {
+        private const int GuidLength = 16;
+
+        /// <summary>
+        /// Minimum length of the attested credential data structure.
+        /// </summary>
+        private const int MinLength = GuidLength + 2 + 1 + 1; // 16 (AAGUID) + 2 (credentialID length) + 1 (min credential ID) + 1 (min CBOR)
+
+        private const int MaxCredentialIdLength = 1023;
+
         /// <summary>
         /// The AAGUID of the authenticator. Can be used to identify the make and model of the authenticator.
         /// </summary>
         /// <see>https://www.w3.org/TR/webauthn/#aaguid</see>
-        public Guid AaGuid
-        {
-            get;
-            private set;
-        }
+        public required Guid AaGuid { get; init; }
 
         /// <summary>
         /// A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions.
         /// </summary>
-        /// <see>https://www.w3.org/TR/webauthn/#credential-id</see>
-        public byte[] CredentialId
-        {
-            get;
-            private set;
-        }
+        public required ReadOnlyMemory<byte> CredentialId { get; init; }
 
         /// <summary>
-        /// The credential public key encoded in COSE_Key format, as defined in
-        /// Section 7 of RFC8152, using the CTAP2 canonical CBOR encoding form.
+        /// The credential public key encoded in COSE_Key format.
         /// </summary>
-        /// <see>https://www.w3.org/TR/webauthn/#credential-public-key</see>
-        public CredentialPublicKey CredentialPublicKey
+        public required ReadOnlyMemory<byte> CredentialPublicKey { get; init; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AttestedCredentialData"/> class.
+        /// </summary>
+        /// <param name="aaGuid">The AAGUID of the authenticator.</param>
+        /// <param name="credentialId">A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions.</param>
+        /// <param name="credentialPublicKey">The credential public key encoded in COSE_Key format.</param>
+        [SetsRequiredMembers]
+        public AttestedCredentialData(Guid aaGuid, ReadOnlyMemory<byte> credentialId, ReadOnlyMemory<byte> credentialPublicKey)
         {
-            get;
-            private set;
+            AaGuid = aaGuid;
+            CredentialId = credentialId;
+            CredentialPublicKey = credentialPublicKey;
         }
 
         /// <summary>
         /// Decodes attested credential data.
         /// </summary>
-        public AttestedCredentialData(BinaryReader reader)
+        internal static AttestedCredentialData Parse(ReadOnlyMemory<byte> data, out int bytesRead)
         {
-            ArgumentNullException.ThrowIfNull(reader);
+            if (data.Length < MinLength)
+            {
+                throw new ArgumentException($"Attested credential data must be at least {MinLength} bytes.", nameof(data));
+            }
 
-            // First 16 bytes is AAGUID
-            byte[] aaguidBytes = reader.ReadBytes(Marshal.SizeOf<Guid>());
+            int position = 0;
 
-            // GUID from authenticator is big endian. If we are on a little endian system, convert.
-            this.AaGuid = aaguidBytes.ToGuidBigEndian();
+            // AAGUID (16 bytes)
+            var aaGuid = Guid.Create(data[..GuidLength].Span, bigEndian: true);
+            position += GuidLength;
 
-            // Byte length of Credential ID, 16-bit unsigned big-endian integer.
-            byte[] credentialIDLenBytes = reader.ReadBytes(sizeof(UInt16));
+            // Credential ID length (2 bytes, big-endian)
+            ushort credentialIdLength = BinaryPrimitives.ReadUInt16BigEndian(data.Slice(position, sizeof(ushort)).Span);
+            if (credentialIdLength > MaxCredentialIdLength)
+            {
+                throw new ArgumentException($"Credential ID length {credentialIdLength} exceeds maximum {MaxCredentialIdLength}.", nameof(data));
+            }
+            position += sizeof(ushort);
 
-            // Credential ID length from authenticator is big endian.  If we are on little endian system, convert.
-            ushort credentialIDLen = credentialIDLenBytes.ToUInt16BigEndian();
+            // Credential ID
+            ReadOnlyMemory<byte> credentialId = data.Slice(position, credentialIdLength);
+            position += credentialIdLength;
 
-            // Read the credential ID bytes
-            this.CredentialId = reader.ReadBytes(credentialIDLen);
+            // Credential public key (CBOR encoded)
+            var reader = new CborReader(data[position..]);
+            reader.SkipValue();
+            int publicKeyLength = data.Length - position - reader.BytesRemaining;
+            ReadOnlyMemory<byte> credentialPublicKey = data.Slice(position, publicKeyLength);
+            position += publicKeyLength;
 
-            // "Determining attested credential data's length, which is variable, involves determining
-            // credentialPublicKey's beginning location given the preceding credentialId's length, and
-            // then determining the credentialPublicKey's length"
+            bytesRead = position;
 
-            // Read the CBOR-encoded credential public key from the stream
-            byte[] cpkBytes = CborHelper.ReadCborItemBytes(reader.BaseStream);
-            this.CredentialPublicKey = new CredentialPublicKey(cpkBytes);
+            return new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        }
+
+        public void WriteTo(Stream output)
+        {
+            ArgumentNullException.ThrowIfNull(output);
+
+            // AAGUID (16 bytes, big-endian)
+            byte[] aaguidBytes = AaGuid.ToByteArray(bigEndian: true);
+            output.Write(aaguidBytes, 0, aaguidBytes.Length);
+
+            // Credential ID length (2 bytes, big-endian)
+            byte[] credIdLenBytes = new byte[sizeof(ushort)];
+            BinaryPrimitives.WriteUInt16BigEndian(credIdLenBytes, (ushort)CredentialId.Length);
+            output.Write(credIdLenBytes, 0, sizeof(ushort));
+
+            // Credential ID
+            output.Write(CredentialId.Span);
+
+            // COSE public key (already CBOR-encoded)
+            output.Write(CredentialPublicKey.Span);
+        }
+
+        public byte[] ToByteArray()
+        {
+            // TODO: Determine the required buffer size.
+            using MemoryStream buffer = new();
+            WriteTo(buffer);
+            return buffer.ToArray();
         }
 
         /// <summary>
@@ -82,8 +129,8 @@ namespace DSInternals.Win32.WebAuthn.FIDO
         {
             return string.Format(CultureInfo.InvariantCulture, "AAGUID: {0}, CredentialID: {1}, CredentialPublicKey: {2}",
                 AaGuid.ToString(),
-                CredentialId.ToHex(true),
-                CredentialPublicKey.ToString());
+                Convert.ToHexString(CredentialId.Span),
+                Convert.ToHexString(CredentialPublicKey.Span));
         }
     }
 }

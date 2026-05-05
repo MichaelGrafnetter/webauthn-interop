@@ -12,12 +12,15 @@ namespace DSInternals.Win32.WebAuthn
         /// 32-byte random data.
         /// </summary>
         [JsonPropertyName("salt1")]
-        public byte[] Salt1 { get; set; }
+        [JsonConverter(typeof(Base64UrlConverter))]
+        public byte[]? Salt1 { get; set; }
 
         /// <summary>
         ///  Optional additional 32-byte random data. Used when the platform wants to roll over the symmetric secret in one operation.
         /// </summary>
         [JsonPropertyName("salt2")]
-        public byte[] Salt2 { get; set; }
+        [JsonConverter(typeof(Base64UrlConverter))]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public byte[]? Salt2 { get; set; }
     }
 }

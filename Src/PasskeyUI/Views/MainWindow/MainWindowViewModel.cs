@@ -195,7 +195,7 @@ internal sealed class MainWindowViewModel : BindableBase
             );
 
             // On success, show the result in the Authentication tab
-            this.AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.PublicKeyCredential);
+            this.AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.AssertionPublicKeyCredential);
 
             // Pre-fill the assertion options view model for easier retesting
             AssertionOptionsViewModel.ResetOptionsCommand.Execute(null);
@@ -223,6 +223,12 @@ internal sealed class MainWindowViewModel : BindableBase
         });
     }
 
+    private static string[]? GetCredentialHints(PublicKeyCredentialHint hint)
+    {
+        string? hintValue = hint.ToJsonString();
+        return hintValue != null ? [hintValue] : null;
+    }
+
     private void OnRegister()
     {
         try
@@ -231,9 +237,7 @@ internal sealed class MainWindowViewModel : BindableBase
             this.AttestationResponse = null;
 
             // Convert single hint to array if specified
-            PublicKeyCredentialHint[]? credentialHints = AttestationOptionsViewModel.CredentialHint != PublicKeyCredentialHint.None
-                ? [AttestationOptionsViewModel.CredentialHint]
-                : null;
+            string[]? credentialHints = GetCredentialHints(AttestationOptionsViewModel.CredentialHint);
 
             var response = _api.AuthenticatorMakeCredential(
                 AttestationOptionsViewModel.RelyingPartyEntity,

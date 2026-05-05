@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -49,6 +47,28 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Flags
         /// </summary>
         private AssertionOptionsFlags _flags;
+
+        /// <summary>
+        /// Indicates whether HMAC secret salt values are already raw HMAC-secret values.
+        /// </summary>
+        public bool UseRawHmacSecretValues
+        {
+            get
+            {
+                return (_flags & AssertionOptionsFlags.AuthenticatorHmacSecretValues) != 0;
+            }
+            set
+            {
+                if (value)
+                {
+                    _flags |= AssertionOptionsFlags.AuthenticatorHmacSecretValues;
+                }
+                else
+                {
+                    _flags &= ~AssertionOptionsFlags.AuthenticatorHmacSecretValues;
+                }
+            }
+        }
 
         /// <summary>
         /// Optional identifier for the U2F AppId. Converted to UTF8 before being hashed. Not lower-cased.
@@ -136,7 +156,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         //
 
         /// <summary>
-        /// PublicKeyCredentialHints (https://w3c.github.io/webauthn/#enum-hints).
+        /// Public key credential hint strings (https://w3c.github.io/webauthn/#enum-hints).
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_8.</remarks>
         private SafeStringArrayIn? _credentialHints;
@@ -197,6 +217,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 Marshal.WriteInt32(_isU2fAppIdUsed, Convert.ToInt32(value != null));
             }
         }
+
+        public bool IsU2fAppIdUsed =>
+            _isU2fAppIdUsed != IntPtr.Zero && Marshal.ReadInt32(_isU2fAppIdUsed) != 0;
 
         /// <summary>
         /// Cancellation Id (Optional)
@@ -315,11 +338,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_6.</remarks>
 
-        public HmacSecretSaltValuesIn HmacSecretSaltValues
+        public HmacSecretSaltValuesIn? HmacSecretSaltValues
         {
             set
             {
-                if (value?.HasGlobalHmacSalt ?? false)
+                if (value?.IsEmpty == false)
                 {
                     if (_hmacSecretSaltValues == IntPtr.Zero)
                     {
@@ -327,16 +350,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     }
 
                     Marshal.StructureToPtr<HmacSecretSaltValuesIn>(value, _hmacSecretSaltValues, false);
-
-                    // Set flag
-                    _flags |= AssertionOptionsFlags.AuthenticatorHmacSecretValues;
                 }
                 else
                 {
                     FreeHmacSecretSaltValues();
 
                     // Unset flag
-                    _flags &= ~AssertionOptionsFlags.AuthenticatorHmacSecretValues;
+                    UseRawHmacSecretValues = false;
                 }
             }
         }
@@ -388,10 +408,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
         }
 
         /// <summary>
-        /// PublicKeyCredentialHints (https://w3c.github.io/webauthn/#enum-hints).
+        /// Public key credential hint strings (https://w3c.github.io/webauthn/#enum-hints).
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_8.</remarks>
-        public PublicKeyCredentialHint[]? CredentialHints
+        public string[]? CredentialHints
         {
             set
             {
@@ -400,13 +420,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
                 if (value != null && value.Length > 0)
                 {
-                    // Convert enum values to their string representations
-                    string[] hints = value
-                        .Where(hint => hint != PublicKeyCredentialHint.None)
-                        .Select(hint => ((EnumMemberAttribute)typeof(PublicKeyCredentialHint).GetField(hint.ToString())!.GetCustomAttributes(typeof(EnumMemberAttribute), true).Single()).Value!)
-                        .ToArray();
-
-                    _credentialHints = new SafeStringArrayIn(hints);
+                    _credentialHints = new SafeStringArrayIn(value);
                 }
                 else
                 {

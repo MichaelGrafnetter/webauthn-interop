@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DSInternals.Win32.WebAuthn.FIDO;
@@ -13,7 +12,31 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
         /// associated with its credential private key.
         /// </summary>
-        public async Task<PublicKeyCredential> AuthenticatorMakeCredentialAsync(
+        public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
+            PublicKeyCredentialCreationOptions options,
+            CancellationToken cancellationToken = default)
+        {
+            return AuthenticatorMakeCredentialAsync(options, default, cancellationToken);
+        }
+
+        /// <summary>
+        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
+        /// associated with its credential private key.
+        /// </summary>
+        public async Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
+            PublicKeyCredentialCreationOptions options,
+            WindowHandle windowHandle,
+            CancellationToken cancellationToken = default)
+        {
+            using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
+            return await Task.Run(() => AuthenticatorMakeCredential(options, windowHandle)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
+        /// associated with its credential private key.
+        /// </summary>
+        public async Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
             byte[] challenge,
@@ -23,18 +46,16 @@ namespace DSInternals.Win32.WebAuthn
             COSE.Algorithm[]? pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            AuthenticationExtensionsClientInputs? extensions = null,
-            IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            AuthenticationExtensionsClientAttestationInputs? extensions = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor>? excludeCredentials = null,
             EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
-            LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
             bool browserInPrivateMode = false,
-            bool enablePseudoRandomFunction = false,
             HybridStorageLinkedData? linkedDevice = null,
-            PublicKeyCredentialHint[]? credentialHints = null,
+            string[]? credentialHints = null,
             bool thirdPartyPayment = false,
-            string? remoteWebOrigin = null,
             byte[]? authenticatorId = null,
             byte[]? publicKeyCredentialCreationOptionsJson = null,
+            string? hostName = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
         )
@@ -53,15 +74,13 @@ namespace DSInternals.Win32.WebAuthn
                 excludeCredentials,
                 enterpriseAttestation,
                 extensions,
-                largeBlobSupport,
                 browserInPrivateMode,
-                enablePseudoRandomFunction,
                 linkedDevice,
                 credentialHints,
                 thirdPartyPayment,
-                remoteWebOrigin,
                 authenticatorId,
                 publicKeyCredentialCreationOptionsJson,
+                hostName,
                 windowHandle
             )).ConfigureAwait(false);
         }
@@ -69,23 +88,42 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
         /// </summary>
-        public async Task<PublicKeyCredential> AuthenticatorGetAssertionAsync(
+        public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
+            PublicKeyCredentialRequestOptions options,
+            CancellationToken cancellationToken = default)
+        {
+            return AuthenticatorGetAssertionAsync(options, default, cancellationToken);
+        }
+
+        /// <summary>
+        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+        /// </summary>
+        public async Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
+            PublicKeyCredentialRequestOptions options,
+            WindowHandle windowHandle,
+            CancellationToken cancellationToken = default)
+        {
+            using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
+            return await Task.Run(() => AuthenticatorGetAssertion(options, windowHandle)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+        /// </summary>
+        public async Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
             string rpId,
             byte[] challenge,
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null,
-            AuthenticationExtensionsClientInputs extensions = null,
-            CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
-            byte[] largeBlob = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null,
+            AuthenticationExtensionsClientAssertionInputs? extensions = null,
             bool browserInPrivateMode = false,
-            HybridStorageLinkedData linkedDevice = null,
+            HybridStorageLinkedData? linkedDevice = null,
             bool autoFill = false,
-            PublicKeyCredentialHint[] credentialHints = null,
-            string remoteWebOrigin = null,
-            byte[] authenticatorId = null,
-            byte[] publicKeyCredentialRequestOptionsJson = null,
+            string[]? credentialHints = null,
+            byte[]? authenticatorId = null,
+            byte[]? publicKeyCredentialRequestOptionsJson = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
         )
@@ -99,13 +137,10 @@ namespace DSInternals.Win32.WebAuthn
                 timeoutMilliseconds,
                 allowCredentials,
                 extensions,
-                largeBlobOperation,
-                largeBlob,
                 browserInPrivateMode,
                 linkedDevice,
                 autoFill,
                 credentialHints,
-                remoteWebOrigin,
                 authenticatorId,
                 publicKeyCredentialRequestOptionsJson,
                 windowHandle
@@ -116,28 +151,25 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
         /// associated with its credential private key.
         /// </summary>
-        public async Task<PublicKeyCredential> AuthenticatorMakeCredentialAsync(
+        public async Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
             CollectedClientData clientData,
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             ResidentKeyRequirement residentKey = ResidentKeyRequirement.Discouraged,
-            COSE.Algorithm[] pubKeyCredParams = null,
+            COSE.Algorithm[]? pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor>? excludeCredentials = null,
             EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None,
-            AuthenticationExtensionsClientInputs extensions = null,
-            LargeBlobSupport largeBlobSupport = LargeBlobSupport.None,
+            AuthenticationExtensionsClientAttestationInputs? extensions = null,
             bool browserInPrivateMode = false,
-            bool enablePseudoRandomFunction = false,
-            HybridStorageLinkedData linkedDevice = null,
-            PublicKeyCredentialHint[] credentialHints = null,
+            HybridStorageLinkedData? linkedDevice = null,
+            string[]? credentialHints = null,
             bool thirdPartyPayment = false,
-            string remoteWebOrigin = null,
-            byte[] authenticatorId = null,
-            byte[] publicKeyCredentialCreationOptionsJson = null,
+            byte[]? authenticatorId = null,
+            byte[]? publicKeyCredentialCreationOptionsJson = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
             )
@@ -156,13 +188,10 @@ namespace DSInternals.Win32.WebAuthn
                 excludeCredentials,
                 enterpriseAttestation,
                 extensions,
-                largeBlobSupport,
                 browserInPrivateMode,
-                enablePseudoRandomFunction,
                 linkedDevice,
                 credentialHints,
                 thirdPartyPayment,
-                remoteWebOrigin,
                 authenticatorId,
                 publicKeyCredentialCreationOptionsJson,
                 windowHandle
@@ -172,23 +201,20 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
         /// </summary>
-        public async Task<PublicKeyCredential> AuthenticatorGetAssertionAsync(
+        public async Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
             string rpId,
             CollectedClientData clientData,
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
             uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null,
-            AuthenticationExtensionsClientInputs extensions = null,
-            CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None,
-            byte[] largeBlob = null,
+            IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null,
+            AuthenticationExtensionsClientAssertionInputs? extensions = null,
             bool browserInPrivateMode = false,
-            HybridStorageLinkedData linkedDevice = null,
+            HybridStorageLinkedData? linkedDevice = null,
             bool autoFill = false,
-            PublicKeyCredentialHint[] credentialHints = null,
-            string remoteWebOrigin = null,
-            byte[] authenticatorId = null,
-            byte[] publicKeyCredentialRequestOptionsJson = null,
+            string[]? credentialHints = null,
+            byte[]? authenticatorId = null,
+            byte[]? publicKeyCredentialRequestOptionsJson = null,
             WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default
             )
@@ -202,13 +228,10 @@ namespace DSInternals.Win32.WebAuthn
                 timeoutMilliseconds,
                 allowCredentials,
                 extensions,
-                largeBlobOperation,
-                largeBlob,
                 browserInPrivateMode,
                 linkedDevice,
                 autoFill,
                 credentialHints,
-                remoteWebOrigin,
                 authenticatorId,
                 publicKeyCredentialRequestOptionsJson,
                 windowHandle

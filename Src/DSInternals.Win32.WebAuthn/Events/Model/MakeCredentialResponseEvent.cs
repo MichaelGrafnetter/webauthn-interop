@@ -20,7 +20,7 @@ public abstract class MakeCredentialResponseEvent : WebAuthnEvent
     /// <summary>
     /// Authenticator data flags byte (UP, UV, AT, ED, etc.).
     /// </summary>
-    public byte? AuthenticatorFlags { get; set; }
+    public AuthenticatorFlags? AuthenticatorFlags { get; set; }
 
     /// <summary>
     /// Signature counter value.

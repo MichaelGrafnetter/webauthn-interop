@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -129,7 +127,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private IntPtr _prfGlobalEval = IntPtr.Zero;
 
         /// <summary>
-        /// PublicKeyCredentialHints (https://w3c.github.io/webauthn/#enum-hints).
+        /// Public key credential hint strings (https://w3c.github.io/webauthn/#enum-hints).
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_8.</remarks>
         private SafeStringArrayIn? _credentialHints;
@@ -322,10 +320,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
         }
 
         /// <summary>
-        /// PublicKeyCredentialHints (https://w3c.github.io/webauthn/#enum-hints).
+        /// Public key credential hint strings (https://w3c.github.io/webauthn/#enum-hints).
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_8.</remarks>
-        public PublicKeyCredentialHint[]? CredentialHints
+        public string[]? CredentialHints
         {
             set
             {
@@ -334,13 +332,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
                 if (value != null && value.Length > 0)
                 {
-                    // Convert enum values to their string representations
-                    string[] hints = value
-                        .Where(hint => hint != PublicKeyCredentialHint.None)
-                        .Select(hint => ((EnumMemberAttribute)typeof(PublicKeyCredentialHint).GetField(hint.ToString())!.GetCustomAttributes(typeof(EnumMemberAttribute), true).Single()).Value!)
-                        .ToArray();
-
-                    _credentialHints = new SafeStringArrayIn(hints);
+                    _credentialHints = new SafeStringArrayIn(value);
                 }
                 else
                 {

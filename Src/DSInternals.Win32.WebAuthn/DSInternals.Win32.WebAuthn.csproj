@@ -45,9 +45,11 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net48'">
-    <!-- Note: Classes from these namespaces are part of .NET Framework -->
+    <!-- Classes from these namespaces are part of .NET Framework -->
     <PackageReference Include="System.Diagnostics.EventLog" />
     <PackageReference Include="System.Security.Cryptography.Cng" />
+    <!-- NSec.Cryptography is not compiled for .NET Framework -->
+    <PackageReference Include="NSec.Cryptography" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(Configuration)' == 'Release'">
