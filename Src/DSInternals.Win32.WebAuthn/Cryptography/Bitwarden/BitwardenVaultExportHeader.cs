@@ -14,6 +14,12 @@ public sealed class BitwardenVaultExportHeader
     /// </summary>
     [JsonPropertyName("encrypted")]
     public bool Encrypted { get; set; }
+
+    /// <summary>
+    /// Indicates whether the export is protected by a user-supplied password.
+    /// </summary>
+    [JsonPropertyName("passwordProtected")]
+    public bool PasswordProtected { get; set; }
 }
 
 #endif

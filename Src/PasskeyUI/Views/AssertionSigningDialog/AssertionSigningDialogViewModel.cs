@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
 using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.Cryptography;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Dialogs;
@@ -181,7 +182,7 @@ internal sealed class AssertionSigningDialogViewModel : BindableBase, IDialogAwa
                 UserHandle,
                 privateKey);
 
-            string json = JsonSerializer.Serialize(credential, IndentedJsonContext.PublicKeyCredential);
+            string json = JsonSerializer.Serialize(credential, IndentedJsonContext.AssertionPublicKeyCredential);
 
             SaveToCache();
 
@@ -197,7 +198,7 @@ internal sealed class AssertionSigningDialogViewModel : BindableBase, IDialogAwa
     {
         if (_loadedPasskey != null)
         {
-            return _loadedPasskey.LoadPrivateKey();
+            return _loadedPasskey.GetPasskeys()[0].PrivateKey;
         }
 
         return SoftwareAuthenticator.LoadPrivateKeyFromPem(KeyFilePath!);
@@ -255,7 +256,7 @@ internal sealed class AssertionSigningDialogViewModel : BindableBase, IDialogAwa
         }
 
         // Validate private key presence
-        if (passkey.PrivateKey == null)
+        if (string.IsNullOrWhiteSpace(passkey.PrivateKey))
         {
             _dialogService.ShowNotificationDialog("No private key found in the passkey file.");
             return;
@@ -265,22 +266,23 @@ internal sealed class AssertionSigningDialogViewModel : BindableBase, IDialogAwa
         KeyFilePath = filePath;
 
         // Auto-fill credential ID
-        if (!string.IsNullOrWhiteSpace(passkey.CredentialId))
+        if (passkey.CredentialId is { Length: > 0 })
         {
-            CredentialId = Base64UrlConverter.FromBase64UrlString(passkey.CredentialId);
+            CredentialId = passkey.CredentialId;
         }
 
         // Auto-fill user handle
-        if (!string.IsNullOrWhiteSpace(passkey.UserHandle))
+        if (passkey.UserHandle is { Length: > 0 })
         {
-            UserHandle = Base64UrlConverter.FromBase64UrlString(passkey.UserHandle);
+            UserHandle = passkey.UserHandle;
         }
 
         // Auto-detect algorithm from the key
         try
         {
-            using var key = passkey.LoadPrivateKey();
-            SelectedAlgorithm = SoftwareAuthenticator.DetectAlgorithm(key);
+            var exportedPasskey = passkey.GetPasskeys()[0];
+            using var key = exportedPasskey.PrivateKey;
+            SelectedAlgorithm = exportedPasskey.KeyAlgorithm;
         }
         catch
         {

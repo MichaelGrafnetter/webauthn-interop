@@ -21,6 +21,8 @@ namespace DSInternals.Win32.WebAuthn
     [JsonSerializable(typeof(AuthenticationExtensionsClientAttestationOutputs))]
     [JsonSerializable(typeof(AuthenticationExtensionsClientAssertionInputs))]
     [JsonSerializable(typeof(AuthenticationExtensionsClientAssertionOutputs))]
+    [JsonSerializable(typeof(HMACGetSecretInput))]
+    [JsonSerializable(typeof(HMACGetSecretOutput))]
     [JsonSerializable(typeof(CredentialPropertiesOutputs))]
     [JsonSerializable(typeof(LargeBlobAttestationInputs))]
     [JsonSerializable(typeof(LargeBlobAttestationOutputs))]

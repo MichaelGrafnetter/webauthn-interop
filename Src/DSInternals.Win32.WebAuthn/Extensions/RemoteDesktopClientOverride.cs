@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn;
@@ -37,5 +38,24 @@ public sealed class RemoteDesktopClientOverride
                 SameOriginWithAncestors = value.Value;
             }
         }
+    }
+
+    /// <summary>
+    /// Deserializes a JSON string into remote desktop client override inputs.
+    /// </summary>
+    /// <param name="json">JSON representation of remote desktop client override inputs.</param>
+    /// <returns>Remote desktop client override inputs if deserialization is successful; otherwise, null.</returns>
+    public static RemoteDesktopClientOverride? FromJson(string json)
+    {
+        return WebAuthnJsonModel.FromJson(json, WebAuthnJsonContext.Default.RemoteDesktopClientOverride);
+    }
+
+    /// <summary>
+    /// Serializes the remote desktop client override inputs to JSON.
+    /// </summary>
+    /// <returns>JSON representation of these remote desktop client override inputs.</returns>
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.RemoteDesktopClientOverride);
     }
 }

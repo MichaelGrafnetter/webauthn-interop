@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+using System.Text.Json;
+
 namespace DSInternals.Win32.WebAuthn
 {
     /// <summary>
@@ -22,5 +24,24 @@ namespace DSInternals.Win32.WebAuthn
         [JsonConverter(typeof(Base64UrlConverter))]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public byte[]? Salt2 { get; set; }
+
+        /// <summary>
+        /// Deserializes a JSON string into hmac-secret extension inputs.
+        /// </summary>
+        /// <param name="json">JSON representation of hmac-secret extension inputs.</param>
+        /// <returns>hmac-secret extension inputs if deserialization is successful; otherwise, null.</returns>
+        public static HMACGetSecretInput? FromJson(string json)
+        {
+            return WebAuthnJsonModel.FromJson(json, WebAuthnJsonContext.Default.HMACGetSecretInput);
+        }
+
+        /// <summary>
+        /// Serializes the hmac-secret extension inputs to JSON.
+        /// </summary>
+        /// <returns>JSON representation of these hmac-secret extension inputs.</returns>
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.HMACGetSecretInput);
+        }
     }
 }

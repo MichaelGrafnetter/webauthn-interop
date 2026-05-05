@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.FIDO;
 
@@ -56,4 +57,23 @@ public sealed class AuthenticationExtensionsClientAssertionInputs
     [JsonPropertyName("remoteDesktopClientOverride")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RemoteDesktopClientOverride? RemoteDesktopClientOverride { get; set; }
+
+    /// <summary>
+    /// Deserializes a JSON string into assertion extension inputs.
+    /// </summary>
+    /// <param name="json">JSON representation of assertion extension inputs.</param>
+    /// <returns>Assertion extension inputs if deserialization is successful; otherwise, null.</returns>
+    public static AuthenticationExtensionsClientAssertionInputs? FromJson(string json)
+    {
+        return WebAuthnJsonModel.FromJson(json, WebAuthnJsonContext.Default.AuthenticationExtensionsClientAssertionInputs);
+    }
+
+    /// <summary>
+    /// Serializes the assertion extension inputs to JSON.
+    /// </summary>
+    /// <returns>JSON representation of these assertion extension inputs.</returns>
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.AuthenticationExtensionsClientAssertionInputs);
+    }
 }

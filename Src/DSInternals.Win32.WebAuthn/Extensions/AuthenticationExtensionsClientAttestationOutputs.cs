@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn;
@@ -81,4 +82,23 @@ public sealed class AuthenticationExtensionsClientAttestationOutputs : Authentic
         LargeBlob == null &&
         Prf == null &&
         RemoteClientDataJson == null;
+
+    /// <summary>
+    /// Deserializes a JSON string into attestation extension outputs.
+    /// </summary>
+    /// <param name="json">JSON representation of attestation extension outputs.</param>
+    /// <returns>Attestation extension outputs if deserialization is successful; otherwise, null.</returns>
+    public static AuthenticationExtensionsClientAttestationOutputs? FromJson(string json)
+    {
+        return WebAuthnJsonModel.FromJson(json, WebAuthnJsonContext.Default.AuthenticationExtensionsClientAttestationOutputs);
+    }
+
+    /// <summary>
+    /// Serializes the attestation extension outputs to JSON.
+    /// </summary>
+    /// <returns>JSON representation of these attestation extension outputs.</returns>
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.AuthenticationExtensionsClientAttestationOutputs);
+    }
 }

@@ -31,10 +31,11 @@ public sealed class BitwardenEncryptedVaultExport
     public bool PasswordProtected { get; set; }
 
     /// <summary>
-    /// The salt decoded from regular Base64 for Bitwarden's password-based key derivation.
+    /// The Base64-encoded salt for Bitwarden's password-based key derivation.
+    /// Bitwarden uses the UTF-8 encoding of this string (not the decoded bytes) as the PBKDF2 salt.
     /// </summary>
     [JsonPropertyName("salt")]
-    public byte[]? Salt { get; set; }
+    public string? Salt { get; set; }
 
     /// <summary>
     /// The Bitwarden KDF identifier.
@@ -131,7 +132,8 @@ public sealed class BitwardenEncryptedVaultExport
         }
 
         byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-        byte[] kdfKey = Rfc2898DeriveBytes.Pbkdf2(passwordBytes, Salt, KdfIterations, HashAlgorithmName.SHA256, Pbkdf2Sha256OutputLength);
+        byte[] saltBytes = Encoding.UTF8.GetBytes(Salt);
+        byte[] kdfKey = Rfc2898DeriveBytes.Pbkdf2(passwordBytes, saltBytes, KdfIterations, HashAlgorithmName.SHA256, Pbkdf2Sha256OutputLength);
         byte[] encryptionKey = new byte[Pbkdf2Sha256OutputLength];
         byte[] macKey = new byte[Pbkdf2Sha256OutputLength];
         HKDF.Expand(HashAlgorithmName.SHA256, kdfKey, encryptionKey, "enc"u8);

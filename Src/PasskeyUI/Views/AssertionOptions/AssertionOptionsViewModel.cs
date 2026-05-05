@@ -111,8 +111,13 @@ internal sealed class AssertionOptionsViewModel : BindableBase, IAssertionOption
         set => SetProperty(ref field, value);
     }
 
-    public IList<KeyValuePair<CredentialLargeBlobOperation?, string>> LargeBlobOperations
-     => EnumAdapter.GetComboBoxItems<CredentialLargeBlobOperation>();
+    public IList<KeyValuePair<CredentialLargeBlobOperation?, string>> LargeBlobOperations =>
+    [
+        // TODO: The Delete support is temporarily dropped. Re-add it once the API is available and supported by the platform.
+        new(CredentialLargeBlobOperation.None, nameof(CredentialLargeBlobOperation.None)),
+        new(CredentialLargeBlobOperation.Get, nameof(CredentialLargeBlobOperation.Get)),
+        new(CredentialLargeBlobOperation.Set, nameof(CredentialLargeBlobOperation.Set))
+    ];
 
     public uint Timeout
     {
@@ -126,20 +131,32 @@ internal sealed class AssertionOptionsViewModel : BindableBase, IAssertionOption
         set => SetProperty(ref field, value);
     }
 
-    public AuthenticationExtensionsClientInputs? ClientExtensions
+    public AuthenticationExtensionsClientAssertionInputs? ClientExtensions
     {
         get
         {
-            if (string.IsNullOrEmpty(AppId) && GetCredentialBlob == false && HmacSecretSalt1 == null && HmacSecretSalt2 == null)
+            string? remoteWebOrigin = string.IsNullOrWhiteSpace(RemoteWebOrigin) ? null : RemoteWebOrigin.Trim();
+            var remoteDesktopClientOverride = remoteWebOrigin != null
+                ? new RemoteDesktopClientOverride { Origin = remoteWebOrigin, SameOriginWithAncestors = false }
+                : null;
+
+            if (string.IsNullOrEmpty(AppId) &&
+                GetCredentialBlob == false &&
+                HmacSecretSalt1 == null &&
+                HmacSecretSalt2 == null &&
+                LargeBlobOperation == CredentialLargeBlobOperation.None &&
+                remoteDesktopClientOverride == null)
             {
                 // No extensions are set
                 return null;
             }
 
-            var result = new AuthenticationExtensionsClientInputs()
+            var result = new AuthenticationExtensionsClientAssertionInputs()
             {
                 AppID = this.AppId,
-                GetCredentialBlob = this.GetCredentialBlob
+                GetCredentialBlob = this.GetCredentialBlob,
+                LargeBlob = GetLargeBlobInput(),
+                RemoteDesktopClientOverride = remoteDesktopClientOverride
             };
 
             if (this.HmacSecretSalt1 != null || this.HmacSecretSalt2 != null)
@@ -165,6 +182,10 @@ internal sealed class AssertionOptionsViewModel : BindableBase, IAssertionOption
                     HmacSecretSalt1 = value.HmacGetSecret.Salt1;
                     HmacSecretSalt2 = value.HmacGetSecret.Salt2;
                 }
+
+                LargeBlobOperation = value.LargeBlob?.Operation ?? CredentialLargeBlobOperation.None;
+                LargeBlob = value.LargeBlob?.Write;
+                RemoteWebOrigin = value.RemoteDesktopClientOverride?.Origin;
             }
             else
             {
@@ -173,8 +194,22 @@ internal sealed class AssertionOptionsViewModel : BindableBase, IAssertionOption
                 GetCredentialBlob = false;
                 HmacSecretSalt1 = null;
                 HmacSecretSalt2 = null;
+                LargeBlobOperation = CredentialLargeBlobOperation.None;
+                LargeBlob = null;
+                RemoteWebOrigin = null;
             }
         }
+    }
+
+    private LargeBlobAssertionInputs? GetLargeBlobInput()
+    {
+        return LargeBlobOperation switch
+        {
+            CredentialLargeBlobOperation.None => null,
+            CredentialLargeBlobOperation.Get => new LargeBlobAssertionInputs(read: true),
+            CredentialLargeBlobOperation.Set => new LargeBlobAssertionInputs(write: LargeBlob),
+            _ => throw new ArgumentException("Unsupported large blob operation.", nameof(LargeBlobOperation))
+        };
     }
 
     public bool GetCredentialBlob
@@ -198,12 +233,12 @@ internal sealed class AssertionOptionsViewModel : BindableBase, IAssertionOption
 
     public string HmacSecretSalt1String
     {
-        get => _hmacSecretSalt1?.ToHex(caps: true) ?? string.Empty;
+        get => _hmacSecretSalt1 != null ? Convert.ToHexString(_hmacSecretSalt1) : string.Empty;
         set
         {
-            byte[] binaryValue = value?.HexToBinary();
+            byte[]? binaryValue = string.IsNullOrWhiteSpace(value) ? null : Convert.FromHexString(value);
 
-            if (binaryValue != null && binaryValue.Length != HmacSecretSaltStringLength)
+            if (binaryValue != null && binaryValue.Length != (int)ApiConstants.CtapOneHmacSecretLength)
             {
                 throw new ArgumentOutOfRangeException(nameof(HmacSecretSalt1String));
             }
@@ -230,12 +265,12 @@ internal sealed class AssertionOptionsViewModel : BindableBase, IAssertionOption
 
     public string? HmacSecretSalt2String
     {
-        get => _hmacSecretSalt2?.ToHex(caps: true) ?? string.Empty;
+        get => _hmacSecretSalt2 != null ? Convert.ToHexString(_hmacSecretSalt2) : string.Empty;
         set
         {
-            byte[]? binaryValue = value?.HexToBinary();
+            byte[]? binaryValue = string.IsNullOrWhiteSpace(value) ? null : Convert.FromHexString(value);
 
-            if (binaryValue != null && binaryValue.Length != HmacSecretSaltStringLength)
+            if (binaryValue != null && binaryValue.Length != (int)ApiConstants.CtapOneHmacSecretLength)
             {
                 throw new ArgumentOutOfRangeException(nameof(HmacSecretSalt2String));
             }
