@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Passkeys.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.1.1'
+ModuleVersion = '3.0.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -196,7 +196,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-- Fixed CredentialId and AuthenticatorId properties not being displayed as Base64Url strings in the output of Get-PasskeyWindowsHello and Get-PasskeyAuthenticator cmdlets.
+- TODO
 '@
 
         # Prerelease string of this module
