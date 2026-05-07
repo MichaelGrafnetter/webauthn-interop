@@ -642,13 +642,7 @@ function Test-Passkey
 
         [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
 
-        [string] $credentialHint = switch ($Hint.ToString()) {
-            'None' { $null; break }
-            'SecurityKey' { [DSInternals.Win32.WebAuthn.Interop.ApiConstants]::CredentialHintSecurityKey; break }
-            'ClientDevice' { [DSInternals.Win32.WebAuthn.Interop.ApiConstants]::CredentialHintClientDevice; break }
-            'Hybrid' { [DSInternals.Win32.WebAuthn.Interop.ApiConstants]::CredentialHintHybrid; break }
-            default { throw "Unknown credential hint: $Hint" }
-        }
+        [string] $credentialHint = [DSInternals.Win32.WebAuthn.PublicKeyCredentialHintExtensions]::ToJsonString($Hint)
         [string[]] $credentialHints = if (![string]::IsNullOrEmpty($credentialHint)) { @($credentialHint) } else { $null }
 
         $response = $api.AuthenticatorGetAssertion(
