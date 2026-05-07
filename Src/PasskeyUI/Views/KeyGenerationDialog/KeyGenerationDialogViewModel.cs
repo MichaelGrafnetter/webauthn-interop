@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.Cryptography;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Dialogs;

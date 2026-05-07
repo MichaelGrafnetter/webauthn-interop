@@ -16,7 +16,7 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
 
         EnterpriseAttestationType EnterpriseAttestation { get; set; }
 
-        AuthenticationExtensionsClientInputs? ClientExtensions { get; set; }
+        AuthenticationExtensionsClientAttestationInputs? ClientExtensions { get; set; }
 
         AuthenticatorAttachment AuthenticatorAttachment { get; set; }
 

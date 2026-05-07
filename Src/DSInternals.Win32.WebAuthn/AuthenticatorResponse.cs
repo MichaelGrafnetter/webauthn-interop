@@ -5,14 +5,13 @@ namespace DSInternals.Win32.WebAuthn
     /// <summary>
     /// Authenticators respond to Relying Party requests by returning an object derived from the AuthenticatorResponse class.
     /// </summary>
-    [JsonConverter(typeof(AuthenticatorResponseConverter))]
     public abstract class AuthenticatorResponse
     {
         /// <summary>
-        /// This attribute contains a JSON-compatible serialization of the client data.
+        /// The JSON-serialized client data passed to the authenticator (Base64Url encoded).
         /// </summary>
         [JsonPropertyName("clientDataJSON")]
         [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] ClientDataJson { get; set; }
+        public byte[]? ClientDataJson { get; init; }
     }
 }

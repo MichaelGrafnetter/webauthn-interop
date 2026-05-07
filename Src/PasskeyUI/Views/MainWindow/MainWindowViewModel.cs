@@ -195,7 +195,7 @@ internal sealed class MainWindowViewModel : BindableBase
             );
 
             // On success, show the result in the Authentication tab
-            this.AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.PublicKeyCredential);
+            this.AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.AssertionPublicKeyCredential);
 
             // Pre-fill the assertion options view model for easier retesting
             AssertionOptionsViewModel.ResetOptionsCommand.Execute(null);
@@ -223,6 +223,12 @@ internal sealed class MainWindowViewModel : BindableBase
         });
     }
 
+    private static string[]? GetCredentialHints(PublicKeyCredentialHint hint)
+    {
+        string? hintValue = hint.ToJsonString();
+        return hintValue != null ? [hintValue] : null;
+    }
+
     private void OnRegister()
     {
         try
@@ -231,9 +237,7 @@ internal sealed class MainWindowViewModel : BindableBase
             this.AttestationResponse = null;
 
             // Convert single hint to array if specified
-            PublicKeyCredentialHint[]? credentialHints = AttestationOptionsViewModel.CredentialHint != PublicKeyCredentialHint.None
-                ? [AttestationOptionsViewModel.CredentialHint]
-                : null;
+            string[]? credentialHints = GetCredentialHints(AttestationOptionsViewModel.CredentialHint);
 
             var response = _api.AuthenticatorMakeCredential(
                 AttestationOptionsViewModel.RelyingPartyEntity,
@@ -248,17 +252,13 @@ internal sealed class MainWindowViewModel : BindableBase
                 excludeCredentials: null,
                 AttestationOptionsViewModel.EnterpriseAttestation,
                 AttestationOptionsViewModel.ClientExtensions,
-                AttestationOptionsViewModel.LargeBlobSupport,
                 AttestationOptionsViewModel.IsBrowserPrivateMode,
-                AttestationOptionsViewModel.EnablePseudoRandomFunction,
                 linkedDevice: null,
                 credentialHints: credentialHints,
-                thirdPartyPayment: AttestationOptionsViewModel.ThirdPartyPayment,
-                remoteWebOrigin: AttestationOptionsViewModel.RemoteWebOrigin,
                 windowHandle: WindowHandle.MainWindow
                 );
 
-            this.AttestationResponse = JsonSerializer.Serialize(response, _indentedJsonContext.PublicKeyCredential);
+            this.AttestationResponse = JsonSerializer.Serialize(response, _indentedJsonContext.AttestationPublicKeyCredential);
         }
         catch (Exception ex)
         {
@@ -274,9 +274,7 @@ internal sealed class MainWindowViewModel : BindableBase
             this.AssertionResponse = null;
 
             // Convert single hint to array if specified
-            PublicKeyCredentialHint[]? credentialHints = AssertionOptionsViewModel.CredentialHint != PublicKeyCredentialHint.None
-                ? [AssertionOptionsViewModel.CredentialHint]
-                : null;
+            string[]? credentialHints = GetCredentialHints(AssertionOptionsViewModel.CredentialHint);
 
             var response = _api.AuthenticatorGetAssertion(
                 AssertionOptionsViewModel.RelyingPartyId,
@@ -285,17 +283,14 @@ internal sealed class MainWindowViewModel : BindableBase
                 AssertionOptionsViewModel.AuthenticatorAttachment,
                 AssertionOptionsViewModel.Timeout,
                 allowCredentials: null,
-                AssertionOptionsViewModel.ClientExtensions,
-                AssertionOptionsViewModel.LargeBlobOperation,
-                AssertionOptionsViewModel.LargeBlob,
-                AssertionOptionsViewModel.IsBrowserPrivateMode,
+                extensions: AssertionOptionsViewModel.ClientExtensions,
+                browserInPrivateMode: AssertionOptionsViewModel.IsBrowserPrivateMode,
                 linkedDevice: null,
                 credentialHints: credentialHints,
-                remoteWebOrigin: AssertionOptionsViewModel.RemoteWebOrigin,
                 windowHandle: WindowHandle.MainWindow
             );
 
-            this.AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.PublicKeyCredential);
+            this.AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.AssertionPublicKeyCredential);
         }
         catch (Exception ex)
         {
@@ -314,7 +309,7 @@ internal sealed class MainWindowViewModel : BindableBase
         {
             try
             {
-                var lastAttestation = JsonSerializer.Deserialize(AttestationResponse, _indentedJsonContext.PublicKeyCredential);
+                var lastAttestation = JsonSerializer.Deserialize(AttestationResponse, _indentedJsonContext.AttestationPublicKeyCredential);
                 if (lastAttestation?.Id is { Length: > 0 })
                     lastCredentialId = lastAttestation.Id;
             }
@@ -344,7 +339,7 @@ internal sealed class MainWindowViewModel : BindableBase
         {
             try
             {
-                var lastAttestation = JsonSerializer.Deserialize(AttestationResponse, _indentedJsonContext.PublicKeyCredential);
+                var lastAttestation = JsonSerializer.Deserialize(AttestationResponse, _indentedJsonContext.AttestationPublicKeyCredential);
                 if (lastAttestation?.Id is { Length: > 0 })
                     lastCredentialId = lastAttestation.Id;
             }
@@ -424,7 +419,7 @@ internal sealed class MainWindowViewModel : BindableBase
             Icon = String.Empty
         };
 
-        AttestationOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientInputs()
+        AttestationOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientAttestationInputs()
         {
             CredProtect = UserVerification.Optional,
             HmacCreateSecret = true
@@ -455,7 +450,7 @@ internal sealed class MainWindowViewModel : BindableBase
         AssertionOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.CrossPlatform;
         AssertionOptionsViewModel.Timeout = 60000;
 
-        AssertionOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientInputs()
+        AssertionOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientAssertionInputs()
         {
             AppID = "https://www.facebook.com/u2f/app_id/?uid=740592393&s=AY66Df2A7Ed9rniipaIgG81SH6QO0rlmffyygOtXMZPrBg"
         };
@@ -496,7 +491,7 @@ internal sealed class MainWindowViewModel : BindableBase
         AssertionOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Discouraged;
         AssertionOptionsViewModel.Timeout = 30000;
 
-        AssertionOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientInputs()
+        AssertionOptionsViewModel.ClientExtensions = new AuthenticationExtensionsClientAssertionInputs()
         {
             AppID = "https://www.gstatic.com/securitykey/origins.json"
         };
@@ -511,6 +506,7 @@ internal sealed class MainWindowViewModel : BindableBase
 
         AttestationOptionsViewModel.RelyingPartyEntity = new RelyingPartyInformation()
         {
+            Name = "Google",
             Id = "https://www.gstatic.com/securitykey/origins.json"
         };
 

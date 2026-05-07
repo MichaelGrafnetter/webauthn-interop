@@ -31,7 +31,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             _credWithHmacSecretSaltList = new CredentialsWithHmacSecretSaltIn(credsWithHmacSecretSalt);
         }
 
-        public bool HasGlobalHmacSalt => _globalHmacSalt != IntPtr.Zero;
+        public bool IsEmpty => _globalHmacSalt == IntPtr.Zero && (_credWithHmacSecretSaltList?.IsEmpty ?? true);
 
         public void Dispose()
         {

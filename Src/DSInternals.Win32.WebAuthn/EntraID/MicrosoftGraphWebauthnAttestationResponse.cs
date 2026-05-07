@@ -18,14 +18,14 @@ namespace DSInternals.Win32.WebAuthn.EntraID
         /// Contains the WebAuthn public key credential information being registered.
         /// </summary>
         [JsonPropertyName("publicKeyCredential")]
-        public override PublicKeyCredential PublicKeyCred { get; set; }
+        public override AttestationPublicKeyCredential PublicKeyCred { get; set; }
 
         /// <summary>
         /// Initializes a new Microsoft Graph attestation response payload.
         /// </summary>
         /// <param name="publicKeyCredential">WebAuthn credential returned by the authenticator.</param>
         /// <param name="displayName">User-provided passkey display name.</param>
-        public MicrosoftGraphWebauthnAttestationResponse(PublicKeyCredential publicKeyCredential, string displayName)
+        public MicrosoftGraphWebauthnAttestationResponse(AttestationPublicKeyCredential publicKeyCredential, string displayName)
         {
             PublicKeyCred = publicKeyCredential;
             DisplayName = displayName;

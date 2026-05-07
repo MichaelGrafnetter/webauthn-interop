@@ -12,7 +12,7 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
 
         AuthenticatorAttachment AuthenticatorAttachment { get; set; }
 
-        AuthenticationExtensionsClientInputs? ClientExtensions { get; set; }
+        AuthenticationExtensionsClientAssertionInputs? ClientExtensions { get; set; }
 
         CredentialLargeBlobOperation LargeBlobOperation { get; set; }
 

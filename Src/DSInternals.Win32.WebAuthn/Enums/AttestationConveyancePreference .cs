@@ -8,13 +8,12 @@ namespace DSInternals.Win32.WebAuthn
     /// This enumeration contains attestation conveyance options for credential generation.
     /// </summary>
     /// <see>https://www.w3.org/TR/webauthn-2/#enum-attestation-convey</see>
-    [JsonConverter(typeof(JsonCustomEnumConverter<AttestationConveyancePreference>))]
+    [JsonConverter(typeof(WebAuthnJsonEnumConverter<AttestationConveyancePreference>))]
     public enum AttestationConveyancePreference : uint
     {
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_ANY.
         /// </remarks>
-        [EnumMember(Value = null)]
         Any = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_ANY,
 
         /// <summary>
@@ -23,7 +22,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_NONE.
         /// </remarks>
-        [EnumMember(Value = "none")]
+        [JsonStringEnumMemberName("none")]
         None = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_NONE,
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_INDIRECT.
         /// </remarks>
-        [EnumMember(Value = "indirect")]
+        [JsonStringEnumMemberName("indirect")]
         Indirect = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_INDIRECT,
 
         /// <summary>
@@ -42,7 +41,16 @@ namespace DSInternals.Win32.WebAuthn
         /// <remarks>
         /// Corresponds to WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT.
         /// </remarks>
-        [EnumMember(Value = "direct")]
-        Direct = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT
+        [JsonStringEnumMemberName("direct")]
+        Direct = PInvoke.WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT,
+
+        /// <summary>
+        /// Indicates that the Relying Party wants to receive an enterprise attestation.
+        /// </summary>
+        /// <remarks>
+        /// This value is mapped to the WebAuthn API via a standalone enum.
+        /// </remarks>
+        [JsonStringEnumMemberName("enterprise")]
+        Enterprise
     }
 }

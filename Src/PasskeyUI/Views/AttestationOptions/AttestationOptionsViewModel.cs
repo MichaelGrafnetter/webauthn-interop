@@ -236,23 +236,39 @@ internal sealed class AttestationOptionsViewModel : BindableBase, IAttestationOp
         set => AlgorithmSelectorViewModel.SelectedAlgorithms = value;
     }
 
-    public AuthenticationExtensionsClientInputs? ClientExtensions
+    public AuthenticationExtensionsClientAttestationInputs? ClientExtensions
     {
         get
         {
-            if (CredProtectPolicy == UserVerification.Any && HmacSecret == false && MinPinLength == false && CredentialBlob == null)
+            string? remoteWebOrigin = string.IsNullOrWhiteSpace(RemoteWebOrigin) ? null : RemoteWebOrigin.Trim();
+            var remoteDesktopClientOverride = remoteWebOrigin != null
+                ? new RemoteDesktopClientOverride { Origin = remoteWebOrigin, SameOriginWithAncestors = false }
+                : null;
+
+            if (CredProtectPolicy == UserVerification.Any &&
+                HmacSecret == false &&
+                MinPinLength == false &&
+                CredentialBlob == null &&
+                LargeBlobSupport == LargeBlobSupport.None &&
+                EnablePseudoRandomFunction == false &&
+                ThirdPartyPayment == false &&
+                remoteDesktopClientOverride == null)
             {
                 // No extensions are set
                 return null;
             }
 
-            return new AuthenticationExtensionsClientInputs()
+            return new AuthenticationExtensionsClientAttestationInputs()
             {
                 CredProtect = this.CredProtectPolicy,
                 EnforceCredProtect = this.EnforceCredProtect,
                 HmacCreateSecret = this.HmacSecret,
                 MinimumPinLength = this.MinPinLength,
-                CredentialBlob = this.CredentialBlob?.Length > 0 ? this.CredentialBlob : null
+                CredentialBlob = this.CredentialBlob?.Length > 0 ? this.CredentialBlob : null,
+                LargeBlob = this.LargeBlobSupport != LargeBlobSupport.None ? new LargeBlobAttestationInputs(this.LargeBlobSupport) : null,
+                Prf = this.EnablePseudoRandomFunction ? new PRFAttestationInputs() : null,
+                Payment = this.ThirdPartyPayment ? new PaymentAttestationInputs { IsPayment = true } : null,
+                RemoteDesktopClientOverride = remoteDesktopClientOverride
             };
         }
         set
@@ -264,6 +280,10 @@ internal sealed class AttestationOptionsViewModel : BindableBase, IAttestationOp
                 EnforceCredProtect = value.EnforceCredProtect == true;
                 MinPinLength = value.MinimumPinLength == true;
                 CredentialBlob = value.CredentialBlob;
+                LargeBlobSupport = value.LargeBlob?.Support ?? LargeBlobSupport.None;
+                EnablePseudoRandomFunction = value.Prf != null;
+                ThirdPartyPayment = value.Payment?.IsPayment == true;
+                RemoteWebOrigin = value.RemoteDesktopClientOverride?.Origin;
             }
             else
             {
@@ -272,6 +292,10 @@ internal sealed class AttestationOptionsViewModel : BindableBase, IAttestationOp
                 HmacSecret = false;
                 MinPinLength = false;
                 CredentialBlob = null;
+                LargeBlobSupport = LargeBlobSupport.None;
+                EnablePseudoRandomFunction = false;
+                ThirdPartyPayment = false;
+                RemoteWebOrigin = null;
             }
         }
     }

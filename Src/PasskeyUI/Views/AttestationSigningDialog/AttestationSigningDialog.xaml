@@ -84,6 +84,7 @@
                             <Binding Path="CredentialId" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>

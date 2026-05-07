@@ -53,6 +53,7 @@
                             <Binding Path="CredentialId" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -60,7 +61,15 @@
                 </DockPanel>
 
                 <Label Content="User handle:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Text="{Binding UserHandle, Converter={StaticResource ByteArrayToBase64UrlConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" ToolTip="Optional user handle in Base64url encoding" />
+                <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" ToolTip="Optional user handle in Base64url encoding">
+                    <TextBox.Text>
+                        <Binding Path="UserHandle" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
                 <Label Content="Signature counter:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">

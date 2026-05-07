@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.Interop;
 
 namespace DSInternals.Win32.WebAuthn.PasskeyUI;
 
@@ -15,7 +16,7 @@ public record AuthenticatorPreset(string Name, Guid AaGuid, Algorithm DefaultAlg
         new("Microsoft Authenticator (iOS)", Guid.Parse("90a3ccdf-635c-4729-a248-9b709135078f"), Algorithm.ES256),
         new("Microsoft Authenticator (Android)", Guid.Parse("de1e552d-db1d-4423-a619-566b625cdc84"), Algorithm.ES256),
         new("1Password", Guid.Parse("bada5566-a7aa-401f-bd96-45619a55120d"), Algorithm.ES256),
-        new("Bitwarden", Guid.Parse("d548826e-79b4-db40-a3d8-11116f7e8349"), Algorithm.ES256),
+        new("Bitwarden", ApiConstants.BitwardenAaGuid, Algorithm.ES256),
     ];
 
     public static IList<KeyValuePair<Algorithm, string>> AlgorithmItems { get; } =

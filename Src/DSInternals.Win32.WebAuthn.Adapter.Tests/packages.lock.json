@@ -49,6 +49,11 @@
         "resolved": "9.18.0",
         "contentHash": "jlgewzgbgEFIoplbpdWNPKo/+R9ELej0iL1sdKrVeMzQ0aZCvRCdi/X/4AjRaBqkXoDTWFrOjgVXRukZYSVO+w=="
       },
+      "libsodium": {
+        "type": "Transitive",
+        "resolved": "1.0.20.1",
+        "contentHash": "pkiceEqJDQFHjbga3k/oPfTVX9g+GKJZ1VrkuiLhaymt9YNw1Dr7cX9hNuZuNaWcr9WD0moW55k4pMwzQ7JaZQ=="
+      },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
         "resolved": "2.23.0",
@@ -170,6 +175,7 @@
           "Microsoft.Bcl.Memory": "[10.0.5, )",
           "Microsoft.Identity.Client": "[4.80.0, )",
           "Microsoft.NET.ILLink.Tasks": "[10.0.3, )",
+          "NSec.Cryptography": "[25.4.0, )",
           "System.Diagnostics.EventLog": "[9.0.3, )",
           "System.Formats.Cbor": "[9.0.3, )",
           "System.IdentityModel.Tokens.Jwt": "[8.15.0, )"
@@ -178,7 +184,7 @@
       "dsinternals.win32.webauthn.adapter": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Win32.WebAuthn": "[2.0.0, )",
+          "DSInternals.Win32.WebAuthn": "[2.1.0, )",
           "Fido2.Models": "[4.0.0, )",
           "Microsoft.Bcl.Memory": "[10.0.5, )"
         }
@@ -212,6 +218,15 @@
         "requested": "[10.0.3, )",
         "resolved": "10.0.3",
         "contentHash": "0B6nZyCHWXnvmlB559oduOspVdNOnpNXPjhpWVMovLPAsDVG7A4jJR9rzECf67JUzxP8/ee/wA8clwIzJcWNFA=="
+      },
+      "NSec.Cryptography": {
+        "type": "CentralTransitive",
+        "requested": "[25.4.0, )",
+        "resolved": "25.4.0",
+        "contentHash": "Z3wPpG0xefMLmhn9T+Ka/EzAmMQPT0THL/5E4lf9cXI/N9rbGH0G23ZFpRcPnD0ast2k7ieG6QSVNIjmfPCXBQ==",
+        "dependencies": {
+          "libsodium": "[1.0.20.1, 1.0.21)"
+        }
       },
       "System.Diagnostics.EventLog": {
         "type": "CentralTransitive",

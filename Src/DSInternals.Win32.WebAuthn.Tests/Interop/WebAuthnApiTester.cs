@@ -1,4 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using DSInternals.Win32.WebAuthn.FIDO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Win32.WebAuthn.Interop.Tests
@@ -47,6 +50,30 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         }
 
         [TestMethod]
+        public void CollectedClientData_CreateCollectedClientData_RemoteDesktopClientOverride()
+        {
+            var extensions = new AuthenticationExtensionsClientAssertionInputs
+            {
+                RemoteDesktopClientOverride = new RemoteDesktopClientOverride
+                {
+                    Origin = "https://accounts.example.com",
+                    SameOriginWithAncestors = false
+                }
+            };
+
+            var clientData = CollectedClientData.Create(
+                ApiConstants.ClientDataCredentialGet,
+                new byte[] { 1, 2, 3 },
+                "example.com",
+                "example.com",
+                null,
+                extensions.RemoteDesktopClientOverride);
+
+            Assert.AreEqual("https://accounts.example.com", clientData.Origin);
+            Assert.IsTrue(clientData.CrossOrigin);
+        }
+
+        [TestMethod]
         [TestCategory("Interactive")]
         public void WebAuthnApi_Register_Vector1()
         {
@@ -67,7 +94,8 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
 
             var api = new WebAuthnApi();
 
-            var response = api.AuthenticatorMakeCredential(rp, user, challenge, UserVerificationRequirement.Required, AuthenticatorAttachment.Any);
+            var response = RunInteractiveWebAuthnTest(() =>
+                api.AuthenticatorMakeCredential(rp, user, challenge, UserVerificationRequirement.Required, AuthenticatorAttachment.Any));
             Assert.IsNotNull(response);
         }
 
@@ -77,8 +105,26 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         {
             var api = new WebAuthnApi();
             var challenge = new byte[] { 0, 1, 2, 3 };
-            var response = api.AuthenticatorGetAssertion("login.microsoft.com", challenge, UserVerificationRequirement.Required, AuthenticatorAttachment.CrossPlatform);
+            var response = RunInteractiveWebAuthnTest(() =>
+                api.AuthenticatorGetAssertion("login.microsoft.com", challenge, UserVerificationRequirement.Required, AuthenticatorAttachment.CrossPlatform));
             Assert.IsNotNull(response);
         }
+
+        [SuppressMessage("MSTest.Analyzers", "MSTEST0025", Justification = "Uses AssertInconclusiveException when interactive WebAuthn UI is unavailable.")]
+        private static T RunInteractiveWebAuthnTest<T>(Func<T> action)
+        {
+            try
+            {
+                return action();
+            }
+            catch (Exception ex) when (IsInteractiveWebAuthnUnavailable(ex))
+            {
+                throw new AssertInconclusiveException("Interactive WebAuthn UI is unavailable or was cancelled in this test environment.", ex);
+            }
+        }
+
+        private static bool IsInteractiveWebAuthnUnavailable(Exception ex) =>
+            ex is UnauthorizedAccessException or OperationCanceledException or Win32Exception
+            || ex.InnerException is Win32Exception { NativeErrorCode: 5 or 1223 };
     }
 }

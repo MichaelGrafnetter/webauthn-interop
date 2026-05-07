@@ -8,7 +8,7 @@ namespace DSInternals.Win32.WebAuthn
     /// <summary>
     /// Describes an acceptable public key credential algorithm and type pair.
     /// </summary>
-    public class PublicKeyCredentialParameter
+    public sealed class PublicKeyCredentialParameter
     {
         /// <summary>
         /// Specifies the cryptographic signature algorithm used for the new credential.

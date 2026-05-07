@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using DSInternals.Win32.WebAuthn.COSE;
 using Prism.Dialogs;
 

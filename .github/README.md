@@ -27,11 +27,11 @@ The [DSInternals.Passkeys](https://www.powershellgallery.com/packages/DSInternal
 
 See [Yubico's blog](https://www.yubico.com/blog/microsoft-strengthens-phishing-resistant-security-for-entra-id-with-fido2-provisioning-apis/) for more details on the API.
 
-## FIDO2 UI
+## Passkey UI
 
-The project also contains a simple Windows GUI tool called `FIDO2 UI`, which is built on top of the `DSInternals.Win32.WebAuthn` library:
+The project also contains a simple Windows GUI tool called `Passkey UI`, which is built on top of the `DSInternals.Win32.WebAuthn` library:
 
-![FIDO2 UI Screenshot](../Documentation/Screenshots/fido2_ui.png)
+![Passkey UI Screenshot](../Documentation/Screenshots/fido2_ui.png)
 
 The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 
@@ -42,7 +42,7 @@ The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 [![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Win32.WebAuthn.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn/)
 
 - The `DSInternals.Passkeys` PowerShell module is published in the [PowerShell Gallery](https://www.powershellgallery.com/packages/DSInternals.Passkeys).
-- The latest version of the `FIDO2 UI` can be downloaded from the [Releases section](https://github.com/MichaelGrafnetter/webauthn-interop/releases/latest).
+- The latest version of the `Passkey UI` can be downloaded from the [Releases section](https://github.com/MichaelGrafnetter/webauthn-interop/releases/latest).
 - The `DSInternals.Win32.WebAuthn` library is published in the [NuGet Gallery](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn/).
 
 ## .NET API Usage

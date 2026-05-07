@@ -1,58 +1,57 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.Interop;
 
-namespace DSInternals.Win32.WebAuthn
+namespace DSInternals.Win32.WebAuthn;
+
+/// <summary>
+/// Represents a WebAuthn public key credential.
+/// </summary>
+/// <typeparam name="TResponse">Concrete authenticator response type.</typeparam>
+/// <typeparam name="TClientExtensionResults">Concrete client extension output type.</typeparam>
+public abstract class PublicKeyCredential<TResponse, TClientExtensionResults>
+    where TResponse : AuthenticatorResponse
+    where TClientExtensionResults : AuthenticationExtensionsClientOutputs
 {
     /// <summary>
-    /// Represents a WebAuthn public key credential.
+    /// The credential identifier (Base64Url encoded).
     /// </summary>
-    public class PublicKeyCredential
-    {
-        /// <summary>
-        /// Authenticator attachment modality used for this credential.
-        /// </summary>
-        [JsonPropertyName("authenticatorAttachment")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public AuthenticatorAttachment? AuthenticatorAttachment { get; set; }
+    [JsonPropertyName("id")]
+    [JsonRequired]
+    [JsonConverter(typeof(Base64UrlConverter))]
+    public required byte[] Id { get; init; }
 
-        /// <summary>
-        /// Base64Url-encoded credential identifier.
-        /// </summary>
-        [JsonPropertyName("id")]
-        [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] Id { get; set; }
+    /// <summary>
+    /// The raw credential identifier (Base64Url encoded).
+    /// </summary>
+    [JsonPropertyName("rawId")]
+    [JsonConverter(typeof(Base64UrlConverter))]
+    public byte[]? RawId { get; init; }
 
-        /// <summary>
-        /// Raw credential identifier bytes.
-        /// </summary>
-        [JsonPropertyName("rawId")]
-        [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] RawId { get; set; }
+    /// <summary>
+    /// The type of the credential (always "public-key").
+    /// </summary>
+    [JsonPropertyName("type")]
+    [JsonRequired]
+    public required string Type { get; init; } = ApiConstants.PublicKeyCredentialType;
 
-        /// <summary>
-        /// Authenticator response payload.
-        /// </summary>
-        [JsonPropertyName("response")]
-        public AuthenticatorResponse Response { get; set; }
+    /// <summary>
+    /// The authenticator attachment modality.
+    /// </summary>
+    [JsonPropertyName("authenticatorAttachment")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public AuthenticatorAttachment AuthenticatorAttachment { get; init; }
 
-        /// <summary>
-        /// Credential type string, typically <c>public-key</c>.
-        /// </summary>
-        [JsonPropertyName("type")]
-        public string Type { get; set; } = ApiConstants.PublicKeyCredentialType;
+    /// <summary>
+    /// Authenticator response payload.
+    /// </summary>
+    [JsonPropertyName("response")]
+    [JsonRequired]
+    public required TResponse Response { get; init; }
 
-        /// <summary>
-        /// Outputs of client extension processing.
-        /// </summary>
-        [JsonPropertyName("clientExtensionResults")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public AuthenticationExtensionsClientOutputs? ClientExtensionResults { get; set; }
-
-        /// <summary>
-        /// Serializes the credential to JSON.
-        /// </summary>
-        /// <returns>JSON representation of this credential.</returns>
-        public override string ToString() => JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.PublicKeyCredential);
-    }
+    /// <summary>
+    /// Outputs of client extension processing.
+    /// </summary>
+    [JsonPropertyName("clientExtensionResults")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public TClientExtensionResults? ClientExtensionResults { get; init; }
 }

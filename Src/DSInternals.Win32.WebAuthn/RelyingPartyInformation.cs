@@ -14,26 +14,28 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Version of this structure, to allow for modifications in the future.
         /// </summary>
-        internal RelyingPartyInformationVersion Version { get; set; } = RelyingPartyInformationVersion.Current;
+        [JsonIgnore]
+        internal RelyingPartyInformationVersion Version { get; init; } = RelyingPartyInformationVersion.Current;
 
         /// <summary>
         /// Identifier for the RP.
         /// </summary>
         [JsonPropertyName("id")]
-        [JsonRequired]
-        public string Id { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Id { get; init; }
 
         /// <summary>
         /// Contains the friendly name of the Relying Party, such as "Acme Corporation", "Widgets Inc" or "Awesome Site".
         /// </summary>
         [JsonPropertyName("name")]
-        public string? Name { get; set; }
+        [JsonRequired]
+        public required string Name { get; init; }
 
         /// <summary>
         /// Optional URL pointing to RP's logo.
         /// </summary>
         [JsonPropertyName("icon")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? Icon { get; set; }
+        public string? Icon { get; init; }
     }
 }

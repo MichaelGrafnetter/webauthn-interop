@@ -2,11 +2,12 @@
 
 using System;
 using System.Buffers.Binary;
+using System.Formats.Cbor;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Formats.Cbor;
 using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.Cryptography;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -409,34 +410,27 @@ namespace DSInternals.Win32.WebAuthn.Tests
         }
 
         [TestMethod]
-        public void ValidateKeyForAlgorithm_MatchingECKey_ReturnsNull()
+        public void CredentialPublicKeyBuild_MatchingECKey_ReturnsCoseKey()
         {
             using var key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
-            Assert.IsNull(SoftwareAuthenticator.ValidateKeyForAlgorithm(key, Algorithm.ES256));
+            var coseKey = new CredentialPublicKey(CredentialPublicKey.Build(key, Algorithm.ES256));
+
+            Assert.AreEqual(KeyType.EC2, coseKey.Type);
+            Assert.AreEqual(Algorithm.ES256, coseKey.Algorithm);
         }
 
         [TestMethod]
-        public void ValidateKeyForAlgorithm_MismatchedECKey_ReturnsError()
-        {
-            using var key = ECDsa.Create(ECCurve.NamedCurves.nistP384);
-            string? error = SoftwareAuthenticator.ValidateKeyForAlgorithm(key, Algorithm.ES256);
-            Assert.IsNotNull(error);
-        }
-
-        [TestMethod]
-        public void ValidateKeyForAlgorithm_RSAKeyWithECAlgorithm_ReturnsError()
+        public void CredentialPublicKeyBuild_RSAKeyWithECAlgorithm_Throws()
         {
             using var key = RSA.Create(2048);
-            string? error = SoftwareAuthenticator.ValidateKeyForAlgorithm(key, Algorithm.ES256);
-            Assert.IsNotNull(error);
+            Assert.ThrowsExactly<NotSupportedException>(() => CredentialPublicKey.Build(key, Algorithm.ES256));
         }
 
         [TestMethod]
-        public void ValidateKeyForAlgorithm_ECKeyWithRSAAlgorithm_ReturnsError()
+        public void CredentialPublicKeyBuild_ECKeyWithRSAAlgorithm_Throws()
         {
             using var key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
-            string? error = SoftwareAuthenticator.ValidateKeyForAlgorithm(key, Algorithm.RS256);
-            Assert.IsNotNull(error);
+            Assert.ThrowsExactly<NotSupportedException>(() => CredentialPublicKey.Build(key, Algorithm.RS256));
         }
 
         [TestMethod]

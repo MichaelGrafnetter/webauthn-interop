@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [3.0] - 2026-05-07
+
+### Added
+
+- Added Credential Exchange Format (CXF) parsing.
+- Added Bitwarden vault export support, covering both encrypted and cleartext exports.
+- Added KeePassXC passkey export parsing.
+- Added a software authenticator with Ed25519 signing for offline testing without a physical authenticator.
+- Added User Verification Method (UVM), Secure Payment Confirmation (SPC), PRF, Large Blob, Credential Properties, and Remote Desktop client override extension models.
+
+### Changed
+
+- Modernized the `WebAuthnApi` surface, including async cancellation handling and clearer marshaling of assertion/attestation options structs.
+
 ## [2.1.1] - 2026-04-05
 
 ### Fixed
@@ -93,7 +107,9 @@ This is a bugfix release. Huge thanks to @aseigler for reporting and fixing the 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.0...HEAD
+[3.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1.1...v3.0
+[2.1.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1...v2.1.1
 [2.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.0...v2.1
 [2.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.6...v2.0
 [1.0.6]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v1.0.5...v1.0.6

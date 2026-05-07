@@ -16,6 +16,11 @@ namespace DSInternals.Win32.WebAuthn.COSE
         ES256 = PInvoke.WEBAUTHN_COSE_ALGORITHM_ECDSA_P256_WITH_SHA256,
 
         /// <summary>
+        /// ECDSA using secp256k1 curve and SHA-256
+        /// </summary>
+        ES256K = -47,
+
+        /// <summary>
         /// ECDSA with SHA-384
         /// </summary>
         /// <remarks>Corresponds to WEBAUTHN_COSE_ALGORITHM_ECDSA_P384_WITH_SHA384.</remarks>

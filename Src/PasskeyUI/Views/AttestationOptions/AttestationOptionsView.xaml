@@ -59,6 +59,7 @@
                                     <TextBox.Text>
                                         <Binding Path="UserId" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                             <Binding.ValidationRules>
+                                                <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
                                                 <ExceptionValidationRule />
                                             </Binding.ValidationRules>
                                         </Binding>
@@ -115,8 +116,9 @@
                         <Label Name="CredBlobLabel" Content="Credential blob:" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="2" />
                         <TextBox Name="CredBlobTextBox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ToolTip="Credential blob in Base64url encoding" TabIndex="15">
                             <TextBox.Text>
-                                <Binding Path="CredentialBlob" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding Path="CredentialBlob" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
                                     <Binding.ValidationRules>
+                                        <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
                                         <ExceptionValidationRule />
                                     </Binding.ValidationRules>
                                 </Binding>
@@ -152,6 +154,7 @@
                                 <Binding Path="Challenge" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
                                         <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
                                         <ExceptionValidationRule />
                                     </Binding.ValidationRules>
                                 </Binding>

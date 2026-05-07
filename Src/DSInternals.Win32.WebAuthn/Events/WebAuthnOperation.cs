@@ -46,27 +46,27 @@ public abstract class WebAuthnOperation
     /// <summary>
     /// Authenticator data flags (raw byte).
     /// </summary>
-    public byte? Flags { get; set; }
+    public AuthenticatorFlags? Flags { get; set; }
 
     /// <summary>
     /// User Present (UP) flag - user presence test completed successfully.
     /// </summary>
-    public bool? UserPresent => Flags.HasValue ? (Flags.Value & 0x01) != 0 : null;
+    public bool? UserPresent => Flags?.HasFlag(AuthenticatorFlags.UserPresent);
 
     /// <summary>
     /// User Verified (UV) flag - user verification completed successfully.
     /// </summary>
-    public bool? UserVerified => Flags.HasValue ? (Flags.Value & 0x04) != 0 : null;
+    public bool? UserVerified => Flags?.HasFlag(AuthenticatorFlags.UserVerified);
 
     /// <summary>
     /// Attested Credential Data (AT) flag - authenticator data includes attested credential data.
     /// </summary>
-    public bool? AttestationData => Flags.HasValue ? (Flags.Value & 0x40) != 0 : null;
+    public bool? AttestationData => Flags?.HasFlag(AuthenticatorFlags.AttestationData);
 
     /// <summary>
     /// Extension Data (ED) flag - authenticator data includes extension data.
     /// </summary>
-    public bool? ExtensionData => Flags.HasValue ? (Flags.Value & 0x80) != 0 : null;
+    public bool? ExtensionData => Flags?.HasFlag(AuthenticatorFlags.ExtensionData);
 
     /// <summary>
     /// Signature counter.

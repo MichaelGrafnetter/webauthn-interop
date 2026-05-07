@@ -11,6 +11,6 @@ namespace DSInternals.Win32.WebAuthn
         /// Gets or sets the underlying WebAuthn public key credential.
         /// </summary>
         [JsonIgnore()]
-        public abstract PublicKeyCredential PublicKeyCred { get; set; }
+        public abstract AttestationPublicKeyCredential PublicKeyCred { get; set; }
     }
 }

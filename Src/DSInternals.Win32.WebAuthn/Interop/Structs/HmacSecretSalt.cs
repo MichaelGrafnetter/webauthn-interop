@@ -18,7 +18,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// The first SALT value.
         /// </summary>
-        private ByteArrayIn _first;
+        private ByteArrayIn? _first;
 
         /// <summary>
         /// Size of _second.
@@ -28,13 +28,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// The second SALT value.
         /// </summary>
-        private ByteArrayIn _second;
+        private ByteArrayIn? _second;
 
-        public HmacSecretSaltIn(byte[] first, byte[] second)
+        public HmacSecretSaltIn(byte[] first, byte[]? second)
         {
             // TODO: Check if the length of the values is WEBAUTHN_CTAP_ONE_HMAC_SECRET_LENGTH.
             _first = new ByteArrayIn(first);
             _firstLength = first?.Length ?? 0;
+
 
             _second = new ByteArrayIn(second);
             _secondLength = second?.Length ?? 0;
@@ -85,7 +86,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// The second SALT value.
         /// </summary>
-        public byte[] Second => _second?.Read(_secondLength);
+        public byte[]? Second => _second?.Read(_secondLength);
 
         private HmacSecretSaltOut() { }
     }

@@ -65,6 +65,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
+        public bool IsEmpty => _length == 0 || _nativeArray == IntPtr.Zero;
+
+        public int Length => _length;
+
         public void Dispose()
         {
             _length = 0;

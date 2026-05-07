@@ -91,7 +91,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
         }
 
-        public byte[] CredBlob
+        public byte[]? CredBlob
         {
             get
             {

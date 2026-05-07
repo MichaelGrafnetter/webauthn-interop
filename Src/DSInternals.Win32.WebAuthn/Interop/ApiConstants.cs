@@ -1,4 +1,5 @@
-﻿using Windows.Win32;
+﻿using System;
+using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn.Interop
 {
@@ -13,14 +14,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const string ClientDataCredentialCreate = "webauthn.create";
 
         /// <summary>
+        /// The client data type for WebAuthn assertion (authentication) operations.
+        /// </summary>
+        public const string ClientDataCredentialGet = "webauthn.get";
+
+        /// <summary>
         /// WebAuthn operation type used when creating new FIDO U2F credentials.
         /// </summary>
         public const string ClientDataCredentialCreateU2F = "navigator.id.finishEnrollment";
-
-        /// <summary>
-        /// WebAuthn operation type used for authentication with FIDO2 credentials.
-        /// </summary>
-        public const string ClientDataCredentialGet = "webauthn.get";
 
         /// <summary>
         /// WebAuthn operation type used for authentication with FIDO U2F credentials.
@@ -28,7 +29,17 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const string ClientDataCredentialGetU2F = "navigator.id.getAssertion";
 
         /// <summary>
-        /// Default timeut for WebAuthn operations.
+        /// The authenticator attachment value for platform authenticators.
+        /// </summary>
+        public const string AuthenticatorAttachmentPlatform = "platform";
+
+        /// <summary>
+        /// The authenticator attachment value for cross-platform (roaming) authenticators.
+        /// </summary>
+        public const string AuthenticatorAttachmentCrossPlatform = "cross-platform";
+
+        /// <summary>
+        /// Default timeout for WebAuthn operations.
         /// </summary>
         public const uint DefaultTimeoutMilliseconds = 60000;
 
@@ -42,6 +53,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </remarks>
         public const uint CtapOneHmacSecretLength = PInvoke.WEBAUTHN_CTAP_ONE_HMAC_SECRET_LENGTH;
 
+        /// <summary>
+        /// The credential type for public-key credentials.
+        /// </summary>
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY.
         /// </remarks>
@@ -122,6 +136,9 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </remarks>
         public const string CtapTransportBle = PInvoke.WEBAUTHN_CTAP_TRANSPORT_BLE_STRING;
 
+        /// <summary>
+        /// The transport value indicating a platform (internal) authenticator.
+        /// </summary>
         /// <remarks>
         /// Corresponds to WEBAUTHN_CTAP_TRANSPORT_INTERNAL_STRING.
         /// </remarks>
@@ -137,19 +154,38 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// </remarks>
         public const string CtapTransportSmartCard = PInvoke.WEBAUTHN_CTAP_TRANSPORT_SMART_CARD_STRING;
 
+        /// <summary>
+        /// The credential hint value for security keys (roaming authenticators).
+        /// </summary>
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_HINT_SECURITY_KEY.
         /// </remarks>
         public const string CredentialHintSecurityKey = PInvoke.WEBAUTHN_CREDENTIAL_HINT_SECURITY_KEY;
 
+        /// <summary>
+        /// The credential hint value for client devices (platform authenticators).
+        /// </summary>
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_HINT_CLIENT_DEVICE.
         /// </remarks>
         public const string CredentialHintClientDevice = PInvoke.WEBAUTHN_CREDENTIAL_HINT_CLIENT_DEVICE;
 
+        /// <summary>
+        /// The credential hint value for hybrid (QR code) authenticators.
+        /// </summary>
         /// <remarks>
         /// Corresponds to WEBAUTHN_CREDENTIAL_HINT_HYBRID.
         /// </remarks>
         public const string CredentialHintHybrid = PInvoke.WEBAUTHN_CREDENTIAL_HINT_HYBRID;
+
+        /// <summary>
+        /// The AAGUID of the KeePassXC authenticator.
+        /// </summary>
+        public static readonly Guid KeePassXCAaGuid = new("fdb141b2-5d84-443e-8a35-4698c205a502");
+
+        /// <summary>
+        /// The AAGUID of the Bitwarden authenticator.
+        /// </summary>
+        public static readonly Guid BitwardenAaGuid = new("d548826e-79b4-db40-a3d8-11116f7e8349");
     }
 }

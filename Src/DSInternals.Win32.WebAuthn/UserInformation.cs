@@ -20,6 +20,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
         /// </summary>
         [JsonPropertyName("name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Name { get; set; }
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace DSInternals.Win32.WebAuthn
         /// Contains the friendly name associated with the user account by the Relying Party, such as "John P. Smith".
         /// </summary>
         [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? DisplayName { get; set; }
     }
 }
