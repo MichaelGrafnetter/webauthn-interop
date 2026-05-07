@@ -50,6 +50,9 @@ namespace DSInternals.Win32.WebAuthn
     [JsonSerializable(typeof(BitwardenVaultExportHeader))]
     [JsonSerializable(typeof(BitwardenCleartextVaultExport))]
     [JsonSerializable(typeof(BitwardenEncryptedVaultExport))]
+    [JsonSerializable(typeof(CredentialExchangeFile))]
+    [JsonSerializable(typeof(CredentialExchangeCredential))]
+    [JsonSerializable(typeof(CredentialExchangePasskey))]
 #endif
     [JsonSerializable(typeof(PublicKeyCredentialRequestOptions))]
     public partial class WebAuthnJsonContext : JsonSerializerContext
