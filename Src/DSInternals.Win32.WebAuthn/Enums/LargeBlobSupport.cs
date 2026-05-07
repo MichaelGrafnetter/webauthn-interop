@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Windows.Win32;
 
 namespace DSInternals.Win32.WebAuthn

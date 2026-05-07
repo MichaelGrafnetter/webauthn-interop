@@ -79,7 +79,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             );
 
             var webauthn = new WebAuthnApiAdapter();
-            var response = webauthn.AuthenticatorMakeCredential(options);
+            var response = RunInteractiveWebAuthnTest(() => webauthn.AuthenticatorMakeCredential(options));
 
             Assert.IsNotNull(response);
         }
@@ -126,7 +126,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             );
 
             var webauthn = new WebAuthnApiAdapter();
-            var response = webauthn.AuthenticatorGetAssertion(options);
+            var response = RunInteractiveWebAuthnTest(() => webauthn.AuthenticatorGetAssertion(options));
 
             Assert.IsNotNull(response);
         }
@@ -153,7 +153,8 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
                 );
 
             var webauthn = new WebAuthnApiAdapter();
-            var response = webauthn.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.Platform);
+            var response = RunInteractiveWebAuthnTest(() =>
+                webauthn.AuthenticatorGetAssertion(options, Fido2NetLib.Objects.AuthenticatorAttachment.Platform));
 
             Assert.IsNotNull(response);
         }
@@ -184,5 +185,22 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
             Assert.ThrowsExactly<OperationCanceledException>(() =>
                 webauthn.AuthenticatorGetAssertionAsync(options, null, source.Token).GetAwaiter().GetResult());
         }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("MSTest.Analyzers", "MSTEST0025", Justification = "Uses AssertInconclusiveException when interactive WebAuthn UI is unavailable.")]
+        private static T RunInteractiveWebAuthnTest<T>(Func<T> action)
+        {
+            try
+            {
+                return action();
+            }
+            catch (Exception ex) when (IsInteractiveWebAuthnUnavailable(ex))
+            {
+                throw new AssertInconclusiveException("Interactive WebAuthn UI is unavailable or was cancelled in this test environment.", ex);
+            }
+        }
+
+        private static bool IsInteractiveWebAuthnUnavailable(Exception ex) =>
+            ex is UnauthorizedAccessException or OperationCanceledException or System.ComponentModel.Win32Exception
+            || ex.InnerException is System.ComponentModel.Win32Exception { NativeErrorCode: 5 or 1223 };
     }
 }

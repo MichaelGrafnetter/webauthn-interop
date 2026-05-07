@@ -110,7 +110,7 @@ namespace DSInternals.Win32.WebAuthn
             {
                 input.CopyTo(buffer);
                 int length = input.Length;
-                
+
 
                 // Normalize standard Base64 to Base64URL: replace '+' with '-', '/' with '_'
                 for (int i = 0; i < length; i++)

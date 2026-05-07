@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.COSE;

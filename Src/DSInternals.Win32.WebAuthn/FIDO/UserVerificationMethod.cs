@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace DSInternals.Win32.WebAuthn.FIDO;
 

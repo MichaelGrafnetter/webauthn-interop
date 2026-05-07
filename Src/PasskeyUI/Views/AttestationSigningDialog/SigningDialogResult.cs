@@ -1,4 +1,4 @@
-using Prism.Dialogs;
+﻿using Prism.Dialogs;
 
 namespace DSInternals.Win32.WebAuthn.PasskeyUI;
 

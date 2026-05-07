@@ -6,9 +6,9 @@ using System.Formats.Cbor;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using DSInternals.Win32.WebAuthn.Interop;
-using DSInternals.Win32.WebAuthn.Cryptography;
 using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.Cryptography;
+using DSInternals.Win32.WebAuthn.Interop;
 
 namespace DSInternals.Win32.WebAuthn.FIDO
 {

@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Buffers.Binary;
 using System.Formats.Asn1;
+using System.Formats.Cbor;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
+using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.EntraID;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using DSInternals.Win32.WebAuthn.Okta;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Formats.Cbor;
 
 namespace DSInternals.Win32.WebAuthn.Tests
 {
@@ -321,18 +322,19 @@ namespace DSInternals.Win32.WebAuthn.Tests
             _alg = _options.PublicKeyOptions.PublicKeyCredentialParameters[algIndex].Algorithm;
             MakeCredentialPublicKey();
 
-            PublicKeyCredential pkc = new()
+            AttestationPublicKeyCredential pkc = new()
             {
                 Response = new AuthenticatorAttestationResponse()
                 {
                     AttestationObject = _attestationObjectBytes,
                     ClientDataJson = _clientDataJson
                 },
-                ClientExtensionResults = new()
+                ClientExtensionResults = new AuthenticationExtensionsClientAttestationOutputs()
                 {
                     HmacSecret = true
                 },
-                Id = _credentialID
+                Id = _credentialID,
+                Type = ApiConstants.PublicKeyCredentialType
             };
 
             response = options.GetType().Name switch
@@ -505,6 +507,73 @@ namespace DSInternals.Win32.WebAuthn.Tests
             Assert.HasCount(2, options.PublicKeyCredentialParameters);
             Assert.AreEqual(COSE.Algorithm.ES256, options.PublicKeyCredentialParameters[0].Algorithm);
             Assert.AreEqual(COSE.Algorithm.RS256, options.PublicKeyCredentialParameters[1].Algorithm);
+        }
+
+        [TestMethod]
+        public void PublicKeyCredentialCreationOptions_DeserializePreservesCustomHints()
+        {
+            var options = JsonSerializer.Deserialize("""
+                {
+                    "rp": {
+                        "id": "example.com",
+                        "name": "Example"
+                    },
+                    "user": {
+                        "id": "AQID",
+                        "name": "user@example.com",
+                        "displayName": "Example User"
+                    },
+                    "challenge": "BAUG",
+                    "pubKeyCredParams": [
+                        {
+                            "type": "public-key",
+                            "alg": -7
+                        }
+                    ],
+                    "hints": [
+                        "security-key",
+                        "future-custom-hint"
+                    ]
+                }
+                """, WebAuthnJsonContext.Default.PublicKeyCredentialCreationOptions);
+
+            Assert.IsNotNull(options);
+            Assert.IsNotNull(options.Hints);
+            Assert.HasCount(2, options.Hints);
+            Assert.AreEqual("security-key", options.Hints[0]);
+            Assert.AreEqual("future-custom-hint", options.Hints[1]);
+        }
+
+        [TestMethod]
+        public void PublicKeyCredentialCreationOptions_SerializePreservesCustomHints()
+        {
+            var options = new PublicKeyCredentialCreationOptions
+            {
+                RelyingParty = new RelyingPartyInformation
+                {
+                    Id = "example.com",
+                    Name = "Example"
+                },
+                User = new UserInformation
+                {
+                    Id = new byte[] { 1, 2, 3 },
+                    Name = "user@example.com",
+                    DisplayName = "Example User"
+                },
+                Challenge = new byte[] { 4, 5, 6 },
+                PublicKeyCredentialParameters =
+                [
+                    new PublicKeyCredentialParameter(COSE.Algorithm.ES256, ApiConstants.PublicKeyCredentialType)
+                ],
+                Hints =
+                [
+                    "future-custom-hint"
+                ]
+            };
+
+            string json = JsonSerializer.Serialize(options, WebAuthnJsonContext.Default.PublicKeyCredentialCreationOptions);
+
+            StringAssert.Contains(json, @"""future-custom-hint""");
         }
     }
 }
