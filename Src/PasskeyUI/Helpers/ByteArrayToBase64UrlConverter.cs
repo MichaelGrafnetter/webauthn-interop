@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers.Text;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using DSInternals.Win32.WebAuthn;
 
@@ -23,9 +24,18 @@ internal sealed class ByteArrayToBase64UrlConverter : IValueConverter
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not string str || string.IsNullOrEmpty(str))
+        if (value is not string str || string.IsNullOrWhiteSpace(str))
+        {
             return null;
+        }
 
-        return Base64UrlConverter.FromBase64UrlString(str);
+        try
+        {
+            return Base64UrlConverter.FromBase64UrlString(str);
+        }
+        catch (FormatException)
+        {
+            return DependencyProperty.UnsetValue;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -51,6 +52,14 @@ public sealed class AuthenticationExtensionsClientAssertionOutputs : Authenticat
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? RemoteClientDataJson { get; set; }
 
+    /// <summary>
+    /// User verification method factors reported by the authenticator.
+    /// </summary>
+    /// <see href="https://www.w3.org/TR/webauthn-2/#sctn-uvm-extension"/>
+    [JsonPropertyName("uvm")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IList<UvmEntry>? Uvm { get; set; }
+
     [JsonIgnore]
     internal override bool IsEmpty =>
         AppID == null &&
@@ -58,7 +67,8 @@ public sealed class AuthenticationExtensionsClientAssertionOutputs : Authenticat
         CredentialBlob == null &&
         LargeBlob == null &&
         Prf == null &&
-        RemoteClientDataJson == null;
+        RemoteClientDataJson == null &&
+        Uvm == null;
 
     /// <summary>
     /// Deserializes a JSON string into assertion extension outputs.

@@ -253,7 +253,6 @@ namespace DSInternals.Win32.WebAuthn
             bool browserInPrivateMode = false,
             HybridStorageLinkedData? linkedDevice = null,
             string[]? credentialHints = null,
-            bool thirdPartyPayment = false,
             byte[]? authenticatorId = null,
             byte[]? publicKeyCredentialCreationOptionsJson = null,
             string? hostName = null,
@@ -289,7 +288,6 @@ namespace DSInternals.Win32.WebAuthn
                 browserInPrivateMode,
                 linkedDevice,
                 credentialHints,
-                thirdPartyPayment,
                 authenticatorId,
                 publicKeyCredentialCreationOptionsJson,
                 windowHandle
@@ -316,7 +314,6 @@ namespace DSInternals.Win32.WebAuthn
             bool browserInPrivateMode = false,
             HybridStorageLinkedData? linkedDevice = null,
             string[]? credentialHints = null,
-            bool thirdPartyPayment = false,
             byte[]? authenticatorId = null,
             byte[]? publicKeyCredentialCreationOptionsJson = null,
             WindowHandle windowHandle = default
@@ -389,6 +386,12 @@ namespace DSInternals.Win32.WebAuthn
                 throw new NotSupportedException("Remote web origin is not supported on this OS.");
             }
 
+            if (extensions?.Uvm == true)
+            {
+                // The uvm extension is not exposed by the Win32 WebAuthn API (webauthn.h V9).
+                throw new NotSupportedException("The uvm extension is not supported on this OS.");
+            }
+
             if (pubKeyCredParams == null || pubKeyCredParams.Length == 0)
             {
                 // Provide a default algorithm
@@ -439,7 +442,7 @@ namespace DSInternals.Win32.WebAuthn
                     options.CancellationId = _cancellationId;
                     options.LinkedDevice = linkedDevice;
                     options.CredentialHints = credentialHints;
-                    options.ThirdPartyPayment = thirdPartyPayment;
+                    options.ThirdPartyPayment = extensions?.Payment?.IsPayment == true;
                     options.PrfGlobalEval = prfGlobalEval;
                     options.RemoteWebOrigin = clientData.TopOrigin;
                     options.AuthenticatorId = authenticatorId;
@@ -684,6 +687,19 @@ namespace DSInternals.Win32.WebAuthn
             {
                 // This feature is only supported in API V9.
                 throw new NotSupportedException("Remote web origin is not supported on this OS.");
+            }
+
+            if (extensions?.Uvm == true)
+            {
+                // The uvm extension is not exposed by the Win32 WebAuthn API (webauthn.h V9).
+                throw new NotSupportedException("The uvm extension is not supported on this OS.");
+            }
+
+            if (extensions?.Payment is not null)
+            {
+                // The SPC payment extension is browser-only during assertion;
+                // webauthn.h V9 only exposes the registration-time bThirdPartyPayment flag.
+                throw new NotSupportedException("The Secure Payment Confirmation (payment) extension is not supported on this OS during assertion.");
             }
 
             if (!windowHandle.IsValid)

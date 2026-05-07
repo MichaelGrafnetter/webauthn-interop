@@ -78,6 +78,20 @@ public sealed class AuthenticationExtensionsClientAttestationInputs
     public PRFAttestationInputs? Prf { get; set; }
 
     /// <summary>
+    /// Requests the user verification method extension output.
+    /// </summary>
+    [JsonPropertyName("uvm")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool Uvm { get; set; }
+
+    /// <summary>
+    /// Inputs for the Secure Payment Confirmation (SPC) payment extension during credential creation.
+    /// </summary>
+    [JsonPropertyName("payment")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public PaymentAttestationInputs? Payment { get; set; }
+
+    /// <summary>
     /// Remote clientDataJSON supplied by a remote desktop client.
     /// </summary>
     [JsonPropertyName("remoteClientDataJSON")]

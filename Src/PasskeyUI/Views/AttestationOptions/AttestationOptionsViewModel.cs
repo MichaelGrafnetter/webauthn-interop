@@ -251,6 +251,7 @@ internal sealed class AttestationOptionsViewModel : BindableBase, IAttestationOp
                 CredentialBlob == null &&
                 LargeBlobSupport == LargeBlobSupport.None &&
                 EnablePseudoRandomFunction == false &&
+                ThirdPartyPayment == false &&
                 remoteDesktopClientOverride == null)
             {
                 // No extensions are set
@@ -266,6 +267,7 @@ internal sealed class AttestationOptionsViewModel : BindableBase, IAttestationOp
                 CredentialBlob = this.CredentialBlob?.Length > 0 ? this.CredentialBlob : null,
                 LargeBlob = this.LargeBlobSupport != LargeBlobSupport.None ? new LargeBlobAttestationInputs(this.LargeBlobSupport) : null,
                 Prf = this.EnablePseudoRandomFunction ? new PRFAttestationInputs() : null,
+                Payment = this.ThirdPartyPayment ? new PaymentAttestationInputs { IsPayment = true } : null,
                 RemoteDesktopClientOverride = remoteDesktopClientOverride
             };
         }
@@ -280,6 +282,7 @@ internal sealed class AttestationOptionsViewModel : BindableBase, IAttestationOp
                 CredentialBlob = value.CredentialBlob;
                 LargeBlobSupport = value.LargeBlob?.Support ?? LargeBlobSupport.None;
                 EnablePseudoRandomFunction = value.Prf != null;
+                ThirdPartyPayment = value.Payment?.IsPayment == true;
                 RemoteWebOrigin = value.RemoteDesktopClientOverride?.Origin;
             }
             else
@@ -291,6 +294,7 @@ internal sealed class AttestationOptionsViewModel : BindableBase, IAttestationOp
                 CredentialBlob = null;
                 LargeBlobSupport = LargeBlobSupport.None;
                 EnablePseudoRandomFunction = false;
+                ThirdPartyPayment = false;
                 RemoteWebOrigin = null;
             }
         }

@@ -255,7 +255,6 @@ internal sealed class MainWindowViewModel : BindableBase
                 AttestationOptionsViewModel.IsBrowserPrivateMode,
                 linkedDevice: null,
                 credentialHints: credentialHints,
-                thirdPartyPayment: AttestationOptionsViewModel.ThirdPartyPayment,
                 windowHandle: WindowHandle.MainWindow
                 );
 

@@ -84,6 +84,7 @@
                             <Binding Path="Challenge" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
                                     <ExceptionValidationRule />
                                 </Binding.ValidationRules>
                             </Binding>
@@ -94,8 +95,9 @@
                     <Label Name="LargeBlobLabel" Content="Large blob:" Width="130" />
                     <TextBox x:Name="LargeBlobTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" TabIndex="12">
                         <TextBox.Text>
-                            <Binding Path="LargeBlob" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="LargeBlob" Converter="{StaticResource ByteArrayToBase64UrlConverter}" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
                                 <Binding.ValidationRules>
+                                    <local:Base64UrlValidationRule ValidationStep="RawProposedValue" />
                                     <ExceptionValidationRule />
                                 </Binding.ValidationRules>
                             </Binding>
