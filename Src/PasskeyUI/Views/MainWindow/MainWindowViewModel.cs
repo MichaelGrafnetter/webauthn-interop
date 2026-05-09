@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DSInternals.Win32.WebAuthn.COSE;
@@ -45,8 +46,8 @@ internal sealed class MainWindowViewModel : BindableBase
 
         // Initialize commands
         ResetCommand = new DelegateCommand(OnReset);
-        RegisterCommand = new DelegateCommand(OnRegister, () => AttestationOptionsViewModel.IsFormValid);
-        AuthenticateCommand = new DelegateCommand(OnAuthenticate, () => AssertionOptionsViewModel.IsFormValid);
+        RegisterCommand = new AsyncDelegateCommand(OnRegister, () => AttestationOptionsViewModel.IsFormValid);
+        AuthenticateCommand = new AsyncDelegateCommand(OnAuthenticate, () => AssertionOptionsViewModel.IsFormValid);
         SignAttestationCommand = new DelegateCommand(OnSignAttestation, () => AttestationOptionsViewModel.IsFormValid);
         SignAssertionCommand = new DelegateCommand(OnSignAssertion, () => AssertionOptionsViewModel.IsFormValid);
         ListPlatformCredentialsCommand = new DelegateCommand(OnListCredentials);
@@ -55,7 +56,7 @@ internal sealed class MainWindowViewModel : BindableBase
         LoadFacebookOptionsCommand = new DelegateCommand(OnLoadFacebookOptions);
         OpenHyperLinkCommand = new DelegateCommand<string>(OnOpenHyperLink);
         DeleteCredentialCommand = new DelegateCommand<CredentialDetails>(OnDeleteCredential);
-        TestCredentialCommand = new DelegateCommand<CredentialDetails>(OnTestCredential);
+        TestCredentialCommand = new AsyncDelegateCommand<CredentialDetails>(OnTestCredential);
 
         // Subscribe to form validity changes to update button states
         if (attestationOptionsViewModel is INotifyPropertyChanged attestationNotify)
@@ -64,8 +65,8 @@ internal sealed class MainWindowViewModel : BindableBase
             {
                 if (e.PropertyName == nameof(IAttestationOptionsViewModel.IsFormValid))
                 {
-                    ((DelegateCommand)RegisterCommand).RaiseCanExecuteChanged();
-                    ((DelegateCommand)SignAttestationCommand).RaiseCanExecuteChanged();
+                    ((DelegateCommandBase)RegisterCommand).RaiseCanExecuteChanged();
+                    ((DelegateCommandBase)SignAttestationCommand).RaiseCanExecuteChanged();
                 }
             };
         }
@@ -76,8 +77,8 @@ internal sealed class MainWindowViewModel : BindableBase
             {
                 if (e.PropertyName == nameof(IAssertionOptionsViewModel.IsFormValid))
                 {
-                    ((DelegateCommand)AuthenticateCommand).RaiseCanExecuteChanged();
-                    ((DelegateCommand)SignAssertionCommand).RaiseCanExecuteChanged();
+                    ((DelegateCommandBase)AuthenticateCommand).RaiseCanExecuteChanged();
+                    ((DelegateCommandBase)SignAssertionCommand).RaiseCanExecuteChanged();
                 }
             };
         }
@@ -161,7 +162,7 @@ internal sealed class MainWindowViewModel : BindableBase
         });
     }
 
-    private void OnTestCredential(CredentialDetails? credential)
+    private async Task OnTestCredential(CredentialDetails? credential)
     {
         if (credential?.CredentialId == null || credential.RelyingPartyInformation?.Id == null)
         {
@@ -184,7 +185,7 @@ internal sealed class MainWindowViewModel : BindableBase
             ];
 
             // Perform authentication
-            var response = _api.AuthenticatorGetAssertion(
+            var response = await _api.AuthenticatorGetAssertionAsync(
                 credential.RelyingPartyInformation.Id,
                 challenge,
                 UserVerificationRequirement.Preferred,
@@ -229,7 +230,7 @@ internal sealed class MainWindowViewModel : BindableBase
         return hintValue != null ? [hintValue] : null;
     }
 
-    private void OnRegister()
+    private async Task OnRegister()
     {
         try
         {
@@ -239,7 +240,7 @@ internal sealed class MainWindowViewModel : BindableBase
             // Convert single hint to array if specified
             string[]? credentialHints = GetCredentialHints(AttestationOptionsViewModel.CredentialHint);
 
-            var response = _api.AuthenticatorMakeCredential(
+            var response = await _api.AuthenticatorMakeCredentialAsync(
                 AttestationOptionsViewModel.RelyingPartyEntity,
                 AttestationOptionsViewModel.UserEntity,
                 AttestationOptionsViewModel.Challenge,
@@ -249,10 +250,10 @@ internal sealed class MainWindowViewModel : BindableBase
                 AttestationOptionsViewModel.PublicKeyCredentialParameters?.ToArray(),
                 AttestationOptionsViewModel.AttestationConveyancePreference,
                 AttestationOptionsViewModel.Timeout,
+                extensions: AttestationOptionsViewModel.ClientExtensions,
                 excludeCredentials: null,
-                AttestationOptionsViewModel.EnterpriseAttestation,
-                AttestationOptionsViewModel.ClientExtensions,
-                AttestationOptionsViewModel.IsBrowserPrivateMode,
+                enterpriseAttestation: AttestationOptionsViewModel.EnterpriseAttestation,
+                browserInPrivateMode: AttestationOptionsViewModel.IsBrowserPrivateMode,
                 linkedDevice: null,
                 credentialHints: credentialHints,
                 windowHandle: WindowHandle.MainWindow
@@ -266,7 +267,7 @@ internal sealed class MainWindowViewModel : BindableBase
         }
     }
 
-    private void OnAuthenticate()
+    private async Task OnAuthenticate()
     {
         try
         {
@@ -276,7 +277,7 @@ internal sealed class MainWindowViewModel : BindableBase
             // Convert single hint to array if specified
             string[]? credentialHints = GetCredentialHints(AssertionOptionsViewModel.CredentialHint);
 
-            var response = _api.AuthenticatorGetAssertion(
+            var response = await _api.AuthenticatorGetAssertionAsync(
                 AssertionOptionsViewModel.RelyingPartyId,
                 AssertionOptionsViewModel.Challenge,
                 AssertionOptionsViewModel.UserVerificationRequirement,

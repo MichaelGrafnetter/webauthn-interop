@@ -18,7 +18,8 @@
     <ProductVersion>3.0.0</ProductVersion>
     <FileVersion>3.0.0</FileVersion>
     <!-- Suppress WPF0001: ThemeMode is experimental but required for Fluent theme -->
-    <NoWarn>$(NoWarn);WPF0001</NoWarn>
+    <!-- Suppress CA2007: WPF view-models touch UI-bound properties after each await, so resuming on the captured (UI) SynchronizationContext is intentional; ConfigureAwait(false) would be wrong here. -->
+    <NoWarn>$(NoWarn);WPF0001;CA2007</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
