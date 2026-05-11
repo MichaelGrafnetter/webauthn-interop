@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
 using DSInternals.Win32.WebAuthn.COSE;
+using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using Fido2NetLib.Objects;
 
@@ -232,6 +234,349 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                 null => ResidentKeyRequirement.Discouraged,
                 _ => throw new NotSupportedException(),
             };
+        }
+
+        /// <summary>
+        /// Maps a list of credential hints to their wire-format strings.
+        /// </summary>
+        public static string[]? Translate(IReadOnlyList<Fido2NetLib.Objects.PublicKeyCredentialHint>? hints)
+        {
+            if (hints == null || hints.Count == 0)
+            {
+                return null;
+            }
+
+            return hints.Select(Translate).ToArray();
+        }
+
+        /// <summary>
+        /// Maps a single credential hint to its wire-format string.
+        /// </summary>
+        public static string Translate(Fido2NetLib.Objects.PublicKeyCredentialHint hint)
+        {
+            return hint switch
+            {
+                Fido2NetLib.Objects.PublicKeyCredentialHint.SecurityKey => ApiConstants.CredentialHintSecurityKey,
+                Fido2NetLib.Objects.PublicKeyCredentialHint.ClientDevice => ApiConstants.CredentialHintClientDevice,
+                Fido2NetLib.Objects.PublicKeyCredentialHint.Hybrid => ApiConstants.CredentialHintHybrid,
+                _ => throw new NotSupportedException("This credential hint is not currently supported."),
+            };
+        }
+
+        /// <summary>
+        /// Maps a Fido2NetLib large blob support preference to the interop enum.
+        /// </summary>
+        public static LargeBlobSupport Translate(Fido2NetLib.Objects.LargeBlobSupport? support)
+        {
+            return support switch
+            {
+                Fido2NetLib.Objects.LargeBlobSupport.Required => LargeBlobSupport.Required,
+                Fido2NetLib.Objects.LargeBlobSupport.Preferred => LargeBlobSupport.Preferred,
+                null => LargeBlobSupport.None,
+                _ => throw new NotSupportedException(),
+            };
+        }
+
+        /// <summary>
+        /// Maps a Fido2NetLib credential protection policy to the interop user verification value.
+        /// </summary>
+        public static UserVerification TranslateCredProtect(Fido2NetLib.Objects.CredentialProtectionPolicy? policy)
+        {
+            return policy switch
+            {
+                Fido2NetLib.Objects.CredentialProtectionPolicy.UserVerificationOptional => UserVerification.Optional,
+                Fido2NetLib.Objects.CredentialProtectionPolicy.UserVerificationOptionalWithCredentialIdList => UserVerification.OptionalWithCredentialIDList,
+                Fido2NetLib.Objects.CredentialProtectionPolicy.UserVerificationRequired => UserVerification.Required,
+                null => UserVerification.Any,
+                _ => throw new NotSupportedException(),
+            };
+        }
+
+        /// <summary>
+        /// Maps an interop user verification value back to a Fido2NetLib credential protection policy.
+        /// </summary>
+        public static Fido2NetLib.Objects.CredentialProtectionPolicy? TranslateCredProtect(UserVerification verification)
+        {
+            return verification switch
+            {
+                UserVerification.Optional => Fido2NetLib.Objects.CredentialProtectionPolicy.UserVerificationOptional,
+                UserVerification.OptionalWithCredentialIDList => Fido2NetLib.Objects.CredentialProtectionPolicy.UserVerificationOptionalWithCredentialIdList,
+                UserVerification.Required => Fido2NetLib.Objects.CredentialProtectionPolicy.UserVerificationRequired,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Maps Fido2NetLib PRF values to the interop equivalent.
+        /// </summary>
+        public static PRFValues? Translate(AuthenticationExtensionsPRFValues? values)
+        {
+            if (values == null)
+            {
+                return null;
+            }
+
+            return new PRFValues
+            {
+                First = values.First,
+                Second = values.Second
+            };
+        }
+
+        /// <summary>
+        /// Maps interop PRF values to the Fido2NetLib equivalent.
+        /// </summary>
+        public static AuthenticationExtensionsPRFValues? Translate(PRFValues? values)
+        {
+            if (values == null)
+            {
+                return null;
+            }
+
+            return new AuthenticationExtensionsPRFValues
+            {
+                First = values.First,
+                Second = values.Second
+            };
+        }
+
+        /// <summary>
+        /// Maps Fido2NetLib PRF inputs to the interop attestation PRF inputs.
+        /// </summary>
+        public static PRFAttestationInputs? TranslateAttestation(AuthenticationExtensionsPRFInputs? inputs)
+        {
+            if (inputs == null)
+            {
+                return null;
+            }
+
+            return new PRFAttestationInputs
+            {
+                Eval = Translate(inputs.Eval)
+            };
+        }
+
+        /// <summary>
+        /// Maps Fido2NetLib PRF inputs to the interop assertion PRF inputs.
+        /// </summary>
+        public static PRFAssertionInputs? TranslateAssertion(AuthenticationExtensionsPRFInputs? inputs)
+        {
+            if (inputs == null)
+            {
+                return null;
+            }
+
+            var result = new PRFAssertionInputs
+            {
+                Eval = Translate(inputs.Eval)
+            };
+
+            if (inputs.EvalByCredential.HasValue)
+            {
+                var pair = inputs.EvalByCredential.Value;
+                var evalValues = Translate(pair.Value);
+                if (evalValues != null)
+                {
+                    result.EvalByCredential = new Dictionary<string, PRFValues>
+                    {
+                        [pair.Key] = evalValues
+                    };
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Maps Fido2NetLib large-blob inputs to the interop attestation large-blob inputs.
+        /// </summary>
+        public static LargeBlobAttestationInputs? TranslateAttestation(AuthenticationExtensionsLargeBlobInputs? inputs)
+        {
+            if (inputs == null || inputs.Support == null)
+            {
+                return null;
+            }
+
+            return new LargeBlobAttestationInputs(Translate(inputs.Support));
+        }
+
+        /// <summary>
+        /// Maps Fido2NetLib large-blob inputs to the interop assertion large-blob inputs.
+        /// </summary>
+        public static LargeBlobAssertionInputs? TranslateAssertion(AuthenticationExtensionsLargeBlobInputs? inputs)
+        {
+            if (inputs == null)
+            {
+                return null;
+            }
+
+            if (!inputs.Read && inputs.Write == null)
+            {
+                return null;
+            }
+
+            return new LargeBlobAssertionInputs(inputs.Read, inputs.Write);
+        }
+
+        /// <summary>
+        /// Maps Fido2NetLib attestation extension inputs to the interop equivalent.
+        /// </summary>
+        public static AuthenticationExtensionsClientAttestationInputs? TranslateAttestationExtensions(AuthenticationExtensionsClientInputs? inputs)
+        {
+            if (inputs == null)
+            {
+                return null;
+            }
+
+            var result = new AuthenticationExtensionsClientAttestationInputs
+            {
+                CredProtect = TranslateCredProtect(inputs.CredentialProtectionPolicy),
+                EnforceCredProtect = inputs.EnforceCredentialProtectionPolicy == true,
+                CredentialProperties = inputs.CredProps == true,
+                LargeBlob = TranslateAttestation(inputs.LargeBlob),
+                Prf = TranslateAttestation(inputs.PRF)
+            };
+
+            return result;
+        }
+
+        /// <summary>
+        /// Maps Fido2NetLib assertion extension inputs to the interop equivalent.
+        /// </summary>
+        public static AuthenticationExtensionsClientAssertionInputs? TranslateAssertionExtensions(AuthenticationExtensionsClientInputs? inputs)
+        {
+            if (inputs == null)
+            {
+                return null;
+            }
+
+            return new AuthenticationExtensionsClientAssertionInputs
+            {
+                AppID = inputs.AppID,
+                LargeBlob = TranslateAssertion(inputs.LargeBlob),
+                Prf = TranslateAssertion(inputs.PRF)
+            };
+        }
+
+        /// <summary>
+        /// Maps interop PRF attestation outputs to the Fido2NetLib equivalent.
+        /// </summary>
+        public static AuthenticationExtensionsPRFOutputs? Translate(PRFAttestationOutputs? outputs)
+        {
+            if (outputs == null)
+            {
+                return null;
+            }
+
+            return new AuthenticationExtensionsPRFOutputs
+            {
+                Enabled = outputs.Enabled,
+                Results = Translate(outputs.Results)!
+            };
+        }
+
+        /// <summary>
+        /// Maps interop PRF assertion outputs to the Fido2NetLib equivalent.
+        /// </summary>
+        public static AuthenticationExtensionsPRFOutputs? Translate(PRFAssertionOutputs? outputs)
+        {
+            if (outputs == null)
+            {
+                return null;
+            }
+
+            return new AuthenticationExtensionsPRFOutputs
+            {
+                Enabled = true,
+                Results = Translate(outputs.Results)!
+            };
+        }
+
+        /// <summary>
+        /// Maps interop large-blob attestation outputs to the Fido2NetLib equivalent.
+        /// </summary>
+        public static AuthenticationExtensionsLargeBlobOutputs? Translate(LargeBlobAttestationOutputs? outputs)
+        {
+            if (outputs == null)
+            {
+                return null;
+            }
+
+            return new AuthenticationExtensionsLargeBlobOutputs
+            {
+                Supported = outputs.Supported
+            };
+        }
+
+        /// <summary>
+        /// Maps interop large-blob assertion outputs to the Fido2NetLib equivalent.
+        /// </summary>
+        public static AuthenticationExtensionsLargeBlobOutputs? Translate(LargeBlobAssertionOutputs? outputs)
+        {
+            if (outputs == null)
+            {
+                return null;
+            }
+
+            return new AuthenticationExtensionsLargeBlobOutputs
+            {
+                Blob = outputs.Blob,
+                Written = outputs.Written == true
+            };
+        }
+
+        /// <summary>
+        /// Maps interop attestation extension outputs to the Fido2NetLib equivalent.
+        /// </summary>
+        public static Fido2NetLib.Objects.AuthenticationExtensionsClientOutputs? Translate(AuthenticationExtensionsClientAttestationOutputs? outputs)
+        {
+            if (outputs == null)
+            {
+                return null;
+            }
+
+            var result = new Fido2NetLib.Objects.AuthenticationExtensionsClientOutputs
+            {
+                CredProtect = TranslateCredProtect(outputs.CredProtect),
+                LargeBlob = Translate(outputs.LargeBlob),
+                PRF = Translate(outputs.Prf)
+            };
+
+            if (outputs.CredentialProperties != null)
+            {
+                result.CredProps = new CredentialPropertiesOutput
+                {
+                    Rk = outputs.CredentialProperties.ResidentKey == true
+                };
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Maps interop assertion extension outputs to the Fido2NetLib equivalent.
+        /// </summary>
+        public static Fido2NetLib.Objects.AuthenticationExtensionsClientOutputs? Translate(AuthenticationExtensionsClientAssertionOutputs? outputs)
+        {
+            if (outputs == null)
+            {
+                return null;
+            }
+
+            return new Fido2NetLib.Objects.AuthenticationExtensionsClientOutputs
+            {
+                AppID = outputs.AppID == true,
+                LargeBlob = Translate(outputs.LargeBlob),
+                PRF = Translate(outputs.Prf)
+            };
+        }
+
+        /// <summary>
+        /// Encodes a credential identifier to its Base64Url string form.
+        /// </summary>
+        public static string EncodeCredentialId(byte[]? credentialId)
+        {
+            return credentialId is null or { Length: 0 } ? string.Empty : Base64Url.EncodeToString(credentialId);
         }
     }
 }

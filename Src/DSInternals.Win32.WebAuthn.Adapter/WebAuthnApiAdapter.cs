@@ -41,18 +41,22 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             var attachment = ApiMapper.Translate(options.AuthenticatorSelection?.AuthenticatorAttachment);
             var attestationPref = ApiMapper.Translate(options.Attestation);
             var user = ApiMapper.Translate(options.User);
+            var extensions = ApiMapper.TranslateAttestationExtensions(options.Extensions);
+            var hints = ApiMapper.Translate(options.Hints);
 
             var attestation = _api.AuthenticatorMakeCredential(
-                rp,
-                user,
-                options.Challenge,
-                uv,
-                attachment,
-                rk,
-                credParams,
-                attestationPref,
-                timeout,
-                new ReadOnlyCollection<PublicKeyCredentialDescriptor>(excludeCreds)
+                rpEntity: rp,
+                userEntity: user,
+                challenge: options.Challenge,
+                userVerificationRequirement: uv,
+                authenticatorAttachment: attachment,
+                residentKey: rk,
+                pubKeyCredParams: credParams,
+                attestationConveyancePreference: attestationPref,
+                timeoutMilliseconds: timeout,
+                excludeCredentials: new ReadOnlyCollection<PublicKeyCredentialDescriptor>(excludeCreds),
+                extensions: extensions,
+                credentialHints: hints
             );
 
             var attestationResponse = attestation.Response as AuthenticatorAttestationResponse
@@ -60,15 +64,16 @@ namespace DSInternals.Win32.WebAuthn.Adapter
 
             return new AuthenticatorAttestationRawResponse()
             {
-                // TODO: Id = attestation.CredentialId,
-                // TODO: RawId = attestation.CredentialId,
+                Id = ApiMapper.EncodeCredentialId(attestation.Id),
+                RawId = attestation.Id,
                 Type = PublicKeyCredentialType.PublicKey,
-                // TODO: Extensions = ApiMapper.Translate(attestation.Extensions),
                 Response = new AuthenticatorAttestationRawResponse.AttestationResponse()
                 {
                     AttestationObject = attestationResponse.AttestationObject,
-                    ClientDataJson = attestation.Response.ClientDataJson
-                }
+                    ClientDataJson = attestation.Response.ClientDataJson,
+                    Transports = Array.Empty<Fido2NetLib.Objects.AuthenticatorTransport>()
+                },
+                ClientExtensionResults = ApiMapper.Translate(attestation.ClientExtensionResults)!
             };
         }
 
@@ -102,22 +107,18 @@ namespace DSInternals.Win32.WebAuthn.Adapter
             uint timeout = checked((uint)options.Timeout);
             var attachment = ApiMapper.Translate(authenticatorAttachment);
             var uv = ApiMapper.Translate(options.UserVerification);
-            // TODO: U2fAppId = options.Extensions?.AppID
-            //    if(options.Extensions?.AppID != null)
-            //    {
-            //        clientData.Add("ClientExtensions", new
-            //        {
-            //            AppId = options.Extensions.AppID
-            //        });
-            //    }
+            var extensions = ApiMapper.TranslateAssertionExtensions(options.Extensions);
+            var hints = ApiMapper.Translate(options.Hints);
 
             var assertion = _api.AuthenticatorGetAssertion(
-                options.RpId,
-                options.Challenge,
-                uv,
-                attachment,
-                timeout,
-                new ReadOnlyCollection<PublicKeyCredentialDescriptor>(allowCreds)
+                rpId: options.RpId,
+                challenge: options.Challenge,
+                userVerificationRequirement: uv,
+                authenticatorAttachment: attachment,
+                timeoutMilliseconds: timeout,
+                allowCredentials: new ReadOnlyCollection<PublicKeyCredentialDescriptor>(allowCreds),
+                extensions: extensions,
+                credentialHints: hints
             );
 
             var assertionResponse = assertion.Response as AuthenticatorAssertionResponse
@@ -125,8 +126,8 @@ namespace DSInternals.Win32.WebAuthn.Adapter
 
             return new AuthenticatorAssertionRawResponse()
             {
-                // TODO: Id = assertion..Credential.Id,
-                // TODO: RawId = assertion.Credential.Id,
+                Id = ApiMapper.EncodeCredentialId(assertion.Id),
+                RawId = assertion.Id ?? Array.Empty<byte>(),
                 Type = PublicKeyCredentialType.PublicKey,
                 Response = new AuthenticatorAssertionRawResponse.AssertionResponse()
                 {
@@ -135,6 +136,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                     UserHandle = assertionResponse.UserHandle,
                     ClientDataJson = assertion.Response.ClientDataJson
                 },
+                ClientExtensionResults = ApiMapper.Translate(assertion.ClientExtensionResults)!
             };
         }
 
