@@ -179,6 +179,26 @@ namespace DSInternals.Win32.WebAuthn.Interop
         public const string CredentialHintHybrid = PInvoke.WEBAUTHN_CREDENTIAL_HINT_HYBRID;
 
         /// <summary>
+        /// The mediation requirement value indicating that the user agent must not show any UI to the user.
+        /// </summary>
+        public const string MediationSilent = "silent";
+
+        /// <summary>
+        /// The mediation requirement value indicating that the user agent may show UI to the user (default behavior).
+        /// </summary>
+        public const string MediationOptional = "optional";
+
+        /// <summary>
+        /// The mediation requirement value indicating conditional mediation (passkey autofill).
+        /// </summary>
+        public const string MediationConditional = "conditional";
+
+        /// <summary>
+        /// The mediation requirement value indicating that the user agent must always show UI to the user.
+        /// </summary>
+        public const string MediationRequired = "required";
+
+        /// <summary>
         /// The AAGUID of the KeePassXC authenticator.
         /// </summary>
         public static readonly Guid KeePassXCAaGuid = new("fdb141b2-5d84-443e-8a35-4698c205a502");
