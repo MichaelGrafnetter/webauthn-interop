@@ -19,7 +19,9 @@
   </Folder>
   <Folder Name="/Module/">
     <File Path="Src/DSInternals.Passkeys/DSInternals.Passkeys.psd1" />
-    <File Path="Src/DSInternals.Passkeys/DSInternals.Passkeys.psm1" />
+    <File Path="Src/DSInternals.Passkeys/DSInternals.Passkeys.Core.psm1" />
+    <File Path="Src/DSInternals.Passkeys/DSInternals.Passkeys.Entra.psm1" />
+    <File Path="Src/DSInternals.Passkeys/DSInternals.Passkeys.Okta.psm1" />
     <File Path="Src/DSInternals.Passkeys/DSInternals.Passkeys.Tests.ps1" />
   </Folder>
   <Folder Name="/Scripts/">

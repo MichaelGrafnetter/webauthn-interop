@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -6,118 +6,15 @@ using System.Text.Json.Serialization;
 namespace DSInternals.Win32.WebAuthn.Okta
 {
     /// <summary>
-    /// Represents the Okta profile metadata associated with a FIDO2 authentication method.
-    /// </summary>
-    public class OktaProfile
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OktaProfile"/> class.
-        /// </summary>
-        [JsonConstructor]
-        public OktaProfile(
-            string credentialId,
-            object appId,
-            object version,
-            string authenticatorName,
-            object presetPinAvailable,
-            object fulfillmentProvider
-        )
-        {
-            this.CredentialId = credentialId;
-            this.AppId = appId;
-            this.Version = version;
-            this.AuthenticatorName = authenticatorName;
-            this.PresetPinAvailable = presetPinAvailable;
-            this.FulfillmentProvider = fulfillmentProvider;
-        }
-
-        /// <summary>
-        /// ID for the Factor credential
-        /// </summary>
-        [JsonPropertyName("credentialId")]
-        public string CredentialId { get; }
-
-        /// <summary>
-        /// U2F appId string
-        /// </summary>
-        [JsonPropertyName("appId")]
-        public object AppId { get; }
-
-        /// <summary>
-        /// Undocumented
-        /// </summary>
-        [JsonPropertyName("version")]
-        public object Version { get; }
-
-        /// <summary>
-        /// Human-readable name of the authenticator
-        /// </summary>
-        [JsonPropertyName("authenticatorName")]
-        public string AuthenticatorName { get; }
-
-        /// <summary>
-        /// Undocumented
-        /// </summary>
-        [JsonPropertyName("presetPinAvailable")]
-        public object PresetPinAvailable { get; }
-
-        /// <summary>
-        /// Undocumented
-        /// </summary>
-        [JsonPropertyName("fulfillmentProvider")]
-        public object FulfillmentProvider { get; }
-    }
-
-    /// <summary>
     /// Represents an Okta FIDO2 authentication method.
     /// </summary>
     public class OktaFido2AuthenticationMethod
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OktaFido2AuthenticationMethod"/> class.
-        /// </summary>
-        [JsonConstructor]
-        public OktaFido2AuthenticationMethod(
-            string id,
-            string factorType,
-            string provider,
-            string vendorName,
-            string status,
-            DateTime? created,
-            DateTime? lastUpdated,
-            OktaProfile profile
-        )
-        {
-            this.Id = id;
-            this.FactorType = factorType;
-            this.Provider = provider;
-            this.VendorName = vendorName;
-            this.Status = status;
-            this.Created = created;
-            this.LastUpdated = lastUpdated;
-            this.Profile = profile;
-        }
-
-        /// <summary>
-        /// Deserializes an Okta FIDO2 authentication method from JSON.
-        /// </summary>
-        /// <param name="json">The JSON payload returned by Okta.</param>
-        /// <returns>The deserialized authentication method.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="json"/> is null or empty.</exception>
-        public static OktaFido2AuthenticationMethod FromJsonString(string json)
-        {
-            if (string.IsNullOrEmpty(json))
-            {
-                throw new ArgumentNullException(nameof(json));
-            }
-
-            return JsonSerializer.Deserialize(json, WebAuthnJsonContext.Default.OktaFido2AuthenticationMethod);
-        }
-        /// <summary>
         /// ID of the Factor
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; }
+        public string FactorId { get; }
 
         /// <summary>
         /// Type of Factor
@@ -159,6 +56,47 @@ namespace DSInternals.Win32.WebAuthn.Okta
         /// Specific attributes related to the Factor
         /// </summary>
         [JsonPropertyName("profile")]
-        public OktaProfile Profile { get; }
+        public OktaFido2Profile Profile { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OktaFido2AuthenticationMethod"/> class.
+        /// </summary>
+        [JsonConstructor]
+        public OktaFido2AuthenticationMethod(
+            string id,
+            string factorType,
+            string provider,
+            string vendorName,
+            string status,
+            DateTime? created,
+            DateTime? lastUpdated,
+            OktaFido2Profile profile
+        )
+        {
+            this.FactorId = id;
+            this.FactorType = factorType;
+            this.Provider = provider;
+            this.VendorName = vendorName;
+            this.Status = status;
+            this.Created = created;
+            this.LastUpdated = lastUpdated;
+            this.Profile = profile;
+        }
+
+        /// <summary>
+        /// Deserializes an Okta FIDO2 authentication method from JSON.
+        /// </summary>
+        /// <param name="json">The JSON payload returned by Okta.</param>
+        /// <returns>The deserialized authentication method.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="json"/> is null or empty.</exception>
+        public static OktaFido2AuthenticationMethod FromJsonString(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                throw new ArgumentNullException(nameof(json));
+            }
+
+            return JsonSerializer.Deserialize(json, WebAuthnJsonContext.Default.OktaFido2AuthenticationMethod);
+        }
     }
 }

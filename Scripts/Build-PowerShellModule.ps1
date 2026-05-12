@@ -43,6 +43,10 @@ foreach($currentConfiguration in $Configuration) {
         # Copy the compiled binaries
         dotnet.exe publish $libraryProject --output $frameworkSpecificPath --nologo --framework $framework --configuration $currentConfiguration --no-restore --no-build
 
+        # Remove dependency manifests that are not consumed by PowerShell's assembly loader
+        Get-ChildItem -Path $frameworkSpecificPath -Filter '*.deps.json' -File |
+            Remove-Item -Verbose
+
         if ($framework -ne 'net48') {
             # Remove assemblies that ship with the .NET runtime and would cause version conflicts in PowerShell 7
             [string[]] $runtimeProvidedAssemblies = @(

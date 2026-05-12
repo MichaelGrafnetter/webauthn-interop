@@ -40,7 +40,8 @@ namespace DSInternals.Win32.WebAuthn
         /// Optional public key (Base64Url encoded).
         /// </summary>
         [JsonPropertyName("publicKey")]
-        public string? PublicKey { get; set; }
+        [JsonConverter(typeof(Base64UrlConverter))]
+        public byte[]? PublicKey { get; set; }
 
         /// <summary>
         /// Optional public key algorithm identifier.

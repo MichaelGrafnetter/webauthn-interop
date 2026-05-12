@@ -8,7 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using DSInternals.Win32.WebAuthn.COSE;
-using DSInternals.Win32.WebAuthn.EntraID;
+using DSInternals.Win32.WebAuthn.Entra;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using DSInternals.Win32.WebAuthn.Okta;
@@ -19,7 +19,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
     [TestClass]
     public class PasskeyFactory
     {
-        internal WebauthnCredentialCreationOptions _options = null;
+        internal PublicKeyCredentialCreationOptions _options = null;
         internal byte[] _attestationObjectBytes
         {
             get
@@ -87,9 +87,9 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
         internal CredentialPublicKey _credentialPublicKey = null!;
 
-        internal string _rp => _options.PublicKeyOptions.RelyingParty.Id;
-        internal string _origin => new UriBuilder("https", _options.PublicKeyOptions.RelyingParty.Id).ToString();
-        internal byte[] _challenge => _options.PublicKeyOptions.Challenge;
+        internal string _rp => _options.RelyingParty.Id;
+        internal string _origin => new UriBuilder(Uri.UriSchemeHttps, _options.RelyingParty.Id).ToString();
+        internal byte[] _challenge => _options.Challenge;
         internal CertificateRequest _certReq = null!;
         internal static X500DistinguishedName _rootDN = new X500DistinguishedName("CN=Testing, O=DSInternals, OU=Passkeys, C=US");
         internal static byte[] _asnEncodedAaguid = [0x04, 0x10, 0x44, 0x53, 0x49, 0x6E, 0x74, 0x65, 0x72, 0x6E, 0x61, 0x6C, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00,];
@@ -313,13 +313,18 @@ namespace DSInternals.Win32.WebAuthn.Tests
             }
         }
 
-        public WebauthnAttestationResponse MakePasskey(WebauthnCredentialCreationOptions options, int algIndex = 0)
+        public object MakePasskey(object options, int algIndex = 0)
         {
             ArgumentNullException.ThrowIfNull(options);
-            WebauthnAttestationResponse response;
             _credentialID = RandomNumberGenerator.GetBytes(32);
-            _options = options;
-            _alg = _options.PublicKeyOptions.PublicKeyCredentialParameters[algIndex].Algorithm;
+            _options = options switch
+            {
+                PublicKeyCredentialCreationOptions raw => raw,
+                MicrosoftGraphWebauthnCredentialCreationOptions graph => graph.PublicKeyOptions,
+                OktaWebauthnCredentialCreationOptions okta => okta.PublicKeyOptions,
+                _ => throw new ArgumentOutOfRangeException(nameof(options)),
+            };
+            _alg = _options.PublicKeyCredentialParameters[algIndex].Algorithm;
             MakeCredentialPublicKey();
 
             AttestationPublicKeyCredential pkc = new()
@@ -337,14 +342,13 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 Type = ApiConstants.PublicKeyCredentialType
             };
 
-            response = options.GetType().Name switch
+            return options switch
             {
-                nameof(MicrosoftGraphWebauthnCredentialCreationOptions) => new MicrosoftGraphWebauthnAttestationResponse(pkc, $"DSInternals.Passkeys {_alg}"),
-                nameof(OktaWebauthnCredentialCreationOptions) => new OktaWebauthnAttestationResponse(pkc, options.PublicKeyOptions.User.Id, ((OktaWebauthnCredentialCreationOptions)options).Id),
+                PublicKeyCredentialCreationOptions => pkc,
+                MicrosoftGraphWebauthnCredentialCreationOptions => new MicrosoftGraphWebauthnAttestationResponse(pkc, $"DSInternals.Passkeys {_alg}"),
+                OktaWebauthnCredentialCreationOptions okta => new OktaWebauthnAttestationResponse(pkc, _options.User.Id, okta.FactorId),
                 _ => throw new ArgumentOutOfRangeException(nameof(options)),
             };
-
-            return response;
         }
     }
 
@@ -440,6 +444,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             Assert.AreEqual(AttestationConveyancePreference.Direct, options.Attestation);
             Assert.IsNotNull(options.ExcludeCredentials);
             Assert.IsTrue(options.AuthenticatorSelection.RequireResidentKey);
+            Assert.IsNull(options.AuthenticatorSelection.ResidentKey);
             Assert.AreEqual(AuthenticatorAttachment.CrossPlatform, options.AuthenticatorSelection.AuthenticatorAttachment);
             Assert.AreEqual(UserVerificationRequirement.Required, options.AuthenticatorSelection.UserVerificationRequirement);
             Assert.HasCount(3, options.PublicKeyCredentialParameters);
@@ -502,6 +507,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             Assert.AreEqual(AttestationConveyancePreference.Direct, options.Attestation);
             Assert.IsNotNull(options.ExcludeCredentials);
             Assert.IsFalse(options.AuthenticatorSelection.RequireResidentKey);
+            Assert.IsNull(options.AuthenticatorSelection.ResidentKey);
             Assert.AreEqual(AuthenticatorAttachment.Any, options.AuthenticatorSelection.AuthenticatorAttachment);
             Assert.AreEqual(UserVerificationRequirement.Required, options.AuthenticatorSelection.UserVerificationRequirement);
             Assert.HasCount(2, options.PublicKeyCredentialParameters);

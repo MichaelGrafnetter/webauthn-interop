@@ -221,6 +221,25 @@ namespace DSInternals.Win32.WebAuthn.Interop
             return result;
         }
 
+        public static string[]? Translate(AuthenticatorTransport transports)
+        {
+            if (transports == AuthenticatorTransport.NoRestrictions)
+            {
+                return null;
+            }
+
+            var result = new List<string>();
+
+            if (transports.HasFlag(AuthenticatorTransport.USB)) result.Add(ApiConstants.CtapTransportUsb);
+            if (transports.HasFlag(AuthenticatorTransport.NFC)) result.Add(ApiConstants.CtapTransportNfc);
+            if (transports.HasFlag(AuthenticatorTransport.BLE)) result.Add(ApiConstants.CtapTransportBle);
+            if (transports.HasFlag(AuthenticatorTransport.Internal)) result.Add(ApiConstants.CtapTransportInternal);
+            if (transports.HasFlag(AuthenticatorTransport.Hybrid)) result.Add(ApiConstants.CtapTransportHybrid);
+            if (transports.HasFlag(AuthenticatorTransport.SmartCard)) result.Add(ApiConstants.CtapTransportSmartCard);
+
+            return result.Count > 0 ? result.ToArray() : null;
+        }
+
         public static IList<AuthenticatorDetails>? Translate(AuthenticatorDetailsOut[] authenticators)
         {
             if (authenticators == null || authenticators.Length == 0)

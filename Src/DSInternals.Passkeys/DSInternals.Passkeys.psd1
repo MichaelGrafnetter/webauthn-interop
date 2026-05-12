@@ -5,7 +5,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = 'DSInternals.Passkeys.psm1'
+# RootModule is intentionally omitted; all functionality is provided by the nested modules below.
 
 # Version number of this module.
 ModuleVersion = '3.0.0'
@@ -103,13 +103,16 @@ else {
 FormatsToProcess = @('DSInternals.Passkeys.Format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @()
+NestedModules = @('DSInternals.Passkeys.Core.psm1','DSInternals.Passkeys.Entra.psm1','DSInternals.Passkeys.Okta.psm1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
-    'Get-PasskeyRegistrationOptions',
+    'Get-EntraPasskeyRegistrationOptions',
+    'Get-OktaPasskeyRegistrationOptions',
+    'Get-OktaUserId',
     'New-Passkey',
-    'Register-Passkey',
+    'Register-EntraPasskey',
+    'Register-OktaPasskey',
     'Test-Passkey',
     'Connect-Okta',
     'Disconnect-Okta',
@@ -117,7 +120,8 @@ FunctionsToExport = @(
     'Get-PasskeyAuthenticator',
     'Get-PasskeyWindowsHello',
     'Remove-PasskeyWindowsHello',
-    'New-PasskeyRandomChallenge'
+    'New-PasskeyRandomChallenge',
+    'Get-PasskeyCreationOptions'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -127,7 +131,7 @@ CmdletsToExport = @()
 VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @('Register-MgUserAuthenticationFido2Method')
+AliasesToExport = @('Get-PasskeyRegistrationOptions','Register-Passkey','Register-MgUserAuthenticationFido2Method')
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -137,6 +141,10 @@ AliasesToExport = @('Register-MgUserAuthenticationFido2Method')
 
 # List of all files packaged with this module
 FileList = @(
+    'DSInternals.Passkeys.psd1',
+    'DSInternals.Passkeys.Core.psm1',
+    'DSInternals.Passkeys.Entra.psm1',
+    'DSInternals.Passkeys.Okta.psm1',
     'DSInternals.Passkeys.Format.ps1xml',
     'en-US/about_DSInternals.Passkeys.help.txt',
     'en-US/DSInternals.Passkeys-help.xml',
@@ -172,6 +180,7 @@ FileList = @(
     'net8.0-windows/Microsoft.IdentityModel.JsonWebTokens.dll',
     'net8.0-windows/Microsoft.IdentityModel.Logging.dll',
     'net8.0-windows/Microsoft.IdentityModel.Tokens.dll',
+    'net8.0-windows/NSec.Cryptography.dll',
     'net8.0-windows/System.Diagnostics.EventLog.dll',
     'net8.0-windows/System.Formats.Cbor.dll',
     'net8.0-windows/System.IdentityModel.Tokens.Jwt.dll'

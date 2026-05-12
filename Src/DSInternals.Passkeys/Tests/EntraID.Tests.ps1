@@ -47,39 +47,34 @@ Describe 'EntraID Tests' -Skip {
     }
 
     It "Registers passkeys to Entra ID for each credential parameter option" {
-        $options = Get-PasskeyRegistrationOptions -UserId $env:EntraIdUserId
-        $options | Should -BeOfType [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnCredentialCreationOptions]
-        $options.ChallengeTimeout | Should -BeGreaterThan (Get-Date)
-        $options.PublicKeyOptions.RelyingParty.Id | Should -Be "login.microsoft.com"
-        $options.PublicKeyOptions.PublicKeyCredentialParameters.Count | Should -Be 2
+        [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions] $options = Get-EntraPasskeyRegistrationOptions -UserId $env:EntraIdUserId
+        $options | Should -BeOfType [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions]
+        $options.RelyingParty.Id | Should -Be "login.microsoft.com"
+        $options.PublicKeyCredentialParameters.Count | Should -Be 2
 
-        $factory0 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
+        [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory] $factory0 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
         $factory0 | Should -BeOfType [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]
-        $passkey0 = $factory0.MakePasskey($options, 0)
-        $passkey0 | Should -BeOfType [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse]
-        $passkey0.DisplayName | Should -BeLike 'DSInternals.Passkeys*'
+        [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential] $passkey0 = $factory0.MakePasskey($options, 0)
+        $passkey0 | Should -BeOfType [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential]
 
-        $factory1 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
+        [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory] $factory1 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
         $factory1 | Should -BeOfType [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]
-        $passkey1 = $factory1.MakePasskey($options, 1)
-        $passkey1 | Should -BeOfType [DSInternals.Win32.WebAuthn.EntraID.MicrosoftGraphWebauthnAttestationResponse]
-        $passkey1.DisplayName | Should -BeLike 'DSInternals.Passkeys*'
+        [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential] $passkey1 = $factory1.MakePasskey($options, 1)
+        $passkey1 | Should -BeOfType [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential]
 
-        $result0 = Register-Passkey -Passkey $passkey0 -UserId $env:EntraIdUserId
+        $result0 = Register-EntraPasskey -Passkey $passkey0 -UserId $env:EntraIdUserId -DisplayName 'DSInternals.Passkeys 0'
         $result0 | Should -Not -BeNullOrEmpty
         $result0 | Should -BeOfType [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]
         $result0.AaGuid | Should -Be "4453496e-7465-726e-616c-730000000000"
-        $result0.CreatedDateTime | Should -BeLessThan $options.ChallengeTimeout
         $result0.AttestationCertificates.Count | Should -Be 1
-        $credentialId0 = $result0.Id
+        [string] $credentialId0 = $result0.Id
 
-        $result1 = Register-Passkey -Passkey $passkey1 -UserId $env:EntraIdUserId
+        $result1 = Register-EntraPasskey -Passkey $passkey1 -UserId $env:EntraIdUserId -DisplayName 'DSInternals.Passkeys 1'
         $result1 | Should -Not -BeNullOrEmpty
         $result1 | Should -BeOfType [Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod]
         $result1.AaGuid | Should -Be "4453496e-7465-726e-616c-730000000000"
-        $result1.CreatedDateTime | Should -BeLessThan $options.ChallengeTimeout
         $result1.AttestationCertificates.Count | Should -Be 1
-        $credentialId1 = $result1.Id
+        [string] $credentialId1 = $result1.Id
 
         $result0.AttestationCertificates[0] | Should -Not -Be $result1.AttestationCertificates[0]
         $result0.Id | Should -Not -Be $result1.Id

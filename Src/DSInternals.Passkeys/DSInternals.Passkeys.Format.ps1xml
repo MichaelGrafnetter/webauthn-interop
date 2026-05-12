@@ -13,7 +13,7 @@
             <ListItems>
               <ListItem>
                 <Label>AuthenticatorId</Label>
-                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.AuthenticatorId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.AuthenticatorId)</ScriptBlock>
               </ListItem>
               <ListItem>
                 <PropertyName>AuthenticatorName</PropertyName>
@@ -51,7 +51,7 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.AuthenticatorId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.AuthenticatorId)</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>AuthenticatorName</PropertyName>
@@ -173,23 +173,23 @@
             <ListItems>
               <ListItem>
                 <Label>CredentialId</Label>
-                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.CredentialId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.CredentialId)</ScriptBlock>
               </ListItem>
               <ListItem>
                 <Label>RelyingPartyId</Label>
-                <ScriptBlock>$_.RelyingPartyInformation.Id</ScriptBlock>
+                <ScriptBlock>$PSItem.RelyingPartyInformation.Id</ScriptBlock>
               </ListItem>
               <ListItem>
                 <Label>RelyingPartyName</Label>
-                <ScriptBlock>$_.RelyingPartyInformation.Name</ScriptBlock>
+                <ScriptBlock>$PSItem.RelyingPartyInformation.Name</ScriptBlock>
               </ListItem>
               <ListItem>
                 <Label>UserName</Label>
-                <ScriptBlock>$_.UserInformation.Name</ScriptBlock>
+                <ScriptBlock>$PSItem.UserInformation.Name</ScriptBlock>
               </ListItem>
               <ListItem>
                 <Label>UserDisplayName</Label>
-                <ScriptBlock>$_.UserInformation.DisplayName</ScriptBlock>
+                <ScriptBlock>$PSItem.UserInformation.DisplayName</ScriptBlock>
               </ListItem>
               <ListItem>
                 <PropertyName>Removable</PropertyName>
@@ -236,13 +236,13 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($_.CredentialId)</ScriptBlock>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.CredentialId)</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
-                <ScriptBlock>$_.RelyingPartyInformation.Id</ScriptBlock>
+                <ScriptBlock>$PSItem.RelyingPartyInformation.Id</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
-                <ScriptBlock>$_.UserInformation.Name</ScriptBlock>
+                <ScriptBlock>$PSItem.UserInformation.Name</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Removable</PropertyName>
@@ -256,6 +256,67 @@
       </TableControl>
     </View>
 
+    <!-- Get-PasskeyRegistrationOptions (Okta) List View (Default) -->
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions.ListView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>FactorId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>PublicKeyOptions</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <!-- Register-OktaPasskey List View (Default) -->
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod.ListView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>FactorId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>FactorType</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>CredentialId</Label>
+                <ScriptBlock>$PSItem.Profile.CredentialId</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>AuthenticatorName</Label>
+                <ScriptBlock>$PSItem.Profile.AuthenticatorName</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Status</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Created</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>LastUpdated</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
     <!-- Test-Passkey Custom View (Default) - JSON format with Base64Url encoding -->
     <View>
       <Name>DSInternals.Win32.WebAuthn.PublicKeyCredential.CustomView</Name>
@@ -267,7 +328,7 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_.ToString()</ScriptBlock>
+                <ScriptBlock>$PSItem.ToString()</ScriptBlock>
               </ExpressionBinding>
             </CustomItem>
           </CustomEntry>

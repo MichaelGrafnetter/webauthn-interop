@@ -218,7 +218,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                 return ResidentKeyRequirement.Required;
             }
 
-            return ResidentKeyRequirement.Discouraged;
+            return ResidentKeyRequirement.Preferred;
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                 Fido2NetLib.Objects.ResidentKeyRequirement.Required => ResidentKeyRequirement.Required,
                 Fido2NetLib.Objects.ResidentKeyRequirement.Preferred => ResidentKeyRequirement.Preferred,
                 Fido2NetLib.Objects.ResidentKeyRequirement.Discouraged => ResidentKeyRequirement.Discouraged,
-                null => ResidentKeyRequirement.Discouraged,
+                null => ResidentKeyRequirement.Preferred,
                 _ => throw new NotSupportedException(),
             };
         }

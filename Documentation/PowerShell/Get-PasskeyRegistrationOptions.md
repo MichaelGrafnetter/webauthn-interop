@@ -44,7 +44,7 @@ PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
 ### EXAMPLE 4 (Okta)
 ```
 PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Seconds 60)
+PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)
 ```
 
 ## PARAMETERS

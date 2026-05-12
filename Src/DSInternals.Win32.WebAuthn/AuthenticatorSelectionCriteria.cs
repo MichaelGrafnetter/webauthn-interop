@@ -28,9 +28,12 @@ public class AuthenticatorSelectionCriteria
     /// <summary>
     /// Specifies the extent to which the Relying Party desires to create a client-side discoverable credential.
     /// </summary>
+    /// <remarks>
+    /// This value is intentionally nullable so that it can default to Preferred when not specified.
+    /// </remarks>
     [JsonPropertyName("residentKey")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public ResidentKeyRequirement ResidentKey { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ResidentKeyRequirement? ResidentKey { get; set; }
 
     /// <summary>
     /// This member is retained for backwards compatibility with WebAuthn Level 1.

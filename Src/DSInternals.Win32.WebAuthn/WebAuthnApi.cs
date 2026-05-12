@@ -221,7 +221,7 @@ namespace DSInternals.Win32.WebAuthn
                 challenge: options.Challenge,
                 userVerificationRequirement: authenticatorSelection?.UserVerificationRequirement ?? UserVerificationRequirement.Any,
                 authenticatorAttachment: authenticatorSelection?.AuthenticatorAttachment ?? AuthenticatorAttachment.Any,
-                residentKey: authenticatorSelection?.ResidentKey ?? (authenticatorSelection?.RequireResidentKey == true ? ResidentKeyRequirement.Required : ResidentKeyRequirement.Discouraged),
+                residentKey: authenticatorSelection?.ResidentKey ?? (authenticatorSelection?.RequireResidentKey == true ? ResidentKeyRequirement.Required : ResidentKeyRequirement.Preferred),
                 pubKeyCredParams: options.PublicKeyCredentialParameters.Select(p => p.Algorithm).ToArray(),
                 attestationConveyancePreference: options.Attestation,
                 timeoutMilliseconds: options.TimeoutMilliseconds ?? ApiConstants.DefaultTimeoutMilliseconds,
@@ -243,7 +243,7 @@ namespace DSInternals.Win32.WebAuthn
             byte[] challenge,
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
-            ResidentKeyRequirement residentKey = ResidentKeyRequirement.Discouraged,
+            ResidentKeyRequirement residentKey = ResidentKeyRequirement.Preferred,
             COSE.Algorithm[]? pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
@@ -304,7 +304,7 @@ namespace DSInternals.Win32.WebAuthn
             CollectedClientData clientData,
             UserVerificationRequirement userVerificationRequirement,
             AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
-            ResidentKeyRequirement residentKey = ResidentKeyRequirement.Discouraged,
+            ResidentKeyRequirement residentKey = ResidentKeyRequirement.Preferred,
             COSE.Algorithm[]? pubKeyCredParams = null,
             AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any,
             uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
@@ -470,6 +470,14 @@ namespace DSInternals.Win32.WebAuthn
                             MinimumPinLength = attestation.Extensions?.MinPinLength
                         };
 
+                        if (extensions?.CredentialProperties == true)
+                        {
+                            extensionResults.CredentialProperties = new CredentialPropertiesOutputs
+                            {
+                                ResidentKey = attestation.ResidentKey
+                            };
+                        }
+
                         var credBlobCreated = attestation.Extensions?.CredBlobCreated;
                         if (credBlobCreated.HasValue)
                         {
@@ -513,6 +521,8 @@ namespace DSInternals.Win32.WebAuthn
                             {
                                 ClientDataJson = clientDataNative.ClientDataRaw,
                                 AttestationObject = attestation.AttestationObject,
+                                AuthenticatorData = attestation.AuthenticatorData,
+                                Transports = ApiHelper.Translate(attestation.Transports)
                             },
                             AuthenticatorAttachment = authenticatorAttachment,
                             ClientExtensionResults = extensionResults.IsEmpty ? null : extensionResults
