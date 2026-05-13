@@ -4,7 +4,7 @@
 SHORT DESCRIPTION
     Allows administrative registration of passkeys
     (i.e. FIDO2 security keys and Microsoft Authenticator mobile app)
-    in Microsoft Entra ID (formerly Azure Active Directory).
+    in Microsoft Entra ID (formerly Azure Active Directory) and Okta.
 
 EXAMPLES
     Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'

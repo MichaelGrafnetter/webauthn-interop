@@ -1,5 +1,5 @@
 ---
-external help file: DSInternals.Passkeys-help.xml
+external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
 online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-PasskeyRandomChallenge.md
 schema: 2.0.0
@@ -17,16 +17,24 @@ New-PasskeyRandomChallenge [[-Length] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Returns a cryptographically random byte array of the requested length, suitable for use as a WebAuthn challenge during credential creation or assertion.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
-New-PasskeyRandomChallenge -Length 32
+```powershell
+New-PasskeyRandomChallenge -Length 64
 ```
 
-Generates a random 32-byte challenge.
+Generates a random 64-byte challenge.
+
+### EXAMPLE 2
+```powershell
+$challenge = New-PasskeyRandomChallenge
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge
+```
+
+Generates a default 32-byte challenge and uses it for a passkey assertion.
 
 ## PARAMETERS
 
@@ -56,3 +64,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[New-Passkey](New-Passkey.md)
+
+[Test-Passkey](Test-Passkey.md)
+
+[Get-PasskeyCreationOptions](Get-PasskeyCreationOptions.md)
+

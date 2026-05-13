@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-EntraPasskeyRegistrationOptions</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>EntraPasskeyRegistrationOptions</command:noun>
+      <maml:description>
+        <maml:para>Retrieves creation options required to generate and register a Microsoft Entra ID compatible passkey.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves a server-issued challenge and the associated WebAuthn parameters needed to register (attest) a new passkey for the specified Microsoft Entra ID user. The returned object can be piped to New-Passkey to drive the local authenticator and then to Register-EntraPasskey to complete enrollment.</maml:para>
+      <maml:para>Requires an active Microsoft Graph connection (Connect-MgGraph) with the UserAuthenticationMethod.ReadWrite.All scope. The caller must be an administrator; self-service is not supported.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-EntraPasskeyRegistrationOptions</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of the user. Either the object id (GUID) or UPN.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Timeout">
+          <maml:name>ChallengeTimeout</maml:name>
+          <maml:description>
+            <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Timeout">
+        <maml:name>ChallengeTimeout</maml:name>
+        <maml:description>
+          <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+        <dev:type>
+          <maml:name>TimeSpan</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
+        <maml:name>UserId</maml:name>
+        <maml:description>
+          <maml:para>The unique identifier of the user. Either the object id (GUID) or UPN.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Self-service operations aren't supported for Entra ID.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com'</dev:code>
+        <dev:remarks>
+          <maml:para>Fetches default creation options for the specified user.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeTimeout (New-TimeSpan -Minutes 10)</dev:code>
+        <dev:remarks>
+          <maml:para>Fetches creation options with an extended 10-minute challenge timeout, useful when the user needs more time to complete the authenticator ceremony.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'</dev:code>
+        <dev:remarks>
+          <maml:para>Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-EntraPasskeyRegistrationOptions.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Register-EntraPasskey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>fido2AuthenticationMethod: creationOptions</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Register-EntraPasskey</command:name>
+      <command:verb>Register</command:verb>
+      <command:noun>EntraPasskey</command:noun>
+      <maml:description>
+        <maml:para>Registers a new passkey in Microsoft Entra ID.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Registers a new passkey for the specified user in Microsoft Entra ID.</maml:para>
+      <maml:para>When called without the -Passkey parameter, this cmdlet performs the full registration flow: it requests a challenge from Entra ID, drives the local authenticator (which prompts the system passkey UI), and submits the attestation to complete enrollment. When called with -Passkey, it submits a previously produced attestation, which is useful when the credential ceremony was run separately (e.g. via New-Passkey in a pipeline).</maml:para>
+      <maml:para>Requires an active Microsoft Graph connection (Connect-MgGraph) with the UserAuthenticationMethod.ReadWrite.All scope. The caller must be an administrator; self-service is not supported.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Register-EntraPasskey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+          <maml:name>ChallengeTimeout</maml:name>
+          <maml:description>
+            <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisplayName</maml:name>
+          <maml:description>
+            <maml:para>Custom name given to the registered passkey.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of the user. Either the object id (GUID) or UPN.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Register-EntraPasskey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisplayName</maml:name>
+          <maml:description>
+            <maml:para>Custom name given to the registered passkey.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Attestation">
+          <maml:name>Passkey</maml:name>
+          <maml:description>
+            <maml:para>The attestation credential produced by the local WebAuthn authenticator (e.g. via New-Passkey). Wrapped into a Microsoft Graph attestation response before being submitted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">AttestationPublicKeyCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>AttestationPublicKeyCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of the user. Either the object id (GUID) or UPN.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+        <maml:name>ChallengeTimeout</maml:name>
+        <maml:description>
+          <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+        <dev:type>
+          <maml:name>TimeSpan</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DisplayName</maml:name>
+        <maml:description>
+          <maml:para>Custom name given to the registered passkey.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Attestation">
+        <maml:name>Passkey</maml:name>
+        <maml:description>
+          <maml:para>The attestation credential produced by the local WebAuthn authenticator (e.g. via New-Passkey). Wrapped into a Microsoft Graph attestation response before being submitted.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">AttestationPublicKeyCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>AttestationPublicKeyCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+        <maml:name>UserId</maml:name>
+        <maml:description>
+          <maml:para>The unique identifier of the user. Either the object id (GUID) or UPN.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Self-service operations aren't supported for Entra ID.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'</dev:code>
+        <dev:remarks>
+          <maml:para>Performs the full registration ceremony in one step: fetches creation options, prompts the local authenticator, and submits the attestation to Entra ID with the given display name.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)</dev:code>
+        <dev:remarks>
+          <maml:para>Registers a passkey using an extended 10-minute challenge timeout, giving the user more time to complete the authenticator ceremony.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'</dev:code>
+        <dev:remarks>
+          <maml:para>Splits the registration into explicit pipeline stages: fetch options, create the credential locally, and submit the attestation. Equivalent to the single-step form but lets the caller inspect intermediate values.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Register-EntraPasskey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-EntraPasskeyRegistrationOptions</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Create fido2AuthenticationMethod</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+</helpItems>

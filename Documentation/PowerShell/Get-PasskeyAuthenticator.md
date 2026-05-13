@@ -1,5 +1,5 @@
 ---
-external help file: DSInternals.Passkeys-help.xml
+external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
 online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyAuthenticator.md
 schema: 2.0.0
@@ -23,21 +23,21 @@ This includes information about authenticator IDs, names, logos, and lock status
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+```powershell
 Get-PasskeyAuthenticator
 ```
 
 Lists all available authenticators.
 
 ### EXAMPLE 2
-```
+```powershell
 Get-PasskeyAuthenticator | Where-Object { -not $PSItem.Locked }
 ```
 
 Lists only unlocked authenticators.
 
 ### EXAMPLE 3
-```
+```powershell
 Get-PasskeyAuthenticator | Format-Table -Prperty AuthenticatorName,Locked
 ```
 
@@ -56,3 +56,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-PasskeyAuthenticatorPlugin](Get-PasskeyAuthenticatorPlugin.md)
+
+[Get-PasskeyWindowsHello](Get-PasskeyWindowsHello.md)
+

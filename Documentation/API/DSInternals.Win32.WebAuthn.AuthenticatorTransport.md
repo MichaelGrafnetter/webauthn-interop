@@ -7,7 +7,7 @@ Defines hints as to how clients might communicate with a particular authenticato
 
 ```csharp
 [Flags]
-[JsonConverter(typeof(JsonCustomEnumConverter<AuthenticatorTransport>))]
+[JsonConverter(typeof(WebAuthnJsonEnumConverter<AuthenticatorTransport>))]
 public enum AuthenticatorTransport : uint
 ```
 
@@ -37,21 +37,27 @@ Bluetooth Low Energy (BLE).
 
 Corresponds to WEBAUTHN_CTAP_TRANSPORT_BLE.
 
-`Hybrid = 32` 
-
-Hybrid Transport (QR Code).
-
-Corresponds to WEBAUTHN_CTAP_TRANSPORT_HYBRID.
-
 `Test = 8` 
 
-
+Reserved for testing.
 
 Corresponds to WEBAUTHN_CTAP_TRANSPORT_TEST.
 
 `Internal = 16` 
 
-Client device-specific transport.
+Client device-specific transport (platform authenticator).
 
 Corresponds to WEBAUTHN_CTAP_TRANSPORT_INTERNAL.
+
+`Hybrid = 32` 
+
+Hybrid Transport (QR Code / caBLE).
+
+Corresponds to WEBAUTHN_CTAP_TRANSPORT_HYBRID.
+
+`SmartCard = 64` 
+
+Smart card transport.
+
+Corresponds to WEBAUTHN_CTAP_TRANSPORT_SMART_CARD.
 

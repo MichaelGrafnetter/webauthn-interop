@@ -6,6 +6,7 @@ Assembly: DSInternals.Win32.WebAuthn.dll
 Large blob support options.
 
 ```csharp
+[JsonConverter(typeof(WebAuthnJsonEnumConverter<LargeBlobSupport>))]
 public enum LargeBlobSupport : uint
 ```
 

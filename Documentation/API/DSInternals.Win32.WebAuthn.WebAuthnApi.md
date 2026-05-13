@@ -56,6 +56,22 @@ public static ApiVersion? ApiVersion { get; }
 
 Indicates the presence of APIs and features.
 
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_IsAuthenticatorListSupported"></a> IsAuthenticatorListSupported
+
+Indicates the availability of the authenticator list API.
+
+```csharp
+public static bool IsAuthenticatorListSupported { get; }
+```
+
+#### Property Value
+
+ [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+#### Remarks
+
+Support for the authenticator list API was added in V9 API.
+
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_IsAvailable"></a> IsAvailable
 
 Indicates the availability of the WebAuthn API.
@@ -224,6 +240,38 @@ public static bool IsPsuedoRandomFunctionSupported { get; }
 
 Support for the prf extension was added in V6 API.
 
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_IsPublicKeyCredentialHintSupported"></a> IsPublicKeyCredentialHintSupported
+
+Indicates the availability of the public key credential hints extension.
+
+```csharp
+public static bool IsPublicKeyCredentialHintSupported { get; }
+```
+
+#### Property Value
+
+ [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+#### Remarks
+
+Support for credential hints was added in V8 API.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_IsRemoteWebOriginSupported"></a> IsRemoteWebOriginSupported
+
+Indicates the availability of remote web origin support for proxied WebAuthn requests.
+
+```csharp
+public static bool IsRemoteWebOriginSupported { get; }
+```
+
+#### Property Value
+
+ [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+#### Remarks
+
+Support for remote web origin was added in V9 API.
+
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_IsUnsignedExtensionOutputSupported"></a> IsUnsignedExtensionOutputSupported
 
 Indicates the support for unsigned extension outputs.
@@ -254,386 +302,861 @@ public static bool IsUserVerifyingPlatformAuthenticatorAvailable { get; }
 
 ## Methods
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_System_String_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Int32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_DSInternals_Win32_WebAuthn_CredentialLargeBlobOperation_System_Byte___System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorGetAssertion\(string, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, int, IReadOnlyList<PublicKeyCredentialDescriptor\>, AuthenticationExtensionsClientInputs, CredentialLargeBlobOperation, byte\[\], bool, HybridStorageLinkedData, WindowHandle\)
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_"></a> AuthenticatorGetAssertion\(PublicKeyCredentialRequestOptions\)
 
-Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
 
 ```csharp
-public AuthenticatorAssertionResponse AuthenticatorGetAssertion(string rpId, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, int timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null, AuthenticationExtensionsClientInputs extensions = null, CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None, byte[] largeBlob = null, bool browserInPrivateMode = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default)
+public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options)
+```
+
+#### Parameters
+
+`options` [PublicKeyCredentialRequestOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialRequestOptions.md)
+
+The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.
+
+#### Returns
+
+ [AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)
+
+The signed assertion public key credential produced by the authenticator.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorGetAssertion\(PublicKeyCredentialRequestOptions, WindowHandle\)
+
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
+
+```csharp
+public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle)
+```
+
+#### Parameters
+
+`options` [PublicKeyCredentialRequestOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialRequestOptions.md)
+
+The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.
+
+`windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
+
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
+#### Returns
+
+ [AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)
+
+The signed assertion public key credential produced by the authenticator.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_System_String_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAssertionInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_Boolean_System_String___System_Byte___System_Byte___DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorGetAssertion\(string, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, AuthenticationExtensionsClientAssertionInputs?, bool, HybridStorageLinkedData?, bool, string\[\]?, byte\[\]?, byte\[\]?, WindowHandle\)
+
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
+
+```csharp
+public AssertionPublicKeyCredential AuthenticatorGetAssertion(string rpId, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null, AuthenticationExtensionsClientAssertionInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, bool autoFill = false, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialRequestOptionsJson = null, WindowHandle windowHandle = default)
 ```
 
 #### Parameters
 
 `rpId` [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+Identifier of the relying party requesting the assertion.
 
 `challenge` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
 
+Cryptographic challenge produced by the relying party to be signed by the authenticator.
+
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
+
+Indicates whether user verification is required, preferred, or discouraged.
 
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
 
-`extensions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
 
-`largeBlobOperation` [CredentialLargeBlobOperation](DSInternals.Win32.WebAuthn.CredentialLargeBlobOperation.md)
+`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
 
-`largeBlob` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+Optional list of credentials acceptable to the relying party for the assertion.
+
+`extensions` [AuthenticationExtensionsClientAssertionInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAssertionInputs.md)?
+
+Client extension inputs for the assertion operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+Indicates whether the request originates from a browser running in private/incognito mode.
+
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`autoFill` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+Indicates whether the request is a conditional UI (autofill) request.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialRequestOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 #### Returns
 
- [AuthenticatorAssertionResponse](DSInternals.Win32.WebAuthn.AuthenticatorAssertionResponse.md)
+ [AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_System_String_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Int32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_DSInternals_Win32_WebAuthn_CredentialLargeBlobOperation_System_Byte___System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorGetAssertion\(string, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, int, IReadOnlyList<PublicKeyCredentialDescriptor\>, AuthenticationExtensionsClientInputs, CredentialLargeBlobOperation, byte\[\], bool, HybridStorageLinkedData, WindowHandle\)
+The signed assertion public key credential produced by the authenticator.
 
-Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_System_String_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAssertionInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_Boolean_System_String___System_Byte___System_Byte___DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorGetAssertion\(string, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, AuthenticationExtensionsClientAssertionInputs?, bool, HybridStorageLinkedData?, bool, string\[\]?, byte\[\]?, byte\[\]?, WindowHandle\)
+
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
 
 ```csharp
-public AuthenticatorAssertionResponse AuthenticatorGetAssertion(string rpId, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, int timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null, AuthenticationExtensionsClientInputs extensions = null, CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None, byte[] largeBlob = null, bool browserInPrivateMode = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default)
+public AssertionPublicKeyCredential AuthenticatorGetAssertion(string rpId, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null, AuthenticationExtensionsClientAssertionInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, bool autoFill = false, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialRequestOptionsJson = null, WindowHandle windowHandle = default)
 ```
 
 #### Parameters
 
 `rpId` [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+Identifier of the relying party requesting the assertion.
 
 `clientData` [CollectedClientData](DSInternals.Win32.WebAuthn.FIDO.CollectedClientData.md)
 
+The client data that contains the challenge, type, origin, and related context to be signed by the authenticator.
+
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
+
+Indicates whether user verification is required, preferred, or discouraged.
 
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
 
-`extensions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
 
-`largeBlobOperation` [CredentialLargeBlobOperation](DSInternals.Win32.WebAuthn.CredentialLargeBlobOperation.md)
+`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
 
-`largeBlob` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+Optional list of credentials acceptable to the relying party for the assertion.
+
+`extensions` [AuthenticationExtensionsClientAssertionInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAssertionInputs.md)?
+
+Client extension inputs for the assertion operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+Indicates whether the request originates from a browser running in private/incognito mode.
+
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`autoFill` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+Indicates whether the request is a conditional UI (autofill) request.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialRequestOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 #### Returns
 
- [AuthenticatorAssertionResponse](DSInternals.Win32.WebAuthn.AuthenticatorAssertionResponse.md)
+ [AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_System_String_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Int32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_DSInternals_Win32_WebAuthn_CredentialLargeBlobOperation_System_Byte___System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(string, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, int, IReadOnlyList<PublicKeyCredentialDescriptor\>, AuthenticationExtensionsClientInputs, CredentialLargeBlobOperation, byte\[\], bool, HybridStorageLinkedData, WindowHandle, CancellationToken\)
+The signed assertion public key credential produced by the authenticator.
 
-Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(PublicKeyCredentialRequestOptions, CancellationToken\)
+
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
 
 ```csharp
-public Task<AuthenticatorAssertionResponse> AuthenticatorGetAssertionAsync(string rpId, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, int timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null, AuthenticationExtensionsClientInputs extensions = null, CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None, byte[] largeBlob = null, bool browserInPrivateMode = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
+public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(PublicKeyCredentialRequestOptions options, CancellationToken cancellationToken = default)
+```
+
+#### Parameters
+
+`options` [PublicKeyCredentialRequestOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialRequestOptions.md)
+
+The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.
+
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
+
+#### Returns
+
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)\>
+
+A task that completes with the signed assertion public key credential produced by the authenticator.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(PublicKeyCredentialRequestOptions, WindowHandle, CancellationToken\)
+
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
+
+```csharp
+public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle, CancellationToken cancellationToken = default)
+```
+
+#### Parameters
+
+`options` [PublicKeyCredentialRequestOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialRequestOptions.md)
+
+The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.
+
+`windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
+
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
+
+#### Returns
+
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)\>
+
+A task that completes with the signed assertion public key credential produced by the authenticator.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_System_String_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAssertionInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_Boolean_System_String___System_Byte___System_Byte___DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(string, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, AuthenticationExtensionsClientAssertionInputs?, bool, HybridStorageLinkedData?, bool, string\[\]?, byte\[\]?, byte\[\]?, WindowHandle, CancellationToken\)
+
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
+
+```csharp
+public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(string rpId, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null, AuthenticationExtensionsClientAssertionInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, bool autoFill = false, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialRequestOptionsJson = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
 
 `rpId` [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+Identifier of the relying party requesting the assertion.
 
 `challenge` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
 
+Cryptographic challenge produced by the relying party to be signed by the authenticator.
+
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
+
+Indicates whether user verification is required, preferred, or discouraged.
 
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
 
-`extensions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
 
-`largeBlobOperation` [CredentialLargeBlobOperation](DSInternals.Win32.WebAuthn.CredentialLargeBlobOperation.md)
+`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
 
-`largeBlob` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+Optional list of credentials acceptable to the relying party for the assertion.
+
+`extensions` [AuthenticationExtensionsClientAssertionInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAssertionInputs.md)?
+
+Client extension inputs for the assertion operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+Indicates whether the request originates from a browser running in private/incognito mode.
+
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`autoFill` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+Indicates whether the request is a conditional UI (autofill) request.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialRequestOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 `cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
 
 #### Returns
 
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AuthenticatorAssertionResponse](DSInternals.Win32.WebAuthn.AuthenticatorAssertionResponse.md)\>
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)\>
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_System_String_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Int32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_DSInternals_Win32_WebAuthn_CredentialLargeBlobOperation_System_Byte___System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(string, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, int, IReadOnlyList<PublicKeyCredentialDescriptor\>, AuthenticationExtensionsClientInputs, CredentialLargeBlobOperation, byte\[\], bool, HybridStorageLinkedData, WindowHandle, CancellationToken\)
+A task that completes with the signed assertion public key credential produced by the authenticator.
 
-Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_System_String_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAssertionInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_Boolean_System_String___System_Byte___System_Byte___DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(string, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, AuthenticationExtensionsClientAssertionInputs?, bool, HybridStorageLinkedData?, bool, string\[\]?, byte\[\]?, byte\[\]?, WindowHandle, CancellationToken\)
+
+Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
 
 ```csharp
-public Task<AuthenticatorAssertionResponse> AuthenticatorGetAssertionAsync(string rpId, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, int timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor> allowCredentials = null, AuthenticationExtensionsClientInputs extenstions = null, CredentialLargeBlobOperation largeBlobOperation = CredentialLargeBlobOperation.None, byte[] largeBlob = null, bool browserInPrivateMode = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
+public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(string rpId, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null, AuthenticationExtensionsClientAssertionInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, bool autoFill = false, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialRequestOptionsJson = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
 
 `rpId` [string](https://learn.microsoft.com/dotnet/api/system.string)
 
+Identifier of the relying party requesting the assertion.
+
 `clientData` [CollectedClientData](DSInternals.Win32.WebAuthn.FIDO.CollectedClientData.md)
+
+The client data that contains the challenge, type, origin, and related context to be signed by the authenticator.
 
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
 
+Indicates whether user verification is required, preferred, or discouraged.
+
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
 
-`extenstions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
 
-`largeBlobOperation` [CredentialLargeBlobOperation](DSInternals.Win32.WebAuthn.CredentialLargeBlobOperation.md)
+`allowCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
 
-`largeBlob` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+Optional list of credentials acceptable to the relying party for the assertion.
+
+`extensions` [AuthenticationExtensionsClientAssertionInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAssertionInputs.md)?
+
+Client extension inputs for the assertion operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+Indicates whether the request originates from a browser running in private/incognito mode.
+
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`autoFill` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+Indicates whether the request is a conditional UI (autofill) request.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialRequestOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 `cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
 
 #### Returns
 
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AuthenticatorAssertionResponse](DSInternals.Win32.WebAuthn.AuthenticatorAssertionResponse.md)\>
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)\>
+
+A task that completes with the signed assertion public key credential produced by the authenticator.
 
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_"></a> AuthenticatorMakeCredential\(PublicKeyCredentialCreationOptions\)
 
-Creates a public key credential source bound to a managing authenticator and returns the credential public key
-associated with its credential private key.
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
 
 ```csharp
-public PublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options)
+public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options)
 ```
 
 #### Parameters
 
 `options` [PublicKeyCredentialCreationOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md)
 
+The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
+
 #### Returns
 
- [PublicKeyCredential](DSInternals.Win32.WebAuthn.PublicKeyCredential.md)
+ [AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Boolean_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_Int32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_DSInternals_Win32_WebAuthn_LargeBlobSupport_System_Boolean_System_Boolean_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorMakeCredential\(RelyingPartyInformation, UserInformation, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, bool, Algorithm\[\], AttestationConveyancePreference, int, IReadOnlyList<PublicKeyCredentialDescriptor\>, EnterpriseAttestationType, AuthenticationExtensionsClientInputs, LargeBlobSupport, bool, bool, bool, HybridStorageLinkedData, WindowHandle\)
+The attestation public key credential produced by the authenticator.
 
-Creates a public key credential source bound to a managing authenticator and returns the credential public key
-associated with its credential private key.
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorMakeCredential\(PublicKeyCredentialCreationOptions, WindowHandle\)
+
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
 
 ```csharp
-public PublicKeyCredential AuthenticatorMakeCredential(RelyingPartyInformation rpEntity, UserInformation userEntity, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, bool requireResidentKey = false, Algorithm[] pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, int timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, AuthenticationExtensionsClientInputs extensions = null, LargeBlobSupport largeBlobSupport = LargeBlobSupport.None, bool preferResidentKey = false, bool browserInPrivateMode = false, bool enablePseudoRandomFunction = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default)
+public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options, WindowHandle windowHandle)
+```
+
+#### Parameters
+
+`options` [PublicKeyCredentialCreationOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md)
+
+The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
+
+`windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
+
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
+#### Returns
+
+ [AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)
+
+The attestation public key credential produced by the authenticator.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_DSInternals_Win32_WebAuthn_ResidentKeyRequirement_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAttestationInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_String___System_Byte___System_Byte___System_String_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorMakeCredential\(RelyingPartyInformation, UserInformation, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, ResidentKeyRequirement, Algorithm\[\]?, AttestationConveyancePreference, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, EnterpriseAttestationType, AuthenticationExtensionsClientAttestationInputs?, bool, HybridStorageLinkedData?, string\[\]?, byte\[\]?, byte\[\]?, string?, WindowHandle\)
+
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
+
+```csharp
+public AttestationPublicKeyCredential AuthenticatorMakeCredential(RelyingPartyInformation rpEntity, UserInformation userEntity, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, ResidentKeyRequirement residentKey = ResidentKeyRequirement.Preferred, Algorithm[]? pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, AuthenticationExtensionsClientAttestationInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialCreationOptionsJson = null, string? hostName = null, WindowHandle windowHandle = default)
 ```
 
 #### Parameters
 
 `rpEntity` [RelyingPartyInformation](DSInternals.Win32.WebAuthn.RelyingPartyInformation.md)
 
+Information about the relying party for which the credential is being created.
+
 `userEntity` [UserInformation](DSInternals.Win32.WebAuthn.UserInformation.md)
+
+Information about the user account the credential will be bound to.
 
 `challenge` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
 
+Cryptographic challenge produced by the relying party to be signed by the authenticator.
+
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
+
+Indicates whether user verification is required, preferred, or discouraged.
 
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`requireResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]
+`residentKey` [ResidentKeyRequirement](DSInternals.Win32.WebAuthn.ResidentKeyRequirement.md)
+
+Indicates whether the credential should be created as a discoverable (resident) credential.
+
+`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]?
+
+Ordered list of supported COSE algorithms for the new credential. Defaults to ES256 when null or empty.
 
 `attestationConveyancePreference` [AttestationConveyancePreference](DSInternals.Win32.WebAuthn.AttestationConveyancePreference.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Specifies how the relying party wants attestation to be conveyed.
 
-`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
+
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
+
+`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
+
+Credentials that the authenticator must not create a new credential for. Used to prevent duplicate registrations.
 
 `enterpriseAttestation` [EnterpriseAttestationType](DSInternals.Win32.WebAuthn.EnterpriseAttestationType.md)
 
-`extensions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+Indicates whether enterprise attestation is requested and at what level.
 
-`largeBlobSupport` [LargeBlobSupport](DSInternals.Win32.WebAuthn.LargeBlobSupport.md)
+`extensions` [AuthenticationExtensionsClientAttestationInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAttestationInputs.md)?
 
-`preferResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Client extension inputs for the credential creation operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`enablePseudoRandomFunction` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Indicates whether the request originates from a browser running in private/incognito mode.
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialCreationOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original creation options, forwarded to the authenticator.
+
+`hostName` [string](https://learn.microsoft.com/dotnet/api/system.string)?
+
+Optional host name used for client data construction; defaults to the relying party identifier.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 #### Returns
 
- [PublicKeyCredential](DSInternals.Win32.WebAuthn.PublicKeyCredential.md)
+ [AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Boolean_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_Int32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_DSInternals_Win32_WebAuthn_LargeBlobSupport_System_Boolean_System_Boolean_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorMakeCredential\(RelyingPartyInformation, UserInformation, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, bool, Algorithm\[\], AttestationConveyancePreference, int, IReadOnlyList<PublicKeyCredentialDescriptor\>, EnterpriseAttestationType, AuthenticationExtensionsClientInputs, LargeBlobSupport, bool, bool, bool, HybridStorageLinkedData, WindowHandle\)
+The attestation public key credential produced by the authenticator.
 
-Creates a public key credential source bound to a managing authenticator and returns the credential public key
-associated with its credential private key.
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_DSInternals_Win32_WebAuthn_ResidentKeyRequirement_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAttestationInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_String___System_Byte___System_Byte___DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorMakeCredential\(RelyingPartyInformation, UserInformation, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, ResidentKeyRequirement, Algorithm\[\]?, AttestationConveyancePreference, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, EnterpriseAttestationType, AuthenticationExtensionsClientAttestationInputs?, bool, HybridStorageLinkedData?, string\[\]?, byte\[\]?, byte\[\]?, WindowHandle\)
+
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
 
 ```csharp
-public PublicKeyCredential AuthenticatorMakeCredential(RelyingPartyInformation rpEntity, UserInformation userEntity, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, bool requireResidentKey = false, Algorithm[] pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, int timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, AuthenticationExtensionsClientInputs extensions = null, LargeBlobSupport largeBlobSupport = LargeBlobSupport.None, bool preferResidentKey = false, bool browserInPrivateMode = false, bool enablePseudoRandomFunction = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default)
+public AttestationPublicKeyCredential AuthenticatorMakeCredential(RelyingPartyInformation rpEntity, UserInformation userEntity, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, ResidentKeyRequirement residentKey = ResidentKeyRequirement.Preferred, Algorithm[]? pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, AuthenticationExtensionsClientAttestationInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialCreationOptionsJson = null, WindowHandle windowHandle = default)
 ```
 
 #### Parameters
 
 `rpEntity` [RelyingPartyInformation](DSInternals.Win32.WebAuthn.RelyingPartyInformation.md)
 
+Information about the relying party for which the credential is being created.
+
 `userEntity` [UserInformation](DSInternals.Win32.WebAuthn.UserInformation.md)
+
+Information about the user account the credential will be bound to.
 
 `clientData` [CollectedClientData](DSInternals.Win32.WebAuthn.FIDO.CollectedClientData.md)
 
+The client data that contains the challenge, type, origin, and related context to be signed by the authenticator.
+
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
+
+Indicates whether user verification is required, preferred, or discouraged.
 
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`requireResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]
+`residentKey` [ResidentKeyRequirement](DSInternals.Win32.WebAuthn.ResidentKeyRequirement.md)
+
+Indicates whether the credential should be created as a discoverable (resident) credential.
+
+`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]?
+
+Ordered list of supported COSE algorithms for the new credential. Defaults to ES256 when null or empty.
 
 `attestationConveyancePreference` [AttestationConveyancePreference](DSInternals.Win32.WebAuthn.AttestationConveyancePreference.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Specifies how the relying party wants attestation to be conveyed.
 
-`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
+
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
+
+`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
+
+Credentials that the authenticator must not create a new credential for. Used to prevent duplicate registrations.
 
 `enterpriseAttestation` [EnterpriseAttestationType](DSInternals.Win32.WebAuthn.EnterpriseAttestationType.md)
 
-`extensions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+Indicates whether enterprise attestation is requested and at what level.
 
-`largeBlobSupport` [LargeBlobSupport](DSInternals.Win32.WebAuthn.LargeBlobSupport.md)
+`extensions` [AuthenticationExtensionsClientAttestationInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAttestationInputs.md)?
 
-`preferResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Client extension inputs for the credential creation operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`enablePseudoRandomFunction` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Indicates whether the request originates from a browser running in private/incognito mode.
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialCreationOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original creation options, forwarded to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 #### Returns
 
- [PublicKeyCredential](DSInternals.Win32.WebAuthn.PublicKeyCredential.md)
+ [AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Boolean_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_Int32_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_LargeBlobSupport_System_Boolean_System_Boolean_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(RelyingPartyInformation, UserInformation, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, bool, Algorithm\[\], AttestationConveyancePreference, int, AuthenticationExtensionsClientInputs, IReadOnlyList<PublicKeyCredentialDescriptor\>, EnterpriseAttestationType, LargeBlobSupport, bool, bool, bool, HybridStorageLinkedData, WindowHandle, CancellationToken\)
+The attestation public key credential produced by the authenticator.
 
-Creates a public key credential source bound to a managing authenticator and returns the credential public key
-associated with its credential private key.
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(PublicKeyCredentialCreationOptions, CancellationToken\)
+
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
 
 ```csharp
-public Task<PublicKeyCredential> AuthenticatorMakeCredentialAsync(RelyingPartyInformation rpEntity, UserInformation userEntity, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, bool requireResidentKey = false, Algorithm[] pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, int timeoutMilliseconds = 60000, AuthenticationExtensionsClientInputs extensions = null, IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, LargeBlobSupport largeBlobSupport = LargeBlobSupport.None, bool preferResidentKey = false, bool browserInPrivateMode = false, bool enablePseudoRandomFunction = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
+public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(PublicKeyCredentialCreationOptions options, CancellationToken cancellationToken = default)
+```
+
+#### Parameters
+
+`options` [PublicKeyCredentialCreationOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md)
+
+The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
+
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
+
+#### Returns
+
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)\>
+
+A task that completes with the attestation public key credential produced by the authenticator.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(PublicKeyCredentialCreationOptions, WindowHandle, CancellationToken\)
+
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
+
+```csharp
+public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(PublicKeyCredentialCreationOptions options, WindowHandle windowHandle, CancellationToken cancellationToken = default)
+```
+
+#### Parameters
+
+`options` [PublicKeyCredentialCreationOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md)
+
+The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
+
+`windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
+
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
+
+#### Returns
+
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)\>
+
+A task that completes with the attestation public key credential produced by the authenticator.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_System_Byte___DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_DSInternals_Win32_WebAuthn_ResidentKeyRequirement_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAttestationInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_String___System_Byte___System_Byte___System_String_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(RelyingPartyInformation, UserInformation, byte\[\], UserVerificationRequirement, AuthenticatorAttachment, ResidentKeyRequirement, Algorithm\[\]?, AttestationConveyancePreference, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, EnterpriseAttestationType, AuthenticationExtensionsClientAttestationInputs?, bool, HybridStorageLinkedData?, string\[\]?, byte\[\]?, byte\[\]?, string?, WindowHandle, CancellationToken\)
+
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
+
+```csharp
+public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(RelyingPartyInformation rpEntity, UserInformation userEntity, byte[] challenge, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, ResidentKeyRequirement residentKey = ResidentKeyRequirement.Preferred, Algorithm[]? pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, AuthenticationExtensionsClientAttestationInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialCreationOptionsJson = null, string? hostName = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
 
 `rpEntity` [RelyingPartyInformation](DSInternals.Win32.WebAuthn.RelyingPartyInformation.md)
 
+Information about the relying party for which the credential is being created.
+
 `userEntity` [UserInformation](DSInternals.Win32.WebAuthn.UserInformation.md)
+
+Information about the user account the credential will be bound to.
 
 `challenge` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
 
+Cryptographic challenge produced by the relying party to be signed by the authenticator.
+
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
+
+Indicates whether user verification is required, preferred, or discouraged.
 
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`requireResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]
+`residentKey` [ResidentKeyRequirement](DSInternals.Win32.WebAuthn.ResidentKeyRequirement.md)
+
+Indicates whether the credential should be created as a discoverable (resident) credential.
+
+`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]?
+
+Ordered list of supported COSE algorithms for the new credential. Defaults to ES256 when null or empty.
 
 `attestationConveyancePreference` [AttestationConveyancePreference](DSInternals.Win32.WebAuthn.AttestationConveyancePreference.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Specifies how the relying party wants attestation to be conveyed.
 
-`extensions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
 
-`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
+
+`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
+
+Credentials that the authenticator must not create a new credential for. Used to prevent duplicate registrations.
 
 `enterpriseAttestation` [EnterpriseAttestationType](DSInternals.Win32.WebAuthn.EnterpriseAttestationType.md)
 
-`largeBlobSupport` [LargeBlobSupport](DSInternals.Win32.WebAuthn.LargeBlobSupport.md)
+Indicates whether enterprise attestation is requested and at what level.
 
-`preferResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+`extensions` [AuthenticationExtensionsClientAttestationInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAttestationInputs.md)?
+
+Client extension inputs for the credential creation operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`enablePseudoRandomFunction` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Indicates whether the request originates from a browser running in private/incognito mode.
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialCreationOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original creation options, forwarded to the authenticator.
+
+`hostName` [string](https://learn.microsoft.com/dotnet/api/system.string)?
+
+Optional host name used for client data construction; defaults to the relying party identifier.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 `cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
 
 #### Returns
 
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[PublicKeyCredential](DSInternals.Win32.WebAuthn.PublicKeyCredential.md)\>
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)\>
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_System_Boolean_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_Int32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientInputs_DSInternals_Win32_WebAuthn_LargeBlobSupport_System_Boolean_System_Boolean_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(RelyingPartyInformation, UserInformation, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, bool, Algorithm\[\], AttestationConveyancePreference, int, IReadOnlyList<PublicKeyCredentialDescriptor\>, EnterpriseAttestationType, AuthenticationExtensionsClientInputs, LargeBlobSupport, bool, bool, bool, HybridStorageLinkedData, WindowHandle, CancellationToken\)
+A task that completes with the attestation public key credential produced by the authenticator.
 
-Creates a public key credential source bound to a managing authenticator and returns the credential public key
-associated with its credential private key.
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_RelyingPartyInformation_DSInternals_Win32_WebAuthn_UserInformation_DSInternals_Win32_WebAuthn_FIDO_CollectedClientData_DSInternals_Win32_WebAuthn_UserVerificationRequirement_DSInternals_Win32_WebAuthn_AuthenticatorAttachment_DSInternals_Win32_WebAuthn_ResidentKeyRequirement_DSInternals_Win32_WebAuthn_COSE_Algorithm___DSInternals_Win32_WebAuthn_AttestationConveyancePreference_System_UInt32_System_Collections_Generic_IReadOnlyList_DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__DSInternals_Win32_WebAuthn_EnterpriseAttestationType_DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientAttestationInputs_System_Boolean_DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_System_String___System_Byte___System_Byte___DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(RelyingPartyInformation, UserInformation, CollectedClientData, UserVerificationRequirement, AuthenticatorAttachment, ResidentKeyRequirement, Algorithm\[\]?, AttestationConveyancePreference, uint, IReadOnlyList<PublicKeyCredentialDescriptor\>?, EnterpriseAttestationType, AuthenticationExtensionsClientAttestationInputs?, bool, HybridStorageLinkedData?, string\[\]?, byte\[\]?, byte\[\]?, WindowHandle, CancellationToken\)
+
+Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
 
 ```csharp
-public Task<PublicKeyCredential> AuthenticatorMakeCredentialAsync(RelyingPartyInformation rpEntity, UserInformation userEntity, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, bool requireResidentKey = false, Algorithm[] pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, int timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor> excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, AuthenticationExtensionsClientInputs extensions = null, LargeBlobSupport largeBlobSupport = LargeBlobSupport.None, bool preferResidentKey = false, bool browserInPrivateMode = false, bool enablePseudoRandomFunction = false, HybridStorageLinkedData linkedDevice = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
+public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(RelyingPartyInformation rpEntity, UserInformation userEntity, CollectedClientData clientData, UserVerificationRequirement userVerificationRequirement, AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any, ResidentKeyRequirement residentKey = ResidentKeyRequirement.Preferred, Algorithm[]? pubKeyCredParams = null, AttestationConveyancePreference attestationConveyancePreference = AttestationConveyancePreference.Any, uint timeoutMilliseconds = 60000, IReadOnlyList<PublicKeyCredentialDescriptor>? excludeCredentials = null, EnterpriseAttestationType enterpriseAttestation = EnterpriseAttestationType.None, AuthenticationExtensionsClientAttestationInputs? extensions = null, bool browserInPrivateMode = false, HybridStorageLinkedData? linkedDevice = null, string[]? credentialHints = null, byte[]? authenticatorId = null, byte[]? publicKeyCredentialCreationOptionsJson = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
 
 `rpEntity` [RelyingPartyInformation](DSInternals.Win32.WebAuthn.RelyingPartyInformation.md)
 
+Information about the relying party for which the credential is being created.
+
 `userEntity` [UserInformation](DSInternals.Win32.WebAuthn.UserInformation.md)
+
+Information about the user account the credential will be bound to.
 
 `clientData` [CollectedClientData](DSInternals.Win32.WebAuthn.FIDO.CollectedClientData.md)
 
+The client data that contains the challenge, type, origin, and related context to be signed by the authenticator.
+
 `userVerificationRequirement` [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
+
+Indicates whether user verification is required, preferred, or discouraged.
 
 `authenticatorAttachment` [AuthenticatorAttachment](DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md)
 
-`requireResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Constrains the type of authenticator that may be used (platform, cross-platform, or any).
 
-`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]
+`residentKey` [ResidentKeyRequirement](DSInternals.Win32.WebAuthn.ResidentKeyRequirement.md)
+
+Indicates whether the credential should be created as a discoverable (resident) credential.
+
+`pubKeyCredParams` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)\[\]?
+
+Ordered list of supported COSE algorithms for the new credential. Defaults to ES256 when null or empty.
 
 `attestationConveyancePreference` [AttestationConveyancePreference](DSInternals.Win32.WebAuthn.AttestationConveyancePreference.md)
 
-`timeoutMilliseconds` [int](https://learn.microsoft.com/dotnet/api/system.int32)
+Specifies how the relying party wants attestation to be conveyed.
 
-`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>
+`timeoutMilliseconds` [uint](https://learn.microsoft.com/dotnet/api/system.uint32)
+
+Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.
+
+`excludeCredentials` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialDescriptor](DSInternals.Win32.WebAuthn.PublicKeyCredentialDescriptor.md)\>?
+
+Credentials that the authenticator must not create a new credential for. Used to prevent duplicate registrations.
 
 `enterpriseAttestation` [EnterpriseAttestationType](DSInternals.Win32.WebAuthn.EnterpriseAttestationType.md)
 
-`extensions` [AuthenticationExtensionsClientInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientInputs.md)
+Indicates whether enterprise attestation is requested and at what level.
 
-`largeBlobSupport` [LargeBlobSupport](DSInternals.Win32.WebAuthn.LargeBlobSupport.md)
+`extensions` [AuthenticationExtensionsClientAttestationInputs](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientAttestationInputs.md)?
 
-`preferResidentKey` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Client extension inputs for the credential creation operation.
 
 `browserInPrivateMode` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
 
-`enablePseudoRandomFunction` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+Indicates whether the request originates from a browser running in private/incognito mode.
 
-`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)
+`linkedDevice` [HybridStorageLinkedData](DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md)?
+
+Optional hybrid (cross-device) storage linked data for state-assisted transactions.
+
+`credentialHints` [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+Optional ordered list of public key credential hints describing the modality the relying party prefers.
+
+`authenticatorId` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional identifier of a specific authenticator to target.
+
+`publicKeyCredentialCreationOptionsJson` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+Optional UTF-8 encoded JSON representation of the original creation options, forwarded to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
+Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.
+
 `cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
 
 #### Returns
 
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[PublicKeyCredential](DSInternals.Win32.WebAuthn.PublicKeyCredential.md)\>
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)\>
+
+A task that completes with the attestation public key credential produced by the authenticator.
 
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_CancelCurrentOperation"></a> CancelCurrentOperation\(\)
 
@@ -652,7 +1175,7 @@ The authenticator stops prompting for, or accepting, any user input related to a
 
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_DeletePlatformCredential_System_Byte___"></a> DeletePlatformCredential\(byte\[\]\)
 
-Removes a Public Key Credential Source stored on a Virtual Authenticator.
+Removes a public key credential stored on the platform authenticator.
 
 ```csharp
 public static void DeletePlatformCredential(byte[] credentialId)
@@ -668,19 +1191,43 @@ The ID of the credential to be removed.
 
  [NotSupportedException](https://learn.microsoft.com/dotnet/api/system.notsupportedexception)
 
+Thrown when the running OS does not support platform credential management (added in API V4).
+
  [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_GetPlatformCredentialList_System_String_System_Boolean_"></a> GetPlatformCredentialList\(string, bool\)
+Thrown when <code class="paramref">credentialId</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_GetAuthenticatorList"></a> GetAuthenticatorList\(\)
+
+Gets the list of available authenticators.
+
+```csharp
+public static IList<AuthenticatorDetails>? GetAuthenticatorList()
+```
+
+#### Returns
+
+ [IList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist\-1)<[AuthenticatorDetails](DSInternals.Win32.WebAuthn.AuthenticatorDetails.md)\>?
+
+The list of authenticators currently visible to the platform, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when none are present.
+
+#### Exceptions
+
+ [NotSupportedException](https://learn.microsoft.com/dotnet/api/system.notsupportedexception)
+
+Thrown when the running OS does not support the authenticator list API (added in API V9).
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_GetPlatformCredentialList_System_String_System_Boolean_"></a> GetPlatformCredentialList\(string?, bool\)
 
 Gets the list of stored credentials.
 
 ```csharp
-public static IList<CredentialDetails> GetPlatformCredentialList(string rpId = null, bool browserInPrivateMode = false)
+public static IList<CredentialDetails>? GetPlatformCredentialList(string? rpId = null, bool browserInPrivateMode = false)
 ```
 
 #### Parameters
 
-`rpId` [string](https://learn.microsoft.com/dotnet/api/system.string)
+`rpId` [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
 Optional Id of the relying party that is making the request.
 
@@ -690,9 +1237,32 @@ Indicates whether the browser is in private mode.
 
 #### Returns
 
- [IList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist\-1)<[CredentialDetails](DSInternals.Win32.WebAuthn.CredentialDetails.md)\>
+ [IList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist\-1)<[CredentialDetails](DSInternals.Win32.WebAuthn.CredentialDetails.md)\>?
+
+The list of platform credentials matching the filter, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when none are present.
 
 #### Exceptions
 
  [NotSupportedException](https://learn.microsoft.com/dotnet/api/system.notsupportedexception)
+
+Thrown when the running OS does not support platform credential management (added in API V4).
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_GetPluginAuthenticators"></a> GetPluginAuthenticators\(\)
+
+Gets the list of registered authenticator plugins from the Windows registry.
+
+```csharp
+public static IList<AuthenticatorPluginInformation>? GetPluginAuthenticators()
+```
+
+#### Returns
+
+ [IList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist\-1)<[AuthenticatorPluginInformation](DSInternals.Win32.WebAuthn.AuthenticatorPluginInformation.md)\>?
+
+A list of authenticator plugin information, or null if no plugins are registered.
+
+#### Remarks
+
+Authenticator plugins (e.g., 1Password, Bitwarden) are registered under
+HKLM\SOFTWARE\Microsoft\FIDO\{UserSID}\Plugins\{PluginGuid}.
 

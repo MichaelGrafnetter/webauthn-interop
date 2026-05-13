@@ -7,7 +7,7 @@ This enumeration describes the Relying Party's requirements regarding user verif
 Eligible authenticators are filtered to only those capable of satisfying this requirement.
 
 ```csharp
-[JsonConverter(typeof(JsonStringEnumConverter<UserVerificationRequirement>))]
+[JsonConverter(typeof(WebAuthnJsonEnumConverter<UserVerificationRequirement>))]
 public enum UserVerificationRequirement : uint
 ```
 

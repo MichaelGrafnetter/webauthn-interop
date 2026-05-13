@@ -10,7 +10,7 @@ Note that most calls used by the Immersive Control Panel for FIDO2 Security Key 
 
 ## Screenshot
 
-![API Monitor Screenshot](../Screenshots/api_monitor.png)
+![API Monitor Screenshot](../Screenshots/api-monitor.png)
 
 ## Installation
 
@@ -19,7 +19,7 @@ The API Monitor then needs to be re-launched.
 
 It is also recommended to increase the maximum size of the captured data, as [clientDataJSON](https://www.w3.org/TR/webauthn/#dom-authenticatorresponse-clientdatajson) can be quite big:
 
-![API Monitor Options](../Screenshots/api_monitor_options.png)
+![API Monitor Options](../Screenshots/api-monitor-options.png)
 
 ## DLL Injection
 

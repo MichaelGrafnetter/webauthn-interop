@@ -1,5 +1,19 @@
 # <a id="DSInternals_Win32_WebAuthn_COSE"></a> Namespace DSInternals.Win32.WebAuthn.COSE
 
+### Classes
+
+ [AlgorithmExtensions](DSInternals.Win32.WebAuthn.COSE.AlgorithmExtensions.md)
+
+Provides metadata for COSE algorithms.
+
+ [CredentialPublicKey](DSInternals.Win32.WebAuthn.COSE.CredentialPublicKey.md)
+
+Represents a parsed COSE <code>credentialPublicKey</code> structure.
+
+ [EllipticCurveExtensions](DSInternals.Win32.WebAuthn.COSE.EllipticCurveExtensions.md)
+
+Provides parsing helpers for COSE elliptic curves.
+
 ### Enums
 
  [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)

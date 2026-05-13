@@ -6,6 +6,7 @@ Assembly: DSInternals.Win32.WebAuthn.dll
 WebAuthn API Version Information.
 
 ```csharp
+[SuppressMessage("Design", "CA1028:Enum Storage should be Int32", Justification = "The version is defined as a DWORD in the WebAuthn API.")]
 public enum ApiVersion : uint
 ```
 
@@ -51,9 +52,21 @@ Corresponds to WEBAUTHN_API_VERSION_6.
 
 Delta From V6.
 
-Corresponds to WEBAUTHN_API_VERSION_6.
+Corresponds to WEBAUTHN_API_VERSION_7.
 
-`Current = 7` 
+`Version8 = 8` 
+
+Delta From V7.
+
+Corresponds to WEBAUTHN_API_VERSION_8.
+
+`Version9 = 9` 
+
+Delta From V8.
+
+Corresponds to WEBAUTHN_API_VERSION_9.
+
+`Current = 9` 
 
 Current Version
 

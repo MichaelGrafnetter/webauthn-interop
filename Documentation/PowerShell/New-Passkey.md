@@ -1,5 +1,5 @@
 ---
-external help file: DSInternals.Passkeys-help.xml
+external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
 online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-Passkey.md
 schema: 2.0.0
@@ -8,65 +8,76 @@ schema: 2.0.0
 # New-Passkey
 
 ## SYNOPSIS
-Creates a new Microsoft Entra ID or Okta-compatible passkey.
+Creates a new WebAuthn credential by driving the local authenticator.
 
 ## SYNTAX
 
+### Default (Default)
 ```
-New-Passkey [-Options] <WebauthnCredentialCreationOptions> [[-DisplayName] <String>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-Passkey -Options <PublicKeyCredentialCreationOptions> [<CommonParameters>]
+```
+
+### Okta
+```
+New-Passkey -OktaOptions <OktaWebauthnCredentialCreationOptions> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Takes the `MicrosoftGraphWebauthnCredentialCreationOptions` or `OktaWebauthnCredentialCreationOptions` object from `Get-PasskeyRegistrationOptions` and uses them to create a credential using the system dialogs.
+Calls the Windows WebAuthn API to make a credential according to the provided PublicKeyCredentialCreationOptions, triggering the system passkey UI.
+Returns the resulting AttestationPublicKeyCredential, which can be wrapped into a provider-specific attestation response and submitted to Microsoft Entra ID, Okta, or any other relying party.
 
 ## EXAMPLES
 
-### EXAMPLE 1 (Entra ID)
-```
-PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \> Get-PasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey -DisplayName 'YubiKey 5 Nano' | Register-Passkey -UserId 'AdeleV@contoso.com'
-```
-
-### EXAMPLE 2 (Okta)
-```
-PS C:\> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> New-Passkey -Options $options
+### EXAMPLE 1
+```powershell
+$credential = Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey
 ```
 
-### EXAMPLE 3 (Okta)
+Retrieves creation options from Microsoft Entra ID and creates a new passkey on the local authenticator without registering it.
+
+### EXAMPLE 2
+```powershell
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 ```
-PS C:\> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Get-PasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey
+
+Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.
+
+### EXAMPLE 3
+```powershell
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-OktaPasskey
 ```
+
+Performs end-to-end passkey registration in Okta in a single pipeline.
 
 ## PARAMETERS
 
-### -DisplayName
-Custom name given to the Entra ID registered passkey.
+### -OktaOptions
+The Okta-specific credential creation options.
+Returned by Get-OktaPasskeyRegistrationOptions.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
+Type: OktaWebauthnCredentialCreationOptions
+Parameter Sets: Okta
 Aliases:
 
-Required: False
-Position: 2
+Required: True
+Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
 ### -Options
-Options required to generate a Microsoft Entra ID or Okta compatible passkey.
+The WebAuthn public key credential creation options.
+Returned directly by Get-EntraPasskeyRegistrationOptions.
 
 ```yaml
-Type: WebauthnCredentialCreationOptions
-Parameter Sets: (All)
+Type: PublicKeyCredentialCreationOptions
+Parameter Sets: Default
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -76,13 +87,24 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-### DSInternals.Win32.WebAuthn.WebauthnCredentialCreationOptions
 
 ## OUTPUTS
 
-### DSInternals.Win32.WebAuthn.WebauthnAttestationResponse
+### DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential
+### DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse
 ## NOTES
 
 ## RELATED LINKS
 
-[Microsoft WebAuthn portal](https://learn.microsoft.com/en-us/windows/win32/webauthn/-webauthn-portal)
+[Get-PasskeyCreationOptions](Get-PasskeyCreationOptions.md)
+
+[Get-EntraPasskeyRegistrationOptions](Get-EntraPasskeyRegistrationOptions.md)
+
+[Get-OktaPasskeyRegistrationOptions](Get-OktaPasskeyRegistrationOptions.md)
+
+[Register-EntraPasskey](Register-EntraPasskey.md)
+
+[Register-OktaPasskey](Register-OktaPasskey.md)
+
+[Test-Passkey](Test-Passkey.md)
+

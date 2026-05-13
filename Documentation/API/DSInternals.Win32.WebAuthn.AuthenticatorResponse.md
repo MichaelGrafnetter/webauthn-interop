@@ -33,15 +33,15 @@ public abstract class AuthenticatorResponse
 
 ### <a id="DSInternals_Win32_WebAuthn_AuthenticatorResponse_ClientDataJson"></a> ClientDataJson
 
-This attribute contains a JSON-compatible serialization of the client data.
+The JSON-serialized client data passed to the authenticator (Base64Url encoded).
 
 ```csharp
 [JsonPropertyName("clientDataJSON")]
 [JsonConverter(typeof(Base64UrlConverter))]
-public byte[] ClientDataJson { get; set; }
+public byte[]? ClientDataJson { get; init; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 

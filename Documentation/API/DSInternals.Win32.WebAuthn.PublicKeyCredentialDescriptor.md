@@ -3,8 +3,10 @@
 Namespace: [DSInternals.Win32.WebAuthn](DSInternals.Win32.WebAuthn.md)  
 Assembly: DSInternals.Win32.WebAuthn.dll  
 
+Identifies an existing public key credential.
+
 ```csharp
-public class PublicKeyCredentialDescriptor
+public sealed class PublicKeyCredentialDescriptor
 ```
 
 #### Inheritance
@@ -18,7 +20,6 @@ public class PublicKeyCredentialDescriptor
 [object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
 [object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 
 [object.GetType\(\)](https://learn.microsoft.com/dotnet/api/system.object.gettype), 
-[object.MemberwiseClone\(\)](https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone), 
 [object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals), 
 [object.ToString\(\)](https://learn.microsoft.com/dotnet/api/system.object.tostring)
 
@@ -26,8 +27,11 @@ public class PublicKeyCredentialDescriptor
 
 ### <a id="DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor__ctor_System_Byte___DSInternals_Win32_WebAuthn_AuthenticatorTransport_System_String_"></a> PublicKeyCredentialDescriptor\(byte\[\], AuthenticatorTransport, string\)
 
+Initializes a new credential descriptor.
+
 ```csharp
 [JsonConstructor]
+[SetsRequiredMembers]
 public PublicKeyCredentialDescriptor(byte[] id, AuthenticatorTransport transports = AuthenticatorTransport.NoRestrictions, string type = "public-key")
 ```
 
@@ -35,9 +39,15 @@ public PublicKeyCredentialDescriptor(byte[] id, AuthenticatorTransport transport
 
 `id` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
 
+Credential identifier.
+
 `transports` [AuthenticatorTransport](DSInternals.Win32.WebAuthn.AuthenticatorTransport.md)
 
+Supported authenticator transports for this credential.
+
 `type` [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+Credential type. Defaults to <code>public-key</code>.
 
 ## Properties
 
@@ -48,7 +58,7 @@ This member contains the credential ID of the public key credential the caller i
 ```csharp
 [JsonPropertyName("id")]
 [JsonConverter(typeof(Base64UrlConverter))]
-public byte[] Id { get; }
+public required byte[] Id { get; init; }
 ```
 
 #### Property Value
@@ -61,7 +71,8 @@ This member contains a hint as to how the client might communicate with the mana
 
 ```csharp
 [JsonPropertyName("transports")]
-public AuthenticatorTransport Transports { get; }
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+public AuthenticatorTransport Transports { get; init; }
 ```
 
 #### Property Value
@@ -74,7 +85,7 @@ This member contains the type of the public key credential the caller is referri
 
 ```csharp
 [JsonPropertyName("type")]
-public string Type { get; }
+public required string Type { get; init; }
 ```
 
 #### Property Value

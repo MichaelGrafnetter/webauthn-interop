@@ -1,5 +1,5 @@
 ---
-external help file: DSInternals.Passkeys-help.xml
+external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
 online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyAuthenticatorPlugin.md
 schema: 2.0.0
@@ -24,21 +24,21 @@ These plugins are registered under HKLM\SOFTWARE\Microsoft\FIDO.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+```powershell
 Get-PasskeyAuthenticatorPlugin
 ```
 
 Lists all registered authenticator plugins.
 
 ### EXAMPLE 2
-```
+```powershell
 Get-PasskeyAuthenticatorPlugin | Where-Object Enabled -eq $true
 ```
 
 Lists only enabled authenticator plugins.
 
 ### EXAMPLE 3
-```
+```powershell
 Get-PasskeyAuthenticatorPlugin | Select-Object -Property Name,PackageFamilyName,Enabled
 ```
 
@@ -57,3 +57,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-PasskeyAuthenticator](Get-PasskeyAuthenticator.md)
+

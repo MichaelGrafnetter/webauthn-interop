@@ -5,6 +5,11 @@ Import-Module -Name Microsoft.Graph.Identity.SignIns -ErrorAction Stop
 .SYNOPSIS
 Retrieves creation options required to generate and register a Microsoft Entra ID compatible passkey.
 
+.DESCRIPTION
+Retrieves a server-issued challenge and the associated WebAuthn parameters needed to register (attest) a new passkey for the specified Microsoft Entra ID user. The returned object can be piped to New-Passkey to drive the local authenticator and then to Register-EntraPasskey to complete enrollment.
+
+Requires an active Microsoft Graph connection (Connect-MgGraph) with the UserAuthenticationMethod.ReadWrite.All scope. The caller must be an administrator; self-service is not supported.
+
 .PARAMETER UserId
 The unique identifier of the user. Either the object id (GUID) or UPN.
 
@@ -12,19 +17,33 @@ The unique identifier of the user. Either the object id (GUID) or UPN.
 Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
 
 .EXAMPLE
-PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \> Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com'
+Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com'
+
+Fetches default creation options for the specified user.
 
 .EXAMPLE
-PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \> Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeTimeout (New-TimeSpan -Minutes 10)
+Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' -ChallengeTimeout (New-TimeSpan -Minutes 10)
+
+Fetches creation options with an extended 10-minute challenge timeout, useful when the user needs more time to complete the authenticator ceremony.
 
 .EXAMPLE
-PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \> Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+
+Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.
 
 .NOTES
 Self-service operations aren't supported for Entra ID.
+
+.LINK
+Register-EntraPasskey
+
+.LINK
+New-Passkey
+
+.LINK
 https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
 
 #>
@@ -78,6 +97,14 @@ function Get-EntraPasskeyRegistrationOptions
 .SYNOPSIS
 Registers a new passkey in Microsoft Entra ID.
 
+.DESCRIPTION
+Registers a new passkey for the specified user in Microsoft Entra ID.
+
+When called without the -Passkey parameter, this cmdlet performs the full registration flow: it requests a challenge from Entra ID, drives the local authenticator (which prompts the system passkey UI), and submits the attestation to complete enrollment.
+When called with -Passkey, it submits a previously produced attestation, which is useful when the credential ceremony was run separately (e.g. via New-Passkey in a pipeline).
+
+Requires an active Microsoft Graph connection (Connect-MgGraph) with the UserAuthenticationMethod.ReadWrite.All scope. The caller must be an administrator; self-service is not supported.
+
 .PARAMETER UserId
 The unique identifier of the user. Either the object id (GUID) or UPN.
 
@@ -91,19 +118,33 @@ The attestation credential produced by the local WebAuthn authenticator (e.g. vi
 Custom name given to the registered passkey.
 
 .EXAMPLE
-PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \> Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+
+Performs the full registration ceremony in one step: fetches creation options, prompts the local authenticator, and submits the attestation to Entra ID with the given display name.
 
 .EXAMPLE
-PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \> Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
+Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
+
+Registers a passkey using an extended 10-minute challenge timeout, giving the user more time to complete the authenticator ceremony.
 
 .EXAMPLE
-PS \> Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-PS \> Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+
+Splits the registration into explicit pipeline stages: fetch options, create the credential locally, and submit the attestation. Equivalent to the single-step form but lets the caller inspect intermediate values.
 
 .NOTES
 Self-service operations aren't supported for Entra ID.
+
+.LINK
+Get-EntraPasskeyRegistrationOptions
+
+.LINK
+New-Passkey
+
+.LINK
 https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods
 
 #>

@@ -5,8 +5,6 @@ Creates a new WebAuthn credential by driving the local authenticator.
 .DESCRIPTION
 Calls the Windows WebAuthn API to make a credential according to the provided PublicKeyCredentialCreationOptions, triggering the system passkey UI. Returns the resulting AttestationPublicKeyCredential, which can be wrapped into a provider-specific attestation response and submitted to Microsoft Entra ID, Okta, or any other relying party.
 
-When called with OktaWebauthnCredentialCreationOptions (as returned by Get-OktaPasskeyRegistrationOptions), the returned credential is wrapped into an OktaWebauthnAttestationResponse ready for submission to the Okta API via Register-OktaPasskey.
-
 .PARAMETER Options
 The WebAuthn public key credential creation options. Returned directly by Get-EntraPasskeyRegistrationOptions.
 
@@ -14,13 +12,37 @@ The WebAuthn public key credential creation options. Returned directly by Get-En
 The Okta-specific credential creation options. Returned by Get-OktaPasskeyRegistrationOptions.
 
 .EXAMPLE
-PS \> $credential = Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey
+$credential = Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey
+
+Retrieves creation options from Microsoft Entra ID and creates a new passkey on the local authenticator without registering it.
 
 .EXAMPLE
-PS \> Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+
+Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.
 
 .EXAMPLE
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-OktaPasskey
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-OktaPasskey
+
+Performs end-to-end passkey registration in Okta in a single pipeline.
+
+.LINK
+Get-PasskeyCreationOptions
+
+.LINK
+Get-EntraPasskeyRegistrationOptions
+
+.LINK
+Get-OktaPasskeyRegistrationOptions
+
+.LINK
+Register-EntraPasskey
+
+.LINK
+Register-OktaPasskey
+
+.LINK
+Test-Passkey
 
 #>
 function New-Passkey
@@ -119,19 +141,28 @@ The timeout for the credential creation operation.
 An optional hint to the client about which authenticator type to use (e.g., SecurityKey, ClientDevice, Hybrid).
 
 .EXAMPLE
-PS \> Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' -UserDisplayName 'John Doe'
+Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' -UserDisplayName 'John Doe'
 
 Builds creation options for a new passkey using mostly default settings.
 
 .EXAMPLE
-PS \> Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' | New-Passkey
+Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' | New-Passkey
 
 Builds creation options and immediately creates a new passkey on the local authenticator.
 
 .EXAMPLE
-PS \> Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' -Hint SecurityKey -ResidentKey Required -UserVerification Required
+Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' -Hint SecurityKey -ResidentKey Required -UserVerification Required
 
 Builds creation options targeting a security key with required user verification and a discoverable credential.
+
+.LINK
+New-Passkey
+
+.LINK
+New-PasskeyRandomChallenge
+
+.LINK
+Test-Passkey
 
 #>
 function Get-PasskeyCreationOptions
@@ -167,10 +198,7 @@ function Get-PasskeyCreationOptions
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [Alias('Algorithms', 'PubKeyCredParams')]
-        [DSInternals.Win32.WebAuthn.COSE.Algorithm[]] $Algorithm = @(
-            [DSInternals.Win32.WebAuthn.COSE.Algorithm]::ES256,
-            [DSInternals.Win32.WebAuthn.COSE.Algorithm]::RS256
-        ),
+        [DSInternals.Win32.WebAuthn.COSE.Algorithm[]] $Algorithm = @([DSInternals.Win32.WebAuthn.COSE.Algorithm]::ES256, [DSInternals.Win32.WebAuthn.COSE.Algorithm]::RS256),
 
         [Parameter(Mandatory = $false)]
         [DSInternals.Win32.WebAuthn.UserVerificationRequirement] $UserVerification = [DSInternals.Win32.WebAuthn.UserVerificationRequirement]::Preferred,
@@ -306,26 +334,32 @@ An optional credential ID to test a specific credential. Accepts either a byte a
 An optional hint to the client about which credential source to use (e.g., SecurityKey, ClientDevice, Hybrid).
 
 .EXAMPLE
-PS \> Test-Passkey -RelyingPartyId 'login.microsoft.com'
+Test-Passkey -RelyingPartyId 'login.microsoft.com'
 
 Tests any passkey registered for login.microsoft.com with a random challenge.
 
 .EXAMPLE
-PS \> $challenge = Get-PasskeyRandomChallenge -Length 32
-PS \> Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge
+$challenge = Get-PasskeyRandomChallenge -Length 32
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge
 
 Tests any passkey registered for login.microsoft.com with a specific challenge.
 
 .EXAMPLE
-PS \> $credential = Get-PasskeyWindowsHello | Select-Object -First 1
-PS \> Test-Passkey -RelyingPartyId $credential.RelyingPartyInformation.Id -CredentialId $credential.CredentialId
+$credential = Get-PasskeyWindowsHello | Select-Object -First 1
+Test-Passkey -RelyingPartyId $credential.RelyingPartyInformation.Id -CredentialId $credential.CredentialId
 
 Tests a specific platform credential.
 
 .EXAMPLE
-PS \> Test-Passkey -RelyingPartyId 'login.microsoft.com' -Hint SecurityKey
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Hint SecurityKey
 
 Tests a passkey with a hint that a security key should be used.
+
+.LINK
+Get-PasskeyWindowsHello
+
+.LINK
+New-PasskeyRandomChallenge
 
 #>
 function Test-Passkey
@@ -422,19 +456,22 @@ Retrieves information about third-party passkey providers (such as 1Password, Bi
 as authenticator plugins in Windows. These plugins are registered under HKLM\SOFTWARE\Microsoft\FIDO.
 
 .EXAMPLE
-PS \> Get-PasskeyAuthenticatorPlugin
+Get-PasskeyAuthenticatorPlugin
 
 Lists all registered authenticator plugins.
 
 .EXAMPLE
-PS \> Get-PasskeyAuthenticatorPlugin | Where-Object Enabled -eq $true
+Get-PasskeyAuthenticatorPlugin | Where-Object Enabled -eq $true
 
 Lists only enabled authenticator plugins.
 
 .EXAMPLE
-PS \> Get-PasskeyAuthenticatorPlugin | Select-Object -Property Name,PackageFamilyName,Enabled
+Get-PasskeyAuthenticatorPlugin | Select-Object -Property Name,PackageFamilyName,Enabled
 
 Lists authenticator plugins with selected properties.
+
+.LINK
+Get-PasskeyAuthenticator
 
 #>
 function Get-PasskeyAuthenticatorPlugin
@@ -476,19 +513,25 @@ Retrieves a list of authenticators available on the system using the Windows Web
 This includes information about authenticator IDs, names, logos, and lock status.
 
 .EXAMPLE
-PS \> Get-PasskeyAuthenticator
+Get-PasskeyAuthenticator
 
 Lists all available authenticators.
 
 .EXAMPLE
-PS \> Get-PasskeyAuthenticator | Where-Object { -not $PSItem.Locked }
+Get-PasskeyAuthenticator | Where-Object { -not $PSItem.Locked }
 
 Lists only unlocked authenticators.
 
 .EXAMPLE
-PS \> Get-PasskeyAuthenticator | Format-Table -Prperty AuthenticatorName,Locked
+Get-PasskeyAuthenticator | Format-Table -Prperty AuthenticatorName,Locked
 
 Lists authenticator names and lock status in a table.
+
+.LINK
+Get-PasskeyAuthenticatorPlugin
+
+.LINK
+Get-PasskeyWindowsHello
 
 #>
 function Get-PasskeyAuthenticator
@@ -534,14 +577,23 @@ and whether credentials are removable or backed up.
 Optional relying party ID to filter credentials. If not specified, all credentials are returned.
 
 .EXAMPLE
-PS \> Get-PasskeyWindowsHello
+Get-PasskeyWindowsHello
 
 Lists all platform credentials.
 
 .EXAMPLE
-PS \> Get-PasskeyWindowsHello -RelyingPartyId 'login.microsoft.com'
+Get-PasskeyWindowsHello -RelyingPartyId 'login.microsoft.com'
 
 Lists credentials for a specific relying party.
+
+.LINK
+Remove-PasskeyWindowsHello
+
+.LINK
+Test-Passkey
+
+.LINK
+Get-PasskeyAuthenticator
 
 #>
 function Get-PasskeyWindowsHello
@@ -594,24 +646,27 @@ Accepts either a byte array or a Base64Url encoded string.
 A CredentialDetails object obtained from Get-PasskeyWindowsHello.
 
 .EXAMPLE
-PS \> $cred = Get-PasskeyWindowsHello | Select-Object -First 1
-PS \> Remove-PasskeyWindowsHello -CredentialId $cred.CredentialId
+$cred = Get-PasskeyWindowsHello | Select-Object -First 1
+Remove-PasskeyWindowsHello -CredentialId $cred.CredentialId
 
 Removes a specific platform credential by ID.
 
 .EXAMPLE
-PS \> Get-PasskeyWindowsHello | Where-Object { $PSItem.RelyingPartyInformation.Id -eq 'example.com' } | Remove-PasskeyWindowsHello
+Get-PasskeyWindowsHello | Where-Object { $PSItem.RelyingPartyInformation.Id -eq 'example.com' } | Remove-PasskeyWindowsHello
 
 Removes all credentials for a specific relying party using pipeline input.
 
 .EXAMPLE
-PS \> Remove-PasskeyWindowsHello -CredentialId 'dGVzdC1jcmVkZW50aWFsLWlk'
+Remove-PasskeyWindowsHello -CredentialId 'dGVzdC1jcmVkZW50aWFsLWlk'
 
 Removes a credential using a Base64Url encoded credential ID.
 
 .NOTES
 Requires Windows with WebAuthn API version 4 or later (Windows 10 2004+).
 This operation requires appropriate permissions and may trigger a Windows Security prompt.
+
+.LINK
+Get-PasskeyWindowsHello
 
 #>
 function Remove-PasskeyWindowsHello
@@ -659,12 +714,31 @@ function Remove-PasskeyWindowsHello
 .SYNOPSIS
 Generates a random challenge to be used by WebAuthn.
 
+.DESCRIPTION
+Returns a cryptographically random byte array of the requested length, suitable for use as a WebAuthn challenge during credential creation or assertion.
+
 .PARAMETER Length
 The length of the challenge in bytes.
 
 .EXAMPLE
-PS \> New-PasskeyRandomChallenge -Length 32
-Generates a random 32-byte challenge.
+New-PasskeyRandomChallenge -Length 64
+
+Generates a random 64-byte challenge.
+
+.EXAMPLE
+$challenge = New-PasskeyRandomChallenge
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge
+
+Generates a default 32-byte challenge and uses it for a passkey assertion.
+
+.LINK
+New-Passkey
+
+.LINK
+Test-Passkey
+
+.LINK
+Get-PasskeyCreationOptions
 
 #>
 function New-PasskeyRandomChallenge

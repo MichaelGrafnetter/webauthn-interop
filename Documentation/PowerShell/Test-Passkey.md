@@ -1,5 +1,5 @@
 ---
-external help file: DSInternals.Passkeys-help.xml
+external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
 online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Test-Passkey.md
 schema: 2.0.0
@@ -26,29 +26,34 @@ verifying that the passkey is working correctly.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+```powershell
 Test-Passkey -RelyingPartyId 'login.microsoft.com'
 ```
 
 Tests any passkey registered for login.microsoft.com with a random challenge.
 
 ### EXAMPLE 2
-```
+```powershell
 $challenge = Get-PasskeyRandomChallenge -Length 32
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge
 ```
-
-PS \\\> Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge
 
 Tests any passkey registered for login.microsoft.com with a specific challenge.
 
 ### EXAMPLE 3
-```
+```powershell
 $credential = Get-PasskeyWindowsHello | Select-Object -First 1
+Test-Passkey -RelyingPartyId $credential.RelyingPartyInformation.Id -CredentialId $credential.CredentialId
 ```
-
-PS \\\> Test-Passkey -RelyingPartyId $credential.RelyingPartyInformation.Id -CredentialId $credential.CredentialId
 
 Tests a specific platform credential.
+
+### EXAMPLE 4
+```powershell
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Hint SecurityKey
+```
+
+Tests a passkey with a hint that a security key should be used.
 
 ## PARAMETERS
 
@@ -170,7 +175,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.Win32.WebAuthn.PublicKeyCredential
+### DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-PasskeyWindowsHello](Get-PasskeyWindowsHello.md)
+
+[New-PasskeyRandomChallenge](New-PasskeyRandomChallenge.md)
+

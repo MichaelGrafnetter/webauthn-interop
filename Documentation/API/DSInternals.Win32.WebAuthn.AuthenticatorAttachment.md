@@ -6,7 +6,7 @@ Assembly: DSInternals.Win32.WebAuthn.dll
 This enumeration’s values describe authenticators' attachment modalities.
 
 ```csharp
-[JsonConverter(typeof(JsonCustomEnumConverter<AuthenticatorAttachment>))]
+[JsonConverter(typeof(WebAuthnJsonEnumConverter<AuthenticatorAttachment>))]
 public enum AuthenticatorAttachment : uint
 ```
 

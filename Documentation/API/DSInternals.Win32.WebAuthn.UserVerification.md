@@ -6,7 +6,7 @@ Assembly: DSInternals.Win32.WebAuthn.dll
 Defines the credential protection policy.
 
 ```csharp
-[JsonConverter(typeof(JsonCustomEnumConverter<UserVerification>))]
+[JsonConverter(typeof(WebAuthnJsonEnumConverter<UserVerification>))]
 public enum UserVerification : uint
 ```
 

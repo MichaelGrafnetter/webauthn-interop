@@ -35,12 +35,13 @@ Contains the friendly name associated with the user account by the Relying Party
 
 ```csharp
 [JsonPropertyName("displayName")]
-public string DisplayName { get; set; }
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? DisplayName { get; set; }
 ```
 
 #### Property Value
 
- [string](https://learn.microsoft.com/dotnet/api/system.string)
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
 ### <a id="DSInternals_Win32_WebAuthn_UserInformation_Icon"></a> Icon
 
@@ -49,12 +50,12 @@ Optional URL that can be used to retrieve an image containing the user's current
 ```csharp
 [JsonPropertyName("icon")]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-public string Icon { get; set; }
+public string? Icon { get; set; }
 ```
 
 #### Property Value
 
- [string](https://learn.microsoft.com/dotnet/api/system.string)
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
 ### <a id="DSInternals_Win32_WebAuthn_UserInformation_Id"></a> Id
 
@@ -76,10 +77,11 @@ Contains a detailed name for this account, such as "john.p.smith@example.com".
 
 ```csharp
 [JsonPropertyName("name")]
-public string Name { get; set; }
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? Name { get; set; }
 ```
 
 #### Property Value
 
- [string](https://learn.microsoft.com/dotnet/api/system.string)
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
 

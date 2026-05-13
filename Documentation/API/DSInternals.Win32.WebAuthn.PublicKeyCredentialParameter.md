@@ -3,8 +3,10 @@
 Namespace: [DSInternals.Win32.WebAuthn](DSInternals.Win32.WebAuthn.md)  
 Assembly: DSInternals.Win32.WebAuthn.dll  
 
+Describes an acceptable public key credential algorithm and type pair.
+
 ```csharp
-public class PublicKeyCredentialParameter
+public sealed class PublicKeyCredentialParameter
 ```
 
 #### Inheritance
@@ -18,13 +20,14 @@ public class PublicKeyCredentialParameter
 [object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
 [object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 
 [object.GetType\(\)](https://learn.microsoft.com/dotnet/api/system.object.gettype), 
-[object.MemberwiseClone\(\)](https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone), 
 [object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals), 
 [object.ToString\(\)](https://learn.microsoft.com/dotnet/api/system.object.tostring)
 
 ## Constructors
 
 ### <a id="DSInternals_Win32_WebAuthn_PublicKeyCredentialParameter__ctor_DSInternals_Win32_WebAuthn_COSE_Algorithm_System_String_"></a> PublicKeyCredentialParameter\(Algorithm, string\)
+
+Initializes a new credential parameter instance.
 
 ```csharp
 [JsonConstructor]
@@ -35,7 +38,11 @@ public PublicKeyCredentialParameter(Algorithm algorithm, string type)
 
 `algorithm` [Algorithm](DSInternals.Win32.WebAuthn.COSE.Algorithm.md)
 
+COSE signature algorithm.
+
 `type` [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+Credential type. Must be <code>public-key</code>.
 
 ## Properties
 

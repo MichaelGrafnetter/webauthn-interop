@@ -36,12 +36,12 @@ Optional URL pointing to RP's logo.
 ```csharp
 [JsonPropertyName("icon")]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-public string Icon { get; set; }
+public string? Icon { get; init; }
 ```
 
 #### Property Value
 
- [string](https://learn.microsoft.com/dotnet/api/system.string)
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
 ### <a id="DSInternals_Win32_WebAuthn_RelyingPartyInformation_Id"></a> Id
 
@@ -49,12 +49,13 @@ Identifier for the RP.
 
 ```csharp
 [JsonPropertyName("id")]
-public string Id { get; set; }
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? Id { get; init; }
 ```
 
 #### Property Value
 
- [string](https://learn.microsoft.com/dotnet/api/system.string)
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
 ### <a id="DSInternals_Win32_WebAuthn_RelyingPartyInformation_Name"></a> Name
 
@@ -62,7 +63,8 @@ Contains the friendly name of the Relying Party, such as "Acme Corporation", "Wi
 
 ```csharp
 [JsonPropertyName("name")]
-public string Name { get; set; }
+[JsonRequired]
+public required string Name { get; init; }
 ```
 
 #### Property Value

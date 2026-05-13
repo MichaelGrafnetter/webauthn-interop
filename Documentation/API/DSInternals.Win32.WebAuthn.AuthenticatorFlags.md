@@ -7,6 +7,8 @@ Authenticator data flags
 
 ```csharp
 [Flags]
+[SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "AuthenticatorFlags is the standard WebAuthn term.")]
+[SuppressMessage("Design", "CA1028:Enum Storage should be Int32", Justification = "The flags are defined as a byte in the WebAuthn specification.")]
 public enum AuthenticatorFlags : byte
 ```
 
@@ -14,49 +16,37 @@ public enum AuthenticatorFlags : byte
 
 `UserPresent = 1` 
 
-User Present indicates that the user presence test has completed successfully.
-
-
-
-`RFU1 = 2` 
-
-Reserved for future use (RFU1)
+User Present (UP) - Bit 0.
 
 
 
 `UserVerified = 4` 
 
-User Verified indicates that the user verification process has completed successfully.
+User Verified (UV) - Bit 2.
 
 
 
-`RFU2 = 8` 
+`BackupEligible = 8` 
 
-Reserved for future use (RFU2)
-
-
-
-`RFU3 = 16` 
-
-Reserved for future use (RFU3)
+Backup Eligibility (BE) - Bit 3.
 
 
 
-`RFU4 = 32` 
+`BackedUp = 16` 
 
-Reserved for future use (RFU4)
+Backup State (BS) - Bit 4.
 
 
 
 `AttestationData = 64` 
 
-Attested credential data included indicates that the authenticator added attested credential data to the authenticator data.
+Attested Credential Data (AT) - Bit 6.
 
 
 
 `ExtensionData = 128` 
 
-Extension data included indicates that the authenticator added extension data to the authenticator data.
+Extension Data (ED) - Bit 7.
 
 
 

@@ -82,15 +82,15 @@ public static WindowHandle MainWindow { get; }
 
 ## Methods
 
-### <a id="DSInternals_Win32_WebAuthn_WindowHandle_Equals_System_Object_"></a> Equals\(object\)
+### <a id="DSInternals_Win32_WebAuthn_WindowHandle_Equals_System_Object_"></a> Equals\(object?\)
 
 ```csharp
-public override bool Equals(object obj)
+public override bool Equals(object? obj)
 ```
 
 #### Parameters
 
-`obj` [object](https://learn.microsoft.com/dotnet/api/system.object)
+`obj` [object](https://learn.microsoft.com/dotnet/api/system.object)?
 
 #### Returns
 

@@ -20,7 +20,7 @@ param(
 [string] $modulePath = Join-Path -Path $rootDir -ChildPath "Build\bin\PSModule\$Configuration\DSInternals.Passkeys"
 [string] $mdHelpPath = Join-Path -Path $rootDir -ChildPath 'Documentation\PowerShell' -ErrorAction Stop
 [string] $modulePagePath = Join-Path -Path $mdHelpPath -ChildPath 'README.md' -ErrorAction Stop
-[string] $xmlHelpPath = Join-Path -Path $modulePath -ChildPath $locale -ErrorAction Stop
+[string] $xmlHelpPath = Join-Path -Path $rootDir -ChildPath "Src\DSInternals.Passkeys\$locale" -ErrorAction Stop
 
 # Import dependencies
 Import-Module -Name platyPS -ErrorAction Stop

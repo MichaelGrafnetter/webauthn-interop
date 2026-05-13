@@ -20,8 +20,8 @@ public sealed class Base64UrlConverter : JsonConverter<byte[]>
 
 [JsonConverter<byte\[\]\>.CanConvert\(Type\)](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.canconvert), 
 [JsonConverter<byte\[\]\>.Read\(ref Utf8JsonReader, Type, JsonSerializerOptions\)](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.read), 
-[JsonConverter<byte\[\]\>.Write\(Utf8JsonWriter, byte\[\], JsonSerializerOptions\)](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.write), 
 [JsonConverter<byte\[\]\>.ReadAsPropertyName\(ref Utf8JsonReader, Type, JsonSerializerOptions\)](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.readaspropertyname), 
+[JsonConverter<byte\[\]\>.Write\(Utf8JsonWriter, byte\[\], JsonSerializerOptions\)](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.write), 
 [JsonConverter<byte\[\]\>.WriteAsPropertyName\(Utf8JsonWriter, byte\[\], JsonSerializerOptions\)](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.writeaspropertyname), 
 [JsonConverter<byte\[\]\>.HandleNull](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.handlenull), 
 [JsonConverter<byte\[\]\>.Type](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter\-1.type), 
@@ -36,17 +36,17 @@ public sealed class Base64UrlConverter : JsonConverter<byte[]>
 
 ## Methods
 
-### <a id="DSInternals_Win32_WebAuthn_Base64UrlConverter_FromBase64UrlString_System_String_"></a> FromBase64UrlString\(string?\)
+### <a id="DSInternals_Win32_WebAuthn_Base64UrlConverter_FromBase64UrlString_System_String_"></a> FromBase64UrlString\(string\)
 
 Converts a Base64Url encoded string to a byte array
 
 ```csharp
-public static byte[] FromBase64UrlString(string? input)
+public static byte[] FromBase64UrlString(string input)
 ```
 
 #### Parameters
 
-`input` [string](https://learn.microsoft.com/dotnet/api/system.string)?
+`input` [string](https://learn.microsoft.com/dotnet/api/system.string)
 
 The Base64Url encoded string
 
@@ -58,7 +58,7 @@ The byte array represented by the encoded string
 
 ### <a id="DSInternals_Win32_WebAuthn_Base64UrlConverter_FromBase64UrlString_System_ReadOnlySpan_System_Byte__"></a> FromBase64UrlString\(ReadOnlySpan<byte\>\)
 
-Converts a Base64Url encoded string to a byte array
+Converts a Base64Url or Base64 encoded string to a byte array
 
 ```csharp
 public static byte[] FromBase64UrlString(ReadOnlySpan<byte> input)
@@ -78,7 +78,7 @@ The byte array represented by the encoded string
 
 ### <a id="DSInternals_Win32_WebAuthn_Base64UrlConverter_Read_System_Text_Json_Utf8JsonReader__System_Type_System_Text_Json_JsonSerializerOptions_"></a> Read\(ref Utf8JsonReader, Type, JsonSerializerOptions\)
 
-Reads and converts the JSON to type <code class="typeparamref">T</code>.
+Reads a Base64Url-encoded JSON string into a byte array.
 
 ```csharp
 public override byte[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -88,45 +88,25 @@ public override byte[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonS
 
 `reader` [Utf8JsonReader](https://learn.microsoft.com/dotnet/api/system.text.json.utf8jsonreader)
 
-The reader.
+JSON reader positioned on the value.
 
 `typeToConvert` [Type](https://learn.microsoft.com/dotnet/api/system.type)
 
-The type to convert.
+Target CLR type.
 
 `options` [JsonSerializerOptions](https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializeroptions)
 
-An object that specifies serialization options to use.
+Serializer options.
 
 #### Returns
 
  [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
 
-The converted value.
-
-### <a id="DSInternals_Win32_WebAuthn_Base64UrlConverter_ToBase64UrlString_System_Byte___"></a> ToBase64UrlString\(byte\[\]\)
-
-Converts a byte array to a Base64Url encoded string
-
-```csharp
-public static string ToBase64UrlString(byte[] input)
-```
-
-#### Parameters
-
-`input` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
-
-The byte array to convert
-
-#### Returns
-
- [string](https://learn.microsoft.com/dotnet/api/system.string)
-
-The Base64Url encoded form of the input
+Decoded binary value.
 
 ### <a id="DSInternals_Win32_WebAuthn_Base64UrlConverter_Write_System_Text_Json_Utf8JsonWriter_System_Byte___System_Text_Json_JsonSerializerOptions_"></a> Write\(Utf8JsonWriter, byte\[\], JsonSerializerOptions\)
 
-Writes a specified value as JSON.
+Writes a byte array as a Base64Url-encoded JSON string.
 
 ```csharp
 public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOptions options)
@@ -136,13 +116,13 @@ public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOp
 
 `writer` [Utf8JsonWriter](https://learn.microsoft.com/dotnet/api/system.text.json.utf8jsonwriter)
 
-The writer to write to.
+JSON writer.
 
 `value` [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
 
-The value to convert to JSON.
+Binary value to encode.
 
 `options` [JsonSerializerOptions](https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializeroptions)
 
-An object that specifies serialization options to use.
+Serializer options.
 

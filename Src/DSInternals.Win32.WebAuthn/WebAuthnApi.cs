@@ -197,18 +197,21 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
-        /// associated with its credential private key.
+        /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
+        /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
+        /// <returns>The attestation public key credential produced by the authenticator.</returns>
         public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options)
         {
             return AuthenticatorMakeCredential(options, default);
         }
 
         /// <summary>
-        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
-        /// associated with its credential private key.
+        /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
+        /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <returns>The attestation public key credential produced by the authenticator.</returns>
         public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options, WindowHandle windowHandle)
         {
             ArgumentNullException.ThrowIfNull(options);
@@ -234,9 +237,28 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
-        /// associated with its credential private key.
+        /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
+        /// <param name="rpEntity">Information about the relying party for which the credential is being created.</param>
+        /// <param name="userEntity">Information about the user account the credential will be bound to.</param>
+        /// <param name="challenge">Cryptographic challenge produced by the relying party to be signed by the authenticator.</param>
+        /// <param name="userVerificationRequirement">Indicates whether user verification is required, preferred, or discouraged.</param>
+        /// <param name="authenticatorAttachment">Constrains the type of authenticator that may be used (platform, cross-platform, or any).</param>
+        /// <param name="residentKey">Indicates whether the credential should be created as a discoverable (resident) credential.</param>
+        /// <param name="pubKeyCredParams">Ordered list of supported COSE algorithms for the new credential. Defaults to ES256 when null or empty.</param>
+        /// <param name="attestationConveyancePreference">Specifies how the relying party wants attestation to be conveyed.</param>
+        /// <param name="timeoutMilliseconds">Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.</param>
+        /// <param name="excludeCredentials">Credentials that the authenticator must not create a new credential for. Used to prevent duplicate registrations.</param>
+        /// <param name="enterpriseAttestation">Indicates whether enterprise attestation is requested and at what level.</param>
+        /// <param name="extensions">Client extension inputs for the credential creation operation.</param>
+        /// <param name="browserInPrivateMode">Indicates whether the request originates from a browser running in private/incognito mode.</param>
+        /// <param name="linkedDevice">Optional hybrid (cross-device) storage linked data for state-assisted transactions.</param>
+        /// <param name="credentialHints">Optional ordered list of public key credential hints describing the modality the relying party prefers.</param>
+        /// <param name="authenticatorId">Optional identifier of a specific authenticator to target.</param>
+        /// <param name="publicKeyCredentialCreationOptionsJson">Optional UTF-8 encoded JSON representation of the original creation options, forwarded to the authenticator.</param>
+        /// <param name="hostName">Optional host name used for client data construction; defaults to the relying party identifier.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <returns>The attestation public key credential produced by the authenticator.</returns>
         public AttestationPublicKeyCredential AuthenticatorMakeCredential(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
@@ -295,9 +317,27 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Creates a public key credential source bound to a managing authenticator and returns the credential public key
-        /// associated with its credential private key.
+        /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
+        /// <param name="rpEntity">Information about the relying party for which the credential is being created.</param>
+        /// <param name="userEntity">Information about the user account the credential will be bound to.</param>
+        /// <param name="clientData">The client data that contains the challenge, type, origin, and related context to be signed by the authenticator.</param>
+        /// <param name="userVerificationRequirement">Indicates whether user verification is required, preferred, or discouraged.</param>
+        /// <param name="authenticatorAttachment">Constrains the type of authenticator that may be used (platform, cross-platform, or any).</param>
+        /// <param name="residentKey">Indicates whether the credential should be created as a discoverable (resident) credential.</param>
+        /// <param name="pubKeyCredParams">Ordered list of supported COSE algorithms for the new credential. Defaults to ES256 when null or empty.</param>
+        /// <param name="attestationConveyancePreference">Specifies how the relying party wants attestation to be conveyed.</param>
+        /// <param name="timeoutMilliseconds">Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.</param>
+        /// <param name="excludeCredentials">Credentials that the authenticator must not create a new credential for. Used to prevent duplicate registrations.</param>
+        /// <param name="enterpriseAttestation">Indicates whether enterprise attestation is requested and at what level.</param>
+        /// <param name="extensions">Client extension inputs for the credential creation operation.</param>
+        /// <param name="browserInPrivateMode">Indicates whether the request originates from a browser running in private/incognito mode.</param>
+        /// <param name="linkedDevice">Optional hybrid (cross-device) storage linked data for state-assisted transactions.</param>
+        /// <param name="credentialHints">Optional ordered list of public key credential hints describing the modality the relying party prefers.</param>
+        /// <param name="authenticatorId">Optional identifier of a specific authenticator to target.</param>
+        /// <param name="publicKeyCredentialCreationOptionsJson">Optional UTF-8 encoded JSON representation of the original creation options, forwarded to the authenticator.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <returns>The attestation public key credential produced by the authenticator.</returns>
         public AttestationPublicKeyCredential AuthenticatorMakeCredential(
             RelyingPartyInformation rpEntity,
             UserInformation userEntity,
@@ -537,16 +577,21 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
         /// </summary>
+        /// <param name="options">The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.</param>
+        /// <returns>The signed assertion public key credential produced by the authenticator.</returns>
         public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options)
         {
             return AuthenticatorGetAssertion(options, default);
         }
 
         /// <summary>
-        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
         /// </summary>
+        /// <param name="options">The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <returns>The signed assertion public key credential produced by the authenticator.</returns>
         public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle)
         {
             ArgumentNullException.ThrowIfNull(options);
@@ -570,8 +615,23 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
         /// </summary>
+        /// <param name="rpId">Identifier of the relying party requesting the assertion.</param>
+        /// <param name="challenge">Cryptographic challenge produced by the relying party to be signed by the authenticator.</param>
+        /// <param name="userVerificationRequirement">Indicates whether user verification is required, preferred, or discouraged.</param>
+        /// <param name="authenticatorAttachment">Constrains the type of authenticator that may be used (platform, cross-platform, or any).</param>
+        /// <param name="timeoutMilliseconds">Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.</param>
+        /// <param name="allowCredentials">Optional list of credentials acceptable to the relying party for the assertion.</param>
+        /// <param name="extensions">Client extension inputs for the assertion operation.</param>
+        /// <param name="browserInPrivateMode">Indicates whether the request originates from a browser running in private/incognito mode.</param>
+        /// <param name="linkedDevice">Optional hybrid (cross-device) storage linked data for state-assisted transactions.</param>
+        /// <param name="autoFill">Indicates whether the request is a conditional UI (autofill) request.</param>
+        /// <param name="credentialHints">Optional ordered list of public key credential hints describing the modality the relying party prefers.</param>
+        /// <param name="authenticatorId">Optional identifier of a specific authenticator to target.</param>
+        /// <param name="publicKeyCredentialRequestOptionsJson">Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <returns>The signed assertion public key credential produced by the authenticator.</returns>
         public AssertionPublicKeyCredential AuthenticatorGetAssertion(
             string rpId,
             byte[] challenge,
@@ -621,8 +681,23 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Produces an assertion signature representing an assertion by the authenticator that the user has consented to a specific transaction, such as logging in or completing a purchase.
+        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
         /// </summary>
+        /// <param name="rpId">Identifier of the relying party requesting the assertion.</param>
+        /// <param name="clientData">The client data that contains the challenge, type, origin, and related context to be signed by the authenticator.</param>
+        /// <param name="userVerificationRequirement">Indicates whether user verification is required, preferred, or discouraged.</param>
+        /// <param name="authenticatorAttachment">Constrains the type of authenticator that may be used (platform, cross-platform, or any).</param>
+        /// <param name="timeoutMilliseconds">Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.</param>
+        /// <param name="allowCredentials">Optional list of credentials acceptable to the relying party for the assertion.</param>
+        /// <param name="extensions">Client extension inputs for the assertion operation.</param>
+        /// <param name="browserInPrivateMode">Indicates whether the request originates from a browser running in private/incognito mode.</param>
+        /// <param name="linkedDevice">Optional hybrid (cross-device) storage linked data for state-assisted transactions.</param>
+        /// <param name="autoFill">Indicates whether the request is a conditional UI (autofill) request.</param>
+        /// <param name="credentialHints">Optional ordered list of public key credential hints describing the modality the relying party prefers.</param>
+        /// <param name="authenticatorId">Optional identifier of a specific authenticator to target.</param>
+        /// <param name="publicKeyCredentialRequestOptionsJson">Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <returns>The signed assertion public key credential produced by the authenticator.</returns>
         public AssertionPublicKeyCredential AuthenticatorGetAssertion(
             string rpId,
             CollectedClientData clientData,
@@ -872,7 +947,8 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         /// <param name="rpId">Optional Id of the relying party that is making the request.</param>
         /// <param name="browserInPrivateMode">Indicates whether the browser is in private mode.</param>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <returns>The list of platform credentials matching the filter, or <see langword="null"/> when none are present.</returns>
+        /// <exception cref="NotSupportedException">Thrown when the running OS does not support platform credential management (added in API V4).</exception>
         public static IList<CredentialDetails>? GetPlatformCredentialList(string? rpId = null, bool browserInPrivateMode = false)
         {
             if (IsPlatformCredentialManagementSupported == false)
@@ -905,11 +981,11 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Removes a Public Key Credential Source stored on a Virtual Authenticator.
+        /// Removes a public key credential stored on the platform authenticator.
         /// </summary>
         /// <param name="credentialId">The ID of the credential to be removed.</param>
-        /// <exception cref="NotSupportedException"></exception>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NotSupportedException">Thrown when the running OS does not support platform credential management (added in API V4).</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="credentialId"/> is <see langword="null"/>.</exception>
         public static void DeletePlatformCredential(byte[] credentialId)
         {
             if (IsPlatformCredentialManagementSupported == false)
@@ -929,7 +1005,8 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Gets the list of available authenticators.
         /// </summary>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <returns>The list of authenticators currently visible to the platform, or <see langword="null"/> when none are present.</returns>
+        /// <exception cref="NotSupportedException">Thrown when the running OS does not support the authenticator list API (added in API V9).</exception>
         public static IList<AuthenticatorDetails>? GetAuthenticatorList()
         {
             if (IsAuthenticatorListSupported == false)
@@ -1016,6 +1093,9 @@ namespace DSInternals.Win32.WebAuthn
         /// <summary>
         /// Reads authenticator plugin information from a registry key.
         /// </summary>
+        /// <param name="pluginKey">The registry key that stores the plugin's values.</param>
+        /// <param name="userSid">Security identifier of the user the plugin is registered for.</param>
+        /// <param name="pluginGuid">CLSID that uniquely identifies the plugin.</param>
         private static AuthenticatorPluginInformation ReadPluginFromRegistry(RegistryKey pluginKey, string userSid, Guid pluginGuid)
         {
             var plugin = new AuthenticatorPluginInformation
@@ -1084,9 +1164,9 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>
-        /// Gets the cancellation ID for a canceled operation.
+        /// Obtains a new cancellation identifier that can later be passed to <see cref="CancelCurrentOperation"/> to abort an in-progress WebAuthn operation.
         /// </summary>
-        /// <returns>ID of the cancelled operation.</returns>
+        /// <returns>The cancellation identifier, or <see langword="null"/> if the running OS does not expose the asynchronous cancellation API.</returns>
         private static Guid? GetCancellationId()
         {
             try

@@ -32,12 +32,13 @@ public class HMACGetSecretInput
 
 ```csharp
 [JsonPropertyName("salt1")]
-public byte[] Salt1 { get; set; }
+[JsonConverter(typeof(Base64UrlConverter))]
+public byte[]? Salt1 { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 
 ### <a id="DSInternals_Win32_WebAuthn_HMACGetSecretInput_Salt2"></a> Salt2
 
@@ -45,10 +46,48 @@ Optional additional 32-byte random data. Used when the platform wants to roll ov
 
 ```csharp
 [JsonPropertyName("salt2")]
-public byte[] Salt2 { get; set; }
+[JsonConverter(typeof(Base64UrlConverter))]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public byte[]? Salt2 { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+## Methods
+
+### <a id="DSInternals_Win32_WebAuthn_HMACGetSecretInput_FromJson_System_String_"></a> FromJson\(string\)
+
+Deserializes a JSON string into hmac-secret extension inputs.
+
+```csharp
+public static HMACGetSecretInput? FromJson(string json)
+```
+
+#### Parameters
+
+`json` [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+JSON representation of hmac-secret extension inputs.
+
+#### Returns
+
+ [HMACGetSecretInput](DSInternals.Win32.WebAuthn.HMACGetSecretInput.md)?
+
+hmac-secret extension inputs if deserialization is successful; otherwise, null.
+
+### <a id="DSInternals_Win32_WebAuthn_HMACGetSecretInput_ToString"></a> ToString\(\)
+
+Serializes the hmac-secret extension inputs to JSON.
+
+```csharp
+public override string ToString()
+```
+
+#### Returns
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+JSON representation of these hmac-secret extension inputs.
 

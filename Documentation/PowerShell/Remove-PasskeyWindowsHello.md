@@ -1,7 +1,7 @@
 ---
-external help file: DSInternals.Passkeys-help.xml
+external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
-online version:
+online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Remove-PasskeyWindowsHello.md
 schema: 2.0.0
 ---
 
@@ -29,23 +29,22 @@ This operation is irreversible - once deleted, the credential cannot be recovere
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+```powershell
 $cred = Get-PasskeyWindowsHello | Select-Object -First 1
+Remove-PasskeyWindowsHello -CredentialId $cred.CredentialId
 ```
-
-PS \\\> Remove-PasskeyWindowsHello -CredentialId $cred.CredentialId
 
 Removes a specific platform credential by ID.
 
 ### EXAMPLE 2
-```
-Get-PasskeyWindowsHello | Where-Object { $_.RelyingPartyInformation.Id -eq 'example.com' } | Remove-PasskeyWindowsHello
+```powershell
+Get-PasskeyWindowsHello | Where-Object { $PSItem.RelyingPartyInformation.Id -eq 'example.com' } | Remove-PasskeyWindowsHello
 ```
 
 Removes all credentials for a specific relying party using pipeline input.
 
 ### EXAMPLE 3
-```
+```powershell
 Remove-PasskeyWindowsHello -CredentialId 'dGVzdC1jcmVkZW50aWFsLWlk'
 ```
 
@@ -128,3 +127,6 @@ Requires Windows with WebAuthn API version 4 or later (Windows 10 2004+).
 This operation requires appropriate permissions and may trigger a Windows Security prompt.
 
 ## RELATED LINKS
+
+[Get-PasskeyWindowsHello](Get-PasskeyWindowsHello.md)
+

@@ -42,32 +42,73 @@ class OktaRevocationInfo {
 .SYNOPSIS
 Retrieves creation options required to generate and register an Okta compatible passkey.
 
+.DESCRIPTION
+Retrieves a server-issued challenge and the associated WebAuthn parameters needed to register (attest) a new passkey for the specified Okta user. The returned object can be piped to New-Passkey to drive the local authenticator and then to Register-OktaPasskey to complete enrollment.
+
+For end-to-end passkey registration in Okta, calling Register-OktaPasskey directly is recommended; it performs the challenge request, authenticator ceremony, and activation in a single step. Use Get-OktaPasskeyRegistrationOptions only when you need to inspect or customize the intermediate options.
+
+Requires an active Okta connection (Connect-Okta).
+
 .PARAMETER UserId
-The unique identifier of the Okta user (20-character Okta id).
+The unique identifier of the Okta user.
+
+.PARAMETER Login
+The Okta user login (typically an email address such as 'user@example.com'). Resolved to a UserId through an API call.
 
 .PARAMETER ChallengeTimeout
 Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
+
+Fetches default creation options for the specified Okta user, identified by their Okta id.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -Login 'user@example.com'
 
-.NOTES
+Resolves the Okta user by login and then fetches creation options, avoiding the need to look up the Okta id manually.
+
+.EXAMPLE
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)
+
+Fetches creation options with a shorter 1-minute challenge timeout to tighten the registration window.
+
+.EXAMPLE
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -Login 'user@example.com' | New-Passkey | Register-OktaPasskey
+
+Performs end-to-end passkey registration in Okta in a single pipeline.
+
+.LINK
+Register-OktaPasskey
+
+.LINK
+New-Passkey
+
+.LINK
+Connect-Okta
+
+.LINK
 https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor
 
 #>
 function Get-OktaPasskeyRegistrationOptions
 {
+    [CmdletBinding(DefaultParameterSetName = 'UserId')]
     [OutputType([DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions])]
     param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'UserId')]
         [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
         [Alias('User')]
         [string] $UserId,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Login')]
+        [ValidateNotNullOrEmpty()]
+        [Alias('UserPrincipalName','UPN','UserName','Email')]
+        [string] $Login,
 
         [Parameter(Mandatory = $false)]
         [ValidateScript({
@@ -85,12 +126,21 @@ function Get-OktaPasskeyRegistrationOptions
     )
     begin {
         if ($null -eq $Script:OktaToken) {
-            throw 'Not connected to Okta, call Connect-Okta to get started.'
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.InvalidOperationException]::new('Not connected to Okta, call Connect-Okta to get started.'),
+                    'NotConnectedToOkta',
+                    [System.Management.Automation.ErrorCategory]::ConnectionError,
+                    $null))
         }
     }
     process {
         try
         {
+            if ($PSCmdlet.ParameterSetName -eq 'Login') {
+                $UserId = Get-OktaUserId -Login $Login -ErrorAction Stop
+            }
+
             Write-Debug "In Get-OktaPasskeyRegistrationOptions with ${UserId} and ${ChallengeTimeout}"
 
             [int] $TokenLifetimeSeconds = $ChallengeTimeout.TotalSeconds
@@ -141,8 +191,21 @@ function Get-OktaPasskeyRegistrationOptions
 .SYNOPSIS
 Registers a new passkey in Okta.
 
+.DESCRIPTION
+Registers a new passkey for the specified user in Okta by submitting the attestation that activates the corresponding webauthn factor.
+
+The cmdlet supports three usage patterns:
+- Pass only -UserId to perform the full ceremony end-to-end: request a challenge, drive the local authenticator, and submit the attestation.
+- Pipe an attestation from a previous New-Passkey call against Okta options.
+- Pass -UserId, -FactorId, and a raw -AttestationPublicKeyCredential when the challenge was issued and the credential ceremony was run separately.
+
+Requires an active Okta connection (Connect-Okta).
+
 .PARAMETER UserId
-The unique identifier of the Okta user (20-character Okta id).
+The unique identifier of the Okta user.
+
+.PARAMETER Login
+The Okta user login (typically an email address such as 'user@example.com'). Resolved to a UserId through an API call.
 
 .PARAMETER ChallengeTimeout
 Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.
@@ -151,30 +214,53 @@ Overrides the timeout of the server-generated challenge returned in the request.
 The passkey to be registered.
 
 .PARAMETER FactorId
-The 20-character Okta factor identifier returned by Get-OktaPasskeyRegistrationOptions, used together with -AttestationPublicKeyCredential as an alternative to -Passkey.
+The Okta factor identifier returned by Get-OktaPasskeyRegistrationOptions, used together with -AttestationPublicKeyCredential as an alternative to -Passkey.
 
 .PARAMETER AttestationPublicKeyCredential
 The raw attestation credential produced by the local WebAuthn authenticator (e.g. via New-Passkey), used together with -UserId and -FactorId as an alternative to -Passkey.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7
+
+Performs the full registration ceremony in one step: enrolls a webauthn factor, prompts the local authenticator, and activates the factor in Okta.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Register-OktaPasskey -Login 'user@example.com'
+
+Resolves the Okta user by login and then performs the full registration ceremony, avoiding the need to look up the Okta id manually.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-OktaPasskey
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)
+
+Registers a passkey using a shorter 1-minute challenge timeout to tighten the registration window.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> $options = Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
-PS \> $credential = New-Passkey -Options $options.PublicKeyOptions
-PS \> Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -FactorId $options.FactorId -AttestationPublicKeyCredential $credential
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-OktaPasskey
 
-.NOTES
+Splits the registration into explicit pipeline stages: enroll the factor, create the credential locally, and activate. Equivalent to the single-step form but lets the caller inspect intermediate values.
+
+.EXAMPLE
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+$options = Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
+$credential = New-Passkey -Options $options.PublicKeyOptions
+Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -FactorId $options.FactorId -AttestationPublicKeyCredential $credential
+
+Drives the WebAuthn ceremony with a raw AttestationPublicKeyCredential and assembles the activation manually. Useful when the credential was produced outside of an Okta-aware pipeline.
+
+.LINK
+Get-OktaPasskeyRegistrationOptions
+
+.LINK
+New-Passkey
+
+.LINK
+Connect-Okta
+
+.LINK
 https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor
 
 #>
@@ -189,21 +275,30 @@ function Register-OktaPasskey
         [Alias('User')]
         [string] $UserId,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'NewByLogin')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AttestationCredentialByLogin')]
+        [ValidateNotNullOrEmpty()]
+        [Alias('UserPrincipalName','UPN','UserName','Email')]
+        [string] $Login,
+
         [Parameter(Mandatory = $true, ParameterSetName = 'Existing', ValueFromPipeline = $true)]
         [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]
         $Passkey,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'AttestationCredential')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AttestationCredentialByLogin')]
         [ValidatePattern('^[A-Za-z0-9_-]{20}$')]
         [Alias('Factor')]
         [string] $FactorId,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'AttestationCredential', ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AttestationCredentialByLogin', ValueFromPipeline = $true)]
         [Alias('Attestation','Credential')]
         [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential]
         $AttestationPublicKeyCredential,
 
         [Parameter(Mandatory = $false, ParameterSetName = 'New')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'NewByLogin')]
         [ValidateScript({
             if ($PSItem -is [TimeSpan]) {
                 [timespan] $min = New-TimeSpan -Seconds 1
@@ -218,33 +313,51 @@ function Register-OktaPasskey
         [timespan] $ChallengeTimeout = (New-TimeSpan -Minutes 5)
     )
 
+    begin {
+        if ($null -eq $Script:OktaToken) {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.InvalidOperationException]::new('Not connected to Okta, call Connect-Okta to get started.'),
+                    'NotConnectedToOkta',
+                    [System.Management.Automation.ErrorCategory]::ConnectionError,
+                    $null))
+        }
+    }
+
     process {
         try {
-            if ($null -eq $Script:OktaToken) {
-                throw 'Not connected to Okta, call Connect-Okta to get started.'
+            # Translate login to ID
+            if ($PSCmdlet.ParameterSetName -in 'NewByLogin','AttestationCredentialByLogin') {
+                $UserId = Get-OktaUserId -Login $Login -ErrorAction Stop
             }
 
-            switch ($PSCmdlet.ParameterSetName) {
-                'New' {
-                    [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions] $options =
-                        Get-OktaPasskeyRegistrationOptions -UserId $UserId -ChallengeTimeout $ChallengeTimeout -ErrorAction Stop
 
-                    [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
-                    [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential] $credential =
-                        $api.AuthenticatorMakeCredential($options.PublicKeyOptions)
+            if ($PSCmdlet.ParameterSetName -in 'New','NewByLogin') {
+                # Fetch the challenge
+                [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions] $options =
+                    Get-OktaPasskeyRegistrationOptions -UserId $UserId -ChallengeTimeout $ChallengeTimeout -ErrorAction Stop
 
-                    $Passkey = [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]::new(
-                        $credential, $options.PublicKeyOptions.User.Id, $options.FactorId)
-                }
-                'AttestationCredential' {
-                    $Passkey = [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]::new(
-                        $AttestationPublicKeyCredential, $UserId, $FactorId)
-                }
+                # Display the passkey registration prompt
+                [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
+                [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential] $credential =
+                    $api.AuthenticatorMakeCredential($options.PublicKeyOptions)
+
+                $FactorId = $options.FactorId
+                $Passkey = [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]::new(
+                    $credential, $UserId, $FactorId)
+            }
+            elseif ($PSCmdlet.ParameterSetName -in 'AttestationCredential','AttestationCredentialByLogin') {
+                $Passkey = [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]::new(
+                    $AttestationPublicKeyCredential, $UserId, $FactorId)
+            }
+            else {
+                # 'Existing' parameter set: $Passkey was bound from the pipeline
+                $UserId = $Passkey.UserId
+                $FactorId = $Passkey.FactorId
             }
 
-            [string] $resolvedUserId = $Passkey.UserId
-            [string] $resolvedFactorId = $Passkey.FactorId
-            [string] $registrationPath = "/api/v1/users/${resolvedUserId}/factors/${resolvedFactorId}/lifecycle/activate"
+            # Activate the factor with the attestation response
+            [string] $registrationPath = "/api/v1/users/${UserId}/factors/${FactorId}/lifecycle/activate"
 
             Write-Debug ('Registration path: ' + $registrationPath)
 
@@ -264,21 +377,39 @@ function Register-OktaPasskey
 
 <#
 .SYNOPSIS
-Resolves an Okta user login to its 20-character Okta user id.
+Resolves an Okta user login to its Okta user id.
+
+.DESCRIPTION
+Queries the Okta users endpoint with a server-side filter on profile.login to return the first matching user's Okta id. Throws if no user matches the supplied login.
+
+Useful as a bridge when callers know the user's login (email) but the downstream cmdlets, like Register-OktaPasskey, require the Okta id. Requires an active Okta connection (Connect-Okta).
 
 .PARAMETER Login
 The Okta user login (typically an email address such as 'user@example.com').
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> Get-OktaUserId -Login 'user@example.com'
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaUserId -Login 'user@example.com'
+
+Looks up the Okta id for the user with the given login and returns it as a string.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
-PS \> $userId = Get-OktaUserId -Login 'user@example.com'
-PS \> Register-OktaPasskey -UserId $userId
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+$userId = Get-OktaUserId -Login 'user@example.com'
+Register-OktaPasskey -UserId $userId
 
-.NOTES
+Resolves the login to an Okta id and reuses it to register a passkey.
+
+.LINK
+Connect-Okta
+
+.LINK
+Get-OktaPasskeyRegistrationOptions
+
+.LINK
+Register-OktaPasskey
+
+.LINK
 https://developer.okta.com/docs/api/openapi/okta-management/management/tag/User/#tag/User/operation/listUsers
 
 #>
@@ -294,7 +425,12 @@ function Get-OktaUserId
 
     begin {
         if ($null -eq $Script:OktaToken) {
-            throw 'Not connected to Okta, call Connect-Okta to get started.'
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.InvalidOperationException]::new('Not connected to Okta, call Connect-Okta to get started.'),
+                    'NotConnectedToOkta',
+                    [System.Management.Automation.ErrorCategory]::ConnectionError,
+                    $null))
         }
     }
 
@@ -336,6 +472,15 @@ function Get-OktaUserId
 .SYNOPSIS
 Retrieves an access token to interact with Okta APIs.
 
+.DESCRIPTION
+Acquires an Okta access token via one of four authentication flows, depending on which parameters are supplied, and caches it for subsequent cmdlets in this module:
+- Interactive authorization code (public client) when only -Tenant and -ClientId are supplied.
+- Client credentials with private_key_jwt when -JsonWebKey is supplied.
+- Client credentials with client_secret_post when -ClientSecret is supplied.
+- Static API token (SSWS) when -ApiToken is supplied.
+
+The cached token is reused by Get-OktaPasskeyRegistrationOptions, Register-OktaPasskey, and Disconnect-Okta. Call Disconnect-Okta to revoke the token (for OAuth flows) or clear it from the session (for SSWS).
+
 .PARAMETER Tenant
 The unique identifier of Okta tenant, like 'example.okta.com'.
 
@@ -355,22 +500,38 @@ The client secret used to authenticate to the Okta application, in order to obta
 A static Okta API token (SSWS). Issued from the Okta admin console under Security > API > Tokens.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+
+Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the authorization code flow with PKCE.
 
 .EXAMPLE
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else')
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else')
+
+Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the authorization code flow with PKCE, requesting scopes `'okta.users.manage'` and `'okta.something.else'`.
 
 .EXAMPLE
-PS \> $jwk = '{"kty":"RSA","kid":"EE3QB0WvhuOwR9DuR6717OERKbDrBemrDKOK4Xvbf8c","d":"TmljZSB0cnkhICBCdXQgdGhpcyBpc...'
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else') -JsonWebKey $jwk
+$jwk = '{"kty":"RSA","kid":"EE3QB0WvhuOwR9DuR6717OERKbDrBemrDKOK4Xvbf8c","d":"TmljZSB0cnkhICBCdXQgdGhpcyBpc...'
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else') -JsonWebKey $jwk
+
+Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the client credentials flow with private_key_jwt, signing the client assertion with `$jwk` and requesting scopes `'okta.users.manage'` and `'okta.something.else'`.
 
 .EXAMPLE
-PS \> $secret = Read-Host -AsSecureString -Prompt 'Client secret'
-PS \> Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage') -ClientSecret $secret
+$secret = Read-Host -AsSecureString -Prompt 'Client secret'
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage') -ClientSecret $secret
+
+Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the client credentials flow with client_secret_post, authenticating with the SecureString-protected `$secret`.
 
 .EXAMPLE
-PS \> $apiToken = Read-Host -AsSecureString -Prompt 'API token'
-PS \> Connect-Okta -Tenant example.okta.com -ApiToken $apiToken
+$apiToken = Read-Host -AsSecureString -Prompt 'API token'
+Connect-Okta -Tenant example.okta.com -ApiToken $apiToken
+
+Connects to the `example.okta.com` tenant using a static SSWS API token issued in the Okta admin console, bypassing the OAuth flow entirely.
+
+.LINK
+Disconnect-Okta
+
+.LINK
+Register-OktaPasskey
 
 .LINK
 https://developer.okta.com/docs/guides/create-an-api-token/main/
@@ -513,11 +674,21 @@ function Connect-Okta
 .SYNOPSIS
 Revokes Okta access token.
 
-.EXAMPLE
-PS \> Disconnect-Okta
-
 .DESCRIPTION
-Revokes the Okta access token cached from the call to `Connect-Okta`.
+Revokes the Okta access token cached from the call to Connect-Okta and clears it from the session. For OAuth-issued Bearer tokens, this calls the /oauth2/v1/revoke endpoint using the same client authentication method that was used to obtain the token (client_assertion or client_secret). For static SSWS API tokens, the cached token is simply discarded from the session because Okta does not expose a revoke endpoint for static tokens; revocation for those is managed in the Okta admin console.
+
+If no token is cached, this cmdlet is a no-op.
+
+.EXAMPLE
+Disconnect-Okta
+
+Revokes the cached OAuth access token (or clears the cached SSWS token) and removes any associated revocation state from the session.
+
+.LINK
+Connect-Okta
+
+.LINK
+Register-OktaPasskey
 
 .LINK
 https://developer.okta.com/docs/guides/revoke-tokens/main/

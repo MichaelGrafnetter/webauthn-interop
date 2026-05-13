@@ -8,7 +8,7 @@
 # RootModule is intentionally omitted; all functionality is provided by the nested modules below.
 
 # Version number of this module.
-ModuleVersion = '3.0.0'
+ModuleVersion = '3.1.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -109,7 +109,6 @@ NestedModules = @('DSInternals.Passkeys.Core.psm1','DSInternals.Passkeys.Entra.p
 FunctionsToExport = @(
     'Get-EntraPasskeyRegistrationOptions',
     'Get-OktaPasskeyRegistrationOptions',
-    'Get-OktaUserId',
     'New-Passkey',
     'Register-EntraPasskey',
     'Register-OktaPasskey',
@@ -147,7 +146,9 @@ FileList = @(
     'DSInternals.Passkeys.Okta.psm1',
     'DSInternals.Passkeys.Format.ps1xml',
     'en-US/about_DSInternals.Passkeys.help.txt',
-    'en-US/DSInternals.Passkeys-help.xml',
+    'en-US/DSInternals.Passkeys.Core.psm1-help.xml',
+    'en-US/DSInternals.Passkeys.Entra.psm1-help.xml',
+    'en-US/DSInternals.Passkeys.Okta.psm1-help.xml',
     'net48/DSInternals.Win32.WebAuthn.dll',
     'net48/Microsoft.Bcl.AsyncInterfaces.dll',
     'net48/Microsoft.Bcl.HashCode.dll',

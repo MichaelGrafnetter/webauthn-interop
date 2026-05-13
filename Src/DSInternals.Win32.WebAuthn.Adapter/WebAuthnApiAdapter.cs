@@ -24,10 +24,10 @@ namespace DSInternals.Win32.WebAuthn.Adapter
         }
 
         /// <summary>
-        /// Creates a public key credential source bound to a managing authenticator.
+        /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
-        /// <param name="options">Options for credential creation.</param>
-        /// <returns>The credential public key associated with the credential private key.</returns>
+        /// <param name="options">The Fido2NetLib credential creation options describing the relying party, the user, and the desired authenticator behavior.</param>
+        /// <returns>The raw attestation response that the relying party can persist to register the new credential.</returns>
         public AuthenticatorAttestationRawResponse AuthenticatorMakeCredential(CredentialCreateOptions options)
         {
             ArgumentNullException.ThrowIfNull(options);
@@ -78,11 +78,11 @@ namespace DSInternals.Win32.WebAuthn.Adapter
         }
 
         /// <summary>
-        /// Asynchronously creates a public key credential source bound to a managing authenticator.
+        /// Asynchronously creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
-        /// <param name="options">Options for credential creation.</param>
-        /// <param name="cancellationToken">Cancellation token used to cancel the operation.</param>
-        /// <returns>The credential public key associated with the credential private key.</returns>
+        /// <param name="options">The Fido2NetLib credential creation options describing the relying party, the user, and the desired authenticator behavior.</param>
+        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
+        /// <returns>The raw attestation response that the relying party can persist to register the new credential.</returns>
         public async Task<AuthenticatorAttestationRawResponse> AuthenticatorMakeCredentialAsync(CredentialCreateOptions options, CancellationToken cancellationToken = default)
         {
             cancellationToken.Register(state => CancelCurrentOperation(), null, false);
@@ -90,11 +90,11 @@ namespace DSInternals.Win32.WebAuthn.Adapter
         }
 
         /// <summary>
-        /// Signs a challenge and other collected data into an assertion, which is used as a credential.
+        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
         /// </summary>
-        /// <param name="options">Assertion options.</param>
-        /// <param name="authenticatorAttachment">Optionally filters the eligible authenticators by their attachment.</param>
-        /// <returns>The cryptographically signed Authenticator Assertion Response object returned by an authenticator.</returns>
+        /// <param name="options">The Fido2NetLib assertion options describing the relying party, allowed credentials, and the desired authenticator behavior.</param>
+        /// <param name="authenticatorAttachment">Optionally constrains the eligible authenticators by attachment (platform or cross-platform).</param>
+        /// <returns>The raw assertion response containing the authenticator data, signature, and user handle returned by the authenticator.</returns>
         public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null)
         {
             ArgumentNullException.ThrowIfNull(options);
@@ -141,12 +141,12 @@ namespace DSInternals.Win32.WebAuthn.Adapter
         }
 
         /// <summary>
-        /// Asynchronously signs a challenge and collected data into an assertion.
+        /// Asynchronously requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
         /// </summary>
-        /// <param name="options">Assertion options.</param>
-        /// <param name="authenticatorAttachment">Optionally filters eligible authenticators by attachment.</param>
-        /// <param name="cancellationToken">Cancellation token used to cancel the operation.</param>
-        /// <returns>The cryptographically signed authenticator assertion response.</returns>
+        /// <param name="options">The Fido2NetLib assertion options describing the relying party, allowed credentials, and the desired authenticator behavior.</param>
+        /// <param name="authenticatorAttachment">Optionally constrains the eligible authenticators by attachment (platform or cross-platform).</param>
+        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
+        /// <returns>The raw assertion response containing the authenticator data, signature, and user handle returned by the authenticator.</returns>
         public async Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(AssertionOptions options, Fido2NetLib.Objects.AuthenticatorAttachment? authenticatorAttachment = null, CancellationToken cancellationToken = default)
         {
             cancellationToken.Register(state => CancelCurrentOperation(), null, false);

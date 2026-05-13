@@ -1,5 +1,5 @@
 ---
-external help file: DSInternals.Passkeys-help.xml
+external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
 online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyWindowsHello.md
 schema: 2.0.0
@@ -24,14 +24,14 @@ and whether credentials are removable or backed up.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+```powershell
 Get-PasskeyWindowsHello
 ```
 
 Lists all platform credentials.
 
 ### EXAMPLE 2
-```
+```powershell
 Get-PasskeyWindowsHello -RelyingPartyId 'login.microsoft.com'
 ```
 
@@ -66,3 +66,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Remove-PasskeyWindowsHello](Remove-PasskeyWindowsHello.md)
+
+[Test-Passkey](Test-Passkey.md)
+
+[Get-PasskeyAuthenticator](Get-PasskeyAuthenticator.md)
+

@@ -46,24 +46,24 @@ public bool BackedUp { get; set; }
 The credential Id.
 
 ```csharp
-public byte[] CredentialId { get; set; }
+public byte[]? CredentialId { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 
 ### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_RelyingPartyInformation"></a> RelyingPartyInformation
 
 The relying party information.
 
 ```csharp
-public RelyingPartyInformation RelyingPartyInformation { get; set; }
+public RelyingPartyInformation? RelyingPartyInformation { get; set; }
 ```
 
 #### Property Value
 
- [RelyingPartyInformation](DSInternals.Win32.WebAuthn.RelyingPartyInformation.md)
+ [RelyingPartyInformation](DSInternals.Win32.WebAuthn.RelyingPartyInformation.md)?
 
 ### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_Removable"></a> Removable
 
@@ -82,10 +82,10 @@ public bool Removable { get; set; }
 The user information.
 
 ```csharp
-public UserInformation UserInformation { get; set; }
+public UserInformation? UserInformation { get; set; }
 ```
 
 #### Property Value
 
- [UserInformation](DSInternals.Win32.WebAuthn.UserInformation.md)
+ [UserInformation](DSInternals.Win32.WebAuthn.UserInformation.md)?
 

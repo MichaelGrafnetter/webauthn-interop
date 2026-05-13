@@ -1,0 +1,1358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-PasskeyAuthenticator</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>PasskeyAuthenticator</command:noun>
+      <maml:description>
+        <maml:para>Gets the list of available authenticators from the WebAuthn API.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves a list of authenticators available on the system using the Windows WebAuthn API. This includes information about authenticator IDs, names, logos, and lock status.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-PasskeyAuthenticator</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.AuthenticatorDetails</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-PasskeyAuthenticator</dev:code>
+        <dev:remarks>
+          <maml:para>Lists all available authenticators.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-PasskeyAuthenticator | Where-Object { -not $PSItem.Locked }</dev:code>
+        <dev:remarks>
+          <maml:para>Lists only unlocked authenticators.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-PasskeyAuthenticator | Format-Table -Prperty AuthenticatorName,Locked</dev:code>
+        <dev:remarks>
+          <maml:para>Lists authenticator names and lock status in a table.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyAuthenticator.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyAuthenticatorPlugin</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyWindowsHello</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-PasskeyAuthenticatorPlugin</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>PasskeyAuthenticatorPlugin</command:noun>
+      <maml:description>
+        <maml:para>Gets the list of registered authenticator plugins from the Windows registry.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves information about third-party passkey providers (such as 1Password, Bitwarden, etc.) that are registered as authenticator plugins in Windows. These plugins are registered under HKLM\SOFTWARE\Microsoft\FIDO.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-PasskeyAuthenticatorPlugin</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.AuthenticatorPluginInformation</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-PasskeyAuthenticatorPlugin</dev:code>
+        <dev:remarks>
+          <maml:para>Lists all registered authenticator plugins.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-PasskeyAuthenticatorPlugin | Where-Object Enabled -eq $true</dev:code>
+        <dev:remarks>
+          <maml:para>Lists only enabled authenticator plugins.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-PasskeyAuthenticatorPlugin | Select-Object -Property Name,PackageFamilyName,Enabled</dev:code>
+        <dev:remarks>
+          <maml:para>Lists authenticator plugins with selected properties.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyAuthenticatorPlugin.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyAuthenticator</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-PasskeyCreationOptions</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>PasskeyCreationOptions</command:noun>
+      <maml:description>
+        <maml:para>Builds a PublicKeyCredentialCreationOptions object for use with New-Passkey.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Constructs a WebAuthn PublicKeyCredentialCreationOptions structure locally, without contacting any relying party. The resulting object can be piped directly to New-Passkey to drive the local authenticator and produce a new credential.</maml:para>
+      <maml:para>This is useful for testing scenarios, custom relying parties, or when interacting with services that don't expose a registration-options endpoint.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-PasskeyCreationOptions</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="RpId, RelyingParty">
+          <maml:name>RelyingPartyId</maml:name>
+          <maml:description>
+            <maml:para>The relying party identifier (e.g., 'login.microsoft.com').</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
+          <maml:name>ResidentKey</maml:name>
+          <maml:description>
+            <maml:para>Specifies the resident key (discoverable credential) requirement. Defaults to Required for passkeys.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Discouraged</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Preferred</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Required</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">ResidentKeyRequirement</command:parameterValue>
+          <dev:type>
+            <maml:name>ResidentKeyRequirement</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Required</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
+          <maml:name>Attestation</maml:name>
+          <maml:description>
+            <maml:para>Specifies the attestation conveyance preference.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Any</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Indirect</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Direct</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Enterprise</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AttestationConveyancePreference</command:parameterValue>
+          <dev:type>
+            <maml:name>AttestationConveyancePreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
+          <maml:name>Timeout</maml:name>
+          <maml:description>
+            <maml:para>The timeout for the credential creation operation.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 2)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="AuthenticatorType, CredentialHint, PublicKeyCredentialHint">
+          <maml:name>Hint</maml:name>
+          <maml:description>
+            <maml:para>An optional hint to the client about which authenticator type to use (e.g., SecurityKey, ClientDevice, Hybrid).</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityKey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ClientDevice</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Hybrid</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">PublicKeyCredentialHint</command:parameterValue>
+          <dev:type>
+            <maml:name>PublicKeyCredentialHint</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="RpName">
+          <maml:name>RelyingPartyName</maml:name>
+          <maml:description>
+            <maml:para>The human-readable name of the relying party (e.g., 'Contoso').</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>UserName</maml:name>
+          <maml:description>
+            <maml:para>The user account name, typically an email address or username (e.g., 'john@contoso.com').</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+          <maml:name>UserDisplayName</maml:name>
+          <maml:description>
+            <maml:para>The friendly name of the user (e.g., 'John Doe'). If not provided, the UserName is used.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="User, UserHandle">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The user handle, an opaque identifier for the user. Accepts either a byte array or a Base64Url encoded string. If not provided, a random 32-byte identifier is generated.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+          <maml:name>Challenge</maml:name>
+          <maml:description>
+            <maml:para>The challenge bytes to be signed. Accepts either a byte array or a Base64Url encoded string. If not provided, a random challenge will be generated.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-PasskeyRandomChallenge -Length 32)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="Algorithms, PubKeyCredParams">
+          <maml:name>Algorithm</maml:name>
+          <maml:description>
+            <maml:para>The list of COSE algorithms acceptable to the relying party, in order of preference. Defaults to ES256 and RS256.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">RS1</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RS512</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RS384</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RS256</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ES256K</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PS512</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PS384</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PS256</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ES512</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ES384</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdDSA</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ES256</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">Algorithm[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Algorithm[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>@([DSInternals.Win32.WebAuthn.COSE.Algorithm]::ES256, [DSInternals.Win32.WebAuthn.COSE.Algorithm]::RS256)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+          <maml:name>UserVerification</maml:name>
+          <maml:description>
+            <maml:para>Specifies the user verification requirement.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Any</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Required</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Preferred</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Discouraged</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">UserVerificationRequirement</command:parameterValue>
+          <dev:type>
+            <maml:name>UserVerificationRequirement</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Preferred</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+          <maml:name>AuthenticatorAttachment</maml:name>
+          <maml:description>
+            <maml:para>Specifies the authenticator attachment type.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Any</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Platform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CrossPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CrossPlatformU2F</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AuthenticatorAttachment</command:parameterValue>
+          <dev:type>
+            <maml:name>AuthenticatorAttachment</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Any</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="Algorithms, PubKeyCredParams">
+        <maml:name>Algorithm</maml:name>
+        <maml:description>
+          <maml:para>The list of COSE algorithms acceptable to the relying party, in order of preference. Defaults to ES256 and RS256.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Algorithm[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Algorithm[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>@([DSInternals.Win32.WebAuthn.COSE.Algorithm]::ES256, [DSInternals.Win32.WebAuthn.COSE.Algorithm]::RS256)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
+        <maml:name>Attestation</maml:name>
+        <maml:description>
+          <maml:para>Specifies the attestation conveyance preference.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">AttestationConveyancePreference</command:parameterValue>
+        <dev:type>
+          <maml:name>AttestationConveyancePreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+        <maml:name>AuthenticatorAttachment</maml:name>
+        <maml:description>
+          <maml:para>Specifies the authenticator attachment type.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">AuthenticatorAttachment</command:parameterValue>
+        <dev:type>
+          <maml:name>AuthenticatorAttachment</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Any</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>Challenge</maml:name>
+        <maml:description>
+          <maml:para>The challenge bytes to be signed. Accepts either a byte array or a Base64Url encoded string. If not provided, a random challenge will be generated.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-PasskeyRandomChallenge -Length 32)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="AuthenticatorType, CredentialHint, PublicKeyCredentialHint">
+        <maml:name>Hint</maml:name>
+        <maml:description>
+          <maml:para>An optional hint to the client about which authenticator type to use (e.g., SecurityKey, ClientDevice, Hybrid).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PublicKeyCredentialHint</command:parameterValue>
+        <dev:type>
+          <maml:name>PublicKeyCredentialHint</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="RpId, RelyingParty">
+        <maml:name>RelyingPartyId</maml:name>
+        <maml:description>
+          <maml:para>The relying party identifier (e.g., 'login.microsoft.com').</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="RpName">
+        <maml:name>RelyingPartyName</maml:name>
+        <maml:description>
+          <maml:para>The human-readable name of the relying party (e.g., 'Contoso').</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
+        <maml:name>ResidentKey</maml:name>
+        <maml:description>
+          <maml:para>Specifies the resident key (discoverable credential) requirement. Defaults to Required for passkeys.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ResidentKeyRequirement</command:parameterValue>
+        <dev:type>
+          <maml:name>ResidentKeyRequirement</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Required</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
+        <maml:name>Timeout</maml:name>
+        <maml:description>
+          <maml:para>The timeout for the credential creation operation.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+        <dev:type>
+          <maml:name>TimeSpan</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-TimeSpan -Minutes 2)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>UserDisplayName</maml:name>
+        <maml:description>
+          <maml:para>The friendly name of the user (e.g., 'John Doe'). If not provided, the UserName is used.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="User, UserHandle">
+        <maml:name>UserId</maml:name>
+        <maml:description>
+          <maml:para>The user handle, an opaque identifier for the user. Accepts either a byte array or a Base64Url encoded string. If not provided, a random 32-byte identifier is generated.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>UserName</maml:name>
+        <maml:description>
+          <maml:para>The user account name, typically an email address or username (e.g., 'john@contoso.com').</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+        <maml:name>UserVerification</maml:name>
+        <maml:description>
+          <maml:para>Specifies the user verification requirement.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">UserVerificationRequirement</command:parameterValue>
+        <dev:type>
+          <maml:name>UserVerificationRequirement</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Preferred</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' -UserDisplayName 'John Doe'</dev:code>
+        <dev:remarks>
+          <maml:para>Builds creation options for a new passkey using mostly default settings.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' | New-Passkey</dev:code>
+        <dev:remarks>
+          <maml:para>Builds creation options and immediately creates a new passkey on the local authenticator.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-PasskeyCreationOptions -RelyingPartyId 'example.com' -RelyingPartyName 'Example' -UserName 'john@example.com' -Hint SecurityKey -ResidentKey Required -UserVerification Required</dev:code>
+        <dev:remarks>
+          <maml:para>Builds creation options targeting a security key with required user verification and a discoverable credential.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>New-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-PasskeyRandomChallenge</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Test-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-PasskeyWindowsHello</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>PasskeyWindowsHello</command:noun>
+      <maml:description>
+        <maml:para>Gets the list of platform credentials (passkeys) stored on the system.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves the list of credentials stored on platform authenticators (such as Windows Hello). This includes information about credential IDs, relying party information, user information, and whether credentials are removable or backed up.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-PasskeyWindowsHello</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="RpId">
+          <maml:name>RelyingPartyId</maml:name>
+          <maml:description>
+            <maml:para>Optional relying party ID to filter credentials. If not specified, all credentials are returned.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="RpId">
+        <maml:name>RelyingPartyId</maml:name>
+        <maml:description>
+          <maml:para>Optional relying party ID to filter credentials. If not specified, all credentials are returned.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.CredentialDetails</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-PasskeyWindowsHello</dev:code>
+        <dev:remarks>
+          <maml:para>Lists all platform credentials.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-PasskeyWindowsHello -RelyingPartyId 'login.microsoft.com'</dev:code>
+        <dev:remarks>
+          <maml:para>Lists credentials for a specific relying party.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyWindowsHello.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Remove-PasskeyWindowsHello</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Test-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyAuthenticator</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-Passkey</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>Passkey</command:noun>
+      <maml:description>
+        <maml:para>Creates a new WebAuthn credential by driving the local authenticator.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Calls the Windows WebAuthn API to make a credential according to the provided PublicKeyCredentialCreationOptions, triggering the system passkey UI. Returns the resulting AttestationPublicKeyCredential, which can be wrapped into a provider-specific attestation response and submitted to Microsoft Entra ID, Okta, or any other relying party.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-Passkey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>OktaOptions</maml:name>
+          <maml:description>
+            <maml:para>The Okta-specific credential creation options. Returned by Get-OktaPasskeyRegistrationOptions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">OktaWebauthnCredentialCreationOptions</command:parameterValue>
+          <dev:type>
+            <maml:name>OktaWebauthnCredentialCreationOptions</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>New-Passkey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>Options</maml:name>
+          <maml:description>
+            <maml:para>The WebAuthn public key credential creation options. Returned directly by Get-EntraPasskeyRegistrationOptions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PublicKeyCredentialCreationOptions</command:parameterValue>
+          <dev:type>
+            <maml:name>PublicKeyCredentialCreationOptions</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>OktaOptions</maml:name>
+        <maml:description>
+          <maml:para>The Okta-specific credential creation options. Returned by Get-OktaPasskeyRegistrationOptions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">OktaWebauthnCredentialCreationOptions</command:parameterValue>
+        <dev:type>
+          <maml:name>OktaWebauthnCredentialCreationOptions</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>Options</maml:name>
+        <maml:description>
+          <maml:para>The WebAuthn public key credential creation options. Returned directly by Get-EntraPasskeyRegistrationOptions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PublicKeyCredentialCreationOptions</command:parameterValue>
+        <dev:type>
+          <maml:name>PublicKeyCredentialCreationOptions</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$credential = Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves creation options from Microsoft Entra ID and creates a new passkey on the local authenticator without registering it.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'</dev:code>
+        <dev:remarks>
+          <maml:para>Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-OktaPasskey</dev:code>
+        <dev:remarks>
+          <maml:para>Performs end-to-end passkey registration in Okta in a single pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-Passkey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyCreationOptions</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-EntraPasskeyRegistrationOptions</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-OktaPasskeyRegistrationOptions</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Register-EntraPasskey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Register-OktaPasskey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Test-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-PasskeyRandomChallenge</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>PasskeyRandomChallenge</command:noun>
+      <maml:description>
+        <maml:para>Generates a random challenge to be used by WebAuthn.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Returns a cryptographically random byte array of the requested length, suitable for use as a WebAuthn challenge during credential creation or assertion.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-PasskeyRandomChallenge</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Length</maml:name>
+          <maml:description>
+            <maml:para>The length of the challenge in bytes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>32</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Length</maml:name>
+        <maml:description>
+          <maml:para>The length of the challenge in bytes.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>32</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Byte[]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>New-PasskeyRandomChallenge -Length 64</dev:code>
+        <dev:remarks>
+          <maml:para>Generates a random 64-byte challenge.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$challenge = New-PasskeyRandomChallenge
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge</dev:code>
+        <dev:remarks>
+          <maml:para>Generates a default 32-byte challenge and uses it for a passkey assertion.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/New-PasskeyRandomChallenge.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Test-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyCreationOptions</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-PasskeyWindowsHello</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>PasskeyWindowsHello</command:noun>
+      <maml:description>
+        <maml:para>Removes a platform credential (passkey) from the system.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Removes a Public Key Credential stored on a platform authenticator (such as Windows Hello). This operation is irreversible - once deleted, the credential cannot be recovered.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-PasskeyWindowsHello</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>CredentialId</maml:name>
+          <maml:description>
+            <maml:para>The ID of the credential to be removed. This can be obtained from Get-PasskeyWindowsHello. Accepts either a byte array or a Base64Url encoded string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Remove-PasskeyWindowsHello</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>InputObject</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill InputObject Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">CredentialDetails</command:parameterValue>
+          <dev:type>
+            <maml:name>CredentialDetails</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>CredentialId</maml:name>
+        <maml:description>
+          <maml:para>The ID of the credential to be removed. This can be obtained from Get-PasskeyWindowsHello. Accepts either a byte array or a Base64Url encoded string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>InputObject</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill InputObject Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">CredentialDetails</command:parameterValue>
+        <dev:type>
+          <maml:name>CredentialDetails</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Requires Windows with WebAuthn API version 4 or later (Windows 10 2004+). This operation requires appropriate permissions and may trigger a Windows Security prompt.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$cred = Get-PasskeyWindowsHello | Select-Object -First 1
+Remove-PasskeyWindowsHello -CredentialId $cred.CredentialId</dev:code>
+        <dev:remarks>
+          <maml:para>Removes a specific platform credential by ID.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-PasskeyWindowsHello | Where-Object { $PSItem.RelyingPartyInformation.Id -eq 'example.com' } | Remove-PasskeyWindowsHello</dev:code>
+        <dev:remarks>
+          <maml:para>Removes all credentials for a specific relying party using pipeline input.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Remove-PasskeyWindowsHello -CredentialId 'dGVzdC1jcmVkZW50aWFsLWlk'</dev:code>
+        <dev:remarks>
+          <maml:para>Removes a credential using a Base64Url encoded credential ID.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Remove-PasskeyWindowsHello.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyWindowsHello</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Test-Passkey</command:name>
+      <command:verb>Test</command:verb>
+      <command:noun>Passkey</command:noun>
+      <maml:description>
+        <maml:para>Tests a passkey by performing an authentication assertion.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Performs a WebAuthn authentication assertion to test a passkey credential. This triggers the authenticator to sign a challenge, verifying that the passkey is working correctly.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Test-Passkey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="RpId, RelyingParty">
+          <maml:name>RelyingPartyId</maml:name>
+          <maml:description>
+            <maml:para>The relying party identifier (e.g., 'login.microsoft.com').</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Challenge</maml:name>
+          <maml:description>
+            <maml:para>The challenge bytes to be signed. Accepts either a byte array or a Base64Url encoded string. If not provided, a random challenge will be generated.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-PasskeyRandomChallenge -Length 32)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>UserVerification</maml:name>
+          <maml:description>
+            <maml:para>Specifies the user verification requirement.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Any</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Required</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Preferred</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Discouraged</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">UserVerificationRequirement</command:parameterValue>
+          <dev:type>
+            <maml:name>UserVerificationRequirement</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Preferred</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+          <maml:name>AuthenticatorAttachment</maml:name>
+          <maml:description>
+            <maml:para>Specifies the authenticator attachment type.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Any</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Platform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CrossPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CrossPlatformU2F</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AuthenticatorAttachment</command:parameterValue>
+          <dev:type>
+            <maml:name>AuthenticatorAttachment</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Any</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+          <maml:name>Timeout</maml:name>
+          <maml:description>
+            <maml:para>The timeout for the operation.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 2)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+          <maml:name>CredentialId</maml:name>
+          <maml:description>
+            <maml:para>An optional credential ID to test a specific credential. Accepts either a byte array or a Base64Url encoded string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="AuthenticatorType, CredentialHint, PublicKeyCredentialHint">
+          <maml:name>Hint</maml:name>
+          <maml:description>
+            <maml:para>An optional hint to the client about which credential source to use (e.g., SecurityKey, ClientDevice, Hybrid).</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityKey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ClientDevice</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Hybrid</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">PublicKeyCredentialHint</command:parameterValue>
+          <dev:type>
+            <maml:name>PublicKeyCredentialHint</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>AuthenticatorAttachment</maml:name>
+        <maml:description>
+          <maml:para>Specifies the authenticator attachment type.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">AuthenticatorAttachment</command:parameterValue>
+        <dev:type>
+          <maml:name>AuthenticatorAttachment</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Any</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Challenge</maml:name>
+        <maml:description>
+          <maml:para>The challenge bytes to be signed. Accepts either a byte array or a Base64Url encoded string. If not provided, a random challenge will be generated.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-PasskeyRandomChallenge -Length 32)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>CredentialId</maml:name>
+        <maml:description>
+          <maml:para>An optional credential ID to test a specific credential. Accepts either a byte array or a Base64Url encoded string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="AuthenticatorType, CredentialHint, PublicKeyCredentialHint">
+        <maml:name>Hint</maml:name>
+        <maml:description>
+          <maml:para>An optional hint to the client about which credential source to use (e.g., SecurityKey, ClientDevice, Hybrid).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PublicKeyCredentialHint</command:parameterValue>
+        <dev:type>
+          <maml:name>PublicKeyCredentialHint</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="RpId, RelyingParty">
+        <maml:name>RelyingPartyId</maml:name>
+        <maml:description>
+          <maml:para>The relying party identifier (e.g., 'login.microsoft.com').</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <maml:name>Timeout</maml:name>
+        <maml:description>
+          <maml:para>The timeout for the operation.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+        <dev:type>
+          <maml:name>TimeSpan</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-TimeSpan -Minutes 2)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>UserVerification</maml:name>
+        <maml:description>
+          <maml:para>Specifies the user verification requirement.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">UserVerificationRequirement</command:parameterValue>
+        <dev:type>
+          <maml:name>UserVerificationRequirement</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Preferred</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Test-Passkey -RelyingPartyId 'login.microsoft.com'</dev:code>
+        <dev:remarks>
+          <maml:para>Tests any passkey registered for login.microsoft.com with a random challenge.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$challenge = Get-PasskeyRandomChallenge -Length 32
+Test-Passkey -RelyingPartyId 'login.microsoft.com' -Challenge $challenge</dev:code>
+        <dev:remarks>
+          <maml:para>Tests any passkey registered for login.microsoft.com with a specific challenge.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>$credential = Get-PasskeyWindowsHello | Select-Object -First 1
+Test-Passkey -RelyingPartyId $credential.RelyingPartyInformation.Id -CredentialId $credential.CredentialId</dev:code>
+        <dev:remarks>
+          <maml:para>Tests a specific platform credential.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Test-Passkey -RelyingPartyId 'login.microsoft.com' -Hint SecurityKey</dev:code>
+        <dev:remarks>
+          <maml:para>Tests a passkey with a hint that a security key should be used.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Test-Passkey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-PasskeyWindowsHello</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-PasskeyRandomChallenge</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+</helpItems>

@@ -6,7 +6,6 @@ Assembly: DSInternals.Win32.WebAuthn.dll
 Enterprise Attestation Capabilities
 
 ```csharp
-[Flags]
 public enum EnterpriseAttestationType : uint
 ```
 

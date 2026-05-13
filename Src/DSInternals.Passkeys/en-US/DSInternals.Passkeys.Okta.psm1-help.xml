@@ -1,0 +1,892 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Connect-Okta</command:name>
+      <command:verb>Connect</command:verb>
+      <command:noun>Okta</command:noun>
+      <maml:description>
+        <maml:para>Retrieves an access token to interact with Okta APIs.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Acquires an Okta access token via one of four authentication flows, depending on which parameters are supplied, and caches it for subsequent cmdlets in this module: - Interactive authorization code (public client) when only -Tenant and -ClientId are supplied.</maml:para>
+      <maml:para>- Client credentials with private_key_jwt when -JsonWebKey is supplied.</maml:para>
+      <maml:para>- Client credentials with client_secret_post when -ClientSecret is supplied.</maml:para>
+      <maml:para>- Static API token (SSWS) when -ApiToken is supplied.</maml:para>
+      <maml:para></maml:para>
+      <maml:para>The cached token is reused by Get-OktaPasskeyRegistrationOptions, Register-OktaPasskey, and Disconnect-Okta. Call Disconnect-Okta to revoke the token (for OAuth flows) or clear it from the session (for SSWS).</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Connect-Okta</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="ApiKey, SswsToken, SSWS">
+          <maml:name>ApiToken</maml:name>
+          <maml:description>
+            <maml:para>A static Okta API token (SSWS). Issued from the Okta admin console under Security &gt; API &gt; Tokens.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
+          <dev:type>
+            <maml:name>SecureString</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Organization, OktaOrganization, OktaDomain">
+          <maml:name>Tenant</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of Okta tenant, like 'example.okta.com'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Connect-Okta</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>ClientId</maml:name>
+          <maml:description>
+            <maml:para>The client id of the Okta application used to obtain an access token.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Scopes</maml:name>
+          <maml:description>
+            <maml:para>Scopes to request for the access token. Defaults to 'okta.users.manage'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>@('okta.users.manage')</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Organization, OktaOrganization, OktaDomain">
+          <maml:name>Tenant</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of Okta tenant, like 'example.okta.com'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Connect-Okta</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>ClientId</maml:name>
+          <maml:description>
+            <maml:para>The client id of the Okta application used to obtain an access token.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Secret">
+          <maml:name>ClientSecret</maml:name>
+          <maml:description>
+            <maml:para>The client secret used to authenticate to the Okta application, in order to obtain access token using the client credentials OAuth flow (client_secret_post).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
+          <dev:type>
+            <maml:name>SecureString</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Scopes</maml:name>
+          <maml:description>
+            <maml:para>Scopes to request for the access token. Defaults to 'okta.users.manage'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>@('okta.users.manage')</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Organization, OktaOrganization, OktaDomain">
+          <maml:name>Tenant</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of Okta tenant, like 'example.okta.com'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Connect-Okta</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>ClientId</maml:name>
+          <maml:description>
+            <maml:para>The client id of the Okta application used to obtain an access token.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="jwk">
+          <maml:name>JsonWebKey</maml:name>
+          <maml:description>
+            <maml:para>The JSON Web Key used to authenticate to the Okta application, in order to obtain access token using the client credentials OAuth flow (private_key_jwt).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Scopes</maml:name>
+          <maml:description>
+            <maml:para>Scopes to request for the access token. Defaults to 'okta.users.manage'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>@('okta.users.manage')</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Organization, OktaOrganization, OktaDomain">
+          <maml:name>Tenant</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of Okta tenant, like 'example.okta.com'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="ApiKey, SswsToken, SSWS">
+        <maml:name>ApiToken</maml:name>
+        <maml:description>
+          <maml:para>A static Okta API token (SSWS). Issued from the Okta admin console under Security &gt; API &gt; Tokens.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
+        <dev:type>
+          <maml:name>SecureString</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>ClientId</maml:name>
+        <maml:description>
+          <maml:para>The client id of the Okta application used to obtain an access token.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Secret">
+        <maml:name>ClientSecret</maml:name>
+        <maml:description>
+          <maml:para>The client secret used to authenticate to the Okta application, in order to obtain access token using the client credentials OAuth flow (client_secret_post).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
+        <dev:type>
+          <maml:name>SecureString</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="jwk">
+        <maml:name>JsonWebKey</maml:name>
+        <maml:description>
+          <maml:para>The JSON Web Key used to authenticate to the Okta application, in order to obtain access token using the client credentials OAuth flow (private_key_jwt).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Scopes</maml:name>
+        <maml:description>
+          <maml:para>Scopes to request for the access token. Defaults to 'okta.users.manage'.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>@('okta.users.manage')</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Organization, OktaOrganization, OktaDomain">
+        <maml:name>Tenant</maml:name>
+        <maml:description>
+          <maml:para>The unique identifier of Okta tenant, like 'example.okta.com'.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7</dev:code>
+        <dev:remarks>
+          <maml:para>Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the authorization code flow with PKCE.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else')</dev:code>
+        <dev:remarks>
+          <maml:para>Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the authorization code flow with PKCE, requesting scopes `'okta.users.manage'` and `'okta.something.else'`.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>$jwk = '{"kty":"RSA","kid":"EE3QB0WvhuOwR9DuR6717OERKbDrBemrDKOK4Xvbf8c","d":"TmljZSB0cnkhICBCdXQgdGhpcyBpc...'
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage','okta.something.else') -JsonWebKey $jwk</dev:code>
+        <dev:remarks>
+          <maml:para>Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the client credentials flow with private_key_jwt, signing the client assertion with `$jwk` and requesting scopes `'okta.users.manage'` and `'okta.something.else'`.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>$secret = Read-Host -AsSecureString -Prompt 'Client secret'
+Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7 -Scopes @('okta.users.manage') -ClientSecret $secret</dev:code>
+        <dev:remarks>
+          <maml:para>Connects to the `example.okta.com` tenant using the application with client id `0oakmj8hvxvtvCy3P5d7` via the client credentials flow with client_secret_post, authenticating with the SecureString-protected `$secret`.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>$apiToken = Read-Host -AsSecureString -Prompt 'API token'
+Connect-Okta -Tenant example.okta.com -ApiToken $apiToken</dev:code>
+        <dev:remarks>
+          <maml:para>Connects to the `example.okta.com` tenant using a static SSWS API token issued in the Okta admin console, bypassing the OAuth flow entirely.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Connect-Okta.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Disconnect-Okta</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Register-OktaPasskey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Create an API token | Okta Developer</maml:linkText>
+        <maml:uri>https://developer.okta.com/docs/guides/create-an-api-token/main/</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Okta client authentication methods</maml:linkText>
+        <maml:uri>https://developer.okta.com/docs/api/openapi/okta-oauth/guides/client-auth</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Disconnect-Okta</command:name>
+      <command:verb>Disconnect</command:verb>
+      <command:noun>Okta</command:noun>
+      <maml:description>
+        <maml:para>Revokes Okta access token.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Revokes the Okta access token cached from the call to Connect-Okta and clears it from the session. For OAuth-issued Bearer tokens, this calls the /oauth2/v1/revoke endpoint using the same client authentication method that was used to obtain the token (client_assertion or client_secret). For static SSWS API tokens, the cached token is simply discarded from the session because Okta does not expose a revoke endpoint for static tokens; revocation for those is managed in the Okta admin console.</maml:para>
+      <maml:para>If no token is cached, this cmdlet is a no-op.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Disconnect-Okta</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Disconnect-Okta</dev:code>
+        <dev:remarks>
+          <maml:para>Revokes the cached OAuth access token (or clears the cached SSWS token) and removes any associated revocation state from the session.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Disconnect-Okta.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Connect-Okta</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Register-OktaPasskey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Revoke Tokens | Okta Developer</maml:linkText>
+        <maml:uri>https://developer.okta.com/docs/guides/revoke-tokens/main/</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-OktaPasskeyRegistrationOptions</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>OktaPasskeyRegistrationOptions</command:noun>
+      <maml:description>
+        <maml:para>Retrieves creation options required to generate and register an Okta compatible passkey.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves a server-issued challenge and the associated WebAuthn parameters needed to register (attest) a new passkey for the specified Okta user. The returned object can be piped to New-Passkey to drive the local authenticator and then to Register-OktaPasskey to complete enrollment.</maml:para>
+      <maml:para>For end-to-end passkey registration in Okta, calling Register-OktaPasskey directly is recommended; it performs the challenge request, authenticator ceremony, and activation in a single step. Use Get-OktaPasskeyRegistrationOptions only when you need to inspect or customize the intermediate options.</maml:para>
+      <maml:para>Requires an active Okta connection (Connect-Okta).</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-OktaPasskeyRegistrationOptions</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+          <maml:name>ChallengeTimeout</maml:name>
+          <maml:description>
+            <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserPrincipalName, UPN, UserName, Email">
+          <maml:name>Login</maml:name>
+          <maml:description>
+            <maml:para>The Okta user login (typically an email address such as 'user@example.com'). Resolved to a UserId through an API call.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-OktaPasskeyRegistrationOptions</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+          <maml:name>ChallengeTimeout</maml:name>
+          <maml:description>
+            <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="User">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of the Okta user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+        <maml:name>ChallengeTimeout</maml:name>
+        <maml:description>
+          <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+        <dev:type>
+          <maml:name>TimeSpan</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserPrincipalName, UPN, UserName, Email">
+        <maml:name>Login</maml:name>
+        <maml:description>
+          <maml:para>The Okta user login (typically an email address such as 'user@example.com'). Resolved to a UserId through an API call.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="User">
+        <maml:name>UserId</maml:name>
+        <maml:description>
+          <maml:para>The unique identifier of the Okta user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7</dev:code>
+        <dev:remarks>
+          <maml:para>Fetches default creation options for the specified Okta user, identified by their Okta id.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -Login 'user@example.com'</dev:code>
+        <dev:remarks>
+          <maml:para>Resolves the Okta user by login and then fetches creation options, avoiding the need to look up the Okta id manually.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)</dev:code>
+        <dev:remarks>
+          <maml:para>Fetches creation options with a shorter 1-minute challenge timeout to tighten the registration window.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -Login 'user@example.com' | New-Passkey | Register-OktaPasskey</dev:code>
+        <dev:remarks>
+          <maml:para>Performs end-to-end passkey registration in Okta in a single pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-OktaPasskeyRegistrationOptions.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Register-OktaPasskey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Connect-Okta</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Okta User Factors API</maml:linkText>
+        <maml:uri>https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Register-OktaPasskey</command:name>
+      <command:verb>Register</command:verb>
+      <command:noun>OktaPasskey</command:noun>
+      <maml:description>
+        <maml:para>Registers a new passkey in Okta.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Registers a new passkey for the specified user in Okta by submitting the attestation that activates the corresponding webauthn factor.</maml:para>
+      <maml:para>The cmdlet supports three usage patterns: - Pass only -UserId to perform the full ceremony end-to-end: request a challenge, drive the local authenticator, and submit the attestation.</maml:para>
+      <maml:para>- Pipe an attestation from a previous New-Passkey call against Okta options.</maml:para>
+      <maml:para>- Pass -UserId, -FactorId, and a raw -AttestationPublicKeyCredential when the challenge was issued and the credential ceremony was run separately.</maml:para>
+      <maml:para></maml:para>
+      <maml:para>Requires an active Okta connection (Connect-Okta).</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Register-OktaPasskey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Attestation, Credential">
+          <maml:name>AttestationPublicKeyCredential</maml:name>
+          <maml:description>
+            <maml:para>The raw attestation credential produced by the local WebAuthn authenticator (e.g. via New-Passkey), used together with -UserId and -FactorId as an alternative to -Passkey.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">AttestationPublicKeyCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>AttestationPublicKeyCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Factor">
+          <maml:name>FactorId</maml:name>
+          <maml:description>
+            <maml:para>The Okta factor identifier returned by Get-OktaPasskeyRegistrationOptions, used together with -AttestationPublicKeyCredential as an alternative to -Passkey.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of the Okta user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Register-OktaPasskey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Attestation, Credential">
+          <maml:name>AttestationPublicKeyCredential</maml:name>
+          <maml:description>
+            <maml:para>The raw attestation credential produced by the local WebAuthn authenticator (e.g. via New-Passkey), used together with -UserId and -FactorId as an alternative to -Passkey.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">AttestationPublicKeyCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>AttestationPublicKeyCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Factor">
+          <maml:name>FactorId</maml:name>
+          <maml:description>
+            <maml:para>The Okta factor identifier returned by Get-OktaPasskeyRegistrationOptions, used together with -AttestationPublicKeyCredential as an alternative to -Passkey.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserPrincipalName, UPN, UserName, Email">
+          <maml:name>Login</maml:name>
+          <maml:description>
+            <maml:para>The Okta user login (typically an email address such as 'user@example.com'). Resolved to a UserId through an API call.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Register-OktaPasskey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+          <maml:name>ChallengeTimeout</maml:name>
+          <maml:description>
+            <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+          <maml:name>UserId</maml:name>
+          <maml:description>
+            <maml:para>The unique identifier of the Okta user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Register-OktaPasskey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+          <maml:name>ChallengeTimeout</maml:name>
+          <maml:description>
+            <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+          <dev:type>
+            <maml:name>TimeSpan</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserPrincipalName, UPN, UserName, Email">
+          <maml:name>Login</maml:name>
+          <maml:description>
+            <maml:para>The Okta user login (typically an email address such as 'user@example.com'). Resolved to a UserId through an API call.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Register-OktaPasskey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>Passkey</maml:name>
+          <maml:description>
+            <maml:para>The passkey to be registered.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">OktaWebauthnAttestationResponse</command:parameterValue>
+          <dev:type>
+            <maml:name>OktaWebauthnAttestationResponse</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Attestation, Credential">
+        <maml:name>AttestationPublicKeyCredential</maml:name>
+        <maml:description>
+          <maml:para>The raw attestation credential produced by the local WebAuthn authenticator (e.g. via New-Passkey), used together with -UserId and -FactorId as an alternative to -Passkey.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">AttestationPublicKeyCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>AttestationPublicKeyCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Timeout">
+        <maml:name>ChallengeTimeout</maml:name>
+        <maml:description>
+          <maml:para>Overrides the timeout of the server-generated challenge returned in the request. The default value is 5 minutes, with the accepted range being between 1 second and 1 day.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">TimeSpan</command:parameterValue>
+        <dev:type>
+          <maml:name>TimeSpan</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(New-TimeSpan -Minutes 5)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Factor">
+        <maml:name>FactorId</maml:name>
+        <maml:description>
+          <maml:para>The Okta factor identifier returned by Get-OktaPasskeyRegistrationOptions, used together with -AttestationPublicKeyCredential as an alternative to -Passkey.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserPrincipalName, UPN, UserName, Email">
+        <maml:name>Login</maml:name>
+        <maml:description>
+          <maml:para>The Okta user login (typically an email address such as 'user@example.com'). Resolved to a UserId through an API call.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>Passkey</maml:name>
+        <maml:description>
+          <maml:para>The passkey to be registered.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">OktaWebauthnAttestationResponse</command:parameterValue>
+        <dev:type>
+          <maml:name>OktaWebauthnAttestationResponse</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+        <maml:name>UserId</maml:name>
+        <maml:description>
+          <maml:para>The unique identifier of the Okta user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7</dev:code>
+        <dev:remarks>
+          <maml:para>Performs the full registration ceremony in one step: enrolls a webauthn factor, prompts the local authenticator, and activates the factor in Okta.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Register-OktaPasskey -Login 'user@example.com'</dev:code>
+        <dev:remarks>
+          <maml:para>Resolves the Okta user by login and then performs the full registration ceremony, avoiding the need to look up the Okta id manually.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -ChallengeTimeout (New-TimeSpan -Minutes 1)</dev:code>
+        <dev:remarks>
+          <maml:para>Registers a passkey using a shorter 1-minute challenge timeout to tighten the registration window.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | Register-OktaPasskey</dev:code>
+        <dev:remarks>
+          <maml:para>Splits the registration into explicit pipeline stages: enroll the factor, create the credential locally, and activate. Equivalent to the single-step form but lets the caller inspect intermediate values.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
+$options = Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
+$credential = New-Passkey -Options $options.PublicKeyOptions
+Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -FactorId $options.FactorId -AttestationPublicKeyCredential $credential</dev:code>
+        <dev:remarks>
+          <maml:para>Drives the WebAuthn ceremony with a raw AttestationPublicKeyCredential and assembles the activation manually. Useful when the credential was produced outside of an Okta-aware pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Register-OktaPasskey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-OktaPasskeyRegistrationOptions</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-Passkey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Connect-Okta</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Okta User Factors API</maml:linkText>
+        <maml:uri>https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/activateFactor</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+</helpItems>

@@ -3,11 +3,7 @@
 Namespace: [DSInternals.Win32.WebAuthn](DSInternals.Win32.WebAuthn.md)  
 Assembly: DSInternals.Win32.WebAuthn.dll  
 
-The AuthenticatorAttestationResponse class represents the authenticator's response
-to a client’s request for the creation of a new public key credential.
-It contains information about the new credential that can be used to identify it for later use,
-and metadata that can be used by the WebAuthn Relying Party to assess the characteristics
-of the credential during registration.
+Represents an authenticator attestation response.
 
 ```csharp
 public class AuthenticatorAttestationResponse : AuthenticatorResponse
@@ -34,9 +30,7 @@ public class AuthenticatorAttestationResponse : AuthenticatorResponse
 
 ### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_AttestationObject"></a> AttestationObject
 
-This attribute contains an attestation object, which is opaque to,
-and cryptographically protected against tampering by, the client.
-The attestation object contains both authenticator data and an attestation statement.
+The attestation object returned by the authenticator (Base64Url encoded).
 
 ```csharp
 [JsonPropertyName("attestationObject")]
@@ -47,4 +41,101 @@ public byte[] AttestationObject { get; set; }
 #### Property Value
 
  [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_AuthenticatorData"></a> AuthenticatorData
+
+The authenticator data if provided separately (Base64Url encoded).
+
+```csharp
+[JsonPropertyName("authenticatorData")]
+[JsonConverter(typeof(Base64UrlConverter))]
+public byte[]? AuthenticatorData { get; set; }
+```
+
+#### Property Value
+
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_AuthenticatorDataParsed"></a> AuthenticatorDataParsed
+
+The parsed authenticator data structure.
+
+```csharp
+[JsonIgnore]
+public AuthenticatorData? AuthenticatorDataParsed { get; }
+```
+
+#### Property Value
+
+ [AuthenticatorData](DSInternals.Win32.WebAuthn.FIDO.AuthenticatorData.md)?
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_PublicKey"></a> PublicKey
+
+Optional public key (Base64Url encoded).
+
+```csharp
+[JsonPropertyName("publicKey")]
+[JsonConverter(typeof(Base64UrlConverter))]
+public byte[]? PublicKey { get; set; }
+```
+
+#### Property Value
+
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_PublicKeyAlgorithm"></a> PublicKeyAlgorithm
+
+Optional public key algorithm identifier.
+
+```csharp
+[JsonPropertyName("publicKeyAlgorithm")]
+public int? PublicKeyAlgorithm { get; set; }
+```
+
+#### Property Value
+
+ [int](https://learn.microsoft.com/dotnet/api/system.int32)?
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_Transports"></a> Transports
+
+Optional transports hint provided by the authenticator.
+
+```csharp
+[JsonPropertyName("transports")]
+public string[]? Transports { get; set; }
+```
+
+#### Property Value
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)\[\]?
+
+## Methods
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_FromJson_System_String_"></a> FromJson\(string\)
+
+```csharp
+public static AuthenticatorAttestationResponse? FromJson(string json)
+```
+
+#### Parameters
+
+`json` [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+#### Returns
+
+ [AuthenticatorAttestationResponse](DSInternals.Win32.WebAuthn.AuthenticatorAttestationResponse.md)?
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorAttestationResponse_ToString"></a> ToString\(\)
+
+Returns a string that represents the current object.
+
+```csharp
+public override string ToString()
+```
+
+#### Returns
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+A string that represents the current object.
 

@@ -17,6 +17,12 @@ ECDSA with SHA-256
 
 Corresponds to WEBAUTHN_COSE_ALGORITHM_ECDSA_P256_WITH_SHA256.
 
+`ES256K = -47` 
+
+ECDSA using secp256k1 curve and SHA-256
+
+
+
 `ES384 = -35` 
 
 ECDSA with SHA-384

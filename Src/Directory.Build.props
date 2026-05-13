@@ -69,9 +69,15 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
+  <PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\PACKAGE.md')">
+    <!-- Per-package README, included via the ItemGroup below -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- Additional files to include in NuGet packages -->
     <None Include="$(MSBuildThisFileDirectory)Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
     <None Include="$(MSBuildThisFileDirectory)../LICENSE" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="PACKAGE.md" Pack="true" PackagePath="/README.md" Visible="false" Condition="Exists('$(MSBuildProjectDirectory)\PACKAGE.md')" />
   </ItemGroup>
 </Project>

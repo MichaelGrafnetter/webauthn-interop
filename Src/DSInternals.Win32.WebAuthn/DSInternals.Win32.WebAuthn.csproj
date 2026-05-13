@@ -7,10 +7,10 @@
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
     <Product>WebAuthn Interop Assembly</Product>
     <Title>WebAuthn Interop Assembly</Title>
-    <Version>3.0.0</Version>
-    <AssemblyVersion>3.0.0</AssemblyVersion>
-    <ProductVersion>3.0.0</ProductVersion>
-    <FileVersion>3.0.0</FileVersion>
+    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.0</AssemblyVersion>
+    <ProductVersion>3.1.0</ProductVersion>
+    <FileVersion>3.1.0</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
     <PackageReleaseNotes>- Major API consolidation: split AuthenticationExtensionsClientInputs/Outputs into per-extension types, renamed AuthenticatorSelection to AuthenticatorSelectionCriteria, and reorganized COSE/Cryptography namespaces.
 - Added Credential Exchange Format (CXF) support and Bitwarden encrypted/cleartext vault export parsing.
