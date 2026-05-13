@@ -31,7 +31,15 @@ See [Yubico's blog](https://www.yubico.com/blog/microsoft-strengthens-phishing-r
 
 The project also contains a simple Windows GUI tool called `Passkey UI`, which is built on top of the `DSInternals.Win32.WebAuthn` library:
 
-![Passkey UI Screenshot](../Documentation/Screenshots/fido2-ui.png)
+![Passkey UI Assertion Screenshot](../Documentation/Screenshots/passkey-ui.png)
+
+![Passkey UI Authenticators Screenshot](../Documentation/Screenshots/passkey-ui-authenticators.png)
+
+![Passkey UI Windows Hello Passkeys Screenshot](../Documentation/Screenshots/passkey-ui-winhello.png)
+
+![Passkey UI Software Signer Screenshot](../Documentation/Screenshots/passkey-ui-signer.png)
+
+![Passkey UI WebAuthn API Version Screenshot](../Documentation/Screenshots/passkey-ui-api-version.png)
 
 The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 
@@ -54,7 +62,7 @@ The WebAuthn API is only supported on Windows 10 1903 and newer. It is exposed i
 Following are code samples that mimic the behavior of [login.microsoftonline.com](https://login.microsoftonline.com).
 The samples are not ready for production use, as they are missing validation and contain many hardcoded values. Especially the `challenge` must be randomly generated in a cryptographically safe way.
 
-### Registration (Attestation)
+### Passkey Registration (Attestation)
 
 Credential registration is performed by calling the [AuthenticatorMakeCredential](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) or [AuthenticatorMakeCredentialAsync](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) method:
 
@@ -78,7 +86,7 @@ var api = new WebAuthnApi();
 var response = api.AuthenticatorMakeCredential(rp, user, challenge, UserVerificationRequirement.Required, AuthenticatorAttachment.Any);
 ```
 
-### Authentication (Assertion)
+### Passkey Authentication (Assertion)
 
 Authentication using a previously registered credential is performed by calling the [AuthenticatorGetAssertion](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) or [AuthenticatorGetAssertionAsync](../Documentation/API/DSInternals.Win32.WebAuthn.WebAuthnApi.md) method:
 

@@ -166,17 +166,12 @@ function Get-OktaPasskeyRegistrationOptions
 
             Write-Debug ('Credential options response: ' + $response)
 
-            # Parse JSON response
+            # Parse JSON response. Okta omits the relying party id from server-issued options;
+            # carry the live tenant host on the options object so downstream WebAuthn API calls
+            # can forward it as the `hostName` argument.
             [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions] $options =
                 [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]::Create($response)
-
-            # Okta appears to omit relying party id in the options, but it is required for credential creation
-            # So set default to the tenant we are talking to, which is probably what the user wants anyway
-            if ($null -eq $options.Embedded.PublicKeyOptions.RelyingParty.Id) {
-                [string] $relyingPartyId = $Script:OktaToken.Tenant.Host
-                Write-Debug ('Setting relying party id to ' + $relyingPartyId)
-                $options.Embedded.PublicKeyOptions.RelyingParty.Id = $relyingPartyId
-            }
+            $options.Tenant = $Script:OktaToken.Tenant.Host
 
             Write-Debug ('Credential options: ' + ($options | Out-String))
             return $options
@@ -246,10 +241,10 @@ Splits the registration into explicit pipeline stages: enroll the factor, create
 .EXAMPLE
 Connect-Okta -Tenant example.okta.com -ClientId 0oakmj8hvxvtvCy3P5d7
 $options = Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7
-$credential = New-Passkey -Options $options.PublicKeyOptions
+$credential = New-Passkey -Options $options.PublicKeyOptions -HostName $options.Tenant
 Register-OktaPasskey -UserId 00eDuihq64pgP1gVD0x7 -FactorId $options.FactorId -AttestationPublicKeyCredential $credential
 
-Drives the WebAuthn ceremony with a raw AttestationPublicKeyCredential and assembles the activation manually. Useful when the credential was produced outside of an Okta-aware pipeline.
+Drives the WebAuthn ceremony with a raw AttestationPublicKeyCredential and assembles the activation manually. The tenant host carried on the options object is forwarded to New-Passkey via -HostName to substitute for the rpId that Okta omits.
 
 .LINK
 Get-OktaPasskeyRegistrationOptions
@@ -337,10 +332,12 @@ function Register-OktaPasskey
                 [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions] $options =
                     Get-OktaPasskeyRegistrationOptions -UserId $UserId -ChallengeTimeout $ChallengeTimeout -ErrorAction Stop
 
-                # Display the passkey registration prompt
+                # Display the passkey registration prompt. Pass the live tenant host name as `hostName`,
+                # which the WebAuthn API uses to derive the origin and to fill in the missing rpId
+                # that Okta omits from its server-issued options.
                 [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
                 [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential] $credential =
-                    $api.AuthenticatorMakeCredential($options.PublicKeyOptions)
+                    $api.AuthenticatorMakeCredential($options.PublicKeyOptions, $Script:OktaToken.Tenant.Host)
 
                 $FactorId = $options.FactorId
                 $Passkey = [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse]::new(

@@ -12,13 +12,19 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
         /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
+        /// <param name="hostName">
+        /// Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
+        /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
+        /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
+        /// </param>
         /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
         /// <returns>A task that completes with the attestation public key credential produced by the authenticator.</returns>
         public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
             PublicKeyCredentialCreationOptions options,
+            string? hostName = null,
             CancellationToken cancellationToken = default)
         {
-            return AuthenticatorMakeCredentialAsync(options, default, cancellationToken);
+            return AuthenticatorMakeCredentialAsync(options, default(WindowHandle), hostName, cancellationToken);
         }
 
         /// <summary>
@@ -26,15 +32,21 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
         /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <param name="hostName">
+        /// Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
+        /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
+        /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
+        /// </param>
         /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
         /// <returns>A task that completes with the attestation public key credential produced by the authenticator.</returns>
         public async Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
             PublicKeyCredentialCreationOptions options,
             WindowHandle windowHandle,
+            string? hostName = null,
             CancellationToken cancellationToken = default)
         {
             using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
-            return await Task.Run(() => AuthenticatorMakeCredential(options, windowHandle)).ConfigureAwait(false);
+            return await Task.Run(() => AuthenticatorMakeCredential(options, windowHandle, hostName)).ConfigureAwait(false);
         }
 
         /// <summary>

@@ -38,19 +38,20 @@ if ([string]::IsNullOrWhiteSpace($ModulePath)) {
 # Load the required PowerShell modules
 Import-Module -Name Pester -ErrorAction Stop
 
-# Get rid of the long directory path in the command prompt
-function prompt() { 'PS > ' }
+# Ensure the test results output directory exists; Pester writes the file directly and will not create it.
+[string] $testResultPath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\Build\TestResults\Pester.xml'
+[string] $testResultDirectory = Split-Path -Path $testResultPath -Parent
+New-Item -Path $testResultDirectory -ItemType Directory -Force | Out-Null
 
 # Invoke the tests
 [PesterConfiguration] $config = [PesterConfiguration]::Default
 $config.Run.Container = New-PesterContainer -Path $PSScriptRoot -Data @{
     ModulePath = $ModulePath # Compiled module directory
 }
-$config.Run.Path = $PSScriptRoot # Directory with the tests
 $config.Output.Verbosity = 'Detailed'
 $config.Output.StackTraceVerbosity = 'None'
 $config.TestResult.Enabled = $true
 $config.TestResult.OutputFormat = 'NUnitXml'
-$config.TestResult.OutputPath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\Build\TestResults\Pester.xml'
+$config.TestResult.OutputPath = $testResultPath
 
 Invoke-Pester -Configuration $config

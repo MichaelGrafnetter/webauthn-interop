@@ -8,6 +8,9 @@ Calls the Windows WebAuthn API to make a credential according to the provided Pu
 .PARAMETER Options
 The WebAuthn public key credential creation options. Returned directly by Get-EntraPasskeyRegistrationOptions.
 
+.PARAMETER HostName
+Optional host name used to derive the WebAuthn origin when the server-issued options omit the relying party identifier.
+
 .PARAMETER OktaOptions
 The Okta-specific credential creation options. Returned by Get-OktaPasskeyRegistrationOptions.
 
@@ -55,6 +58,11 @@ function New-Passkey
         [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions]
         $Options,
 
+        [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $HostName,
+
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Okta')]
         [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]
         $OktaOptions
@@ -62,14 +70,17 @@ function New-Passkey
 
     process {
         try {
-            # Unify the options to pass to the WebAuthn API, extracting the PublicKeyCredentialCreationOptions from the Okta wrapper if necessary
-            [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions] $publicKeyOptions =
-                if ($PSCmdlet.ParameterSetName -eq 'Okta') { $OktaOptions.PublicKeyOptions } else { $Options }
-
-            # Call the WebAuthn API to create a new credential, which will trigger the Windows passkey UI
+            # Call the WebAuthn API to create a new credential, which will trigger the Windows passkey UI.
+            # The `hostName` argument derives the WebAuthn origin and stands in for the rpId when the
+            # server-issued options omit it. For Okta, the tenant host is carried on the options object;
+            # for the Default path, the caller can supply it via -HostName.
             [DSInternals.Win32.WebAuthn.WebAuthnApi] $api = [DSInternals.Win32.WebAuthn.WebAuthnApi]::new()
             [DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential] $credential =
-                $api.AuthenticatorMakeCredential($publicKeyOptions)
+                if ($PSCmdlet.ParameterSetName -eq 'Okta') {
+                    $api.AuthenticatorMakeCredential($OktaOptions.PublicKeyOptions, $OktaOptions.Tenant)
+                } else {
+                    $api.AuthenticatorMakeCredential($Options, $HostName)
+                }
 
             if ($PSCmdlet.ParameterSetName -eq 'Okta') {
                 # Wrap the credential into an Okta-specific attestation response object

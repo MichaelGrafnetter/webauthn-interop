@@ -270,6 +270,9 @@
                 <PropertyName>FactorId</PropertyName>
               </ListItem>
               <ListItem>
+                <PropertyName>Tenant</PropertyName>
+              </ListItem>
+              <ListItem>
                 <PropertyName>PublicKeyOptions</PropertyName>
               </ListItem>
             </ListItems>

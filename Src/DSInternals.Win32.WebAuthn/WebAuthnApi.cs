@@ -200,10 +200,17 @@ namespace DSInternals.Win32.WebAuthn
         /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
         /// </summary>
         /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
+        /// <param name="hostName">
+        /// Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
+        /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
+        /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
+        /// </param>
         /// <returns>The attestation public key credential produced by the authenticator.</returns>
-        public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options)
+        public AttestationPublicKeyCredential AuthenticatorMakeCredential(
+            PublicKeyCredentialCreationOptions options,
+            string? hostName = null)
         {
-            return AuthenticatorMakeCredential(options, default);
+            return AuthenticatorMakeCredential(options, default(WindowHandle), hostName);
         }
 
         /// <summary>
@@ -211,8 +218,16 @@ namespace DSInternals.Win32.WebAuthn
         /// </summary>
         /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
         /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <param name="hostName">
+        /// Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
+        /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
+        /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
+        /// </param>
         /// <returns>The attestation public key credential produced by the authenticator.</returns>
-        public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options, WindowHandle windowHandle)
+        public AttestationPublicKeyCredential AuthenticatorMakeCredential(
+            PublicKeyCredentialCreationOptions options,
+            WindowHandle windowHandle,
+            string? hostName = null)
         {
             ArgumentNullException.ThrowIfNull(options);
 
@@ -232,6 +247,7 @@ namespace DSInternals.Win32.WebAuthn
                 excludeCredentials: options.ExcludeCredentials,
                 credentialHints: options.Hints?.ToArray(),
                 publicKeyCredentialCreationOptionsJson: Encoding.UTF8.GetBytes(options.ToString()),
+                hostName: hostName,
                 windowHandle: windowHandle
                 );
         }

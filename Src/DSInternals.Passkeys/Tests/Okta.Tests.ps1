@@ -45,7 +45,10 @@ Describe "Okta Tests" -Skip {
     It "Registers passkeys to Okta for each credential parameter option" {
         $options0 = Get-OktaPasskeyRegistrationOptions -UserId $env:OktaUserId
         $options0 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]
-        $options0.PublicKeyOptions.RelyingParty.Id | Should -Be $env:OktaTenantId
+        # Okta omits rp.id from server-issued options; the cmdlet stamps the live tenant host onto
+        # the Tenant property so downstream WebAuthn API calls can forward it as the hostName argument.
+        $options0.PublicKeyOptions.RelyingParty.Id | Should -BeNullOrEmpty
+        $options0.Tenant | Should -Be $env:OktaTenantId
         $options0.PublicKeyOptions.PublicKeyCredentialParameters.Count | Should -Be 2
 
         $factory0 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()
@@ -76,7 +79,8 @@ Describe "Okta Tests" -Skip {
 
         $options1 = Get-OktaPasskeyRegistrationOptions -UserId $env:OktaUserId
         $options1 | Should -BeOfType [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]
-        $options1.PublicKeyOptions.RelyingParty.Id | Should -Be $env:OktaTenantId
+        $options1.PublicKeyOptions.RelyingParty.Id | Should -BeNullOrEmpty
+        $options1.Tenant | Should -Be $env:OktaTenantId
         $options1.PublicKeyOptions.PublicKeyCredentialParameters.Count | Should -Be 2
 
         $factory1 = [DSInternals.Win32.WebAuthn.Tests.PasskeyFactory]::new()

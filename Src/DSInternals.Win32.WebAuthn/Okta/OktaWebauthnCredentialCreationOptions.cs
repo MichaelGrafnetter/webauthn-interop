@@ -42,6 +42,14 @@ namespace DSInternals.Win32.WebAuthn.Okta
         }
 
         /// <summary>
+        /// The Okta tenant host name (e.g., <c>example.okta.com</c>) that issued these options.
+        /// Carried out-of-band because Okta omits <c>rp.id</c> from server-issued credential creation options;
+        /// downstream WebAuthn API calls forward this value as the <c>hostName</c> argument so it acts as both the relying party identifier and the WebAuthn origin source.
+        /// </summary>
+        [JsonIgnore]
+        public string? Tenant { get; set; }
+
+        /// <summary>
         /// Parses a JSON payload returned by Okta into WebAuthn credential creation options.
         /// </summary>
         /// <param name="json">The Okta JSON payload.</param>

@@ -25,7 +25,7 @@ Registers a new passkey in Microsoft Entra ID.
 
 ### [Connect-Okta](Connect-Okta.md)
 
-Retrieves an access token to interact with Okta APIs.
+Retrieves an access token to interact with Okta APIs. See [Okta Setup](../Okta.md) for tenant and application configuration prerequisites.
 
 ### [Disconnect-Okta](Disconnect-Okta.md)
 
