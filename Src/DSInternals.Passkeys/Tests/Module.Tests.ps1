@@ -157,7 +157,10 @@ Describe 'PowerShell Module' {
 
         It 'contains proper module description' {
             [string] $moduleDescription = $manifest.Description.Trim()
-            $modulePagePath | Should -FileContentMatch $moduleDescription
+            # FileContentMatch treats the expected content as a regex, so any regex
+            # metacharacters in the module description (e.g. parentheses) must be
+            # escaped to ensure literal matching against the README.
+            $modulePagePath | Should -FileContentMatch ([regex]::Escape($moduleDescription))
         }
 
         It 'contains the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {

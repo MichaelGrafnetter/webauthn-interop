@@ -41,6 +41,8 @@ The project also contains a simple Windows GUI tool called `Passkey UI`, which i
 
 ![Passkey UI WebAuthn API Version Screenshot](../Documentation/Screenshots/passkey-ui-api-version.png)
 
+![Passkey UI WebAuthn Events Screenshot](../Documentation/Screenshots/passkey-ui-events.png)
+
 The only purpose of this tool is to demonstrate the usage of the WebAuthn API.
 
 ## Downloads

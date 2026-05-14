@@ -12,9 +12,9 @@
           "name": "Debug Passkey UI",
           "type": "coreclr",
           "request": "launch",
-          "program": "${workspaceFolder}/Build/bin/PasskeyUI/debug_net10.0-windows/PasskeyUI.exe",
+          "program": "${workspaceFolder}/Build/bin/PasskeyUI/debug/PasskeyUI.exe",
           "args": [],
-          "cwd": "${workspaceFolder}/Build/bin/PasskeyUI/debug_net10.0-windows",
+          "cwd": "${workspaceFolder}/Build/bin/PasskeyUI/debug",
           "stopAtEntry": false,
           "console": "internalConsole",
           "preLaunchTask": "build"
