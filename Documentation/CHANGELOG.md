@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
-## [3.1] - 2026-05-14
+## [3.1.0] - 2026-05-14
 
 ### Added
 
@@ -130,8 +130,8 @@ This is a bugfix release. Huge thanks to @aseigler for reporting and fixing the 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.1...HEAD
-[3.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.0...v3.1
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.0...v3.1.0
 [3.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1.1...v3.0
 [2.1.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1...v2.1.1
 [2.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.0...v2.1

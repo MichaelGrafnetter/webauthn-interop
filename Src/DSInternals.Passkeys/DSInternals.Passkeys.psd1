@@ -26,7 +26,7 @@ CompanyName = 'DSInternals'
 Copyright = 'Copyright (c) 2021-2026 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) through the Microsoft Graph API.'
+Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) and Okta.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.1'

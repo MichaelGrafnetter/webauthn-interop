@@ -9,7 +9,7 @@ Locale: en-US
 
 ## Description
 
-This PowerShell module allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) as well as Okta.
+Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) and Okta.
 
 ## Microsoft Entra ID Cmdlets
 
