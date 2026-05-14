@@ -6,7 +6,7 @@ namespace System.Security.Cryptography.X509Certificates;
 /// <summary>
 /// Provides compatibility members for APIs added to newer .NET versions.
 /// </summary>
-public static class X509CertificateLoader
+internal static class X509CertificateLoader
 {
     /// <summary>
     /// Loads an X.509 certificate from raw DER/BER encoded bytes.
