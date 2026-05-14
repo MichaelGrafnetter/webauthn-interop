@@ -42,7 +42,7 @@ env:
 jobs:
   build:
     name: 'Build'
-    runs-on: windows-latest
+    runs-on: windows-2025-vs2026
     timeout-minutes: 10
     permissions:
       id-token: write
@@ -104,7 +104,7 @@ jobs:
         dotnet tool install --global --prerelease sign
 
     - name: Azure Login
-      uses: azure/login@v2
+      uses: azure/login@v3
       if: ${{ inputs.certificate_sign }}
       with:
         client-id: ${{ secrets.SIGNING_CLIENT_ID }}

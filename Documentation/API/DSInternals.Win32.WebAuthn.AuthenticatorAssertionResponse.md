@@ -17,6 +17,7 @@ public class AuthenticatorAssertionResponse : AuthenticatorResponse
 
 #### Inherited Members
 
+[AuthenticatorResponse.ClientData](DSInternals.Win32.WebAuthn.AuthenticatorResponse.md\#DSInternals\_Win32\_WebAuthn\_AuthenticatorResponse\_ClientData), 
 [AuthenticatorResponse.ClientDataJson](DSInternals.Win32.WebAuthn.AuthenticatorResponse.md\#DSInternals\_Win32\_WebAuthn\_AuthenticatorResponse\_ClientDataJson), 
 [object.Equals\(object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\)), 
 [object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 

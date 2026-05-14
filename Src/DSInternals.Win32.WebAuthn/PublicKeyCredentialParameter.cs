@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.Interop;
@@ -34,6 +35,15 @@ namespace DSInternals.Win32.WebAuthn
 
             this.Algorithm = algorithm;
             this.Type = type;
+        }
+
+        /// <summary>
+        /// Serializes the credential parameter to JSON.
+        /// </summary>
+        /// <returns>JSON representation of this credential parameter.</returns>
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.PublicKeyCredentialParameter);
         }
     }
 }

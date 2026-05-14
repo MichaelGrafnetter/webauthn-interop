@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DSInternals.Win32.WebAuthn.FIDO;
@@ -17,36 +17,17 @@ namespace DSInternals.Win32.WebAuthn
         /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
         /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
         /// </param>
-        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
-        /// <returns>A task that completes with the attestation public key credential produced by the authenticator.</returns>
-        public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
-            PublicKeyCredentialCreationOptions options,
-            string? hostName = null,
-            CancellationToken cancellationToken = default)
-        {
-            return AuthenticatorMakeCredentialAsync(options, default(WindowHandle), hostName, cancellationToken);
-        }
-
-        /// <summary>
-        /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
-        /// </summary>
-        /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
         /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
-        /// <param name="hostName">
-        /// Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
-        /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
-        /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
-        /// </param>
         /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
         /// <returns>A task that completes with the attestation public key credential produced by the authenticator.</returns>
         public async Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(
             PublicKeyCredentialCreationOptions options,
-            WindowHandle windowHandle,
             string? hostName = null,
+            WindowHandle windowHandle = default,
             CancellationToken cancellationToken = default)
         {
             using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
-            return await Task.Run(() => AuthenticatorMakeCredential(options, windowHandle, hostName)).ConfigureAwait(false);
+            return await Task.Run(() => AuthenticatorMakeCredential(options, hostName, windowHandle), cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -117,92 +98,7 @@ namespace DSInternals.Win32.WebAuthn
                 publicKeyCredentialCreationOptionsJson,
                 hostName,
                 windowHandle
-            )).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
-        /// </summary>
-        /// <param name="options">The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.</param>
-        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
-        /// <returns>A task that completes with the signed assertion public key credential produced by the authenticator.</returns>
-        public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
-            PublicKeyCredentialRequestOptions options,
-            CancellationToken cancellationToken = default)
-        {
-            return AuthenticatorGetAssertionAsync(options, default, cancellationToken);
-        }
-
-        /// <summary>
-        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
-        /// </summary>
-        /// <param name="options">The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.</param>
-        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
-        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
-        /// <returns>A task that completes with the signed assertion public key credential produced by the authenticator.</returns>
-        public async Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
-            PublicKeyCredentialRequestOptions options,
-            WindowHandle windowHandle,
-            CancellationToken cancellationToken = default)
-        {
-            using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
-            return await Task.Run(() => AuthenticatorGetAssertion(options, windowHandle)).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
-        /// </summary>
-        /// <param name="rpId">Identifier of the relying party requesting the assertion.</param>
-        /// <param name="challenge">Cryptographic challenge produced by the relying party to be signed by the authenticator.</param>
-        /// <param name="userVerificationRequirement">Indicates whether user verification is required, preferred, or discouraged.</param>
-        /// <param name="authenticatorAttachment">Constrains the type of authenticator that may be used (platform, cross-platform, or any).</param>
-        /// <param name="timeoutMilliseconds">Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.</param>
-        /// <param name="allowCredentials">Optional list of credentials acceptable to the relying party for the assertion.</param>
-        /// <param name="extensions">Client extension inputs for the assertion operation.</param>
-        /// <param name="browserInPrivateMode">Indicates whether the request originates from a browser running in private/incognito mode.</param>
-        /// <param name="linkedDevice">Optional hybrid (cross-device) storage linked data for state-assisted transactions.</param>
-        /// <param name="autoFill">Indicates whether the request is a conditional UI (autofill) request.</param>
-        /// <param name="credentialHints">Optional ordered list of public key credential hints describing the modality the relying party prefers.</param>
-        /// <param name="authenticatorId">Optional identifier of a specific authenticator to target.</param>
-        /// <param name="publicKeyCredentialRequestOptionsJson">Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.</param>
-        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
-        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
-        /// <returns>A task that completes with the signed assertion public key credential produced by the authenticator.</returns>
-        public async Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
-            string rpId,
-            byte[] challenge,
-            UserVerificationRequirement userVerificationRequirement,
-            AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
-            uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
-            IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null,
-            AuthenticationExtensionsClientAssertionInputs? extensions = null,
-            bool browserInPrivateMode = false,
-            HybridStorageLinkedData? linkedDevice = null,
-            bool autoFill = false,
-            string[]? credentialHints = null,
-            byte[]? authenticatorId = null,
-            byte[]? publicKeyCredentialRequestOptionsJson = null,
-            WindowHandle windowHandle = default,
-            CancellationToken cancellationToken = default
-        )
-        {
-            using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
-            return await Task.Run(() => AuthenticatorGetAssertion(
-                rpId,
-                challenge,
-                userVerificationRequirement,
-                authenticatorAttachment,
-                timeoutMilliseconds,
-                allowCredentials,
-                extensions,
-                browserInPrivateMode,
-                linkedDevice,
-                autoFill,
-                credentialHints,
-                authenticatorId,
-                publicKeyCredentialRequestOptionsJson,
-                windowHandle
-            )).ConfigureAwait(false);
+            ), cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -270,7 +166,79 @@ namespace DSInternals.Win32.WebAuthn
                 authenticatorId,
                 publicKeyCredentialCreationOptionsJson,
                 windowHandle
-            )).ConfigureAwait(false);
+            ), cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
+        /// </summary>
+        /// <param name="options">The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
+        /// <returns>A task that completes with the signed assertion public key credential produced by the authenticator.</returns>
+        public async Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
+            PublicKeyCredentialRequestOptions options,
+            WindowHandle windowHandle = default,
+            CancellationToken cancellationToken = default)
+        {
+            using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
+            return await Task.Run(() => AuthenticatorGetAssertion(options, windowHandle), cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
+        /// </summary>
+        /// <param name="rpId">Identifier of the relying party requesting the assertion.</param>
+        /// <param name="challenge">Cryptographic challenge produced by the relying party to be signed by the authenticator.</param>
+        /// <param name="userVerificationRequirement">Indicates whether user verification is required, preferred, or discouraged.</param>
+        /// <param name="authenticatorAttachment">Constrains the type of authenticator that may be used (platform, cross-platform, or any).</param>
+        /// <param name="timeoutMilliseconds">Timeout, in milliseconds, that the client should wait for the authenticator to complete the operation.</param>
+        /// <param name="allowCredentials">Optional list of credentials acceptable to the relying party for the assertion.</param>
+        /// <param name="extensions">Client extension inputs for the assertion operation.</param>
+        /// <param name="browserInPrivateMode">Indicates whether the request originates from a browser running in private/incognito mode.</param>
+        /// <param name="linkedDevice">Optional hybrid (cross-device) storage linked data for state-assisted transactions.</param>
+        /// <param name="autoFill">Indicates whether the request is a conditional UI (autofill) request.</param>
+        /// <param name="credentialHints">Optional ordered list of public key credential hints describing the modality the relying party prefers.</param>
+        /// <param name="authenticatorId">Optional identifier of a specific authenticator to target.</param>
+        /// <param name="publicKeyCredentialRequestOptionsJson">Optional UTF-8 encoded JSON representation of the original request options, forwarded to the authenticator.</param>
+        /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
+        /// <param name="cancellationToken">Token that, when canceled, signals the underlying WebAuthn operation to be canceled.</param>
+        /// <returns>A task that completes with the signed assertion public key credential produced by the authenticator.</returns>
+        public async Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(
+            string rpId,
+            byte[] challenge,
+            UserVerificationRequirement userVerificationRequirement,
+            AuthenticatorAttachment authenticatorAttachment = AuthenticatorAttachment.Any,
+            uint timeoutMilliseconds = ApiConstants.DefaultTimeoutMilliseconds,
+            IReadOnlyList<PublicKeyCredentialDescriptor>? allowCredentials = null,
+            AuthenticationExtensionsClientAssertionInputs? extensions = null,
+            bool browserInPrivateMode = false,
+            HybridStorageLinkedData? linkedDevice = null,
+            bool autoFill = false,
+            string[]? credentialHints = null,
+            byte[]? authenticatorId = null,
+            byte[]? publicKeyCredentialRequestOptionsJson = null,
+            WindowHandle windowHandle = default,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var cancellationTokenRegistration = cancellationToken.Register(() => { this.CancelCurrentOperation(); });
+            return await Task.Run(() => AuthenticatorGetAssertion(
+                rpId,
+                challenge,
+                userVerificationRequirement,
+                authenticatorAttachment,
+                timeoutMilliseconds,
+                allowCredentials,
+                extensions,
+                browserInPrivateMode,
+                linkedDevice,
+                autoFill,
+                credentialHints,
+                authenticatorId,
+                publicKeyCredentialRequestOptionsJson,
+                windowHandle
+            ), cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -326,7 +294,7 @@ namespace DSInternals.Win32.WebAuthn
                 authenticatorId,
                 publicKeyCredentialRequestOptionsJson,
                 windowHandle
-            )).ConfigureAwait(false);
+            ), cancellationToken).ConfigureAwait(false);
         }
     }
 }

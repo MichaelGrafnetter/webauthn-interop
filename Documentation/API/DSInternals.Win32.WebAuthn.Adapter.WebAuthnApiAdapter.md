@@ -46,17 +46,17 @@ public AuthenticatorAssertionRawResponse AuthenticatorGetAssertion(AssertionOpti
 
 #### Parameters
 
-`options` [AssertionOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/AssertionOptions.cs)
+`options` [AssertionOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/AssertionOptions.cs)
 
 The Fido2NetLib assertion options describing the relying party, allowed credentials, and the desired authenticator behavior.
 
-`authenticatorAttachment` [AuthenticatorAttachment](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticatorAttachment.cs)?
+`authenticatorAttachment` [AuthenticatorAttachment](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticatorAttachment.cs)?
 
 Optionally constrains the eligible authenticators by attachment (platform or cross-platform).
 
 #### Returns
 
- [AuthenticatorAssertionRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/AuthenticatorAssertionRawResponse.cs)
+ [AuthenticatorAssertionRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/AuthenticatorAssertionRawResponse.cs)
 
 The raw assertion response containing the authenticator data, signature, and user handle returned by the authenticator.
 
@@ -70,11 +70,11 @@ public Task<AuthenticatorAssertionRawResponse> AuthenticatorGetAssertionAsync(As
 
 #### Parameters
 
-`options` [AssertionOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/AssertionOptions.cs)
+`options` [AssertionOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/AssertionOptions.cs)
 
 The Fido2NetLib assertion options describing the relying party, allowed credentials, and the desired authenticator behavior.
 
-`authenticatorAttachment` [AuthenticatorAttachment](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticatorAttachment.cs)?
+`authenticatorAttachment` [AuthenticatorAttachment](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticatorAttachment.cs)?
 
 Optionally constrains the eligible authenticators by attachment (platform or cross-platform).
 
@@ -84,7 +84,7 @@ Token that, when canceled, signals the underlying WebAuthn operation to be cance
 
 #### Returns
 
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AuthenticatorAssertionRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/AuthenticatorAssertionRawResponse.cs)\>
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AuthenticatorAssertionRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/AuthenticatorAssertionRawResponse.cs)\>
 
 The raw assertion response containing the authenticator data, signature, and user handle returned by the authenticator.
 
@@ -98,13 +98,13 @@ public AuthenticatorAttestationRawResponse AuthenticatorMakeCredential(Credentia
 
 #### Parameters
 
-`options` [CredentialCreateOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/CredentialCreateOptions.cs)
+`options` [CredentialCreateOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/CredentialCreateOptions.cs)
 
 The Fido2NetLib credential creation options describing the relying party, the user, and the desired authenticator behavior.
 
 #### Returns
 
- [AuthenticatorAttestationRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/AuthenticatorAttestationRawResponse.cs)
+ [AuthenticatorAttestationRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/AuthenticatorAttestationRawResponse.cs)
 
 The raw attestation response that the relying party can persist to register the new credential.
 
@@ -118,7 +118,7 @@ public Task<AuthenticatorAttestationRawResponse> AuthenticatorMakeCredentialAsyn
 
 #### Parameters
 
-`options` [CredentialCreateOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/CredentialCreateOptions.cs)
+`options` [CredentialCreateOptions](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/CredentialCreateOptions.cs)
 
 The Fido2NetLib credential creation options describing the relying party, the user, and the desired authenticator behavior.
 
@@ -128,7 +128,7 @@ Token that, when canceled, signals the underlying WebAuthn operation to be cance
 
 #### Returns
 
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AuthenticatorAttestationRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/AuthenticatorAttestationRawResponse.cs)\>
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AuthenticatorAttestationRawResponse](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/AuthenticatorAttestationRawResponse.cs)\>
 
 The raw attestation response that the relying party can persist to register the new credential.
 

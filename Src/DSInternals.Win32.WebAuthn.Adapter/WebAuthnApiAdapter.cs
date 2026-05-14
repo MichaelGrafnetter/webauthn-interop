@@ -70,7 +70,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                 Response = new AuthenticatorAttestationRawResponse.AttestationResponse()
                 {
                     AttestationObject = attestationResponse.AttestationObject,
-                    ClientDataJson = attestation.Response.ClientDataJson,
+                    ClientDataJson = attestation.Response.ClientData,
                     Transports = Array.Empty<Fido2NetLib.Objects.AuthenticatorTransport>()
                 },
                 ClientExtensionResults = ApiMapper.Translate(attestation.ClientExtensionResults)!
@@ -134,7 +134,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter
                     AuthenticatorData = assertionResponse.AuthenticatorData,
                     Signature = assertionResponse.Signature,
                     UserHandle = assertionResponse.UserHandle,
-                    ClientDataJson = assertion.Response.ClientDataJson
+                    ClientDataJson = assertion.Response.ClientData
                 },
                 ClientExtensionResults = ApiMapper.Translate(assertion.ClientExtensionResults)!
             };

@@ -65,6 +65,21 @@ public PublicKeyCredentialCreationOptions PublicKeyOptions { get; set; }
 
  [PublicKeyCredentialCreationOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md)
 
+### <a id="DSInternals_Win32_WebAuthn_Okta_OktaWebauthnCredentialCreationOptions_Tenant"></a> Tenant
+
+The Okta tenant host name (e.g., <code>example.okta.com</code>) that issued these options.
+Carried out-of-band because Okta omits <code>rp.id</code> from server-issued credential creation options;
+downstream WebAuthn API calls forward this value as the <code>hostName</code> argument so it acts as both the relying party identifier and the WebAuthn origin source.
+
+```csharp
+[JsonIgnore]
+public string? Tenant { get; set; }
+```
+
+#### Property Value
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
+
 ## Methods
 
 ### <a id="DSInternals_Win32_WebAuthn_Okta_OktaWebauthnCredentialCreationOptions_Create_System_String_"></a> Create\(string\)

@@ -8,13 +8,13 @@
 #Requires -Version 5.1
 #Requires -Modules @{ ModuleName = 'Pester'; ModuleVersion = '5.0' }
 
-[CmdletBinding(DefaultParameterSetName = 'Configuration')]
+[CmdletBinding()]
 param(
-    [Parameter(Mandatory = $false, ParameterSetName = 'ModulePath')]
+    [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string] $ModulePath,
 
-    [Parameter(Mandatory = $false, ParameterSetName = 'Configuration')]
+    [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [ValidateSet('Debug', 'Release')]
     [string] $Configuration = 'Debug'
@@ -46,7 +46,8 @@ New-Item -Path $testResultDirectory -ItemType Directory -Force | Out-Null
 # Invoke the tests
 [PesterConfiguration] $config = [PesterConfiguration]::Default
 $config.Run.Container = New-PesterContainer -Path $PSScriptRoot -Data @{
-    ModulePath = $ModulePath # Compiled module directory
+    ModulePath    = $ModulePath # Compiled module directory
+    Configuration = $Configuration # Build configuration (gates the strong-name check)
 }
 $config.Output.Verbosity = 'Detailed'
 $config.Output.StackTraceVerbosity = 'None'

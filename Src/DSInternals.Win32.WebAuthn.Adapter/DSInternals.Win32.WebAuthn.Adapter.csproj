@@ -11,7 +11,8 @@
     <ProductVersion>3.1.0</ProductVersion>
     <FileVersion>3.1.0</FileVersion>
     <Description>Bridge between Fido2.Models and DSInternals.Win32.WebAuthn packages</Description>
-    <PackageReleaseNotes>- Updated DSInternals.Win32.WebAuthn dependency to 3.1.0 and aligned with the new API surface.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added translators for credential hints, credential protection policy, large-blob attestation/assertion inputs and outputs, and PRF attestation/assertion inputs and outputs.
+- Updated `DSInternals.Win32.WebAuthn` dependency to 3.1.0 and aligned with the new API surface.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -28,7 +29,6 @@
 
   <ItemGroup>
     <PackageReference Include="Fido2.Models" />
-    <PackageReference Include="Microsoft.Bcl.Memory" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(Configuration)' == 'Release'">

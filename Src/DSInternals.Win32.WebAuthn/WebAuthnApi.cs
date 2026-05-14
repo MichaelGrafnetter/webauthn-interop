@@ -205,29 +205,12 @@ namespace DSInternals.Win32.WebAuthn
         /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
         /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
         /// </param>
-        /// <returns>The attestation public key credential produced by the authenticator.</returns>
-        public AttestationPublicKeyCredential AuthenticatorMakeCredential(
-            PublicKeyCredentialCreationOptions options,
-            string? hostName = null)
-        {
-            return AuthenticatorMakeCredential(options, default(WindowHandle), hostName);
-        }
-
-        /// <summary>
-        /// Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
-        /// </summary>
-        /// <param name="options">The credential creation options that describe the relying party, the user, and the desired authenticator behavior.</param>
         /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
-        /// <param name="hostName">
-        /// Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
-        /// Useful for relying parties (such as Okta) that omit <c>rp.id</c> from server-issued creation options.
-        /// When <see cref="RelyingPartyInformation.Id"/> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
-        /// </param>
         /// <returns>The attestation public key credential produced by the authenticator.</returns>
         public AttestationPublicKeyCredential AuthenticatorMakeCredential(
             PublicKeyCredentialCreationOptions options,
-            WindowHandle windowHandle,
-            string? hostName = null)
+            string? hostName = null,
+            WindowHandle windowHandle = default)
         {
             ArgumentNullException.ThrowIfNull(options);
 
@@ -309,6 +292,19 @@ namespace DSInternals.Win32.WebAuthn
                 relyingPartyId: rpEntity.Id,
                 remoteClientDataJson: extensions?.RemoteClientDataJson,
                 remoteDesktopClientOverride: extensions?.RemoteDesktopClientOverride);
+
+            // The Win32 WebAuthn API rejects a null rp.id with E_INVALIDARG. When the relying party
+            // (e.g. Okta) omits it from server-issued options, substitute the host name so the
+            // native call receives a well-formed RP entity.
+            if (string.IsNullOrEmpty(rpEntity.Id) && !string.IsNullOrEmpty(hostName))
+            {
+                rpEntity = new RelyingPartyInformation
+                {
+                    Id = hostName,
+                    Name = rpEntity.Name,
+                    Icon = rpEntity.Icon
+                };
+            }
 
             return AuthenticatorMakeCredential(
                 rpEntity,
@@ -575,7 +571,7 @@ namespace DSInternals.Win32.WebAuthn
                             Type = ApiConstants.PublicKeyCredentialType,
                             Response = new AuthenticatorAttestationResponse()
                             {
-                                ClientDataJson = clientDataNative.ClientDataRaw,
+                                ClientData = clientDataNative.ClientDataRaw,
                                 AttestationObject = attestation.AttestationObject,
                                 AuthenticatorData = attestation.AuthenticatorData,
                                 Transports = ApiHelper.Translate(attestation.Transports)
@@ -596,19 +592,9 @@ namespace DSInternals.Win32.WebAuthn
         /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
         /// </summary>
         /// <param name="options">The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.</param>
-        /// <returns>The signed assertion public key credential produced by the authenticator.</returns>
-        public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options)
-        {
-            return AuthenticatorGetAssertion(options, default);
-        }
-
-        /// <summary>
-        /// Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
-        /// </summary>
-        /// <param name="options">The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.</param>
         /// <param name="windowHandle">Handle to the window that will own the authenticator UI. When invalid, the foreground window is used.</param>
         /// <returns>The signed assertion public key credential produced by the authenticator.</returns>
-        public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle)
+        public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle = default)
         {
             ArgumentNullException.ThrowIfNull(options);
 
@@ -942,7 +928,7 @@ namespace DSInternals.Win32.WebAuthn
                             AuthenticatorAttachment = authenticatorAttachment,
                             Response = new AuthenticatorAssertionResponse()
                             {
-                                ClientDataJson = clientDataNative.ClientDataRaw,
+                                ClientData = clientDataNative.ClientDataRaw,
                                 AuthenticatorData = assertion.AuthenticatorData,
                                 Signature = assertion.Signature,
                                 UserHandle = assertion.UserId

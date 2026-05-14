@@ -105,7 +105,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
             var response = credential.Response as AuthenticatorAttestationResponse;
             Assert.IsNotNull(response);
-            Assert.IsNotNull(response.ClientDataJson);
+            Assert.IsNotNull(response.ClientData);
             Assert.IsNotNull(response.AttestationObject);
         }
 
@@ -119,7 +119,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var credential = SoftwareAuthenticator.MakeCredential(rp, user, TestChallenge, Algorithm.ES256, TestAaGuid, 0, AuthenticatorFlags.UserPresent, key);
             var response = (AuthenticatorAttestationResponse)credential.Response;
 
-            var clientData = JsonSerializer.Deserialize(response.ClientDataJson, WebAuthnJsonContext.Default.CollectedClientData);
+            var clientData = JsonSerializer.Deserialize(response.ClientData, WebAuthnJsonContext.Default.CollectedClientData);
             Assert.IsNotNull(clientData);
             var parsedClientData = (CollectedClientData)clientData;
 
@@ -174,7 +174,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var (_, authData, _, signature) = ParseAttestationObject(response.AttestationObject);
 
             // Reconstruct signed data: authData || SHA-256(clientDataJSON)
-            byte[] clientDataHash = SHA256.HashData(response.ClientDataJson);
+            byte[] clientDataHash = SHA256.HashData(response.ClientData);
             byte[] signedData = new byte[authData.Length + clientDataHash.Length];
             Buffer.BlockCopy(authData, 0, signedData, 0, authData.Length);
             Buffer.BlockCopy(clientDataHash, 0, signedData, authData.Length, clientDataHash.Length);
@@ -196,7 +196,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
             var (_, authData, _, signature) = ParseAttestationObject(response.AttestationObject);
 
-            byte[] clientDataHash = SHA256.HashData(response.ClientDataJson);
+            byte[] clientDataHash = SHA256.HashData(response.ClientData);
             byte[] signedData = new byte[authData.Length + clientDataHash.Length];
             Buffer.BlockCopy(authData, 0, signedData, 0, authData.Length);
             Buffer.BlockCopy(clientDataHash, 0, signedData, authData.Length, clientDataHash.Length);
@@ -245,7 +245,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
             var response = credential.Response as AuthenticatorAssertionResponse;
             Assert.IsNotNull(response);
-            Assert.IsNotNull(response.ClientDataJson);
+            Assert.IsNotNull(response.ClientData);
             Assert.IsNotNull(response.AuthenticatorData);
             Assert.IsNotNull(response.Signature);
             CollectionAssert.AreEqual(TestUserHandle, response.UserHandle);
@@ -259,7 +259,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var credential = SoftwareAuthenticator.GetAssertion(TestRpId, TestChallenge, Algorithm.ES256, 0, AuthenticatorFlags.UserPresent, TestCredentialId, null!, key);
             var response = (AuthenticatorAssertionResponse)credential.Response;
 
-            var clientData = JsonSerializer.Deserialize(response.ClientDataJson, WebAuthnJsonContext.Default.CollectedClientData);
+            var clientData = JsonSerializer.Deserialize(response.ClientData, WebAuthnJsonContext.Default.CollectedClientData);
             Assert.IsNotNull(clientData);
             var parsedClientData = (CollectedClientData)clientData;
 
@@ -308,7 +308,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var response = (AuthenticatorAssertionResponse)credential.Response;
 
             // Reconstruct signed data: authenticatorData || SHA-256(clientDataJSON)
-            byte[] clientDataHash = SHA256.HashData(response.ClientDataJson);
+            byte[] clientDataHash = SHA256.HashData(response.ClientData);
             byte[] signedData = new byte[response.AuthenticatorData.Length + clientDataHash.Length];
             Buffer.BlockCopy(response.AuthenticatorData, 0, signedData, 0, response.AuthenticatorData.Length);
             Buffer.BlockCopy(clientDataHash, 0, signedData, response.AuthenticatorData.Length, clientDataHash.Length);
@@ -325,7 +325,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             var credential = SoftwareAuthenticator.GetAssertion(TestRpId, TestChallenge, Algorithm.RS256, 0, AuthenticatorFlags.UserPresent, TestCredentialId, null!, key);
             var response = (AuthenticatorAssertionResponse)credential.Response;
 
-            byte[] clientDataHash = SHA256.HashData(response.ClientDataJson);
+            byte[] clientDataHash = SHA256.HashData(response.ClientData);
             byte[] signedData = new byte[response.AuthenticatorData.Length + clientDataHash.Length];
             Buffer.BlockCopy(response.AuthenticatorData, 0, signedData, 0, response.AuthenticatorData.Length);
             Buffer.BlockCopy(clientDataHash, 0, signedData, response.AuthenticatorData.Length, clientDataHash.Length);
@@ -465,7 +465,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
 
             // Verify assertion signature
             var assertionResponse = (AuthenticatorAssertionResponse)authCredential.Response;
-            byte[] clientDataHash = SHA256.HashData(assertionResponse.ClientDataJson);
+            byte[] clientDataHash = SHA256.HashData(assertionResponse.ClientData);
             byte[] signedData = new byte[assertionResponse.AuthenticatorData.Length + clientDataHash.Length];
             Buffer.BlockCopy(assertionResponse.AuthenticatorData, 0, signedData, 0, assertionResponse.AuthenticatorData.Length);
             Buffer.BlockCopy(clientDataHash, 0, signedData, assertionResponse.AuthenticatorData.Length, clientDataHash.Length);
@@ -488,7 +488,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
             Assert.IsNotEmpty(response.Signature);
 
             // Verify the signature
-            byte[] clientDataHash = SHA256.HashData(response.ClientDataJson);
+            byte[] clientDataHash = SHA256.HashData(response.ClientData);
             byte[] signedData = new byte[response.AuthenticatorData.Length + clientDataHash.Length];
             Buffer.BlockCopy(response.AuthenticatorData, 0, signedData, 0, response.AuthenticatorData.Length);
             Buffer.BlockCopy(clientDataHash, 0, signedData, response.AuthenticatorData.Length, clientDataHash.Length);

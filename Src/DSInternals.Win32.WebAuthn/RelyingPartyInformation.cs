@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.Interop;
 
@@ -37,5 +38,14 @@ namespace DSInternals.Win32.WebAuthn
         [JsonPropertyName("icon")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Icon { get; init; }
+
+        /// <summary>
+        /// Serializes the relying party information to JSON.
+        /// </summary>
+        /// <returns>JSON representation of this relying party information.</returns>
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.RelyingPartyInformation);
+        }
     }
 }

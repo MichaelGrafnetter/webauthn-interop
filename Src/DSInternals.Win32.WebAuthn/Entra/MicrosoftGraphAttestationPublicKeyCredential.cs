@@ -71,7 +71,7 @@ public sealed class MicrosoftGraphAttestationPublicKeyCredential
         Id = source.Id;
         Response = new AuthenticatorAttestationResponse
         {
-            ClientDataJson = source.Response.ClientDataJson,
+            ClientData = source.Response.ClientData,
             AttestationObject = source.Response.AttestationObject
         };
         ClientExtensionResults = source.ClientExtensionResults;

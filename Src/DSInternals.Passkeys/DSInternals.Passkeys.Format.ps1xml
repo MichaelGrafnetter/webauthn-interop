@@ -281,6 +281,39 @@
       </ListControl>
     </View>
 
+    <!-- New-Passkey (Okta) List View (Default) -->
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse.ListView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>UserId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>FactorId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>CredentialId</Label>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.CredentialId)</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>Attestation</Label>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.Attestation)</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <PropertyName>ClientDataJson</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
     <!-- Register-OktaPasskey List View (Default) -->
     <View>
       <Name>DSInternals.Win32.WebAuthn.Okta.OktaFido2AuthenticationMethod.ListView</Name>
@@ -313,6 +346,92 @@
               </ListItem>
               <ListItem>
                 <PropertyName>LastUpdated</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <!-- Get-*PasskeyRegistrationOptions List View (Default) -->
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.ListView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>RelyingParty</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>User</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Challenge</Label>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.Challenge)</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <PropertyName>PublicKeyCredentialParameters</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>TimeoutMilliseconds</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>ExcludeCredentials</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>AuthenticatorSelection</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Attestation</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Extensions</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Hints</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>AttestationFormats</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <!-- New-Passkey (WebAuthn) List View (Default) -->
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.ListView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>Id</Label>
+                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.Id)</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>RawId</Label>
+                <ScriptBlock>if ($null -ne $PSItem.RawId) { [System.Buffers.Text.Base64Url]::EncodeToString($PSItem.RawId) }</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Type</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>AuthenticatorAttachment</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Response</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>ClientExtensionResults</PropertyName>
               </ListItem>
             </ListItems>
           </ListEntry>

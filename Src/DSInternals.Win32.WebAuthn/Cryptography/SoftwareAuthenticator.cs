@@ -106,7 +106,7 @@ public static class SoftwareAuthenticator
             Type = ApiConstants.PublicKeyCredentialType,
             Response = new AuthenticatorAttestationResponse
             {
-                ClientDataJson = clientDataJson,
+                ClientData = clientDataJson,
                 AttestationObject = attestationObject
             }
         };
@@ -176,7 +176,7 @@ public static class SoftwareAuthenticator
             AuthenticatorAttachment = authenticatorAttachment,
             Response = new AuthenticatorAssertionResponse
             {
-                ClientDataJson = clientDataJson,
+                ClientData = clientDataJson,
                 AuthenticatorData = authenticatorDataBytes,
                 Signature = signature,
                 UserHandle = userHandle

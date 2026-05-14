@@ -439,7 +439,6 @@ function Test-Passkey
             $false, # autoFill
             $credentialHints,
             $null,  # authenticatorId
-            $null,  # remoteWebOrigin
             $null,  # publicKeyCredentialRequestOptionsJson
             [DSInternals.Win32.WebAuthn.WindowHandle]::ForegroundWindow
         )

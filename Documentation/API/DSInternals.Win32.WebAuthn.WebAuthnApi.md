@@ -302,32 +302,12 @@ public static bool IsUserVerifyingPlatformAuthenticatorAvailable { get; }
 
 ## Methods
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_"></a> AuthenticatorGetAssertion\(PublicKeyCredentialRequestOptions\)
-
-Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
-
-```csharp
-public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options)
-```
-
-#### Parameters
-
-`options` [PublicKeyCredentialRequestOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialRequestOptions.md)
-
-The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.
-
-#### Returns
-
- [AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)
-
-The signed assertion public key credential produced by the authenticator.
-
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertion_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorGetAssertion\(PublicKeyCredentialRequestOptions, WindowHandle\)
 
 Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
 
 ```csharp
-public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle)
+public AssertionPublicKeyCredential AuthenticatorGetAssertion(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle = default)
 ```
 
 #### Parameters
@@ -490,36 +470,12 @@ Handle to the window that will own the authenticator UI. When invalid, the foreg
 
 The signed assertion public key credential produced by the authenticator.
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(PublicKeyCredentialRequestOptions, CancellationToken\)
-
-Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
-
-```csharp
-public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(PublicKeyCredentialRequestOptions options, CancellationToken cancellationToken = default)
-```
-
-#### Parameters
-
-`options` [PublicKeyCredentialRequestOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialRequestOptions.md)
-
-The credential request options that describe the relying party, allowed credentials, and the desired authenticator behavior.
-
-`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
-
-Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
-
-#### Returns
-
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AssertionPublicKeyCredential](DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.md)\>
-
-A task that completes with the signed assertion public key credential produced by the authenticator.
-
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorGetAssertionAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialRequestOptions_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorGetAssertionAsync\(PublicKeyCredentialRequestOptions, WindowHandle, CancellationToken\)
 
 Requests a signed assertion from the authenticator confirming the user's consent to a specific transaction, such as signing in or completing a purchase.
 
 ```csharp
-public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle, CancellationToken cancellationToken = default)
+public Task<AssertionPublicKeyCredential> AuthenticatorGetAssertionAsync(PublicKeyCredentialRequestOptions options, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
@@ -694,12 +650,12 @@ Token that, when canceled, signals the underlying WebAuthn operation to be cance
 
 A task that completes with the signed assertion public key credential produced by the authenticator.
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_"></a> AuthenticatorMakeCredential\(PublicKeyCredentialCreationOptions\)
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_System_String_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorMakeCredential\(PublicKeyCredentialCreationOptions, string?, WindowHandle\)
 
 Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
 
 ```csharp
-public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options)
+public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options, string? hostName = null, WindowHandle windowHandle = default)
 ```
 
 #### Parameters
@@ -708,25 +664,11 @@ public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCrede
 
 The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
 
-#### Returns
+`hostName` [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
- [AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)
-
-The attestation public key credential produced by the authenticator.
-
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredential_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_DSInternals_Win32_WebAuthn_WindowHandle_"></a> AuthenticatorMakeCredential\(PublicKeyCredentialCreationOptions, WindowHandle\)
-
-Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
-
-```csharp
-public AttestationPublicKeyCredential AuthenticatorMakeCredential(PublicKeyCredentialCreationOptions options, WindowHandle windowHandle)
-```
-
-#### Parameters
-
-`options` [PublicKeyCredentialCreationOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md)
-
-The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
+Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
+Useful for relying parties (such as Okta) that omit <code>rp.id</code> from server-issued creation options.
+When <xref href="DSInternals.Win32.WebAuthn.RelyingPartyInformation.Id" data-throw-if-not-resolved="false"></xref> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 
@@ -918,12 +860,12 @@ Handle to the window that will own the authenticator UI. When invalid, the foreg
 
 The attestation public key credential produced by the authenticator.
 
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(PublicKeyCredentialCreationOptions, CancellationToken\)
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_System_String_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(PublicKeyCredentialCreationOptions, string?, WindowHandle, CancellationToken\)
 
 Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
 
 ```csharp
-public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(PublicKeyCredentialCreationOptions options, CancellationToken cancellationToken = default)
+public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(PublicKeyCredentialCreationOptions options, string? hostName = null, WindowHandle windowHandle = default, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
@@ -932,29 +874,11 @@ public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(Pub
 
 The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
 
-`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+`hostName` [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
-Token that, when canceled, signals the underlying WebAuthn operation to be canceled.
-
-#### Returns
-
- [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential.md)\>
-
-A task that completes with the attestation public key credential produced by the authenticator.
-
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_AuthenticatorMakeCredentialAsync_DSInternals_Win32_WebAuthn_PublicKeyCredentialCreationOptions_DSInternals_Win32_WebAuthn_WindowHandle_System_Threading_CancellationToken_"></a> AuthenticatorMakeCredentialAsync\(PublicKeyCredentialCreationOptions, WindowHandle, CancellationToken\)
-
-Creates a new public key credential on the authenticator and returns the attestation that conveys its public key to the relying party.
-
-```csharp
-public Task<AttestationPublicKeyCredential> AuthenticatorMakeCredentialAsync(PublicKeyCredentialCreationOptions options, WindowHandle windowHandle, CancellationToken cancellationToken = default)
-```
-
-#### Parameters
-
-`options` [PublicKeyCredentialCreationOptions](DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.md)
-
-The credential creation options that describe the relying party, the user, and the desired authenticator behavior.
+Optional host name used to derive the WebAuthn origin and to fill in a missing relying party identifier.
+Useful for relying parties (such as Okta) that omit <code>rp.id</code> from server-issued creation options.
+When <xref href="DSInternals.Win32.WebAuthn.RelyingPartyInformation.Id" data-throw-if-not-resolved="false"></xref> is null or empty, the host name is used as the relying party identifier sent to the authenticator.
 
 `windowHandle` [WindowHandle](DSInternals.Win32.WebAuthn.WindowHandle.md)
 

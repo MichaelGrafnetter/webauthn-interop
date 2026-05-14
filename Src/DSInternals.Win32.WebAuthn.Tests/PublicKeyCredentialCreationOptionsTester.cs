@@ -332,7 +332,7 @@ namespace DSInternals.Win32.WebAuthn.Tests
                 Response = new AuthenticatorAttestationResponse()
                 {
                     AttestationObject = _attestationObjectBytes,
-                    ClientDataJson = _clientDataJson
+                    ClientData = _clientDataJson
                 },
                 ClientExtensionResults = new AuthenticationExtensionsClientAttestationOutputs()
                 {

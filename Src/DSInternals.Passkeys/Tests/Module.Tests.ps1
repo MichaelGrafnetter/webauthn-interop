@@ -5,6 +5,8 @@
     Path to the compiled module directory.
 .PARAMETER MarkdownDocumentationPath
     Path to the directory containing the project's markdown documentation.
+.PARAMETER Configuration
+    The build configuration of the module being tested.
 #>
 
 #Requires -Version 5.1
@@ -17,12 +19,17 @@ param(
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string] $MarkdownDocumentationPath
+    [string] $MarkdownDocumentationPath,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateSet('Debug', 'Release')]
+    [string] $Configuration = 'Release'
 )
 
 if ([string]::IsNullOrWhiteSpace($ModulePath)) {
     # No path has been provided, so use the default value
-    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\PSModule\Release\DSInternals.Passkeys' -Resolve -ErrorAction Stop
+    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath "..\..\..\Build\bin\PSModule\$Configuration\DSInternals.Passkeys" -Resolve -ErrorAction Stop
 }
 
 if ([string]::IsNullOrWhiteSpace($MarkdownDocumentationPath)) {
@@ -164,7 +171,10 @@ Describe 'PowerShell Module' {
         It 'contains proper description of the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
             param([string] $Cmdlet, [string] $Description)
 
-            $modulePagePath | Should -FileContentMatchMultilineExactly -ExpectedContent $Description
+            # FileContentMatchMultilineExactly treats the expected content as a regex, so any
+            # regex metacharacters in the cmdlet description (e.g. parentheses) must be escaped
+            # to ensure literal matching against the README.
+            $modulePagePath | Should -FileContentMatchMultilineExactly -ExpectedContent ([regex]::Escape($Description))
         }
     }
 }

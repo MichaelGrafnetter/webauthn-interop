@@ -90,6 +90,11 @@ public sealed class CollectedClientData
             return remoteClientData;
         }
 
+        // Normalize empty/whitespace to null so the fallback below works for callers
+        // (notably PowerShell, which binds an unset [string] parameter to "" rather than $null).
+        if (string.IsNullOrWhiteSpace(hostName)) hostName = null;
+        if (string.IsNullOrWhiteSpace(relyingPartyId)) relyingPartyId = null;
+
         if (hostName is null && relyingPartyId is null)
         {
             throw new ArgumentException("Either hostname or relyingPartyId must be provided.");

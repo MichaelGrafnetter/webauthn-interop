@@ -206,7 +206,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-- TODO
+- Module restructured into Core/Entra/Okta nested modules; provider cmdlets renamed (`Get-PasskeyRegistrationOptions` -> `Get-EntraPasskeyRegistrationOptions` / `Get-OktaPasskeyRegistrationOptions`, `Register-Passkey` -> `Register-EntraPasskey` / `Register-OktaPasskey`). Old names are kept as aliases.
+- Added `Get-PasskeyCreationOptions` for building credential creation options locally without contacting a remote identity provider.
 '@
 
         # Prerelease string of this module

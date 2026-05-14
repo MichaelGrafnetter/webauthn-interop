@@ -25,7 +25,7 @@ public class PublicKeyCredentialTester
 
         Assert.IsNotNull(credential);
         CollectionAssert.AreEqual(new byte[] { 1, 2, 3 }, credential.Id);
-        CollectionAssert.AreEqual(new byte[] { 4, 5 }, credential.Response.ClientDataJson);
+        CollectionAssert.AreEqual(new byte[] { 4, 5 }, credential.Response.ClientData);
         CollectionAssert.AreEqual(new byte[] { 6, 7 }, credential.Response.AttestationObject);
         Assert.IsNotNull(credential.ClientExtensionResults);
         Assert.IsTrue(credential.ClientExtensionResults.HmacSecret);
@@ -54,7 +54,7 @@ public class PublicKeyCredentialTester
 
         Assert.IsNotNull(credential);
         CollectionAssert.AreEqual(new byte[] { 1, 2, 3 }, credential.Id);
-        CollectionAssert.AreEqual(new byte[] { 4, 5 }, credential.Response.ClientDataJson);
+        CollectionAssert.AreEqual(new byte[] { 4, 5 }, credential.Response.ClientData);
         CollectionAssert.AreEqual(new byte[] { 6, 7 }, credential.Response.AuthenticatorData);
         CollectionAssert.AreEqual(new byte[] { 8, 9 }, credential.Response.Signature);
         CollectionAssert.AreEqual(new byte[] { 10, 11 }, credential.Response.UserHandle);

@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Text;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -43,6 +44,12 @@ namespace DSInternals.Win32.WebAuthn.Okta
         public byte[]? ClientData { get; set; }
 
         /// <summary>
+        /// The clientData value decoded as a UTF-8 string.
+        /// </summary>
+        [JsonIgnore]
+        public string? ClientDataJson => ClientData is null ? null : Encoding.UTF8.GetString(ClientData);
+
+        /// <summary>
         /// Initializes a new Okta attestation response payload.
         /// </summary>
         /// <param name="publicKeyCredential">WebAuthn credential returned by the authenticator.</param>
@@ -56,7 +63,7 @@ namespace DSInternals.Win32.WebAuthn.Okta
 
             CredentialId = publicKeyCredential.Id;
             Attestation = publicKeyCredential.Response.AttestationObject;
-            ClientData = publicKeyCredential.Response.ClientDataJson;
+            ClientData = publicKeyCredential.Response.ClientData;
             UserId = userId;
             FactorId = factorId;
         }

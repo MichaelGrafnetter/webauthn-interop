@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -36,5 +37,14 @@ namespace DSInternals.Win32.WebAuthn
         [JsonPropertyName("displayName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? DisplayName { get; set; }
+
+        /// <summary>
+        /// Serializes the user information to JSON.
+        /// </summary>
+        /// <returns>JSON representation of this user information.</returns>
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.UserInformation);
+        }
     }
 }

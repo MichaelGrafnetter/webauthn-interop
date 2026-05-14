@@ -12,11 +12,10 @@
     <ProductVersion>3.1.0</ProductVersion>
     <FileVersion>3.1.0</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>- Major API consolidation: split AuthenticationExtensionsClientInputs/Outputs into per-extension types, renamed AuthenticatorSelection to AuthenticatorSelectionCriteria, and reorganized COSE/Cryptography namespaces.
-- Added Credential Exchange Format (CXF) support and Bitwarden encrypted/cleartext vault export parsing.
-- Added KeePassXC passkey export parsing and a software authenticator with Ed25519 signing.
-- Added UVM, Payment, PRF, LargeBlob, and Remote Desktop client extension models.
-- Changed credential hints to raw strings so future and custom hint values are preserved.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added an optional `hostName` parameter to `AuthenticatorMakeCredential` / `AuthenticatorMakeCredentialAsync` that derives the WebAuthn origin and substitutes for a missing `rp.id` (useful for relying parties such as Okta that omit it from server-issued options).
+- Reshaped Entra and Okta payloads.
+- `AuthenticatorSelectionCriteria.ResidentKey` is now nullable so it can default to `Preferred` when unspecified.
+</PackageReleaseNotes>
     <!-- The DLL is publishable as part of the PowerShell module -->
     <IsPublishable>true</IsPublishable>
     <PublishDocumentationFile>false</PublishDocumentationFile>

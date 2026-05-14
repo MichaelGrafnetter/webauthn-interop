@@ -2,25 +2,30 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
+  <!--
+    Versions of assemblies that can be loaded alongside Microsoft.Graph.Authentication
+    are pinned to match its bundled Dependencies folder. This avoids side-by-side loading
+    of two different assembly versions (and the resulting type-identity mismatches) on
+    Windows PowerShell 5.1, where Microsoft.Graph.Authentication wins the load race.
+  -->
   <ItemGroup>
-    <PackageVersion Include="Fido2.Models" Version="4.0.0" />
+    <PackageVersion Include="Fido2.Models" Version="4.0.1" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.3" />
     <PackageVersion Include="Microsoft.Bcl.Memory" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Identity.Client" Version="4.80.0" />
-    <PackageVersion Include="Microsoft.NET.ILLink.Tasks" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Identity.Client" Version="4.82.1" />
+    <PackageVersion Include="Microsoft.NET.ILLink.Tasks" Version="10.0.8" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.269" />
-    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
     <PackageVersion Include="NSec.Cryptography" Version="25.4.0" />
-    <PackageVersion Include="Polyfill" Version="9.18" />
+    <PackageVersion Include="Polyfill" Version="10.5.1" />
     <PackageVersion Include="Prism.Unity" Version="9.0.537" />
     <PackageVersion Include="Prism.Wpf" Version="9.0.537" />
-    <PackageVersion Include="SharpVectors.Wpf" Version="1.8.4.2" />
-    <PackageVersion Include="System.Diagnostics.EventLog" Version="9.0.3" />
-    <PackageVersion Include="System.Formats.Cbor" Version="9.0.3" />
+    <PackageVersion Include="SharpVectors.Wpf" Version="1.8.5" />
+    <PackageVersion Include="System.Diagnostics.EventLog" Version="9.0.16" />
+    <PackageVersion Include="System.Formats.Cbor" Version="10.0.8" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
     <PackageVersion Include="System.Security.Cryptography.Cng" Version="5.0.0" />
-    <!-- System.Text.Json is intentionally kept at V9 for PowerShell 7.5 compatibility -->
-    <PackageVersion Include="System.Text.Json" Version="9.0.3" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.3" />
   </ItemGroup>
 </Project>

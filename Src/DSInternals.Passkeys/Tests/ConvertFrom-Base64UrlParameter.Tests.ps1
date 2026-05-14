@@ -3,6 +3,8 @@
     This script contains Pester tests for the ConvertFrom-Base64UrlParameter cmdlet from the DSInternals.Passkeys PowerShell module.
 .PARAMETER ModulePath
     Path to the compiled module directory.
+.PARAMETER Configuration
+    The build configuration of the module being tested.
 #>
 
 #Requires -Version 5.1
@@ -11,12 +13,17 @@
 param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string] $ModulePath
+    [string] $ModulePath,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateSet('Debug', 'Release')]
+    [string] $Configuration = 'Release'
 )
 
 if ([string]::IsNullOrWhiteSpace($ModulePath)) {
     # No path has been provided, so use a the default value
-    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\PSModule\Release\DSInternals.Passkeys' -Resolve -ErrorAction Stop
+    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath "..\..\..\Build\bin\PSModule\$Configuration\DSInternals.Passkeys" -Resolve -ErrorAction Stop
 }
 
 BeforeDiscovery {

@@ -3,6 +3,8 @@
     This script contains Pester tests for the assemblies bundled in the DSInternals.Passkeys PowerShell module.
 .PARAMETER ModulePath
     Path to the compiled module directory.
+.PARAMETER Configuration
+    The build configuration of the module being tested. Strong-name signing is only enforced for Release builds.
 #>
 
 #Requires -Version 5.1
@@ -11,12 +13,17 @@
 param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string] $ModulePath
+    [string] $ModulePath,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateSet('Debug', 'Release')]
+    [string] $Configuration = 'Release'
 )
 
 if ([string]::IsNullOrWhiteSpace($ModulePath)) {
     # No path has been provided, so use the default value
-    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\PSModule\Release\DSInternals.Passkeys' -Resolve -ErrorAction Stop
+    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath "..\..\..\Build\bin\PSModule\$Configuration\DSInternals.Passkeys" -Resolve -ErrorAction Stop
 }
 
 Describe 'Assemblies' {
@@ -24,9 +31,12 @@ Describe 'Assemblies' {
         [hashtable[]] $assemblies = Get-ChildItem -Path $ModulePath -Recurse -Filter *.dll |
             ForEach-Object { @{ Assembly = $PSItem } }
         [hashtable[]] $ownedAssemblies = $assemblies | Where-Object { $PSItem.Assembly.Name -like 'DSInternals.*.dll' }
+
+        # Strong-name signing is only wired up for Release builds (see Src/Directory.Build.props)
+        [bool] $skipStrongNameCheck = ($Configuration -ne 'Release')
     }
 
-    It '<Assembly.Name> has a strong name' -TestCases $assemblies -Test {
+    It '<Assembly.Name> has a strong name' -TestCases $assemblies -Skip:$skipStrongNameCheck -Test {
         param([System.IO.FileInfo] $Assembly)
 
         [System.Reflection.AssemblyName] $assemblyName = [System.Reflection.AssemblyName]::GetAssemblyName($Assembly.FullName)

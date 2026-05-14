@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [3.1] - 2026-05-14
+
+### Added
+
+- Added the `Get-PasskeyCreationOptions` cmdlet for building WebAuthn credential creation options locally, without contacting a remote identity provider.
+- Added the `Tenant` property to `OktaWebauthnCredentialCreationOptions`, carrying the live Okta tenant host out-of-band instead of mutating `rp.id` after deserialization.
+- Added Pester integration tests covering the PowerShell module manifest, file layout, exported aliases, MAML help, and bundled assemblies.
+- `DSInternals.Win32.WebAuthn.Adapter` now translates credential hints, credential protection policy, large-blob extension inputs/outputs, PRF extension inputs/outputs, and credential identifiers (`Id`/`RawId`) so attestation and assertion responses are fully populated for `Fido2.Models` callers.
+
+### Changed
+
+- **PowerShell module restructure.** The monolithic `DSInternals.Passkeys.psm1` was split into three nested modules — `DSInternals.Passkeys.Core.psm1`, `DSInternals.Passkeys.Entra.psm1`, and `DSInternals.Passkeys.Okta.psm1`. Provider-specific cmdlets were renamed:
+  - `Get-PasskeyRegistrationOptions` → `Get-EntraPasskeyRegistrationOptions` / `Get-OktaPasskeyRegistrationOptions`
+  - `Register-Passkey` → `Register-EntraPasskey` / `Register-OktaPasskey`
+
+  The previous names are kept as aliases.
+- `AuthenticatorMakeCredential` and `AuthenticatorMakeCredentialAsync` now accept an optional `hostName` argument that is used to derive the WebAuthn origin and to fill in a missing relying party identifier.
+- `AuthenticatorSelectionCriteria.ResidentKey` is now nullable, allowing it to default to *Preferred* when not specified by the caller.
+
+### Fixed
+
+- Fixed Entra and Okta passkey registration.
+
 ## [3.0] - 2026-05-07
 
 ### Added
@@ -107,7 +130,8 @@ This is a bugfix release. Huge thanks to @aseigler for reporting and fixing the 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.0...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.1...HEAD
+[3.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.0...v3.1
 [3.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1.1...v3.0
 [2.1.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1...v2.1.1
 [2.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.0...v2.1

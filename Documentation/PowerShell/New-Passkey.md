@@ -14,7 +14,7 @@ Creates a new WebAuthn credential by driving the local authenticator.
 
 ### Default (Default)
 ```
-New-Passkey -Options <PublicKeyCredentialCreationOptions> [<CommonParameters>]
+New-Passkey -Options <PublicKeyCredentialCreationOptions> [-HostName <String>] [<CommonParameters>]
 ```
 
 ### Okta
@@ -50,6 +50,21 @@ Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | 
 Performs end-to-end passkey registration in Okta in a single pipeline.
 
 ## PARAMETERS
+
+### -HostName
+Optional host name used to derive the WebAuthn origin when the server-issued options omit the relying party identifier.
+
+```yaml
+Type: String
+Parameter Sets: Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -OktaOptions
 The Okta-specific credential creation options.

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn;
 
@@ -42,4 +43,13 @@ public class AuthenticatorSelectionCriteria
     [JsonPropertyName("requireResidentKey")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool RequireResidentKey { get; set; }
+
+    /// <summary>
+    /// Serializes the authenticator selection criteria to JSON.
+    /// </summary>
+    /// <returns>JSON representation of these authenticator selection criteria.</returns>
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.AuthenticatorSelectionCriteria);
+    }
 }

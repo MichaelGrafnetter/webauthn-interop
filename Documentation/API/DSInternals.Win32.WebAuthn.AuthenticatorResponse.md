@@ -31,17 +31,30 @@ public abstract class AuthenticatorResponse
 
 ## Properties
 
-### <a id="DSInternals_Win32_WebAuthn_AuthenticatorResponse_ClientDataJson"></a> ClientDataJson
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorResponse_ClientData"></a> ClientData
 
-The JSON-serialized client data passed to the authenticator (Base64Url encoded).
+The UTF-8 encoded JSON-serialized client data passed to the authenticator (Base64Url encoded in JSON).
 
 ```csharp
 [JsonPropertyName("clientDataJSON")]
 [JsonConverter(typeof(Base64UrlConverter))]
-public byte[]? ClientDataJson { get; init; }
+public byte[]? ClientData { get; init; }
 ```
 
 #### Property Value
 
  [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorResponse_ClientDataJson"></a> ClientDataJson
+
+The clientDataJSON value decoded as a UTF-8 string.
+
+```csharp
+[JsonIgnore]
+public string? ClientDataJson { get; }
+```
+
+#### Property Value
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
 

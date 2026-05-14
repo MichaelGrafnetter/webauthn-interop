@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.Interop;
 
@@ -46,6 +47,15 @@ namespace DSInternals.Win32.WebAuthn
             Id = id ?? throw new ArgumentNullException(nameof(id));
             Transports = transports;
             Type = type;
+        }
+
+        /// <summary>
+        /// Serializes the credential descriptor to JSON.
+        /// </summary>
+        /// <returns>JSON representation of this credential descriptor.</returns>
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, WebAuthnJsonContext.Default.PublicKeyCredentialDescriptor);
         }
     }
 }

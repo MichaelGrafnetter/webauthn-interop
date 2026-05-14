@@ -3,6 +3,8 @@
     This script contains Pester tests for Entra ID passkey registration via the DSInternals.Passkeys PowerShell module.
 .PARAMETER ModulePath
     Path to the compiled module directory.
+.PARAMETER Configuration
+    The build configuration of the module being tested.
 #>
 
 #Requires -Version 5.1
@@ -13,18 +15,20 @@
 param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string] $ModulePath
+    [string] $ModulePath,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateSet('Debug', 'Release')]
+    [string] $Configuration = 'Release'
 )
 
 if ([string]::IsNullOrWhiteSpace($ModulePath)) {
     # No path has been provided, so use the default value
-    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Build\bin\PSModule\Release\DSInternals.Passkeys' -Resolve -ErrorAction Stop
+    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath "..\..\..\Build\bin\PSModule\$Configuration\DSInternals.Passkeys" -Resolve -ErrorAction Stop
 }
 
 BeforeAll {
-    # Derive build configuration (e.g., Release/Debug) from the module path
-    [string] $moduleConfigDirectory = Split-Path -Path (Split-Path -Path $ModulePath -Parent) -Leaf
-
     # Select framework based on PowerShell version
     if ($PSVersionTable.PSVersion.Major -lt 6) {
         [string] $framework = 'net48'
@@ -33,7 +37,7 @@ BeforeAll {
         [string] $framework = 'net8.0-windows'
     }
 
-    [string] $testAssemblyPath = Join-Path -Path $PSScriptRoot -ChildPath ("..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\{0}_{1}\DSInternals.Win32.WebAuthn.Tests.dll" -f $moduleConfigDirectory.ToLowerInvariant(), $framework) -Resolve -ErrorAction Stop
+    [string] $testAssemblyPath = Join-Path -Path $PSScriptRoot -ChildPath ("..\..\..\Build\bin\DSInternals.Win32.WebAuthn.Tests\{0}_{1}\DSInternals.Win32.WebAuthn.Tests.dll" -f $Configuration.ToLowerInvariant(), $framework) -Resolve -ErrorAction Stop
 
     Add-Type -Path $testAssemblyPath -ErrorAction Stop
     Import-Module -Name $ModulePath -ErrorAction Stop -Force

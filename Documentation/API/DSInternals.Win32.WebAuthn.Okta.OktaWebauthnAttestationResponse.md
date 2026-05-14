@@ -100,6 +100,19 @@ public byte[]? ClientData { get; set; }
 
  [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 
+### <a id="DSInternals_Win32_WebAuthn_Okta_OktaWebauthnAttestationResponse_ClientDataJson"></a> ClientDataJson
+
+The clientData value decoded as a UTF-8 string.
+
+```csharp
+[JsonIgnore]
+public string? ClientDataJson { get; }
+```
+
+#### Property Value
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
+
 ### <a id="DSInternals_Win32_WebAuthn_Okta_OktaWebauthnAttestationResponse_CredentialId"></a> CredentialId
 
 Gets or sets the credential identifier returned by the authenticator.

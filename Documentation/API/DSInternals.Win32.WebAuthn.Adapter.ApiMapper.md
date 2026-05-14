@@ -56,7 +56,7 @@ public static RelyingPartyInformation Translate(PublicKeyCredentialRpEntity rely
 
 #### Parameters
 
-`relyingParty` [PublicKeyCredentialRpEntity](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/CredentialCreateOptions.cs)
+`relyingParty` [PublicKeyCredentialRpEntity](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/CredentialCreateOptions.cs)
 
 The Fido2NetLib relying party entity to map.
 
@@ -76,7 +76,7 @@ public static UserInformation Translate(Fido2User user)
 
 #### Parameters
 
-`user` [Fido2User](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/CredentialCreateOptions.cs)
+`user` [Fido2User](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/CredentialCreateOptions.cs)
 
 The Fido2NetLib user entity to map.
 
@@ -96,7 +96,7 @@ public static Algorithm[] Translate(IReadOnlyList<PubKeyCredParam> credParams)
 
 #### Parameters
 
-`credParams` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PubKeyCredParam](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/CredentialCreateOptions.cs)\>
+`credParams` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PubKeyCredParam](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/CredentialCreateOptions.cs)\>
 
 The list of public key credential parameters whose algorithms should be extracted.
 
@@ -136,7 +136,7 @@ public static Algorithm Translate(COSE.Algorithm algorithm)
 
 #### Parameters
 
-`algorithm` [COSE](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/COSETypes.cs).[Algorithm](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/COSETypes.cs)
+`algorithm` [COSE](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/COSETypes.cs).[Algorithm](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/COSETypes.cs)
 
 The Fido2NetLib COSE algorithm value.
 
@@ -156,7 +156,7 @@ public static IList<PublicKeyCredentialDescriptor> Translate(IEnumerable<PublicK
 
 #### Parameters
 
-`credentials` [IEnumerable](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable\-1)<[PublicKeyCredentialDescriptor](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/PublicKeyCredentialDescriptor.cs)\>
+`credentials` [IEnumerable](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable\-1)<[PublicKeyCredentialDescriptor](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/PublicKeyCredentialDescriptor.cs)\>
 
 The Fido2NetLib credential descriptors to map. May be <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -176,7 +176,7 @@ public static PublicKeyCredentialDescriptor Translate(PublicKeyCredentialDescrip
 
 #### Parameters
 
-`credential` [PublicKeyCredentialDescriptor](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/PublicKeyCredentialDescriptor.cs)
+`credential` [PublicKeyCredentialDescriptor](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/PublicKeyCredentialDescriptor.cs)
 
 The Fido2NetLib credential descriptor to map.
 
@@ -196,7 +196,7 @@ public static AuthenticatorTransport Translate(AuthenticatorTransport[] transpor
 
 #### Parameters
 
-`transports` [AuthenticatorTransport](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticatorTransport.cs)\[\]
+`transports` [AuthenticatorTransport](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticatorTransport.cs)\[\]
 
 The Fido2NetLib transport values to combine into a flag set.
 
@@ -216,7 +216,7 @@ public static AuthenticatorTransport Translate(AuthenticatorTransport? transport
 
 #### Parameters
 
-`transport` [AuthenticatorTransport](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticatorTransport.cs)?
+`transport` [AuthenticatorTransport](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticatorTransport.cs)?
 
 The Fido2NetLib transport value to map.
 
@@ -236,7 +236,7 @@ public static string Translate(PublicKeyCredentialType? credentialType)
 
 #### Parameters
 
-`credentialType` [PublicKeyCredentialType](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/PublicKeyCredentialType.cs)?
+`credentialType` [PublicKeyCredentialType](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/PublicKeyCredentialType.cs)?
 
 The Fido2NetLib credential type to map. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> is treated as <xref href="Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey" data-throw-if-not-resolved="false"></xref>.
 
@@ -256,7 +256,7 @@ public static AuthenticatorAttachment Translate(AuthenticatorAttachment? authent
 
 #### Parameters
 
-`authenticatorAttachment` [AuthenticatorAttachment](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticatorAttachment.cs)?
+`authenticatorAttachment` [AuthenticatorAttachment](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticatorAttachment.cs)?
 
 The Fido2NetLib attachment preference. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> is mapped to <xref href="DSInternals.Win32.WebAuthn.AuthenticatorAttachment.Any" data-throw-if-not-resolved="false"></xref>.
 
@@ -276,7 +276,7 @@ public static UserVerificationRequirement Translate(UserVerificationRequirement?
 
 #### Parameters
 
-`userVerification` [UserVerificationRequirement](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/UserVerificationRequirement.cs)?
+`userVerification` [UserVerificationRequirement](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/UserVerificationRequirement.cs)?
 
 The Fido2NetLib user verification requirement. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> is mapped to <xref href="DSInternals.Win32.WebAuthn.UserVerificationRequirement.Any" data-throw-if-not-resolved="false"></xref>.
 
@@ -296,7 +296,7 @@ public static AttestationConveyancePreference Translate(AttestationConveyancePre
 
 #### Parameters
 
-`attestation` [AttestationConveyancePreference](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AttestationConveyancePreference.cs)?
+`attestation` [AttestationConveyancePreference](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AttestationConveyancePreference.cs)?
 
 The Fido2NetLib attestation conveyance preference. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> is mapped to <xref href="DSInternals.Win32.WebAuthn.AttestationConveyancePreference.Any" data-throw-if-not-resolved="false"></xref>.
 
@@ -316,7 +316,7 @@ public static string[]? Translate(IReadOnlyList<PublicKeyCredentialHint>? hints)
 
 #### Parameters
 
-`hints` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialHint](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/PublicKeyCredentialHint.cs)\>?
+`hints` [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[PublicKeyCredentialHint](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/PublicKeyCredentialHint.cs)\>?
 
 The Fido2NetLib credential hints to map.
 
@@ -336,7 +336,7 @@ public static string Translate(PublicKeyCredentialHint hint)
 
 #### Parameters
 
-`hint` [PublicKeyCredentialHint](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/PublicKeyCredentialHint.cs)
+`hint` [PublicKeyCredentialHint](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/PublicKeyCredentialHint.cs)
 
 The Fido2NetLib credential hint to map.
 
@@ -356,7 +356,7 @@ public static LargeBlobSupport Translate(LargeBlobSupport? support)
 
 #### Parameters
 
-`support` [LargeBlobSupport](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/LargeBlobSupport.cs)?
+`support` [LargeBlobSupport](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/LargeBlobSupport.cs)?
 
 The Fido2NetLib large blob support preference. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> is mapped to <xref href="DSInternals.Win32.WebAuthn.LargeBlobSupport.None" data-throw-if-not-resolved="false"></xref>.
 
@@ -376,7 +376,7 @@ public static PRFValues? Translate(AuthenticationExtensionsPRFValues? values)
 
 #### Parameters
 
-`values` [AuthenticationExtensionsPRFValues](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFValues.cs)?
+`values` [AuthenticationExtensionsPRFValues](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFValues.cs)?
 
 The Fido2NetLib PRF input values to map.
 
@@ -402,7 +402,7 @@ The interop PRF values to map.
 
 #### Returns
 
- [AuthenticationExtensionsPRFValues](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFValues.cs)?
+ [AuthenticationExtensionsPRFValues](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFValues.cs)?
 
 The equivalent Fido2NetLib PRF values, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when <code class="paramref">values</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -422,7 +422,7 @@ The interop PRF outputs returned by the authenticator during credential creation
 
 #### Returns
 
- [AuthenticationExtensionsPRFOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFOutputs.cs)?
+ [AuthenticationExtensionsPRFOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFOutputs.cs)?
 
 The equivalent Fido2NetLib PRF extension outputs, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when <code class="paramref">outputs</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -442,7 +442,7 @@ The interop PRF outputs returned by the authenticator during an assertion.
 
 #### Returns
 
- [AuthenticationExtensionsPRFOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFOutputs.cs)?
+ [AuthenticationExtensionsPRFOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFOutputs.cs)?
 
 The equivalent Fido2NetLib PRF extension outputs, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when <code class="paramref">outputs</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -462,7 +462,7 @@ The interop large-blob outputs returned by the authenticator during credential c
 
 #### Returns
 
- [AuthenticationExtensionsLargeBlobOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobOutputs.cs)?
+ [AuthenticationExtensionsLargeBlobOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobOutputs.cs)?
 
 The equivalent Fido2NetLib large-blob extension outputs, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when <code class="paramref">outputs</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -482,7 +482,7 @@ The interop large-blob outputs returned by the authenticator during an assertion
 
 #### Returns
 
- [AuthenticationExtensionsLargeBlobOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobOutputs.cs)?
+ [AuthenticationExtensionsLargeBlobOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobOutputs.cs)?
 
 The equivalent Fido2NetLib large-blob extension outputs, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when <code class="paramref">outputs</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -502,7 +502,7 @@ The interop client extension outputs reported after credential creation.
 
 #### Returns
 
- [AuthenticationExtensionsClientOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsClientOutputs.cs)?
+ [AuthenticationExtensionsClientOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsClientOutputs.cs)?
 
 The equivalent Fido2NetLib client extension outputs, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when <code class="paramref">outputs</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -522,7 +522,7 @@ The interop client extension outputs reported after an assertion.
 
 #### Returns
 
- [AuthenticationExtensionsClientOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsClientOutputs.cs)?
+ [AuthenticationExtensionsClientOutputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsClientOutputs.cs)?
 
 The equivalent Fido2NetLib client extension outputs, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when <code class="paramref">outputs</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.
 
@@ -536,7 +536,7 @@ public static PRFAssertionInputs? TranslateAssertion(AuthenticationExtensionsPRF
 
 #### Parameters
 
-`inputs` [AuthenticationExtensionsPRFInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFInputs.cs)?
+`inputs` [AuthenticationExtensionsPRFInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFInputs.cs)?
 
 The Fido2NetLib PRF extension inputs.
 
@@ -556,7 +556,7 @@ public static LargeBlobAssertionInputs? TranslateAssertion(AuthenticationExtensi
 
 #### Parameters
 
-`inputs` [AuthenticationExtensionsLargeBlobInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobInputs.cs)?
+`inputs` [AuthenticationExtensionsLargeBlobInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobInputs.cs)?
 
 The Fido2NetLib large-blob extension inputs.
 
@@ -576,7 +576,7 @@ public static AuthenticationExtensionsClientAssertionInputs? TranslateAssertionE
 
 #### Parameters
 
-`inputs` [AuthenticationExtensionsClientInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsClientInputs.cs)?
+`inputs` [AuthenticationExtensionsClientInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsClientInputs.cs)?
 
 The Fido2NetLib client extension inputs supplied for an assertion request.
 
@@ -596,7 +596,7 @@ public static PRFAttestationInputs? TranslateAttestation(AuthenticationExtension
 
 #### Parameters
 
-`inputs` [AuthenticationExtensionsPRFInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFInputs.cs)?
+`inputs` [AuthenticationExtensionsPRFInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsPRFInputs.cs)?
 
 The Fido2NetLib PRF extension inputs.
 
@@ -616,7 +616,7 @@ public static LargeBlobAttestationInputs? TranslateAttestation(AuthenticationExt
 
 #### Parameters
 
-`inputs` [AuthenticationExtensionsLargeBlobInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobInputs.cs)?
+`inputs` [AuthenticationExtensionsLargeBlobInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsLargeBlobInputs.cs)?
 
 The Fido2NetLib large-blob extension inputs.
 
@@ -636,7 +636,7 @@ public static AuthenticationExtensionsClientAttestationInputs? TranslateAttestat
 
 #### Parameters
 
-`inputs` [AuthenticationExtensionsClientInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/AuthenticationExtensionsClientInputs.cs)?
+`inputs` [AuthenticationExtensionsClientInputs](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/AuthenticationExtensionsClientInputs.cs)?
 
 The Fido2NetLib client extension inputs supplied for credential creation.
 
@@ -656,7 +656,7 @@ public static UserVerification TranslateCredProtect(CredentialProtectionPolicy? 
 
 #### Parameters
 
-`policy` [CredentialProtectionPolicy](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/CredentialProtectionPolicy.cs)?
+`policy` [CredentialProtectionPolicy](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/CredentialProtectionPolicy.cs)?
 
 The Fido2NetLib credential protection policy. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> is mapped to <xref href="DSInternals.Win32.WebAuthn.UserVerification.Any" data-throw-if-not-resolved="false"></xref>.
 
@@ -682,7 +682,7 @@ The interop user verification value reported by the credProtect extension.
 
 #### Returns
 
- [CredentialProtectionPolicy](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/CredentialProtectionPolicy.cs)?
+ [CredentialProtectionPolicy](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/CredentialProtectionPolicy.cs)?
 
 The equivalent Fido2NetLib credential protection policy, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when no policy applies.
 
@@ -716,7 +716,7 @@ public static ResidentKeyRequirement TranslateResidentKey(ResidentKeyRequirement
 
 #### Parameters
 
-`residentKey` [ResidentKeyRequirement](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/567965baac00fb58987d0812f8da1ea4a2245eac/Src/Fido2.Models/Objects/ResidentKeyRequirement.cs)?
+`residentKey` [ResidentKeyRequirement](https://github.com/passwordless\-lib/fido2\-net\-lib/blob/0d7d16a001b8d635a7a488362b08b5cf88d7fa6f/Src/Fido2.Models/Objects/ResidentKeyRequirement.cs)?
 
 The Fido2NetLib resident key requirement. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> is mapped to <xref href="DSInternals.Win32.WebAuthn.ResidentKeyRequirement.Preferred" data-throw-if-not-resolved="false"></xref>.
 
