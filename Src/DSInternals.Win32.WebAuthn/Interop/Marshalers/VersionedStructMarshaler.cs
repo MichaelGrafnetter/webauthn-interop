@@ -5,17 +5,14 @@ namespace DSInternals.Win32.WebAuthn.Interop
 {
     internal static class VersionedStructMarshaler
     {
-        public static T PtrToStructure<T>(IntPtr ptr, int sourceStructSize) where T : class
+        public static T? PtrToStructure<T>(IntPtr ptr, int sourceStructSize) where T : class
         {
             if (ptr == IntPtr.Zero || sourceStructSize == 0)
             {
                 return null;
             }
 
-            if (sourceStructSize < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(sourceStructSize));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(sourceStructSize);
 
             int targetStructSize = Marshal.SizeOf<T>();
 

@@ -20,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Extension data.
         /// </summary>
-        private ByteArrayIn _data;
+        private ByteArrayIn? _data;
 
         public ExtensionIn(string id, byte[] data)
         {
@@ -104,16 +104,16 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Extension identifier.
         /// </summary>
-        public string Identifier { get; private set; }
+        public string? Identifier { get; private set; }
 
         private int _dataLength;
 
-        private ByteArrayOut _data;
+        private ByteArrayOut? _data;
 
         /// <summary>
         /// Extension data.
         /// </summary>
-        public byte[] Data => _data?.Read(_dataLength);
+        public byte[]? Data => _data?.Read(_dataLength);
 
         private ExtensionOut() { }
     }

@@ -14,11 +14,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
     internal sealed class CredentialList : IDisposable
     {
         private int _length;
-        private IntPtr _nativeArray = IntPtr.Zero;
+        private IntPtr _nativeArray;
 
         public CredentialList(CredentialEx[] credentials) : base()
         {
-            if ((credentials?.Length ?? 0) <= 0)
+            if (credentials is null || credentials.Length <= 0)
             {
                 // Nothing to initialize
                 return;

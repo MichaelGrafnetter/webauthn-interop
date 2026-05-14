@@ -7,7 +7,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
     internal abstract class SafeStructArrayOut<T>
     {
         protected int _length;
-        protected IntPtr _nativeArray = IntPtr.Zero;
+        protected IntPtr _nativeArray;
 
         protected SafeStructArrayOut()
         {
@@ -42,7 +42,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
     internal abstract class SafeStructArrayIn<T> : IDisposable
     {
         protected int _length;
-        protected IntPtr _nativeArray = IntPtr.Zero;
+        protected IntPtr _nativeArray;
 
         public SafeStructArrayIn(T[]? items)
         {

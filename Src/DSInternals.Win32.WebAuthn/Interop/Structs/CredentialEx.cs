@@ -20,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private ByteArrayIn _id;
+        private ByteArrayIn? _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.

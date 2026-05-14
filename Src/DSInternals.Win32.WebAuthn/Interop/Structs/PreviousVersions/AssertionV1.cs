@@ -17,22 +17,22 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private int _authenticatorDataLength;
 
         /// <remarks>This field has been present since WEBAUTHN_ASSERTION_VERSION_1.</remarks>
-        private ByteArrayOut _authenticatorData;
+        private ByteArrayOut? _authenticatorData;
 
         /// <remarks>This field has been present since WEBAUTHN_ASSERTION_VERSION_1.</remarks>
         private int _signatureLength;
 
         /// <remarks>This field has been present since WEBAUTHN_ASSERTION_VERSION_1.</remarks>
-        private ByteArrayOut _signature;
+        private ByteArrayOut? _signature;
 
         /// <remarks>This field has been present since WEBAUTHN_ASSERTION_VERSION_1.</remarks>
-        private CredentialOut _credential;
+        private CredentialOut? _credential;
 
         /// <remarks>This field has been present since WEBAUTHN_ASSERTION_VERSION_1.</remarks>
         private int _userIdLength;
 
         /// <remarks>This field has been present since WEBAUTHN_ASSERTION_VERSION_1.</remarks>
-        private ByteArrayOut _userId;
+        private ByteArrayOut? _userId;
 
         /// <summary>
         /// The instantiation of this class is blocked by this private constructor.

@@ -7,7 +7,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
     [StructLayout(LayoutKind.Sequential)]
     internal class ByteArrayOut
     {
-        protected IntPtr _nativeArray = IntPtr.Zero;
+        protected IntPtr _nativeArray;
 
         // This class is only created by marshaling.
         protected ByteArrayOut() { }

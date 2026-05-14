@@ -15,7 +15,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             return true;
         }
 
-        internal CredentialAttestation ToManaged()
+        internal CredentialAttestation? ToManaged()
         {
             if (this.IsInvalid)
             {

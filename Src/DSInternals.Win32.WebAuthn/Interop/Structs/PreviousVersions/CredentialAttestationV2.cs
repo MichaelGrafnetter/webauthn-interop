@@ -15,19 +15,19 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private CredentialAttestationVersion _version;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
-        private string _formatType;
+        private string? _formatType;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
         private int _authenticatorDataLength;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
-        private ByteArrayOut _authenticatorData;
+        private ByteArrayOut? _authenticatorData;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
         private int _attestationLength;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
-        private ByteArrayOut _attestation;
+        private ByteArrayOut? _attestation;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
         private AttestationDecode _attestationDecodeType;
@@ -39,16 +39,16 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private int _attestationObjectLength;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
-        private ByteArrayOut _attestationObject;
+        private ByteArrayOut? _attestationObject;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
         private int _credentialIdLength;
 
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_1.</remarks>
-        private ByteArrayOut _credentialId;
+        private ByteArrayOut? _credentialId;
 
         /// <remarks>This field has been added in WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2.</remarks>
-        private ExtensionsOut _extensions;
+        private ExtensionsOut? _extensions;
 
         /// <summary>
         /// The instantiation of this class is blocked by this private constructor.

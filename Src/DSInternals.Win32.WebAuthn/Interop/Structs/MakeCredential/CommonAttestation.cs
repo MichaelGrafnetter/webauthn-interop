@@ -20,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Hash and Padding Algorithm
         /// </summary>
         /// <remarks>The following won't be set for "fido-u2f" which assumes "ES256".</remarks>
-        public string Algorithm { get; private set; }
+        public string? Algorithm { get; private set; }
 
         /// <summary>
         /// COSE algorithm
@@ -29,27 +29,27 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
         private int _signatureLength;
 
-        private ByteArrayOut _signature;
+        private ByteArrayOut? _signature;
 
         private int _certificatesLength;
 
         private IntPtr _certificates;
 
         // Following fields are also set for tpm
-        public string TPMVersion { get; private set; }
+        public string? TPMVersion { get; private set; }
 
         private int _certificateInfoLength;
 
-        private ByteArrayOut _certificateInfo;
+        private ByteArrayOut? _certificateInfo;
 
         private int _pubAreaLength;
 
-        private ByteArrayOut _pubArea;
+        private ByteArrayOut? _pubArea;
 
         /// <summary>
         /// Signature that was generated for this attestation.
         /// </summary>
-        public byte[] Signature => _signature?.Read(_signatureLength);
+        public byte[]? Signature => _signature?.Read(_signatureLength);
 
         /// <summary>
         /// Array of X.509 DER encoded certificates.
@@ -58,11 +58,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// The first certificate is the signer, leaf certificate.
         /// It is set for Full Basic Attestation. If not, set then, this is Self Attestation.
         /// </remarks>
-        public Certificate[] Certificates => new Certificates(_certificatesLength, _certificates).Items;
+        public Certificate[]? Certificates => new Certificates(_certificatesLength, _certificates).Items;
 
         // TODO: Decode CertificateInfo
-        public byte[] TPMCertificate => _certificateInfo?.Read(_certificateInfoLength);
+        public byte[]? TPMCertificate => _certificateInfo?.Read(_certificateInfoLength);
         // TODO: Rename TPMPubArea to something more meaningful
-        public byte[] TPMPubArea => _pubArea?.Read(_pubAreaLength);
+        public byte[]? TPMPubArea => _pubArea?.Read(_pubAreaLength);
     }
 }

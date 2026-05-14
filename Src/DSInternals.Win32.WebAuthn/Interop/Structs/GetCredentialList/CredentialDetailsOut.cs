@@ -80,13 +80,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// RP Info
         /// </summary>
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_DETAILS_VERSION_1.</remarks>
-        public RelyingPartyInformation RelyingPartyInformation => Marshal.PtrToStructure<RelyingPartyInformation>(_relyingPartyInformation);
+        public RelyingPartyInformation? RelyingPartyInformation => Marshal.PtrToStructure<RelyingPartyInformation>(_relyingPartyInformation);
 
         /// <summary>
         /// User Info
         /// </summary>
         /// <remarks>This field has been present since WEBAUTHN_CREDENTIAL_DETAILS_VERSION_1.</remarks>
-        public UserInformationOut UserInformation => Marshal.PtrToStructure<UserInformationOut>(_userInformation);
+        public UserInformationOut? UserInformation => Marshal.PtrToStructure<UserInformationOut>(_userInformation);
 
         /// <summary>
         /// CredentialId bytes.

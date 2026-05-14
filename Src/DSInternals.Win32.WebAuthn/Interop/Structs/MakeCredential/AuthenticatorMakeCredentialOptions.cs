@@ -60,13 +60,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Optional cancellation Id.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_2.</remarks>
-        private IntPtr _cancellationId = IntPtr.Zero;
+        private IntPtr _cancellationId;
 
         /// <summary>
         /// The exclude credential list. If present, CredentialList will be ignored.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_3.</remarks>
-        private IntPtr _excludeCredentialList = IntPtr.Zero;
+        private IntPtr _excludeCredentialList;
 
         /// <summary>
         /// Enterprise Attestation
@@ -108,7 +108,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Size of JSON extension.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_7.</remarks>
-        private int _jsonExtLength = 0;
+        private int _jsonExtLength;
 
         /// <summary>
         /// JSON extension.
@@ -124,7 +124,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// PRF extension "eval" values which will be converted into HMAC-SECRET values according to WebAuthn Spec.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_8.</remarks>
-        private IntPtr _prfGlobalEval = IntPtr.Zero;
+        private IntPtr _prfGlobalEval;
 
         /// <summary>
         /// Public key credential hint strings (https://w3c.github.io/webauthn/#enum-hints).
@@ -153,7 +153,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Size of PublicKeyCredentialCreationOptionsJSON.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_9.</remarks>
-        private int _publicKeyCredentialCreationOptionsJsonLength = 0;
+        private int _publicKeyCredentialCreationOptionsJsonLength;
 
         /// <summary>
         /// UTF-8 encoded JSON serialization of the PublicKeyCredentialCreationOptions.
@@ -165,7 +165,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Size of AuthenticatorId.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_VERSION_9.</remarks>
-        private int _authenticatorIdLength = 0;
+        private int _authenticatorIdLength;
 
         /// <summary>
         /// Authenticator ID got from WebAuthNGetAuthenticatorList API.

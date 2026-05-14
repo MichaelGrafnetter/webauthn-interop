@@ -12,16 +12,16 @@ namespace DSInternals.Win32.WebAuthn.Interop
     internal sealed class Certificate
     {
         private int _dataLength;
-        private ByteArrayOut _data;
+        private ByteArrayOut? _data;
 
         private Certificate() { }
 
-        public X509Certificate2 Cert
+        public X509Certificate2? Cert
         {
             get
             {
-                byte[] data = _data?.Read(_dataLength);
-                return data != null ? new X509Certificate2(data) : null;
+                byte[]? data = _data?.Read(_dataLength);
+                return data != null ? X509CertificateLoader.LoadCertificate(data) : null;
             }
         }
     }

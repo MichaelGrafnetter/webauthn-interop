@@ -7,7 +7,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
     internal class SafeStringArrayIn : IDisposable
     {
         protected int _length;
-        protected IntPtr _nativeArray = IntPtr.Zero;
+        protected IntPtr _nativeArray;
 
         public SafeStringArrayIn(string[]? items)
         {

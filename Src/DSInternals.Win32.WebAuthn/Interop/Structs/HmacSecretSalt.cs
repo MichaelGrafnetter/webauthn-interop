@@ -66,7 +66,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// The first SALT value.
         /// </summary>
-        private ByteArrayOut _first;
+        private ByteArrayOut? _first;
 
         /// <summary>
         /// Size of _second.
@@ -76,12 +76,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// The second SALT value.
         /// </summary>
-        private ByteArrayOut _second;
+        private ByteArrayOut? _second;
 
         /// <summary>
         /// The first SALT value.
         /// </summary>
-        public byte[] First => _first?.Read(_firstLength);
+        public byte[]? First => _first?.Read(_firstLength);
 
         /// <summary>
         /// The second SALT value.

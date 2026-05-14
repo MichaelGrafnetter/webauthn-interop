@@ -18,27 +18,27 @@ namespace DSInternals.Win32.WebAuthn.Interop
 
         private int _idLength;
 
-        private ByteArrayOut _id;
+        private ByteArrayOut? _id;
 
         /// <summary>
         /// Contains a detailed name for this account, such as "john.p.smith@example.com".
         /// </summary>
-        public string Name { get; private set; }
+        public string? Name { get; private set; }
 
         /// <summary>
         /// Optional URL that can be used to retrieve an image containing the user's current avatar, or a data URI that contains the image data.
         /// </summary>
-        public string Icon { get; private set; }
+        public string? Icon { get; private set; }
 
         /// <summary>
         /// Contains the friendly name associated with the user account by the Relying Party, such as "John P. Smith".
         /// </summary>
-        public string DisplayName { get; private set; }
+        public string? DisplayName { get; private set; }
 
         /// <summary>
         /// Identifier for the User.
         /// </summary>
-        public byte[] Id
+        public byte[]? Id
         {
             get
             {

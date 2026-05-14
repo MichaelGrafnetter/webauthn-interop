@@ -13,7 +13,7 @@ internal sealed class AuthenticatorDetailsListSafeHandle : SafeHandleZeroOrMinus
         return true;
     }
 
-    internal AuthenticatorDetailsOut[] ToManaged()
+    internal AuthenticatorDetailsOut[]? ToManaged()
     {
         if (this.IsInvalid)
         {

@@ -11,7 +11,7 @@ namespace DSInternals.Win32.WebAuthn.Interop;
 internal sealed class AuthenticatorDetailsList
 {
     private int _length;
-    private IntPtr _nativeArray = IntPtr.Zero;
+    private IntPtr _nativeArray;
 
     private AuthenticatorDetailsList() { }
 

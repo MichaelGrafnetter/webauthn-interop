@@ -82,20 +82,20 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Note that this value is modified by WebAuthNAuthenticatorGetAssertion
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_2.</remarks>
-        private IntPtr _isU2fAppIdUsed = IntPtr.Zero;
+        private IntPtr _isU2fAppIdUsed;
 
         /// <summary>
         /// Cancellation Id (Optional).
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_3.</remarks>
-        private IntPtr _cancellationId = IntPtr.Zero;
+        private IntPtr _cancellationId;
 
         /// <summary>
         /// An optional list of public key credential descriptors describing credentials acceptable to the Relying Party (possibly filtered by the client), if any.
         /// If present, CredentialList will be ignored.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_4.</remarks>
-        private IntPtr _allowCredentialList = IntPtr.Zero;
+        private IntPtr _allowCredentialList;
 
         /// <summary>
         /// The large blob operation.
@@ -176,7 +176,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Size of PublicKeyCredentialRequestOptionsJSON.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_9.</remarks>
-        private int _publicKeyCredentialRequestOptionsJsonLength = 0;
+        private int _publicKeyCredentialRequestOptionsJsonLength;
 
         /// <summary>
         /// UTF-8 encoded JSON serialization of the PublicKeyCredentialRequestOptions.
@@ -188,7 +188,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// Size of AuthenticatorId.
         /// </summary>
         /// <remarks>This field has been added in WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_VERSION_9.</remarks>
-        private int _authenticatorIdLength = 0;
+        private int _authenticatorIdLength;
 
         /// <summary>
         /// Authenticator ID got from WebAuthNGetAuthenticatorList API.

@@ -13,28 +13,28 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// // Version of this structure, to allow for modifications in the future.
         /// </summary>
-        private HybridStorageLinkedDataVersion _version = HybridStorageLinkedDataVersion.Version1;
+        private HybridStorageLinkedDataVersion? _version = HybridStorageLinkedDataVersion.Version1;
 
         // Contact Id
         private int _contactIdLength;
-        private ByteArrayIn _contactId;
+        private ByteArrayIn? _contactId;
 
         // Link Id
         private int _linkIdLength;
-        private ByteArrayIn _linkId;
+        private ByteArrayIn? _linkId;
 
         // Link secret
         private int _linkSecretLength;
-        private ByteArrayIn _linkSecret;
+        private ByteArrayIn? _linkSecret;
 
         // Authenticator Public Key
         private int _publicKeyLength;
-        private ByteArrayIn _publicKey;
+        private ByteArrayIn? _publicKey;
 
         /// <summary>
         /// Authenticator Name
         /// </summary>
-        public string AuthenticatorName { get; set; }
+        public string? AuthenticatorName { get; set; }
 
         /// <summary>
         /// Tunnel server domain
@@ -44,7 +44,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Contact Id
         /// </summary>
-        public byte[] ContactId
+        public byte[]? ContactId
         {
             get
             {
@@ -61,7 +61,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Link Id
         /// </summary>
-        public byte[] LinkId
+        public byte[]? LinkId
         {
             get
             {
@@ -78,7 +78,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Link secret
         /// </summary>
-        public byte[] LinkSecret
+        public byte[]? LinkSecret
         {
             get
             {
@@ -95,7 +95,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Authenticator Public Key
         /// </summary>
-        public byte[] PublicKey
+        public byte[]? PublicKey
         {
             get
             {

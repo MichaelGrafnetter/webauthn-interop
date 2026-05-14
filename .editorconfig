@@ -72,6 +72,8 @@ dotnet_naming_symbols.constant_fields.required_modifiers          = const
 ###############################
 # CA1051: Do not declare visible instance fields
 dotnet_code_quality.ca1051.api_surface = public
+# CA1819: Properties should not return arrays (suppressed due to heavy interop code use)
+dotnet_diagnostic.CA1819.severity = none
 ###############################
 # C# Coding Conventions       #
 ###############################

@@ -20,7 +20,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        private ByteArrayIn _id;
+        private ByteArrayIn? _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
@@ -56,17 +56,17 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private int _idLength;
 
 
-        private ByteArrayOut _id;
+        private ByteArrayOut? _id;
 
         /// <summary>
         /// Well-known credential type specifying what this particular credential is.
         /// </summary>
-        public string Type { get; private set; }
+        public string? Type { get; private set; }
 
         /// <summary>
         /// Unique ID for this particular credential.
         /// </summary>
-        public byte[] Id => _id?.Read(_idLength);
+        public byte[]? Id => _id?.Read(_idLength);
 
         private CredentialOut() { }
     }

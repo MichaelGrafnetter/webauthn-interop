@@ -181,7 +181,7 @@ namespace DSInternals.Win32.WebAuthn.Adapter.Tests
 
             var webauthn = new WebAuthnApiAdapter();
 
-            var source = new CancellationTokenSource(5000); // Cancel in 5 seconds
+            using var source = new CancellationTokenSource(5000); // Cancel in 5 seconds
             Assert.ThrowsExactly<OperationCanceledException>(() =>
                 webauthn.AuthenticatorGetAssertionAsync(options, null, source.Token).GetAwaiter().GetResult());
         }

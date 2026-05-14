@@ -14,7 +14,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             return true;
         }
 
-        internal CredentialDetailsOut[] ToManaged()
+        internal CredentialDetailsOut[]? ToManaged()
         {
             return Marshal.PtrToStructure<CredentialDetailsList>(handle)?.Items;
         }
