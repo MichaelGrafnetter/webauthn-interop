@@ -344,6 +344,9 @@ An optional credential ID to test a specific credential. Accepts either a byte a
 .PARAMETER Hint
 An optional hint to the client about which credential source to use (e.g., SecurityKey, ClientDevice, Hybrid).
 
+.PARAMETER BrowserInPrivateMode
+Indicates whether the request originates from a browser running in private/incognito mode.
+
 .EXAMPLE
 Test-Passkey -RelyingPartyId 'login.microsoft.com'
 
@@ -401,7 +404,11 @@ function Test-Passkey
 
         [Parameter(Mandatory = $false)]
         [Alias("AuthenticatorType", "CredentialHint", "PublicKeyCredentialHint")]
-        [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint] $Hint = [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint]::None
+        [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint] $Hint = [DSInternals.Win32.WebAuthn.PublicKeyCredentialHint]::None,
+
+        [Parameter(Mandatory = $false)]
+        [Alias("PrivateMode", "Private")]
+        [switch] $BrowserInPrivateMode
     )
 
     try {
@@ -434,7 +441,7 @@ function Test-Passkey
             $timeoutMilliseconds,
             $allowCredentials,
             $null,  # extensions
-            $false, # browserInPrivateMode
+            $BrowserInPrivateMode.IsPresent,
             $null,  # linkedDevice
             $false, # autoFill
             $credentialHints,
@@ -586,6 +593,9 @@ and whether credentials are removable or backed up.
 .PARAMETER RelyingPartyId
 Optional relying party ID to filter credentials. If not specified, all credentials are returned.
 
+.PARAMETER BrowserInPrivateMode
+Indicates whether the request originates from a browser running in private/incognito mode.
+
 .EXAMPLE
 Get-PasskeyWindowsHello
 
@@ -613,11 +623,15 @@ function Get-PasskeyWindowsHello
     param(
         [Parameter(Mandatory = $false)]
         [Alias('RpId')]
-        [string] $RelyingPartyId
+        [string] $RelyingPartyId,
+
+        [Parameter(Mandatory = $false)]
+        [Alias("PrivateMode", "Private")]
+        [switch] $BrowserInPrivateMode
     )
 
     try {
-        [DSInternals.Win32.WebAuthn.CredentialDetails[]] $credentials = [DSInternals.Win32.WebAuthn.WebAuthnApi]::GetPlatformCredentialList($RelyingPartyId)
+        [DSInternals.Win32.WebAuthn.CredentialDetails[]] $credentials = [DSInternals.Win32.WebAuthn.WebAuthnApi]::GetPlatformCredentialList($RelyingPartyId, $BrowserInPrivateMode.IsPresent)
 
         if ($null -eq $credentials -or $credentials.Count -eq 0) {
             Write-Verbose 'No platform credentials found.'

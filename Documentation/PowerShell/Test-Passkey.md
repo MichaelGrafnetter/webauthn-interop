@@ -15,7 +15,8 @@ Tests a passkey by performing an authentication assertion.
 ```
 Test-Passkey [-RelyingPartyId] <String> [[-Challenge] <Object>]
  [[-UserVerification] <UserVerificationRequirement>] [[-AuthenticatorAttachment] <AuthenticatorAttachment>]
- [[-Timeout] <TimeSpan>] [[-CredentialId] <Object>] [[-Hint] <PublicKeyCredentialHint>] [<CommonParameters>]
+ [[-Timeout] <TimeSpan>] [[-CredentialId] <Object>] [[-Hint] <PublicKeyCredentialHint>]
+ [-BrowserInPrivateMode] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -69,6 +70,21 @@ Accepted values: Any, Platform, CrossPlatform, CrossPlatformU2F
 Required: False
 Position: 4
 Default value: Any
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BrowserInPrivateMode
+Indicates whether the request originates from a browser running in private/incognito mode.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: PrivateMode, Private
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

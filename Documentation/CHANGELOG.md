@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Added
+
+- Added the `-BrowserInPrivateMode` switch (aliases `-PrivateMode`, `-Private`) to the `Test-Passkey` and `Get-PasskeyWindowsHello` cmdlets, signaling that the request originates from a browser running in private/incognito mode. When this switch is used, no information about the operation is written to the Windows event log.
+
 ## [3.1.0] - 2026-05-14
 
 ### Added

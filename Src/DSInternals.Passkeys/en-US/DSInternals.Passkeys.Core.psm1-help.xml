@@ -597,9 +597,33 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="False" position="named" aliases="PrivateMode, Private">
+          <maml:name>BrowserInPrivateMode</maml:name>
+          <maml:description>
+            <maml:para>Indicates whether the request originates from a browser running in private/incognito mode.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="False" position="named" aliases="PrivateMode, Private">
+        <maml:name>BrowserInPrivateMode</maml:name>
+        <maml:description>
+          <maml:para>Indicates whether the request originates from a browser running in private/incognito mode.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="RpId">
         <maml:name>RelyingPartyId</maml:name>
         <maml:description>
@@ -1228,6 +1252,18 @@ Remove-PasskeyWindowsHello -CredentialId $cred.CredentialId</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="False" position="named" aliases="PrivateMode, Private">
+          <maml:name>BrowserInPrivateMode</maml:name>
+          <maml:description>
+            <maml:para>Indicates whether the request originates from a browser running in private/incognito mode.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -1242,6 +1278,18 @@ Remove-PasskeyWindowsHello -CredentialId $cred.CredentialId</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>Any</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="False" position="named" aliases="PrivateMode, Private">
+        <maml:name>BrowserInPrivateMode</maml:name>
+        <maml:description>
+          <maml:para>Indicates whether the request originates from a browser running in private/incognito mode.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Challenge</maml:name>

@@ -13,7 +13,7 @@ Gets the list of platform credentials (passkeys) stored on the system.
 ## SYNTAX
 
 ```
-Get-PasskeyWindowsHello [[-RelyingPartyId] <String>] [<CommonParameters>]
+Get-PasskeyWindowsHello [[-RelyingPartyId] <String>] [-BrowserInPrivateMode] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,6 +38,21 @@ Get-PasskeyWindowsHello -RelyingPartyId 'login.microsoft.com'
 Lists credentials for a specific relying party.
 
 ## PARAMETERS
+
+### -BrowserInPrivateMode
+Indicates whether the request originates from a browser running in private/incognito mode.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: PrivateMode, Private
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -RelyingPartyId
 Optional relying party ID to filter credentials.
