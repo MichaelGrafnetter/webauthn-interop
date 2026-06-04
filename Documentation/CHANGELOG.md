@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - `WebAuthnApi.AuthenticatorGetAssertion` now prefers the native `pbAuthenticationResponseJSON` returned in `WEBAUTHN_ASSERTION_VERSION_6` when present, deserializing the full credential (including `clientExtensionResults`) verbatim from the OS-produced JSON. The legacy field-by-field assembly and per-extension recomputation remain as a fallback for older OS versions.
 - `WebAuthnApi.AuthenticatorMakeCredential` now prefers the native `pbRegistrationResponseJSON` returned in `WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_8` when present, deserializing the full credential verbatim from the OS-produced JSON. The legacy field-by-field assembly and per-extension recomputation remain as a fallback for older OS versions.
+- The `AuthenticatorDetails.AuthenticatorId` property (returned by `Get-PasskeyAuthenticator`) was renamed to `AaGuid` and its type changed from `byte[]` to `Guid?`. The binary identifier returned by the Win32 API is a big-endian encoded Authenticator Attestation GUID (AAGUID), so it is now decoded and surfaced as a `Guid` (or `null` when absent) instead of a Base64Url-encoded string.
 
 ## [3.1.0] - 2026-05-14
 
