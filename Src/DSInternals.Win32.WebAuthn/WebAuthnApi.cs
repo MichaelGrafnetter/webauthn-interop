@@ -515,6 +515,24 @@ namespace DSInternals.Win32.WebAuthn
                     try
                     {
                         var attestation = attestationHandle.ToManaged();
+
+                        // Prefer the native RegistrationResponseJSON (WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_8+) when available.
+                        // It is produced by PublicKeyCredential.toJSON() on the OS side per the WebAuthn spec, so it
+                        // already contains the fully-formed credential — including clientExtensionResults — and we
+                        // return it verbatim instead of re-deriving anything from the legacy struct fields.
+                        byte[]? responseJsonBytes = attestation.RegistrationResponseJson;
+                        if (responseJsonBytes is { Length: > 0 })
+                        {
+                            var parsed = AttestationPublicKeyCredential.FromJson(Encoding.UTF8.GetString(responseJsonBytes));
+                            if (parsed != null)
+                            {
+                                return parsed;
+                            }
+                        }
+
+                        // Fallback: pre-V8 path (or JSON deserialization failed). Assemble the credential from the
+                        // individual fields exposed by the CredentialAttestation struct and recompute extension
+                        // outputs from the wrapper's non-JSON channels.
                         var extensionResults = new AuthenticationExtensionsClientAttestationOutputs()
                         {
                             HmacSecret = attestation.Extensions?.HmacSecret ?? false,
@@ -860,6 +878,24 @@ namespace DSInternals.Win32.WebAuthn
                     try
                     {
                         var assertion = assertionHandle.ToManaged();
+
+                        // Prefer the native AuthenticationResponseJSON (WEBAUTHN_ASSERTION_VERSION_6+) when available.
+                        // It is produced by PublicKeyCredential.toJSON() on the OS side per the WebAuthn spec, so it
+                        // already contains the fully-formed credential — including clientExtensionResults — and we
+                        // return it verbatim instead of re-deriving anything from the legacy struct fields.
+                        byte[]? responseJsonBytes = assertion.AuthenticationResponseJson;
+                        if (responseJsonBytes is { Length: > 0 })
+                        {
+                            var parsed = AssertionPublicKeyCredential.FromJson(Encoding.UTF8.GetString(responseJsonBytes));
+                            if (parsed != null)
+                            {
+                                return parsed;
+                            }
+                        }
+
+                        // Fallback: pre-V6 path (or JSON deserialization failed). Assemble the credential from the
+                        // individual fields exposed by the Assertion struct and recompute extension outputs from
+                        // the wrapper's non-JSON channels.
                         var hmacSecret = assertion.HmacSecret;
                         var extensionsOut = new AuthenticationExtensionsClientAssertionOutputs();
 
@@ -918,7 +954,6 @@ namespace DSInternals.Win32.WebAuthn
                             };
                         }
 
-                        // Wrap the raw results
                         return new AssertionPublicKeyCredential()
                         {
                             Id = assertion.Credential?.Id,

@@ -8,6 +8,11 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added the `-BrowserInPrivateMode` switch (aliases `-PrivateMode`, `-Private`) to the `Test-Passkey` and `Get-PasskeyWindowsHello` cmdlets, signaling that the request originates from a browser running in private/incognito mode. When this switch is used, no information about the operation is written to the Windows event log.
 
+### Changed
+
+- `WebAuthnApi.AuthenticatorGetAssertion` now prefers the native `pbAuthenticationResponseJSON` returned in `WEBAUTHN_ASSERTION_VERSION_6` when present, deserializing the full credential (including `clientExtensionResults`) verbatim from the OS-produced JSON. The legacy field-by-field assembly and per-extension recomputation remain as a fallback for older OS versions.
+- `WebAuthnApi.AuthenticatorMakeCredential` now prefers the native `pbRegistrationResponseJSON` returned in `WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_8` when present, deserializing the full credential verbatim from the OS-produced JSON. The legacy field-by-field assembly and per-extension recomputation remain as a fallback for older OS versions.
+
 ## [3.1.0] - 2026-05-14
 
 ### Added
