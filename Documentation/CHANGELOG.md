@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added the `-BrowserInPrivateMode` switch (aliases `-PrivateMode`, `-Private`) to the `Test-Passkey` and `Get-PasskeyWindowsHello` cmdlets, signaling that the request originates from a browser running in private/incognito mode. When this switch is used, no information about the operation is written to the Windows event log.
 
+### Changed
+
+- The `AuthenticatorDetails.AuthenticatorId` property (returned by `Get-PasskeyAuthenticator`) was renamed to `AaGuid` and its type changed from `byte[]` to `Guid`. The binary identifier returned by the Win32 API is a big-endian encoded Authenticator Attestation GUID (AAGUID), so it is now decoded and surfaced as a `Guid` instead of a Base64Url-encoded string.
+
 ## [3.1.0] - 2026-05-14
 
 ### Added

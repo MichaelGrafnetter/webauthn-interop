@@ -12,8 +12,8 @@
           <ListEntry>
             <ListItems>
               <ListItem>
-                <Label>AuthenticatorId</Label>
-                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.AuthenticatorId)</ScriptBlock>
+                <Label>AAGUID</Label>
+                <PropertyName>AaGuid</PropertyName>
               </ListItem>
               <ListItem>
                 <PropertyName>AuthenticatorName</PropertyName>
@@ -36,8 +36,8 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>AuthenticatorId</Label>
-            <Width>45</Width>
+            <Label>AAGUID</Label>
+            <Width>38</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>AuthenticatorName</Label>
@@ -51,7 +51,7 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.AuthenticatorId)</ScriptBlock>
+                <PropertyName>AaGuid</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>AuthenticatorName</PropertyName>

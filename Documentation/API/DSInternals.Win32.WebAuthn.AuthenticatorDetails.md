@@ -29,17 +29,17 @@ Corresponds to WEBAUTHN_AUTHENTICATOR_DETAILS.
 
 ## Properties
 
-### <a id="DSInternals_Win32_WebAuthn_AuthenticatorDetails_AuthenticatorId"></a> AuthenticatorId
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorDetails_AaGuid"></a> AaGuid
 
-The authenticator Id.
+The Authenticator Attestation GUID (AAGUID) identifying the model of the authenticator.
 
 ```csharp
-public byte[]? AuthenticatorId { get; set; }
+public Guid AaGuid { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+ [Guid](https://learn.microsoft.com/dotnet/api/system.guid)
 
 ### <a id="DSInternals_Win32_WebAuthn_AuthenticatorDetails_AuthenticatorLogo"></a> AuthenticatorLogo
 

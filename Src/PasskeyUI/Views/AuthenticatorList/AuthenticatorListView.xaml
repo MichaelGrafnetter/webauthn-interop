@@ -56,10 +56,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Authenticator ID" Width="280" MinWidth="80" SortMemberPath="AuthenticatorId">
+                        <DataGridTemplateColumn Header="AAGUID" Width="280" MinWidth="80" SortMemberPath="AaGuid">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <local:ClipboardEnabledTextBlock Text="{Binding AuthenticatorId, Converter={StaticResource ByteArrayToBase64UrlConverter}}" />
+                                    <local:ClipboardEnabledTextBlock Text="{Binding AaGuid}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

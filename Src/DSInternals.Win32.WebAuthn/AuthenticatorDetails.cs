@@ -1,4 +1,6 @@
-﻿namespace DSInternals.Win32.WebAuthn;
+﻿using System;
+
+namespace DSInternals.Win32.WebAuthn;
 
 /// <summary>
 /// Information about an authenticator.
@@ -7,9 +9,9 @@
 public sealed class AuthenticatorDetails
 {
     /// <summary>
-    /// The authenticator Id.
+    /// The Authenticator Attestation GUID (AAGUID) identifying the model of the authenticator.
     /// </summary>
-    public byte[]? AuthenticatorId { get; set; }
+    public Guid AaGuid { get; set; }
 
     /// <summary>
     /// The authenticator name.

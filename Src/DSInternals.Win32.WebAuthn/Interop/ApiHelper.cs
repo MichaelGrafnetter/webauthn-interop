@@ -253,7 +253,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             {
                 result.Add(new AuthenticatorDetails
                 {
-                    AuthenticatorId = authenticator.AuthenticatorId,
+                    AaGuid = DecodeAaGuid(authenticator.AuthenticatorId),
                     AuthenticatorName = authenticator.AuthenticatorName,
                     AuthenticatorLogo = DecodeBinaryLogo(authenticator.AuthenticatorLogo),
                     Locked = authenticator.Locked
@@ -261,6 +261,17 @@ namespace DSInternals.Win32.WebAuthn.Interop
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Decodes the authenticator identifier returned by the Win32 API, which is the AAGUID encoded as a big-endian GUID.
+        /// </summary>
+        private static Guid DecodeAaGuid(byte[]? authenticatorId)
+        {
+            // The AAGUID is always a 16-byte big-endian encoded GUID.
+            return authenticatorId is { Length: 16 }
+                ? Guid.Create(authenticatorId, bigEndian: true)
+                : Guid.Empty;
         }
 
         /// <summary>
