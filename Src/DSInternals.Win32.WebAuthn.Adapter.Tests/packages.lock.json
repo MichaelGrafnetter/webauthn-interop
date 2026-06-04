@@ -178,7 +178,7 @@
       "dsinternals.win32.webauthn.adapter": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Win32.WebAuthn": "[3.1.0, )",
+          "DSInternals.Win32.WebAuthn": "[3.2.0, )",
           "Fido2.Models": "[4.0.1, )"
         }
       },

@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-06-04
+
 ### Added
 
 - Added the `-BrowserInPrivateMode` switch (aliases `-PrivateMode`, `-Private`) to the `Test-Passkey` and `Get-PasskeyWindowsHello` cmdlets, signaling that the request originates from a browser running in private/incognito mode. When this switch is used, no information about the operation is written to the Windows event log.
@@ -140,7 +142,8 @@ This is a bugfix release. Huge thanks to @aseigler for reporting and fixing the 
 
 - Initial version
 
-[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v3.0...v3.1.0
 [3.0]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1.1...v3.0
 [2.1.1]: https://github.com/MichaelGrafnetter/webauthn-interop/compare/v2.1...v2.1.1

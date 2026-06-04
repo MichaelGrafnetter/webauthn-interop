@@ -6,13 +6,12 @@
     <PackageId>DSInternals.Win32.WebAuthn.Adapter</PackageId>
     <Product>WebAuthn Interop Assembly Adapter</Product>
     <Title>WebAuthn Interop Assembly Adapter</Title>
-    <Version>3.1.0</Version>
-    <AssemblyVersion>3.1.0</AssemblyVersion>
-    <ProductVersion>3.1.0</ProductVersion>
-    <FileVersion>3.1.0</FileVersion>
+    <Version>3.2.0</Version>
+    <AssemblyVersion>3.2.0</AssemblyVersion>
+    <ProductVersion>3.2.0</ProductVersion>
+    <FileVersion>3.2.0</FileVersion>
     <Description>Bridge between Fido2.Models and DSInternals.Win32.WebAuthn packages</Description>
-    <PackageReleaseNotes>- Added translators for credential hints, credential protection policy, large-blob attestation/assertion inputs and outputs, and PRF attestation/assertion inputs and outputs.
-- Updated `DSInternals.Win32.WebAuthn` dependency to 3.1.0 and aligned with the new API surface.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Updated `DSInternals.Win32.WebAuthn` dependency to 3.2.0 and aligned with the new API surface (native registration/assertion JSON responses and the `AaGuid` rename on `AuthenticatorDetails`).</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

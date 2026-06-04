@@ -8,7 +8,7 @@
 # RootModule is intentionally omitted; all functionality is provided by the nested modules below.
 
 # Version number of this module.
-ModuleVersion = '3.1.0'
+ModuleVersion = '3.2.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -206,8 +206,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-- Module restructured into Core/Entra/Okta nested modules; provider cmdlets renamed (`Get-PasskeyRegistrationOptions` -> `Get-EntraPasskeyRegistrationOptions` / `Get-OktaPasskeyRegistrationOptions`, `Register-Passkey` -> `Register-EntraPasskey` / `Register-OktaPasskey`). Old names are kept as aliases.
-- Added `Get-PasskeyCreationOptions` for building credential creation options locally without contacting a remote identity provider.
+- Added the -BrowserInPrivateMode switch (aliases -PrivateMode, -Private) to Test-Passkey and Get-PasskeyWindowsHello, signaling that the request originates from a browser in private/incognito mode so the operation is not written to the Windows event log.
+- Get-PasskeyAuthenticator now exposes the authenticator AAGUID as a Guid? value on the new AaGuid property, replacing the previous Base64Url-encoded AuthenticatorId byte array.
+- Underlying WebAuthnApi now prefers the native registration/assertion JSON produced by recent Windows builds, returning credentials (including clientExtensionResults) verbatim from the OS instead of reconstructing them field by field.
 '@
 
         # Prerelease string of this module

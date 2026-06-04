@@ -7,14 +7,14 @@
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
     <Product>WebAuthn Interop Assembly</Product>
     <Title>WebAuthn Interop Assembly</Title>
-    <Version>3.1.0</Version>
-    <AssemblyVersion>3.1.0</AssemblyVersion>
-    <ProductVersion>3.1.0</ProductVersion>
-    <FileVersion>3.1.0</FileVersion>
+    <Version>3.2.0</Version>
+    <AssemblyVersion>3.2.0</AssemblyVersion>
+    <ProductVersion>3.2.0</ProductVersion>
+    <FileVersion>3.2.0</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>- Added an optional `hostName` parameter to `AuthenticatorMakeCredential` / `AuthenticatorMakeCredentialAsync` that derives the WebAuthn origin and substitutes for a missing `rp.id` (useful for relying parties such as Okta that omit it from server-issued options).
-- Reshaped Entra and Okta payloads.
-- `AuthenticatorSelectionCriteria.ResidentKey` is now nullable so it can default to `Preferred` when unspecified.
+    <PackageReleaseNotes>- `WebAuthnApi.AuthenticatorMakeCredential` / `AuthenticatorGetAssertion` now prefer the native `pbRegistrationResponseJSON` / `pbAuthenticationResponseJSON` returned by recent WebAuthn API versions, deserializing the full credential (including `clientExtensionResults`) verbatim from the OS-produced JSON. The legacy field-by-field assembly remains as a fallback for older OS versions.
+- `AuthenticatorDetails.AuthenticatorId` (surfaced by `Get-PasskeyAuthenticator`) was renamed to `AaGuid` and its type changed from `byte[]` to `Guid?`. The big-endian AAGUID returned by the Win32 API is now decoded and exposed as a `Guid` instead of a Base64Url string.
+- Added a `BrowserInPrivateMode` flag (`WEBAUTHN_AUTHENTICATOR_HINTS_FLAGS_BROWSER_IN_PRIVATE_MODE`) so callers can signal that the request originates from a browser running in private/incognito mode; no information about the operation is written to the Windows event log in that case.
 </PackageReleaseNotes>
     <!-- The DLL is publishable as part of the PowerShell module -->
     <IsPublishable>true</IsPublishable>
