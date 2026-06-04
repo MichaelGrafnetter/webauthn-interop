@@ -266,12 +266,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <summary>
         /// Decodes the authenticator identifier returned by the Win32 API, which is the AAGUID encoded as a big-endian GUID.
         /// </summary>
-        private static Guid DecodeAaGuid(byte[]? authenticatorId)
+        private static Guid? DecodeAaGuid(byte[]? authenticatorId)
         {
             // The AAGUID is always a 16-byte big-endian encoded GUID.
             return authenticatorId is { Length: 16 }
                 ? Guid.Create(authenticatorId, bigEndian: true)
-                : Guid.Empty;
+                : null;
         }
 
         /// <summary>

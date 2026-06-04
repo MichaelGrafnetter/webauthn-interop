@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Changed
 
-- The `AuthenticatorDetails.AuthenticatorId` property (returned by `Get-PasskeyAuthenticator`) was renamed to `AaGuid` and its type changed from `byte[]` to `Guid`. The binary identifier returned by the Win32 API is a big-endian encoded Authenticator Attestation GUID (AAGUID), so it is now decoded and surfaced as a `Guid` instead of a Base64Url-encoded string.
+- The `AuthenticatorDetails.AuthenticatorId` property (returned by `Get-PasskeyAuthenticator`) was renamed to `AaGuid` and its type changed from `byte[]` to `Guid?`. The binary identifier returned by the Win32 API is a big-endian encoded Authenticator Attestation GUID (AAGUID), so it is now decoded and surfaced as a `Guid` (or `null` when absent) instead of a Base64Url-encoded string.
 
 ## [3.1.0] - 2026-05-14
 

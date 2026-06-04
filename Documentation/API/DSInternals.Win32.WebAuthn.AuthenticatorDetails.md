@@ -34,12 +34,12 @@ Corresponds to WEBAUTHN_AUTHENTICATOR_DETAILS.
 The Authenticator Attestation GUID (AAGUID) identifying the model of the authenticator.
 
 ```csharp
-public Guid AaGuid { get; set; }
+public Guid? AaGuid { get; set; }
 ```
 
 #### Property Value
 
- [Guid](https://learn.microsoft.com/dotnet/api/system.guid)
+ [Guid](https://learn.microsoft.com/dotnet/api/system.guid)?
 
 ### <a id="DSInternals_Win32_WebAuthn_AuthenticatorDetails_AuthenticatorLogo"></a> AuthenticatorLogo
 

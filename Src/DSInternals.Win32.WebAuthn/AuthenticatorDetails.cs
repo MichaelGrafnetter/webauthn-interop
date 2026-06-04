@@ -11,7 +11,7 @@ public sealed class AuthenticatorDetails
     /// <summary>
     /// The Authenticator Attestation GUID (AAGUID) identifying the model of the authenticator.
     /// </summary>
-    public Guid AaGuid { get; set; }
+    public Guid? AaGuid { get; set; }
 
     /// <summary>
     /// The authenticator name.
