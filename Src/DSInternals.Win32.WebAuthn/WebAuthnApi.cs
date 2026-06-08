@@ -456,6 +456,36 @@ namespace DSInternals.Win32.WebAuthn
                 windowHandle = WindowHandle.ForegroundWindow;
             }
 
+            // Windows 11 24H2+ system passkey providers (e.g. 1Password) receive the original
+            // PublicKeyCredentialCreationOptions JSON from webauthn.dll. When the caller hasn't
+            // supplied one, synthesize it from the individual parameters so plug-in authenticators
+            // are still routed and appear in the OS picker.
+            if (publicKeyCredentialCreationOptionsJson is null or { Length: 0 })
+            {
+                publicKeyCredentialCreationOptionsJson = Encoding.UTF8.GetBytes(
+                    new PublicKeyCredentialCreationOptions
+                    {
+                        RelyingParty = rpEntity,
+                        User = userEntity,
+                        Challenge = clientData.Challenge,
+                        PublicKeyCredentialParameters = pubKeyCredParams
+                            .Select(alg => new PublicKeyCredentialParameter(alg, ApiConstants.PublicKeyCredentialType))
+                            .ToArray(),
+                        TimeoutMilliseconds = timeoutMilliseconds,
+                        ExcludeCredentials = excludeCredentials,
+                        AuthenticatorSelection = new AuthenticatorSelectionCriteria
+                        {
+                            AuthenticatorAttachment = authenticatorAttachment,
+                            UserVerificationRequirement = userVerificationRequirement,
+                            ResidentKey = residentKey,
+                            RequireResidentKey = residentKey == ResidentKeyRequirement.Required,
+                        },
+                        Attestation = attestationConveyancePreference,
+                        Extensions = extensions,
+                        Hints = credentialHints,
+                    }.ToString());
+            }
+
             using (var excludeCreds = new DisposableList<CredentialIn>())
             using (var excludeCredsEx = new DisposableList<CredentialEx>())
             {
@@ -810,6 +840,25 @@ namespace DSInternals.Win32.WebAuthn
             if (!windowHandle.IsValid)
             {
                 windowHandle = WindowHandle.ForegroundWindow;
+            }
+
+            // Windows 11 24H2+ system passkey providers (e.g. 1Password) receive the original
+            // PublicKeyCredentialRequestOptions JSON from webauthn.dll. When the caller hasn't
+            // supplied one, synthesize it from the individual parameters so plug-in authenticators
+            // are still routed and appear in the OS picker.
+            if (publicKeyCredentialRequestOptionsJson is null or { Length: 0 })
+            {
+                publicKeyCredentialRequestOptionsJson = Encoding.UTF8.GetBytes(
+                    new PublicKeyCredentialRequestOptions
+                    {
+                        Challenge = clientData.Challenge,
+                        Timeout = timeoutMilliseconds,
+                        RpId = rpId,
+                        AllowCredentials = allowCredentials,
+                        UserVerification = userVerificationRequirement,
+                        Hints = credentialHints,
+                        Extensions = extensions,
+                    }.ToString());
             }
 
             using (var allowCreds = new DisposableList<CredentialIn>())
