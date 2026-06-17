@@ -11,11 +11,26 @@ namespace DSInternals.Win32.WebAuthn.Events;
 /// </summary>
 public static class WebAuthnEventReader
 {
+    /// <summary>
+    /// Name of the operational WebAuthn event log.
+    /// </summary>
     private const string LogName = "Microsoft-Windows-WebAuthN/Operational";
+
+    /// <summary>
+    /// CTAP command name for adding plugin authenticator credentials.
+    /// </summary>
+    private const string AddPluginAuthenticatorCredentialsCommand = "AddPluginAuthenticatorCredentials";
+
+    /// <summary>
+    /// CTAP command name for enumerating all platform credentials.
+    /// </summary>
+    private const string GetAllPlatformCredentialsCommand = "GetAllPlatformCredentials";
 
     /// <summary>
     /// Reads all events from the local WebAuthN event log.
     /// </summary>
+    /// <param name="maxEvents">Optional maximum number of parsed events to return.</param>
+    /// <returns>The parsed WebAuthn events.</returns>
     public static IReadOnlyList<WebAuthnEvent> ReadEvents(int? maxEvents = null)
     {
         return ReadEvents(LogName, PathType.LogName, maxEvents);
@@ -24,11 +39,21 @@ public static class WebAuthnEventReader
     /// <summary>
     /// Reads events from a saved .evtx file.
     /// </summary>
+    /// <param name="filePath">Path to the saved event log file.</param>
+    /// <param name="maxEvents">Optional maximum number of parsed events to return.</param>
+    /// <returns>The parsed WebAuthn events.</returns>
     public static IReadOnlyList<WebAuthnEvent> ReadEventsFromFile(string filePath, int? maxEvents = null)
     {
         return ReadEvents(filePath, PathType.FilePath, maxEvents);
     }
 
+    /// <summary>
+    /// Reads events from an event log path or file path.
+    /// </summary>
+    /// <param name="path">The event log name or event log file path.</param>
+    /// <param name="pathType">The type of path to read from.</param>
+    /// <param name="maxEvents">Optional maximum number of parsed events to return.</param>
+    /// <returns>The parsed WebAuthn events.</returns>
     private static IReadOnlyList<WebAuthnEvent> ReadEvents(string path, PathType pathType, int? maxEvents)
     {
         var events = new List<WebAuthnEvent>();
@@ -59,6 +84,11 @@ public static class WebAuthnEventReader
         return events;
     }
 
+    /// <summary>
+    /// Parses a single event log record.
+    /// </summary>
+    /// <param name="record">The event record to parse.</param>
+    /// <returns>The parsed WebAuthn event, or <see langword="null"/> for empty records.</returns>
     private static WebAuthnEvent? ParseEvent(EventRecord record)
     {
         if (record.Id == 0)
@@ -143,11 +173,24 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Gets the standard event level from an event record.
+    /// </summary>
+    /// <param name="record">The event record to inspect.</param>
+    /// <returns>The standard event level, or <see langword="null"/> when the level is unavailable.</returns>
     private static StandardEventLevel? GetLevel(EventRecord record)
     {
         return record.Level.HasValue ? (StandardEventLevel)record.Level.Value : null;
     }
 
+    /// <summary>
+    /// Parses a generic event using the known base field layouts.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed base WebAuthn event.</returns>
     private static WebAuthnEvent ParseBaseEvent(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         Guid? transactionId = null;
@@ -251,6 +294,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a MakeCredentialCompleted event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed MakeCredentialCompleted event.</returns>
     private static MakeCredentialCompletedEvent ParseMakeCredentialCompleted(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId
@@ -266,6 +317,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a CBOR MakeCredential request event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed MakeCredential request event.</returns>
     private static MakeCredentialRequestEvent ParseMakeCredentialRequest(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, RpId, UserIdLength, UserId, ClientDataHashAlgId, ClientDataLength, ClientDataHashLength, ClientDataHash, RequireResidentKey, CredentialCount, CredentialParameterCount, RequestLength, Request
@@ -290,6 +349,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a CBOR MakeCredential response event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed CBOR MakeCredential response event.</returns>
     private static CborMakeCredentialResponseEvent ParseCborMakeCredentialResponse(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, AttestationFormatType, RpIdHashLength, RpIdHash, Flags, SignCount, AAGuid, CredentialIdLength, CredentialId, U2fPublicKey, PublicKeyLength, PublicKey, ResponseLength, Response
@@ -314,6 +381,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses an NGC MakeCredential response event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed NGC MakeCredential response event.</returns>
     private static NgcMakeCredentialResponseEvent ParseNgcMakeCredentialResponse(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, AttestationFormatType, RpIdHashLength, RpIdHash, Flags, SignCount, AAGuid, CredentialIdLength, CredentialId, U2fPublicKey, PublicKeyLength, PublicKey, ResponseLength, Response
@@ -338,6 +413,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a CBOR GetAssertion request event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed GetAssertion request event.</returns>
     private static GetAssertionRequestEvent ParseGetAssertionRequest(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, RpId, ClientDataHashAlgId, ClientDataLength, ClientDataHashLength, ClientDataHash, CredentialCount, RequestLength, Request
@@ -359,6 +442,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a CBOR GetAssertion response event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed GetAssertion response event.</returns>
     private static GetAssertionResponseEvent ParseGetAssertionResponse(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, RpIdHashLength, RpIdHash, Flags, SignCount, CredentialIdLength, CredentialId, ResponseLength, Response
@@ -379,6 +470,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a device information event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed device information event.</returns>
     private static DeviceInfoEvent ParseDeviceInfo(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, ProviderName, DevicePath, Manufacturer, Product, AAGuid, U2fProtocol
@@ -400,6 +499,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a USB device completed event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed USB device completed event.</returns>
     private static UsbDeviceCompletedEvent ParseUsbDeviceCompleted(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, DevicePath, Manufacturer, Product, AAGuid, U2fProtocol
@@ -420,6 +527,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a USB device started event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed USB device started event.</returns>
     private static UsbDeviceStartedEvent ParseUsbDeviceStarted(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, DevicePath, Manufacturer, Product
@@ -438,6 +553,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a USB add device event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed USB add device event.</returns>
     private static UsbAddDeviceEvent ParseUsbAddDevice(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: TransactionId, DevicePath, Manufacturer, Product
@@ -456,6 +579,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a platform authenticator availability result event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed platform authenticator availability event.</returns>
     private static IsUserVerifyingPlatformAuthenticatorAvailableEvent ParseIsUserVerifyingPlatformAuthenticatorAvailable(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: value, Error, HResult
@@ -473,6 +604,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses an API version event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed API version event.</returns>
     private static ApiVersionEvent ParseApiVersion(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: value, Error, HResult
@@ -490,6 +629,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a cancel-current-operation result event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed cancel-current-operation event.</returns>
     private static CancelCurrentOperationEvent ParseCancelCurrentOperation(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: value (CancellationId), Error, HResult
@@ -507,6 +654,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a generic name/value event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed name/value event.</returns>
     private static NameValueEvent ParseNameValue(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: Name, Value
@@ -523,9 +678,48 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a CTAP command started event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed CTAP command started event.</returns>
     private static CtapCommandStartedEvent ParseCtapCommandStarted(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: Command, TransactionId, Flags, TimeoutMilliseconds, TicketLength, Ticket, RequestLength, Request
+        string? command = GetString(properties, 0);
+        Guid? transactionId = GetGuid(properties, 1);
+        int? flags = GetInt32(properties, 2);
+        int? timeoutMilliseconds = GetInt32(properties, 3);
+        byte[]? ticket = GetByteArray(properties, 5); // index 4 is TicketLength
+        byte[]? request = GetByteArray(properties, 7); // index 6 is RequestLength
+
+        if (string.Equals(command, AddPluginAuthenticatorCredentialsCommand, StringComparison.Ordinal))
+        {
+            AddPluginAuthenticatorCredentialsRequest? parsedRequest = AddPluginAuthenticatorCredentialsRequestParser.Parse(request);
+
+            return new AddPluginAuthenticatorCredentialsEvent
+            {
+                EventId = eventId,
+                TimeCreated = record.TimeCreated?.ToLocalTime(),
+                ProcessId = (int)(record.ProcessId ?? 0),
+                ThreadId = (int)(record.ThreadId ?? 0),
+                Level = GetLevel(record),
+                Message = message,
+                Command = command,
+                TransactionId = transactionId,
+                Flags = flags,
+                TimeoutMilliseconds = timeoutMilliseconds,
+                Ticket = ticket,
+                Request = request,
+                FilterHybridTransport = parsedRequest?.FilterHybridTransport,
+                Credentials = parsedRequest?.Credentials,
+                PluginClassId = parsedRequest?.PluginClassId
+            };
+        }
+
         return new CtapCommandStartedEvent
         {
             EventId = eventId,
@@ -534,18 +728,47 @@ public static class WebAuthnEventReader
             ThreadId = (int)(record.ThreadId ?? 0),
             Level = GetLevel(record),
             Message = message,
-            Command = GetString(properties, 0),
-            TransactionId = GetGuid(properties, 1),
-            Flags = GetInt32(properties, 2),
-            TimeoutMilliseconds = GetInt32(properties, 3),
-            Ticket = GetByteArray(properties, 5), // index 4 is TicketLength
-            Request = GetByteArray(properties, 7) // index 6 is RequestLength
+            Command = command,
+            TransactionId = transactionId,
+            Flags = flags,
+            TimeoutMilliseconds = timeoutMilliseconds,
+            Ticket = ticket,
+            Request = request
         };
     }
 
+    /// <summary>
+    /// Parses a CTAP command completed event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed CTAP command completed event.</returns>
     private static CtapCommandCompletedEvent ParseCtapCommandCompleted(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: Command, TransactionId, ResponseLength, Response
+        string? command = GetString(properties, 0);
+        Guid? transactionId = GetGuid(properties, 1);
+        byte[]? response = GetByteArray(properties, 3); // index 2 is ResponseLength
+
+        if (string.Equals(command, GetAllPlatformCredentialsCommand, StringComparison.Ordinal))
+        {
+            return new GetAllPlatformCredentialsEvent
+            {
+                EventId = eventId,
+                TimeCreated = record.TimeCreated?.ToLocalTime(),
+                ProcessId = (int)(record.ProcessId ?? 0),
+                ThreadId = (int)(record.ThreadId ?? 0),
+                Level = GetLevel(record),
+                Message = message,
+                Command = command,
+                TransactionId = transactionId,
+                Response = response,
+                Credentials = GetAllPlatformCredentialsResponseParser.Parse(response)
+            };
+        }
+
         return new CtapCommandCompletedEvent
         {
             EventId = eventId,
@@ -554,12 +777,20 @@ public static class WebAuthnEventReader
             ThreadId = (int)(record.ThreadId ?? 0),
             Level = GetLevel(record),
             Message = message,
-            Command = GetString(properties, 0),
-            TransactionId = GetGuid(properties, 1),
-            Response = GetByteArray(properties, 3) // index 2 is ResponseLength
+            Command = command,
+            TransactionId = transactionId,
+            Response = response
         };
     }
 
+    /// <summary>
+    /// Parses a CTAP command error event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed CTAP command error event.</returns>
     private static CtapCommandErrorEvent ParseCtapCommandError(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: Command, TransactionId, Error, Win32Error
@@ -578,6 +809,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a function warning event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed function warning event.</returns>
     private static FunctionWarningEvent ParseFunctionWarning(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: Function, Location, Error, Win32Error
@@ -596,6 +835,14 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Parses a BLE function warning event.
+    /// </summary>
+    /// <param name="record">The source event record.</param>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="eventId">The WebAuthn event ID.</param>
+    /// <param name="message">The formatted event message, if available.</param>
+    /// <returns>The parsed BLE function warning event.</returns>
     private static BleFunctionWarningEvent ParseBleFunctionWarning(EventRecord record, IList<EventProperty> properties, WebAuthnEventId eventId, string? message)
     {
         // Fields: Function, Location, Error, Win32Error
@@ -616,6 +863,11 @@ public static class WebAuthnEventReader
 
     #region Property extraction helpers
 
+    /// <summary>
+    /// Gets event payload properties from a record.
+    /// </summary>
+    /// <param name="record">The event record to inspect.</param>
+    /// <returns>The event properties, or an empty collection when they cannot be read.</returns>
     private static IList<EventProperty> GetEventProperties(EventRecord record)
     {
         try
@@ -628,6 +880,12 @@ public static class WebAuthnEventReader
         }
     }
 
+    /// <summary>
+    /// Gets a string property value.
+    /// </summary>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="index">The property index.</param>
+    /// <returns>The property converted to a string, or <see langword="null"/> when unavailable.</returns>
     private static string? GetString(IList<EventProperty> properties, int index)
     {
         if (index >= properties.Count) return null;
@@ -635,6 +893,12 @@ public static class WebAuthnEventReader
         return value?.ToString();
     }
 
+    /// <summary>
+    /// Gets a signed 32-bit integer property value.
+    /// </summary>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="index">The property index.</param>
+    /// <returns>The property converted to an <see cref="int"/>, or <see langword="null"/> when unavailable.</returns>
     private static int? GetInt32(IList<EventProperty> properties, int index)
     {
         if (index >= properties.Count) return null;
@@ -651,6 +915,12 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Gets an unsigned 32-bit integer property value.
+    /// </summary>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="index">The property index.</param>
+    /// <returns>The property converted to a <see cref="uint"/>, or <see langword="null"/> when unavailable.</returns>
     private static uint? GetUInt32(IList<EventProperty> properties, int index)
     {
         if (index >= properties.Count) return null;
@@ -667,6 +937,12 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Gets a byte property value.
+    /// </summary>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="index">The property index.</param>
+    /// <returns>The property converted to a <see cref="byte"/>, or <see langword="null"/> when unavailable.</returns>
     private static byte? GetByte(IList<EventProperty> properties, int index)
     {
         if (index >= properties.Count) return null;
@@ -682,6 +958,12 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Gets a Boolean property value.
+    /// </summary>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="index">The property index.</param>
+    /// <returns>The property converted to a <see cref="bool"/>, or <see langword="null"/> when unavailable.</returns>
     private static bool? GetBoolean(IList<EventProperty> properties, int index)
     {
         if (index >= properties.Count) return null;
@@ -696,6 +978,12 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Gets a GUID property value.
+    /// </summary>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="index">The property index.</param>
+    /// <returns>The property converted to a non-empty <see cref="Guid"/>, or <see langword="null"/> when unavailable.</returns>
     private static Guid? GetGuid(IList<EventProperty> properties, int index)
     {
         if (index >= properties.Count) return null;
@@ -709,6 +997,12 @@ public static class WebAuthnEventReader
         };
     }
 
+    /// <summary>
+    /// Gets a byte array property value.
+    /// </summary>
+    /// <param name="properties">The event payload properties.</param>
+    /// <param name="index">The property index.</param>
+    /// <returns>The property byte array, or <see langword="null"/> when unavailable or empty.</returns>
     private static byte[]? GetByteArray(IList<EventProperty> properties, int index)
     {
         if (index >= properties.Count) return null;

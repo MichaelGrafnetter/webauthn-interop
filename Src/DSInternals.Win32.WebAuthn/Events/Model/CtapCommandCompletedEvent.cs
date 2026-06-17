@@ -17,7 +17,7 @@
 /// GetAuthenticatorList, GetPluginAuthenticatorList, CreateTicket, UpdatePluginAuthenticator,
 /// RemoveAllPluginAuthenticatorCredentials, WebAuthN, command.</para>
 /// </remarks>
-public sealed class CtapCommandCompletedEvent : WebAuthnEvent
+public class CtapCommandCompletedEvent : WebAuthnEvent
 {
     /// <summary>
     /// The CTAP command name (e.g., "MakeCredential", "GetAssertion", "GetAllPlatformCredentials").

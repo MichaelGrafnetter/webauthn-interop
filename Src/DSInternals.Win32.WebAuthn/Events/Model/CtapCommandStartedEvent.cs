@@ -19,9 +19,9 @@
 /// </code>
 /// <para>Known command names: MakeCredential, GetAssertion, GetAllPlatformCredentials,
 /// GetAuthenticatorList, GetPluginAuthenticatorList, CreateTicket, UpdatePluginAuthenticator,
-/// RemoveAllPluginAuthenticatorCredentials, WebAuthN, command.</para>
+/// AddPluginAuthenticatorCredentials, RemoveAllPluginAuthenticatorCredentials, WebAuthN, command.</para>
 /// </remarks>
-public sealed class CtapCommandStartedEvent : WebAuthnEvent
+public class CtapCommandStartedEvent : WebAuthnEvent
 {
     /// <summary>
     /// The CTAP command name (e.g., "MakeCredential", "GetAssertion", "GetAllPlatformCredentials").

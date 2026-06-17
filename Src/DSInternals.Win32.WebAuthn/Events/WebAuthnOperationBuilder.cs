@@ -7,14 +7,15 @@ using System.Text.RegularExpressions;
 namespace DSInternals.Win32.WebAuthn.Events;
 
 /// <summary>
-/// Aggregates raw WebAuthN events into <see cref="WebAuthnAttestationOperation"/> and <see cref="WebAuthnAssertionOperation"/> operations
-/// grouped by transaction ID.
+/// Aggregates raw WebAuthN events into operation models grouped by transaction ID.
 /// </summary>
 public static class WebAuthnOperationBuilder
 {
     /// <summary>
     /// Builds aggregated WebAuthn operations from a list of raw WebAuthN events.
     /// </summary>
+    /// <param name="events">The raw WebAuthn events to aggregate.</param>
+    /// <returns>The aggregated WebAuthn operations sorted by descending start time.</returns>
     public static IReadOnlyList<WebAuthnOperation> Build(IEnumerable<WebAuthnEvent> events)
     {
         var operations = new List<WebAuthnOperation>();
@@ -28,6 +29,8 @@ public static class WebAuthnOperationBuilder
         {
             var eventList = group.ToList();
             var transactionId = group.Key;
+            var pluginCredentialEnumerationEvents = eventList.OfType<AddPluginAuthenticatorCredentialsEvent>();
+            var platformCredentialEnumerationEvents = eventList.OfType<GetAllPlatformCredentialsEvent>();
 
             // Determine if this is an attestation (MakeCredential) or assertion (GetAssertion) transaction
             bool hasAttestation = eventList.Any(e =>
@@ -37,6 +40,28 @@ public static class WebAuthnOperationBuilder
             bool hasAssertion = eventList.Any(e =>
                 e.EventId == WebAuthnEventId.GetAssertionStarted ||
                 e.EventId == WebAuthnEventId.CborGetAssertionRequest);
+
+            foreach (var pluginCredentialEnumerationEvent in pluginCredentialEnumerationEvents)
+            {
+                operations.AddRange(BuildCredentialEnumerations(
+                    transactionId,
+                    eventList,
+                    pluginCredentialEnumerationEvent,
+                    pluginCredentialEnumerationEvent.Credentials,
+                    pluginCredentialEnumerationEvent.PluginClassId,
+                    pluginCredentialEnumerationEvent.FilterHybridTransport));
+            }
+
+            foreach (var platformCredentialEnumerationEvent in platformCredentialEnumerationEvents)
+            {
+                operations.AddRange(BuildCredentialEnumerations(
+                    transactionId,
+                    eventList,
+                    platformCredentialEnumerationEvent,
+                    platformCredentialEnumerationEvent.Credentials,
+                    pluginClassId: null,
+                    filterHybridTransport: null));
+            }
 
             if (hasAttestation)
             {
@@ -66,6 +91,12 @@ public static class WebAuthnOperationBuilder
         return operations.OrderByDescending(o => o.TimeStarted ?? DateTime.MinValue).ToList();
     }
 
+    /// <summary>
+    /// Builds a registration operation from events sharing a transaction ID.
+    /// </summary>
+    /// <param name="transactionId">The transaction ID shared by the events.</param>
+    /// <param name="events">The events in the transaction group.</param>
+    /// <returns>The aggregated registration operation.</returns>
     private static WebAuthnAttestationOperation BuildAttestation(Guid transactionId, List<WebAuthnEvent> events)
     {
         var started = events.FirstOrDefault(e => e.EventId == WebAuthnEventId.MakeCredentialStarted);
@@ -118,6 +149,12 @@ public static class WebAuthnOperationBuilder
         };
     }
 
+    /// <summary>
+    /// Builds an authentication operation from events sharing a transaction ID.
+    /// </summary>
+    /// <param name="transactionId">The transaction ID shared by the events.</param>
+    /// <param name="events">The events in the transaction group.</param>
+    /// <returns>The aggregated authentication operation.</returns>
     private static WebAuthnAssertionOperation BuildAssertion(Guid transactionId, List<WebAuthnEvent> events)
     {
         var started = events.FirstOrDefault(e => e.EventId == WebAuthnEventId.GetAssertionStarted);
@@ -161,9 +198,92 @@ public static class WebAuthnOperationBuilder
         };
     }
 
+    /// <summary>
+    /// Builds one credential enumeration operation for each credential in the event.
+    /// </summary>
+    /// <param name="transactionId">The transaction ID shared by the events.</param>
+    /// <param name="events">The events in the transaction group.</param>
+    /// <param name="enumerationEvent">The credential enumeration event.</param>
+    /// <returns>The per-credential enumeration operations.</returns>
+    private static IEnumerable<CredentialEnumeration> BuildCredentialEnumerations(
+        Guid transactionId,
+        List<WebAuthnEvent> events,
+        WebAuthnEvent enumerationEvent,
+        IReadOnlyList<CredentialDetails>? credentials,
+        Guid? pluginClassId,
+        bool? filterHybridTransport)
+    {
+        if (credentials == null || credentials.Count == 0)
+        {
+            yield break;
+        }
+
+        DateTime? endTime = GetLastEventTime(events) ?? enumerationEvent.TimeCreated;
+        int credentialCount = credentials.Count;
+
+        foreach (var credential in credentials)
+        {
+            yield return new CredentialEnumeration
+            {
+                TransactionId = transactionId,
+                TimeStarted = enumerationEvent.TimeCreated,
+                TimeCompleted = endTime,
+                ProcessId = enumerationEvent.ProcessId,
+                RpId = credential.RelyingPartyInformation?.Id,
+                CredentialId = credential.CredentialId,
+                CredentialCount = credentialCount,
+                UserName = credential.UserInformation?.Name,
+                PluginClassId = pluginClassId,
+                FilterHybridTransport = filterHybridTransport,
+                RelyingPartyName = credential.RelyingPartyInformation?.Name,
+                UserId = credential.UserInformation?.Id,
+                UserDisplayName = credential.UserInformation?.DisplayName,
+                Removable = credential.Removable,
+                BackedUp = credential.BackedUp,
+                AuthenticatorName = credential.AuthenticatorName,
+                AuthenticatorLogo = credential.AuthenticatorLogo,
+                ThirdPartyPayment = credential.ThirdPartyPayment,
+                Transports = credential.Transports
+            };
+        }
+    }
+
+    /// <summary>
+    /// Regex used to parse USB vendor IDs from device paths.
+    /// </summary>
     private static readonly Regex VidRegex = new(@"vid_([0-9a-fA-F]{4})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    /// <summary>
+    /// Regex used to parse USB product IDs from device paths.
+    /// </summary>
     private static readonly Regex PidRegex = new(@"pid_([0-9a-fA-F]{4})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+    /// <summary>
+    /// Gets the last event time in a transaction group.
+    /// </summary>
+    /// <param name="events">The events to inspect.</param>
+    /// <returns>The latest event timestamp, or <see langword="null"/> when no event has a timestamp.</returns>
+    private static DateTime? GetLastEventTime(IEnumerable<WebAuthnEvent> events)
+    {
+        DateTime? latest = null;
+
+        foreach (var evt in events)
+        {
+            if (evt.TimeCreated.HasValue && (!latest.HasValue || evt.TimeCreated > latest))
+            {
+                latest = evt.TimeCreated;
+            }
+        }
+
+        return latest;
+    }
+
+    /// <summary>
+    /// Parses USB vendor and product IDs from a device path.
+    /// </summary>
+    /// <param name="devicePath">The authenticator device path.</param>
+    /// <param name="vendorId">The parsed USB vendor ID, if present.</param>
+    /// <param name="productId">The parsed USB product ID, if present.</param>
     private static void ParseVidPid(string? devicePath, out int? vendorId, out int? productId)
     {
         vendorId = null;
