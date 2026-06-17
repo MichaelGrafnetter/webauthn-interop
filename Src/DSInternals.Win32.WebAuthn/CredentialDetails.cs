@@ -30,5 +30,25 @@
         /// Indicates if the credential is backed up or not.
         /// </summary>
         public bool BackedUp { get; set; }
+
+        /// <summary>
+        /// The authenticator name.
+        /// </summary>
+        public string? AuthenticatorName { get; set; }
+
+        /// <summary>
+        /// Authenticator logo (expected to be in SVG format).
+        /// </summary>
+        public string? AuthenticatorLogo { get; set; }
+
+        /// <summary>
+        /// Indicates if the credential is a third-party payment credential.
+        /// </summary>
+        public bool ThirdPartyPayment { get; set; }
+
+        /// <summary>
+        /// Applicable transports.
+        /// </summary>
+        public AuthenticatorTransport Transports { get; set; }
     }
 }

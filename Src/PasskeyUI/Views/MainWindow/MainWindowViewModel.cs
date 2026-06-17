@@ -179,9 +179,13 @@ internal sealed class MainWindowViewModel : BindableBase
             }
 
             // Create allowed credentials list with the specific credential ID
+            AuthenticatorTransport transports = credential.Transports != AuthenticatorTransport.NoRestrictions
+                ? credential.Transports
+                : AuthenticatorTransport.Internal;
+
             List<PublicKeyCredentialDescriptor> allowCredentials =
             [
-                new(credential.CredentialId, AuthenticatorTransport.Internal)
+                new(credential.CredentialId, transports)
             ];
 
             // Perform authentication

@@ -96,6 +96,18 @@
                                   Focusable="False"
                                   IsTabStop="False">
                             <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Logo" Width="60" MinWidth="40" CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <svgc:SvgViewbox SvgSource="{Binding AuthenticatorLogo}"
+                                                             Width="32"
+                                                             Height="32"
+                                                             Stretch="Uniform"
+                                                             VerticalAlignment="Center"
+                                                             HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="Credential ID" Width="*" SortMemberPath="CredentialId" MinWidth="80">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -113,6 +125,7 @@
                                 <DataGridTextColumn Header="RP Name" Binding="{Binding RelyingPartyInformation.Name}" Width="220" MinWidth="80" ElementStyle="{StaticResource DataGridTextElementStyle}" />
                                 <DataGridTextColumn Header="User Name" Binding="{Binding UserInformation.Name}" Width="250" MinWidth="80" ElementStyle="{StaticResource DataGridTextElementStyle}" />
                                 <DataGridTextColumn Header="Display Name" Binding="{Binding UserInformation.DisplayName}" Width="180" MinWidth="80" ElementStyle="{StaticResource DataGridTextElementStyle}" />
+                                <DataGridCheckBoxColumn Header="Payment" Binding="{Binding ThirdPartyPayment, Mode=OneWay}" Width="90" MinWidth="80" />
                                 <DataGridCheckBoxColumn Header="Removable" Binding="{Binding Removable, Mode=OneWay}" Width="100" MinWidth="80" />
                                 <DataGridCheckBoxColumn Header="Backed Up" Binding="{Binding BackedUp, Mode=OneWay}" Width="100" MinWidth="80" />
                                 <DataGridTemplateColumn Header="Actions" Width="80" CanUserResize="False">

@@ -186,8 +186,13 @@ namespace DSInternals.Win32.WebAuthn.Interop
             };
         }
 
-        public static UserInformation Translate(UserInformationOut userInfo)
+        public static UserInformation? Translate(UserInformationOut? userInfo)
         {
+            if (userInfo == null)
+            {
+                return null;
+            }
+
             return new UserInformation
             {
                 Id = userInfo.Id,
@@ -214,7 +219,11 @@ namespace DSInternals.Win32.WebAuthn.Interop
                     RelyingPartyInformation = credential.RelyingPartyInformation,
                     CredentialId = credential.CredentialId,
                     BackedUp = credential.BackedUp,
-                    Removable = credential.Removable
+                    Removable = credential.Removable,
+                    AuthenticatorName = credential.AuthenticatorName,
+                    AuthenticatorLogo = DecodeBinaryLogo(credential.AuthenticatorLogo),
+                    ThirdPartyPayment = credential.ThirdPartyPayment,
+                    Transports = credential.Transports
                 });
             }
 
@@ -284,9 +293,12 @@ namespace DSInternals.Win32.WebAuthn.Interop
                 return null;
             }
 
+            // Trim the null terminator if present
+            int logoLength = logoBytes[^1] == 0 ? logoBytes.Length - 1 : logoBytes.Length;
+
             try
             {
-                return Encoding.UTF8.GetString(logoBytes);
+                return Encoding.UTF8.GetString(logoBytes, 0, logoLength);
             }
             catch
             {

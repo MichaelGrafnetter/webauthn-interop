@@ -197,6 +197,15 @@
               <ListItem>
                 <PropertyName>BackedUp</PropertyName>
               </ListItem>
+              <ListItem>
+                <PropertyName>AuthenticatorName</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>ThirdPartyPayment</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Transports</PropertyName>
+              </ListItem>
             </ListItems>
           </ListEntry>
         </ListEntries>
@@ -224,6 +233,10 @@
             <Width>25</Width>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Payment</Label>
+            <Width>8</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
             <Label>Removable</Label>
             <Width>10</Width>
           </TableColumnHeader>
@@ -243,6 +256,9 @@
               </TableColumnItem>
               <TableColumnItem>
                 <ScriptBlock>$PSItem.UserInformation.Name</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ThirdPartyPayment</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Removable</PropertyName>
