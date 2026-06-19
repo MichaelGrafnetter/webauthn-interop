@@ -12,6 +12,11 @@ namespace DSInternals.Win32.WebAuthn.Events;
 public static class WebAuthnOperationBuilder
 {
     /// <summary>
+    /// CTAP command name for obtaining assertions.
+    /// </summary>
+    private const string GetAssertionCommand = "GetAssertion";
+
+    /// <summary>
     /// Builds aggregated WebAuthn operations from a list of raw WebAuthN events.
     /// </summary>
     /// <param name="events">The raw WebAuthn events to aggregate.</param>
@@ -31,6 +36,7 @@ public static class WebAuthnOperationBuilder
             var transactionId = group.Key;
             var pluginCredentialEnumerationEvents = eventList.OfType<AddPluginAuthenticatorCredentialsEvent>();
             var platformCredentialEnumerationEvents = eventList.OfType<GetAllPlatformCredentialsEvent>();
+            var getAssertionCredentialEvents = eventList.OfType<GetAssertionEvent>();
 
             // Determine if this is an attestation (MakeCredential) or assertion (GetAssertion) transaction
             bool hasAttestation = eventList.Any(e =>
@@ -63,6 +69,17 @@ public static class WebAuthnOperationBuilder
                     filterHybridTransport: null));
             }
 
+            foreach (var getAssertionCredentialEvent in getAssertionCredentialEvents)
+            {
+                operations.AddRange(BuildCredentialEnumerations(
+                    transactionId,
+                    eventList,
+                    getAssertionCredentialEvent,
+                    getAssertionCredentialEvent.Credentials,
+                    pluginClassId: null,
+                    filterHybridTransport: null));
+            }
+
             if (hasAttestation)
             {
                 // Only include successful attestations
@@ -78,7 +95,9 @@ public static class WebAuthnOperationBuilder
             if (hasAssertion)
             {
                 // Only include successful assertions
-                bool hasAssertionError = eventList.Any(e => e.EventId == WebAuthnEventId.GetAssertionError);
+                bool hasAssertionError =
+                    eventList.Any(e => e.EventId == WebAuthnEventId.GetAssertionError) ||
+                    eventList.OfType<CtapCommandErrorEvent>().Any(e => string.Equals(e.Command, GetAssertionCommand, StringComparison.Ordinal));
                 bool hasAssertionSuccess = eventList.Any(e => e.EventId == WebAuthnEventId.GetAssertionCompleted);
 
                 if (hasAssertionSuccess && !hasAssertionError)

@@ -17,6 +17,11 @@ public static class WebAuthnEventReader
     private const string LogName = "Microsoft-Windows-WebAuthN/Operational";
 
     /// <summary>
+    /// CTAP command name for obtaining assertions.
+    /// </summary>
+    private const string GetAssertionCommand = "GetAssertion";
+
+    /// <summary>
     /// CTAP command name for adding plugin authenticator credentials.
     /// </summary>
     private const string AddPluginAuthenticatorCredentialsCommand = "AddPluginAuthenticatorCredentials";
@@ -766,6 +771,36 @@ public static class WebAuthnEventReader
                 TransactionId = transactionId,
                 Response = response,
                 Credentials = GetAllPlatformCredentialsResponseParser.Parse(response)
+            };
+        }
+
+        if (string.Equals(command, GetAssertionCommand, StringComparison.Ordinal))
+        {
+            GetAssertionResponseData? parsedResponse = GetAssertionResponseParser.Parse(response);
+
+            return new GetAssertionEvent
+            {
+                EventId = eventId,
+                TimeCreated = record.TimeCreated?.ToLocalTime(),
+                ProcessId = (int)(record.ProcessId ?? 0),
+                ThreadId = (int)(record.ThreadId ?? 0),
+                Level = GetLevel(record),
+                Message = message,
+                Command = command,
+                TransactionId = transactionId,
+                Response = response,
+                Status = parsedResponse?.Status,
+                CtapStatus = parsedResponse?.CtapStatus,
+                RpIdHash = parsedResponse?.RpIdHash,
+                AuthenticatorFlags = parsedResponse?.AuthenticatorFlags,
+                ProviderType = parsedResponse?.ProviderType,
+                ProviderName = parsedResponse?.ProviderName,
+                Manufacturer = parsedResponse?.Manufacturer,
+                Product = parsedResponse?.Product,
+                AAGuid = parsedResponse?.AAGuid,
+                ThirdPartyPayment = parsedResponse?.ThirdPartyPayment,
+                Transports = parsedResponse?.Transports,
+                Credentials = parsedResponse?.Credentials
             };
         }
 
