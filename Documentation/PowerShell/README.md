@@ -53,6 +53,10 @@ Creates a new WebAuthn credential by driving the local authenticator.
 
 Tests a passkey by performing an authentication assertion.
 
+### [Test-PasskeyWindowsHelloForBusiness](Test-PasskeyWindowsHelloForBusiness.md)
+
+Tests a Windows Hello for Business (WHfB) NGC-based passkey registered for Microsoft Entra ID sign-in.
+
 ### [New-PasskeyRandomChallenge](New-PasskeyRandomChallenge.md)
 
 Generates a random challenge to be used by WebAuthn.
