@@ -1,6 +1,4 @@
-﻿#if NET5_0_OR_GREATER
-
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
 using DSInternals.Win32.WebAuthn.COSE;
@@ -208,12 +206,17 @@ public static class SoftwareAuthenticator
     {
         using AsymmetricAlgorithm key = GenerateKeyPair(algorithm);
 
+#if NET5_0_OR_GREATER
         return key switch
         {
             ECDsa ecdsa => ecdsa.ExportPkcs8PrivateKeyPem(),
             RSA rsa => rsa.ExportPkcs8PrivateKeyPem(),
             _ => throw new NotSupportedException($"PEM export is not supported for key type {key.GetType().Name}.")
         };
+#else
+        // .NET Framework lacks native PKCS#8 PEM export APIs for RSA/ECDsa.
+        throw new PlatformNotSupportedException("PEM export requires .NET 5.0 or later.");
+#endif
     }
 
     /// <summary>
@@ -234,6 +237,7 @@ public static class SoftwareAuthenticator
     {
         ArgumentNullException.ThrowIfNull(pem);
 
+#if NET5_0_OR_GREATER
         // Try EC first, then RSA, then Ed25519 (net8+ only)
         try
         {
@@ -271,6 +275,10 @@ public static class SoftwareAuthenticator
 #endif
 
         throw new CryptographicException("The PEM data does not contain a supported private key format.");
+#else
+        // .NET Framework lacks native PEM import APIs for RSA/ECDsa.
+        throw new PlatformNotSupportedException("PEM import requires .NET 5.0 or later.");
+#endif
     }
 
     /// <summary>
@@ -280,6 +288,7 @@ public static class SoftwareAuthenticator
     {
         ArgumentNullException.ThrowIfNull(privateKey);
 
+#if NET5_0_OR_GREATER
         try
         {
             var ecdsa = ECDsa.Create();
@@ -316,6 +325,10 @@ public static class SoftwareAuthenticator
 #endif
 
         throw new CryptographicException("The PKCS#8 data does not contain a supported private key format.");
+#else
+        // .NET Framework lacks native PKCS#8 import APIs for RSA/ECDsa.
+        throw new PlatformNotSupportedException("PKCS#8 import requires .NET 5.0 or later.");
+#endif
     }
 
     /// <summary>
@@ -353,7 +366,13 @@ public static class SoftwareAuthenticator
 
         if (key is ECDsa ecdsa)
         {
+#if NET5_0_OR_GREATER
             return ecdsa.SignData(data, hashAlg, DSASignatureFormat.Rfc3279DerSequence);
+#else
+            // .NET Framework's ECDsa.SignData only produces the IEEE P1363 (raw r || s) format.
+            byte[] ieeeP1363Signature = ecdsa.SignData(data, hashAlg);
+            return ConvertIeeeP1363SignatureToDer(ieeeP1363Signature);
+#endif
         }
         else if (key is RSA rsa)
         {
@@ -363,6 +382,23 @@ public static class SoftwareAuthenticator
 
         throw new NotSupportedException($"Unsupported key type for signing: {key.GetType().Name}");
     }
-}
 
+#if !NET5_0_OR_GREATER
+    /// <summary>
+    /// Converts an IEEE P1363 (raw r || s) ECDSA signature into the RFC 3279 DER SEQUENCE format expected by WebAuthn.
+    /// </summary>
+    private static byte[] ConvertIeeeP1363SignatureToDer(ReadOnlySpan<byte> input)
+    {
+        // Input is (r, s), each of them exactly half of the array.
+        // Output is the DER encoded value of SEQUENCE(INTEGER(r), INTEGER(s)).
+        int halfLength = input.Length / 2;
+
+        var writer = new System.Formats.Asn1.AsnWriter(System.Formats.Asn1.AsnEncodingRules.DER);
+        writer.PushSequence();
+        writer.WriteIntegerUnsigned(input.Slice(0, halfLength));
+        writer.WriteIntegerUnsigned(input.Slice(halfLength, halfLength));
+        writer.PopSequence();
+        return writer.Encode();
+    }
 #endif
+}

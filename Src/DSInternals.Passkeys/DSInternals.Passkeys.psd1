@@ -113,6 +113,7 @@ FunctionsToExport = @(
     'Register-EntraPasskey',
     'Register-OktaPasskey',
     'Test-Passkey',
+    'Test-PasskeyWindowsHelloForBusiness',
     'Connect-Okta',
     'Disconnect-Okta',
     'Get-PasskeyAuthenticatorPlugin',

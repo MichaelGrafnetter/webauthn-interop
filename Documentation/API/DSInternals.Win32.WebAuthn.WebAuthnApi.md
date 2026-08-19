@@ -1146,7 +1146,7 @@ Thrown when the running OS does not support the authenticator list API (added in
 Gets the list of stored credentials.
 
 ```csharp
-public static IList<CredentialDetails>? GetPlatformCredentialList(string? rpId = null, bool browserInPrivateMode = false)
+public static IReadOnlyList<CredentialDetails>? GetPlatformCredentialList(string? rpId = null, bool browserInPrivateMode = false)
 ```
 
 #### Parameters
@@ -1161,7 +1161,7 @@ Indicates whether the browser is in private mode.
 
 #### Returns
 
- [IList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist\-1)<[CredentialDetails](DSInternals.Win32.WebAuthn.CredentialDetails.md)\>?
+ [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[CredentialDetails](DSInternals.Win32.WebAuthn.CredentialDetails.md)\>?
 
 The list of platform credentials matching the filter, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when none are present.
 

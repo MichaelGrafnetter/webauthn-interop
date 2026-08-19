@@ -202,7 +202,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
             };
         }
 
-        public static IList<CredentialDetails>? Translate(CredentialDetailsOut[] credentials)
+        public static IReadOnlyList<CredentialDetails>? Translate(CredentialDetailsOut[] credentials)
         {
             if (credentials == null || credentials.Length == 0)
             {

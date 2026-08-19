@@ -71,3 +71,19 @@ public required string Name { get; init; }
 
  [string](https://learn.microsoft.com/dotnet/api/system.string)
 
+## Methods
+
+### <a id="DSInternals_Win32_WebAuthn_RelyingPartyInformation_ToString"></a> ToString\(\)
+
+Serializes the relying party information to JSON.
+
+```csharp
+public override string ToString()
+```
+
+#### Returns
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+JSON representation of this relying party information.
+

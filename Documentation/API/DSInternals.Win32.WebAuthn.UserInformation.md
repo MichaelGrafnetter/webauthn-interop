@@ -85,3 +85,19 @@ public string? Name { get; set; }
 
  [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
+## Methods
+
+### <a id="DSInternals_Win32_WebAuthn_UserInformation_ToString"></a> ToString\(\)
+
+Serializes the user information to JSON.
+
+```csharp
+public override string ToString()
+```
+
+#### Returns
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+JSON representation of this user information.
+

@@ -72,3 +72,19 @@ public string Type { get; }
 
  [string](https://learn.microsoft.com/dotnet/api/system.string)
 
+## Methods
+
+### <a id="DSInternals_Win32_WebAuthn_PublicKeyCredentialParameter_ToString"></a> ToString\(\)
+
+Serializes the credential parameter to JSON.
+
+```csharp
+public override string ToString()
+```
+
+#### Returns
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+JSON representation of this credential parameter.
+

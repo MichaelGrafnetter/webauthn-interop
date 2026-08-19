@@ -986,7 +986,7 @@ namespace DSInternals.Win32.WebAuthn
         /// <param name="browserInPrivateMode">Indicates whether the browser is in private mode.</param>
         /// <returns>The list of platform credentials matching the filter, or <see langword="null"/> when none are present.</returns>
         /// <exception cref="NotSupportedException">Thrown when the running OS does not support platform credential management (added in API V4).</exception>
-        public static IList<CredentialDetails>? GetPlatformCredentialList(string? rpId = null, bool browserInPrivateMode = false)
+        public static IReadOnlyList<CredentialDetails>? GetPlatformCredentialList(string? rpId = null, bool browserInPrivateMode = false)
         {
             if (IsPlatformCredentialManagementSupported == false)
             {

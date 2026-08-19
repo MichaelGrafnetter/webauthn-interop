@@ -466,6 +466,91 @@ function Test-Passkey
 
 <#
 .SYNOPSIS
+Tests a Windows Hello for Business (NGC) passkey registered for Microsoft Entra ID sign-in.
+
+.DESCRIPTION
+Locally signs a WebAuthn assertion for login.microsoft.com using the on-device Windows Hello for Business key,
+without going through the Windows WebAuthn UI. The corresponding NGC (Next Generation Credentials) private key
+is located in the Microsoft Passport Key Storage Provider and matched against the platform credential(s)
+registered for login.microsoft.com by comparing public key hashes.
+
+Unlike Test-Passkey, this cmdlet does not invoke the native WebAuthNAuthenticatorGetAssertion API and therefore
+does not show any authenticator selection or consent UI. Windows Hello is expected to already be unlocked.
+
+.PARAMETER Challenge
+The challenge bytes to be signed. Accepts either a byte array or a Base64Url encoded string.
+If not provided, a random challenge will be generated.
+
+.PARAMETER SignatureCounter
+The signature counter value to embed in the authenticator data. Defaults to 0.
+
+.PARAMETER BrowserInPrivateMode
+Indicates whether the request originates from a browser running in private/incognito mode. Passed through when
+enumerating registered platform credentials, so that no information about the operation is written to the
+Windows event log.
+
+.EXAMPLE
+Test-PasskeyWindowsHelloForBusiness
+
+Tests all Windows Hello for Business passkeys registered for login.microsoft.com with a random challenge.
+
+.EXAMPLE
+$challenge = New-PasskeyRandomChallenge -Length 32
+Test-PasskeyWindowsHelloForBusiness -Challenge $challenge
+
+Tests the passkey(s) with a specific challenge.
+
+.LINK
+Test-Passkey
+
+.LINK
+New-PasskeyRandomChallenge
+
+#>
+function Test-PasskeyWindowsHelloForBusiness
+{
+    [OutputType([DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential])]
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $false)]
+        [object] $Challenge = (New-PasskeyRandomChallenge -Length 32),
+
+        [Parameter(Mandatory = $false)]
+        [uint32] $SignatureCounter = 0,
+
+        [Parameter(Mandatory = $false)]
+        [Alias("PrivateMode", "Private")]
+        [switch] $BrowserInPrivateMode
+    )
+
+    try {
+        # Convert Challenge parameter (accepts byte[] or Base64Url string)
+        [byte[]] $challengeBytes = ConvertFrom-Base64UrlParameter -InputObject $Challenge
+
+        [DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential[]] $assertions = [DSInternals.Win32.WebAuthn.Cryptography.WindowsHelloForBusinessSigner]::GetAssertions(
+            $challengeBytes,
+            $SignatureCounter,
+            $BrowserInPrivateMode.IsPresent
+        )
+
+        foreach ($assertion in $assertions) {
+            Write-Output -InputObject $assertion
+        }
+    }
+    catch {
+        [System.Management.Automation.ErrorRecord] $errorRecord = [System.Management.Automation.ErrorRecord]::new(
+            $PSItem.Exception,
+            $PSItem.Exception.Message,
+            [System.Management.Automation.ErrorCategory]::InvalidOperation,
+            $null
+        )
+
+        $PSCmdlet.ThrowTerminatingError($errorRecord)
+    }
+}
+
+<#
+.SYNOPSIS
 Gets the list of registered authenticator plugins from the Windows registry.
 
 .DESCRIPTION

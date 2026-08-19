@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using Microsoft.Win32.SafeHandles;
 using Windows.Win32.Foundation;
 
 namespace DSInternals.Win32.WebAuthn.Interop
@@ -14,6 +16,95 @@ namespace DSInternals.Win32.WebAuthn.Interop
         private const string WebAuthn = "webauthn.dll";
         private const string User32 = "user32.dll";
         private const string Kernel32 = "kernel32.dll";
+        private const string Ncrypt = "ncrypt.dll";
+
+        /// <summary>
+        /// Opens a CNG key storage provider.
+        /// </summary>
+        /// <param name="providerHandle">Receives the provider handle.</param>
+        /// <param name="providerName">The provider name, or <see langword="null"/> for the default provider.</param>
+        /// <param name="flags">Flags controlling provider opening behavior.</param>
+        /// <returns>
+        /// If the function succeeds, it returns <c>S_OK</c>.
+        /// If the function fails, it returns an HRESULT value that indicates the error.
+        /// </returns>
+        /// <remarks>
+        /// Native API: <c>NCryptOpenStorageProvider</c> from <c>ncrypt.dll</c>.
+        /// </remarks>
+        [DllImport(Ncrypt, CharSet = CharSet.Unicode, SetLastError = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        public static extern HRESULT NCryptOpenStorageProvider(
+            out SafeNCryptProviderHandle providerHandle,
+            string? providerName,
+            NCryptOpenStorageProviderFlags flags
+        );
+
+        /// <summary>
+        /// Enumerates keys in a CNG key storage provider.
+        /// </summary>
+        /// <param name="providerHandle">A handle to the key storage provider.</param>
+        /// <param name="scope">This parameter is not currently used and must be <see langword="null"/>.</param>
+        /// <param name="keyName">Receives a buffer containing an <c>NCRYPT_KEY_NAME</c> structure.</param>
+        /// <param name="enumState">Enumeration state handle that must be preserved between calls and disposed once enumeration is complete.</param>
+        /// <param name="flags">Flags controlling key enumeration behavior.</param>
+        /// <returns>
+        /// If the function succeeds, it returns <c>S_OK</c>.
+        /// If no more keys are available, it returns <c>NTE_NO_MORE_ITEMS</c>.
+        /// Otherwise, it returns an HRESULT value that indicates the error.
+        /// </returns>
+        /// <remarks>
+        /// The caller should release <paramref name="keyName"/> by disposing it.
+        /// </remarks>
+        [DllImport(Ncrypt, CharSet = CharSet.Unicode, SetLastError = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        private static extern HRESULT NCryptEnumKeys(
+            SafeNCryptProviderHandle providerHandle,
+            string? scope,
+            out SafeNCryptBufferHandle keyName,
+            ref SafeNCryptEnumStateHandle enumState,
+            CngKeyOpenOptions flags
+        );
+
+        /// <summary>
+        /// Enumerates keys in a CNG key storage provider, exposing each key name as a managed <see cref="NCryptKeyName"/>.
+        /// </summary>
+        /// <param name="providerHandle">A handle to the key storage provider.</param>
+        /// <param name="keyName">Receives the parsed key name, or <see langword="null"/> when no more keys are available.</param>
+        /// <param name="enumState">Enumeration state handle that must be preserved between calls and disposed once enumeration is complete.</param>
+        /// <param name="flags">Flags controlling key enumeration behavior.</param>
+        /// <returns>
+        /// If the function succeeds, it returns <c>S_OK</c>.
+        /// If no more keys are available, it returns <c>NTE_NO_MORE_ITEMS</c>.
+        /// Otherwise, it returns an HRESULT value that indicates the error.
+        /// </returns>
+        public static HRESULT NCryptEnumKeys(
+            SafeNCryptProviderHandle providerHandle,
+            out NCryptKeyName? keyName,
+            ref SafeNCryptEnumStateHandle enumState,
+            CngKeyOpenOptions flags = CngKeyOpenOptions.None
+        )
+        {
+            HRESULT result = NCryptEnumKeys(providerHandle, null, out SafeNCryptBufferHandle keyNameHandle, ref enumState, flags);
+
+            using (keyNameHandle)
+            {
+                keyName = keyNameHandle.IsInvalid ? null : Marshal.PtrToStructure<NCryptKeyName>(keyNameHandle.DangerousGetHandle());
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Frees memory allocated by CNG APIs such as <see cref="NCryptEnumKeys(SafeNCryptProviderHandle, string?, out SafeNCryptBufferHandle, ref SafeNCryptEnumStateHandle, CngKeyOpenOptions)"/>.
+        /// </summary>
+        /// <param name="pvInput">Pointer to the allocated buffer.</param>
+        /// <returns>
+        /// If the function succeeds, it returns <c>S_OK</c>.
+        /// If the function fails, it returns an HRESULT value that indicates the error.
+        /// </returns>
+        [DllImport(Ncrypt)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        public static extern HRESULT NCryptFreeBuffer(IntPtr pvInput);
 
         /// <summary>
         /// Gets the version number of the WebAuthN API.

@@ -79,3 +79,8 @@ Represents a passkey exported from KeePassXC (.passkey JSON format).
 Software-based authenticator that signs WebAuthn requests using a PEM private key file,
 without requiring a hardware authenticator or the Windows WebAuthn API.
 
+ [WindowsHelloForBusinessSigner](DSInternals.Win32.WebAuthn.Cryptography.WindowsHelloForBusinessSigner.md)
+
+Produces WebAuthn assertions for Microsoft Entra ID (login.microsoft.com) using the local
+Windows Hello for Business (NGC) key that is registered as a platform passkey.
+
