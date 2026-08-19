@@ -17,6 +17,7 @@ public abstract class WebAuthnOperation
 
 #### Derived
 
+[CredentialEnumeration](DSInternals.Win32.WebAuthn.Events.CredentialEnumeration.md), 
 [WebAuthnAssertionOperation](DSInternals.Win32.WebAuthn.Events.WebAuthnAssertionOperation.md), 
 [WebAuthnAttestationOperation](DSInternals.Win32.WebAuthn.Events.WebAuthnAttestationOperation.md)
 

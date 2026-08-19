@@ -29,6 +29,30 @@ Corresponds to WEBAUTHN_CREDENTIAL_DETAILS.
 
 ## Properties
 
+### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_AuthenticatorLogo"></a> AuthenticatorLogo
+
+Authenticator logo (expected to be in SVG format).
+
+```csharp
+public string? AuthenticatorLogo { get; set; }
+```
+
+#### Property Value
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
+
+### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_AuthenticatorName"></a> AuthenticatorName
+
+The authenticator name.
+
+```csharp
+public string? AuthenticatorName { get; set; }
+```
+
+#### Property Value
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
+
 ### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_BackedUp"></a> BackedUp
 
 Indicates if the credential is backed up or not.
@@ -76,6 +100,30 @@ public bool Removable { get; set; }
 #### Property Value
 
  [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_ThirdPartyPayment"></a> ThirdPartyPayment
+
+Indicates if the credential is a third-party payment credential.
+
+```csharp
+public bool ThirdPartyPayment { get; set; }
+```
+
+#### Property Value
+
+ [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_Transports"></a> Transports
+
+Applicable transports.
+
+```csharp
+public AuthenticatorTransport Transports { get; set; }
+```
+
+#### Property Value
+
+ [AuthenticatorTransport](DSInternals.Win32.WebAuthn.AuthenticatorTransport.md)
 
 ### <a id="DSInternals_Win32_WebAuthn_CredentialDetails_UserInformation"></a> UserInformation
 

@@ -455,11 +455,11 @@
       </ListControl>
     </View>
 
-    <!-- Test-Passkey Custom View (Default) - JSON format with Base64Url encoding -->
+    <!-- Test-Passkey and Test-PasskeyWindowsHelloForBusiness Custom View (Default) - JSON format with Base64Url encoding -->
     <View>
-      <Name>DSInternals.Win32.WebAuthn.PublicKeyCredential.CustomView</Name>
+      <Name>DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential.CustomView</Name>
       <ViewSelectedBy>
-        <TypeName>DSInternals.Win32.WebAuthn.PublicKeyCredential</TypeName>
+        <TypeName>DSInternals.Win32.WebAuthn.AssertionPublicKeyCredential</TypeName>
       </ViewSelectedBy>
       <CustomControl>
         <CustomEntries>

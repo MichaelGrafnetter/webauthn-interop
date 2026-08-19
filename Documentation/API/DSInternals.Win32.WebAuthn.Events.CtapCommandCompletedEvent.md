@@ -6,7 +6,7 @@ Assembly: DSInternals.Win32.WebAuthn.dll
 Represents a CTAP platform command completed event (Event ID 2102).
 
 ```csharp
-public sealed class CtapCommandCompletedEvent : WebAuthnEvent
+public class CtapCommandCompletedEvent : WebAuthnEvent
 ```
 
 #### Inheritance
@@ -14,6 +14,11 @@ public sealed class CtapCommandCompletedEvent : WebAuthnEvent
 [object](https://learn.microsoft.com/dotnet/api/system.object) ← 
 [WebAuthnEvent](DSInternals.Win32.WebAuthn.Events.WebAuthnEvent.md) ← 
 [CtapCommandCompletedEvent](DSInternals.Win32.WebAuthn.Events.CtapCommandCompletedEvent.md)
+
+#### Derived
+
+[GetAllPlatformCredentialsEvent](DSInternals.Win32.WebAuthn.Events.GetAllPlatformCredentialsEvent.md), 
+[GetAssertionEvent](DSInternals.Win32.WebAuthn.Events.GetAssertionEvent.md)
 
 #### Inherited Members
 
@@ -30,6 +35,7 @@ public sealed class CtapCommandCompletedEvent : WebAuthnEvent
 [object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
 [object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 
 [object.GetType\(\)](https://learn.microsoft.com/dotnet/api/system.object.gettype), 
+[object.MemberwiseClone\(\)](https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone), 
 [object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals), 
 [object.ToString\(\)](https://learn.microsoft.com/dotnet/api/system.object.tostring)
 

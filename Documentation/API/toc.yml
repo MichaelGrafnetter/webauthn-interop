@@ -204,6 +204,8 @@
     href: DSInternals.Win32.WebAuthn.Cryptography.KeePassXCPasskey.md
   - name: SoftwareAuthenticator
     href: DSInternals.Win32.WebAuthn.Cryptography.SoftwareAuthenticator.md
+  - name: WindowsHelloForBusinessSigner
+    href: DSInternals.Win32.WebAuthn.Cryptography.WindowsHelloForBusinessSigner.md
 - name: DSInternals.Win32.WebAuthn.Entra
   href: DSInternals.Win32.WebAuthn.Entra.md
   items:
@@ -218,6 +220,8 @@
   href: DSInternals.Win32.WebAuthn.Events.md
   items:
   - name: Classes
+  - name: AddPluginAuthenticatorCredentialsEvent
+    href: DSInternals.Win32.WebAuthn.Events.AddPluginAuthenticatorCredentialsEvent.md
   - name: ApiVersionEvent
     href: DSInternals.Win32.WebAuthn.Events.ApiVersionEvent.md
   - name: BleFunctionWarningEvent
@@ -226,6 +230,8 @@
     href: DSInternals.Win32.WebAuthn.Events.CancelCurrentOperationEvent.md
   - name: CborMakeCredentialResponseEvent
     href: DSInternals.Win32.WebAuthn.Events.CborMakeCredentialResponseEvent.md
+  - name: CredentialEnumeration
+    href: DSInternals.Win32.WebAuthn.Events.CredentialEnumeration.md
   - name: CtapCommandCompletedEvent
     href: DSInternals.Win32.WebAuthn.Events.CtapCommandCompletedEvent.md
   - name: CtapCommandErrorEvent
@@ -236,6 +242,10 @@
     href: DSInternals.Win32.WebAuthn.Events.DeviceInfoEvent.md
   - name: FunctionWarningEvent
     href: DSInternals.Win32.WebAuthn.Events.FunctionWarningEvent.md
+  - name: GetAllPlatformCredentialsEvent
+    href: DSInternals.Win32.WebAuthn.Events.GetAllPlatformCredentialsEvent.md
+  - name: GetAssertionEvent
+    href: DSInternals.Win32.WebAuthn.Events.GetAssertionEvent.md
   - name: GetAssertionRequestEvent
     href: DSInternals.Win32.WebAuthn.Events.GetAssertionRequestEvent.md
   - name: GetAssertionResponseEvent
@@ -298,6 +308,11 @@
     href: DSInternals.Win32.WebAuthn.Interop.ApiConstants.md
   - name: HybridStorageLinkedData
     href: DSInternals.Win32.WebAuthn.Interop.HybridStorageLinkedData.md
+  - name: NCryptKeyName
+    href: DSInternals.Win32.WebAuthn.Interop.NCryptKeyName.md
+  - name: Enums
+  - name: NCryptKeyNameFlags
+    href: DSInternals.Win32.WebAuthn.Interop.NCryptKeyNameFlags.md
 - name: DSInternals.Win32.WebAuthn.Okta
   href: DSInternals.Win32.WebAuthn.Okta.md
   items:

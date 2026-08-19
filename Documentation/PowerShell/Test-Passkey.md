@@ -15,8 +15,8 @@ Tests a passkey by performing an authentication assertion.
 ```
 Test-Passkey [-RelyingPartyId] <String> [[-Challenge] <Object>]
  [[-UserVerification] <UserVerificationRequirement>] [[-AuthenticatorAttachment] <AuthenticatorAttachment>]
- [[-Timeout] <TimeSpan>] [[-CredentialId] <Object>] [[-Hint] <PublicKeyCredentialHint>]
- [-BrowserInPrivateMode] [<CommonParameters>]
+ [[-Timeout] <TimeSpan>] [[-CredentialId] <Object>] [[-Hint] <PublicKeyCredentialHint>] [-BrowserInPrivateMode]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -195,6 +195,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Test-PasskeyWindowsHelloForBusiness](Test-PasskeyWindowsHelloForBusiness.md)
 
 [Get-PasskeyWindowsHello](Get-PasskeyWindowsHello.md)
 

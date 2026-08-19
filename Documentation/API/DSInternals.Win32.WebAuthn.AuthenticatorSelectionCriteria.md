@@ -91,3 +91,19 @@ public UserVerificationRequirement UserVerificationRequirement { get; set; }
 
  [UserVerificationRequirement](DSInternals.Win32.WebAuthn.UserVerificationRequirement.md)
 
+## Methods
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticatorSelectionCriteria_ToString"></a> ToString\(\)
+
+Serializes the authenticator selection criteria to JSON.
+
+```csharp
+public override string ToString()
+```
+
+#### Returns
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+JSON representation of these authenticator selection criteria.
+

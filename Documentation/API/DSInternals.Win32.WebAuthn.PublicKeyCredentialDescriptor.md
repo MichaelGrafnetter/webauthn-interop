@@ -92,3 +92,19 @@ public required string Type { get; init; }
 
  [string](https://learn.microsoft.com/dotnet/api/system.string)
 
+## Methods
+
+### <a id="DSInternals_Win32_WebAuthn_PublicKeyCredentialDescriptor_ToString"></a> ToString\(\)
+
+Serializes the credential descriptor to JSON.
+
+```csharp
+public override string ToString()
+```
+
+#### Returns
+
+ [string](https://learn.microsoft.com/dotnet/api/system.string)
+
+JSON representation of this credential descriptor.
+

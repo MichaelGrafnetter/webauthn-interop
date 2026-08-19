@@ -202,26 +202,24 @@ public static class SoftwareAuthenticator
     /// <summary>
     /// Generates a private key for the requested COSE algorithm and exports it as PKCS#8 PEM.
     /// </summary>
+#if NET5_0_OR_GREATER
     public static string GenerateKeyPairPem(Algorithm algorithm)
     {
         using AsymmetricAlgorithm key = GenerateKeyPair(algorithm);
 
-#if NET5_0_OR_GREATER
         return key switch
         {
             ECDsa ecdsa => ecdsa.ExportPkcs8PrivateKeyPem(),
             RSA rsa => rsa.ExportPkcs8PrivateKeyPem(),
             _ => throw new NotSupportedException($"PEM export is not supported for key type {key.GetType().Name}.")
         };
-#else
-        // .NET Framework lacks native PKCS#8 PEM export APIs for RSA/ECDsa.
-        throw new PlatformNotSupportedException("PEM export requires .NET 5.0 or later.");
-#endif
     }
+#endif
 
     /// <summary>
     /// Loads a private key from a PEM file. The caller is responsible for disposing the returned key.
     /// </summary>
+#if NET5_0_OR_GREATER
     public static AsymmetricAlgorithm LoadPrivateKeyFromPem(string pemFilePath)
     {
         ArgumentNullException.ThrowIfNull(pemFilePath);
@@ -229,15 +227,16 @@ public static class SoftwareAuthenticator
         string pem = File.ReadAllText(pemFilePath);
         return ImportPrivateKeyFromPem(pem);
     }
+#endif
 
     /// <summary>
     /// Imports a private key from a PEM string. The caller is responsible for disposing the returned key.
     /// </summary>
+#if NET5_0_OR_GREATER
     public static AsymmetricAlgorithm ImportPrivateKeyFromPem(string pem)
     {
         ArgumentNullException.ThrowIfNull(pem);
 
-#if NET5_0_OR_GREATER
         // Try EC first, then RSA, then Ed25519 (net8+ only)
         try
         {
@@ -275,20 +274,17 @@ public static class SoftwareAuthenticator
 #endif
 
         throw new CryptographicException("The PEM data does not contain a supported private key format.");
-#else
-        // .NET Framework lacks native PEM import APIs for RSA/ECDsa.
-        throw new PlatformNotSupportedException("PEM import requires .NET 5.0 or later.");
-#endif
     }
+#endif
 
     /// <summary>
     /// Imports a private key from DER-encoded PKCS#8 data. The caller is responsible for disposing the returned key.
     /// </summary>
+#if NET5_0_OR_GREATER
     public static AsymmetricAlgorithm ImportPrivateKeyFromPkcs8(byte[] privateKey)
     {
         ArgumentNullException.ThrowIfNull(privateKey);
 
-#if NET5_0_OR_GREATER
         try
         {
             var ecdsa = ECDsa.Create();
@@ -325,11 +321,8 @@ public static class SoftwareAuthenticator
 #endif
 
         throw new CryptographicException("The PKCS#8 data does not contain a supported private key format.");
-#else
-        // .NET Framework lacks native PKCS#8 import APIs for RSA/ECDsa.
-        throw new PlatformNotSupportedException("PKCS#8 import requires .NET 5.0 or later.");
-#endif
     }
+#endif
 
     /// <summary>
     /// Determines the COSE algorithm that matches the given private key.

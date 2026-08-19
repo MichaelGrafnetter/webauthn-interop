@@ -13,6 +13,9 @@ namespace DSInternals.Win32.WebAuthn.Cryptography;
 /// Produces WebAuthn assertions for Microsoft Entra ID (login.microsoft.com) using the local
 /// Windows Hello for Business (NGC) key that is registered as a platform passkey.
 /// </summary>
+#if NET5_0_OR_GREATER
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
 public static class WindowsHelloForBusinessSigner
 {
     /// <summary>

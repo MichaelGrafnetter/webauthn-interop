@@ -2,6 +2,10 @@
 
 ### Classes
 
+ [AddPluginAuthenticatorCredentialsEvent](DSInternals.Win32.WebAuthn.Events.AddPluginAuthenticatorCredentialsEvent.md)
+
+Represents an AddPluginAuthenticatorCredentials CTAP command started event (Event ID 2100).
+
  [ApiVersionEvent](DSInternals.Win32.WebAuthn.Events.ApiVersionEvent.md)
 
 Represents an API version query event (Event ID 1071).
@@ -17,6 +21,10 @@ Represents the result of a WebAuthNCancelCurrentOperation call (Event ID 1072).
  [CborMakeCredentialResponseEvent](DSInternals.Win32.WebAuthn.Events.CborMakeCredentialResponseEvent.md)
 
 Represents a CBOR-decoded MakeCredential response event (Event ID 1102).
+
+ [CredentialEnumeration](DSInternals.Win32.WebAuthn.Events.CredentialEnumeration.md)
+
+Aggregated data about one credential discovered during platform or plugin credential enumeration.
 
  [CtapCommandCompletedEvent](DSInternals.Win32.WebAuthn.Events.CtapCommandCompletedEvent.md)
 
@@ -37,6 +45,14 @@ Represents a CTAP device info event (Event ID 2104).
  [FunctionWarningEvent](DSInternals.Win32.WebAuthn.Events.FunctionWarningEvent.md)
 
 Represents a CTAP function warning event (Event ID 2105).
+
+ [GetAllPlatformCredentialsEvent](DSInternals.Win32.WebAuthn.Events.GetAllPlatformCredentialsEvent.md)
+
+Represents a GetAllPlatformCredentials CTAP command completed event (Event ID 2102).
+
+ [GetAssertionEvent](DSInternals.Win32.WebAuthn.Events.GetAssertionEvent.md)
+
+Represents a GetAssertion CTAP command completed event (Event ID 2102).
 
  [GetAssertionRequestEvent](DSInternals.Win32.WebAuthn.Events.GetAssertionRequestEvent.md)
 
@@ -109,8 +125,7 @@ grouped by transaction ID.
 
  [WebAuthnOperationBuilder](DSInternals.Win32.WebAuthn.Events.WebAuthnOperationBuilder.md)
 
-Aggregates raw WebAuthN events into <xref href="DSInternals.Win32.WebAuthn.Events.WebAuthnAttestationOperation" data-throw-if-not-resolved="false"></xref> and <xref href="DSInternals.Win32.WebAuthn.Events.WebAuthnAssertionOperation" data-throw-if-not-resolved="false"></xref> operations
-grouped by transaction ID.
+Aggregates raw WebAuthN events into operation models grouped by transaction ID.
 
 ### Enums
 

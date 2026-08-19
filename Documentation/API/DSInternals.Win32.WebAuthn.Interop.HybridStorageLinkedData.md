@@ -38,24 +38,24 @@ Corresponds to CTAPCBOR_HYBRID_STORAGE_LINKED_DATA.
 Authenticator Name
 
 ```csharp
-public string AuthenticatorName { get; set; }
+public string? AuthenticatorName { get; set; }
 ```
 
 #### Property Value
 
- [string](https://learn.microsoft.com/dotnet/api/system.string)
+ [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
 ### <a id="DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_ContactId"></a> ContactId
 
 Contact Id
 
 ```csharp
-public byte[] ContactId { get; set; }
+public byte[]? ContactId { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 
 ### <a id="DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_EncodedTunnelServerDomain"></a> EncodedTunnelServerDomain
 
@@ -74,36 +74,36 @@ public short EncodedTunnelServerDomain { get; set; }
 Link Id
 
 ```csharp
-public byte[] LinkId { get; set; }
+public byte[]? LinkId { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 
 ### <a id="DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_LinkSecret"></a> LinkSecret
 
 Link secret
 
 ```csharp
-public byte[] LinkSecret { get; set; }
+public byte[]? LinkSecret { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 
 ### <a id="DSInternals_Win32_WebAuthn_Interop_HybridStorageLinkedData_PublicKey"></a> PublicKey
 
 Authenticator Public Key
 
 ```csharp
-public byte[] PublicKey { get; set; }
+public byte[]? PublicKey { get; set; }
 ```
 
 #### Property Value
 
- [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
 
 ## Methods
 

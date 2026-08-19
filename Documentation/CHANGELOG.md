@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-08-19
+
+### Added
+
+- Added the `Test-PasskeyWindowsHelloForBusiness` cmdlet for testing Windows Hello for Business passkeys registered for Microsoft Entra ID sign-in.
+
+### Changed
+
+- Improved PowerShell default views.
+
 ## [3.2.0] - 2026-06-04
 
 ### Added

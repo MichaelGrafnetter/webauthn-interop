@@ -38,9 +38,13 @@ public static IReadOnlyList<WebAuthnEvent> ReadEvents(int? maxEvents = null)
 
 `maxEvents` [int](https://learn.microsoft.com/dotnet/api/system.int32)?
 
+Optional maximum number of parsed events to return.
+
 #### Returns
 
  [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[WebAuthnEvent](DSInternals.Win32.WebAuthn.Events.WebAuthnEvent.md)\>
+
+The parsed WebAuthn events.
 
 ### <a id="DSInternals_Win32_WebAuthn_Events_WebAuthnEventReader_ReadEventsFromFile_System_String_System_Nullable_System_Int32__"></a> ReadEventsFromFile\(string, int?\)
 
@@ -54,9 +58,15 @@ public static IReadOnlyList<WebAuthnEvent> ReadEventsFromFile(string filePath, i
 
 `filePath` [string](https://learn.microsoft.com/dotnet/api/system.string)
 
+Path to the saved event log file.
+
 `maxEvents` [int](https://learn.microsoft.com/dotnet/api/system.int32)?
+
+Optional maximum number of parsed events to return.
 
 #### Returns
 
  [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[WebAuthnEvent](DSInternals.Win32.WebAuthn.Events.WebAuthnEvent.md)\>
+
+The parsed WebAuthn events.
 

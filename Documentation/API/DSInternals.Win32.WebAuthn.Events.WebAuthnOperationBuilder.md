@@ -3,8 +3,7 @@
 Namespace: [DSInternals.Win32.WebAuthn.Events](DSInternals.Win32.WebAuthn.Events.md)  
 Assembly: DSInternals.Win32.WebAuthn.dll  
 
-Aggregates raw WebAuthN events into <xref href="DSInternals.Win32.WebAuthn.Events.WebAuthnAttestationOperation" data-throw-if-not-resolved="false"></xref> and <xref href="DSInternals.Win32.WebAuthn.Events.WebAuthnAssertionOperation" data-throw-if-not-resolved="false"></xref> operations
-grouped by transaction ID.
+Aggregates raw WebAuthN events into operation models grouped by transaction ID.
 
 ```csharp
 public static class WebAuthnOperationBuilder
@@ -39,7 +38,11 @@ public static IReadOnlyList<WebAuthnOperation> Build(IEnumerable<WebAuthnEvent> 
 
 `events` [IEnumerable](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable\-1)<[WebAuthnEvent](DSInternals.Win32.WebAuthn.Events.WebAuthnEvent.md)\>
 
+The raw WebAuthn events to aggregate.
+
 #### Returns
 
  [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[WebAuthnOperation](DSInternals.Win32.WebAuthn.Events.WebAuthnOperation.md)\>
+
+The aggregated WebAuthn operations sorted by descending start time.
 
