@@ -144,21 +144,31 @@ public static class WindowsHelloForBusinessSigner
     /// </summary>
     public static IReadOnlyList<NCryptKeyName> ListNgcKeys()
     {
-        return ListCngKeys(NgcKeyStorageProvider);
+        return ListCngKeys(NgcKeyStorageProvider, machineKeys: false);
     }
 
     /// <summary>
     /// Enumerates the keys stored in the given CNG key storage provider.
     /// </summary>
     /// <param name="providerName">The provider name, or <see langword="null"/> for the default provider.</param>
-    public static IReadOnlyList<NCryptKeyName> ListCngKeys(string? providerName = null)
+    /// <param name="machineKeys"><see langword="true"/> to enumerate machine keys; otherwise user keys.</param>
+    public static IReadOnlyList<NCryptKeyName> ListCngKeys(string? providerName = null, bool machineKeys = false)
     {
         var keyNames = new List<NCryptKeyName>();
+
+        NCryptOpenStorageProviderFlags openFlags =
+            NCryptOpenStorageProviderFlags.NoKeyValidation |
+            NCryptOpenStorageProviderFlags.Silent |
+            (machineKeys ? NCryptOpenStorageProviderFlags.MachineKey : NCryptOpenStorageProviderFlags.None);
+
+        CngKeyOpenOptions enumFlags =
+            CngKeyOpenOptions.Silent |
+            (machineKeys ? CngKeyOpenOptions.MachineKey : CngKeyOpenOptions.None);
 
         HRESULT openResult = NativeMethods.NCryptOpenStorageProvider(
             out SafeNCryptProviderHandle providerHandle,
             providerName,
-            NCryptOpenStorageProviderFlags.Silent);
+            openFlags);
         ApiHelper.Validate(openResult);
 
         using (providerHandle)
@@ -173,7 +183,7 @@ public static class WindowsHelloForBusinessSigner
                         providerHandle,
                         out NCryptKeyName? keyName,
                         ref enumState,
-                        CngKeyOpenOptions.Silent);
+                        enumFlags);
 
                     if (enumResult == HRESULT.NTE_NO_MORE_ITEMS)
                     {
