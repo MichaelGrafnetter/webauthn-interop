@@ -67,12 +67,12 @@ public IReadOnlyList<ExportedPasskey> GetPasskeys()
 
 The passkeys contained in login items.
 
-### <a id="DSInternals_Win32_WebAuthn_Cryptography_BitwardenCleartextVaultExport_LoadFromFile_System_String_"></a> LoadFromFile\(string\)
+### <a id="DSInternals_Win32_WebAuthn_Cryptography_BitwardenCleartextVaultExport_LoadFromFileAsync_System_String_System_Threading_CancellationToken_"></a> LoadFromFileAsync\(string, CancellationToken\)
 
-Loads and parses a cleartext Bitwarden JSON vault export.
+Asynchronously loads and parses a cleartext Bitwarden JSON vault export.
 
 ```csharp
-public static BitwardenCleartextVaultExport LoadFromFile(string filePath)
+public static Task<BitwardenCleartextVaultExport> LoadFromFileAsync(string filePath, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
@@ -81,9 +81,13 @@ public static BitwardenCleartextVaultExport LoadFromFile(string filePath)
 
 Path to the Bitwarden JSON export.
 
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+A token that may be used to cancel the read operation.
+
 #### Returns
 
- [BitwardenCleartextVaultExport](DSInternals.Win32.WebAuthn.Cryptography.BitwardenCleartextVaultExport.md)
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[BitwardenCleartextVaultExport](DSInternals.Win32.WebAuthn.Cryptography.BitwardenCleartextVaultExport.md)\>
 
 The parsed cleartext Bitwarden export.
 

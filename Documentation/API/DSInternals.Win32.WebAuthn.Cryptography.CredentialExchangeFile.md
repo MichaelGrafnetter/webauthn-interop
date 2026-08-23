@@ -132,12 +132,12 @@ Optional AAGUID to assign to the imported passkeys. Defaults to
 
 The passkeys contained in the export.
 
-### <a id="DSInternals_Win32_WebAuthn_Cryptography_CredentialExchangeFile_LoadFromFile_System_String_"></a> LoadFromFile\(string\)
+### <a id="DSInternals_Win32_WebAuthn_Cryptography_CredentialExchangeFile_LoadFromFileAsync_System_String_System_Threading_CancellationToken_"></a> LoadFromFileAsync\(string, CancellationToken\)
 
-Loads and parses a CXF JSON document from disk.
+Asynchronously loads and parses a CXF JSON document from disk.
 
 ```csharp
-public static CredentialExchangeFile LoadFromFile(string filePath)
+public static Task<CredentialExchangeFile> LoadFromFileAsync(string filePath, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
@@ -146,9 +146,13 @@ public static CredentialExchangeFile LoadFromFile(string filePath)
 
 Path to the CXF JSON file.
 
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+A token that may be used to cancel the read operation.
+
 #### Returns
 
- [CredentialExchangeFile](DSInternals.Win32.WebAuthn.Cryptography.CredentialExchangeFile.md)
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[CredentialExchangeFile](DSInternals.Win32.WebAuthn.Cryptography.CredentialExchangeFile.md)\>
 
 The parsed CXF payload.
 

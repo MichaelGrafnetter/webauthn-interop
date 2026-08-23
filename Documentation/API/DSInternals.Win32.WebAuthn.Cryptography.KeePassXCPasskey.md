@@ -109,21 +109,27 @@ public IReadOnlyList<ExportedPasskey> GetPasskeys()
 
  [IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist\-1)<[ExportedPasskey](DSInternals.Win32.WebAuthn.Cryptography.ExportedPasskey.md)\>
 
-### <a id="DSInternals_Win32_WebAuthn_Cryptography_KeePassXCPasskey_LoadFromFile_System_String_"></a> LoadFromFile\(string\)
+### <a id="DSInternals_Win32_WebAuthn_Cryptography_KeePassXCPasskey_LoadFromFileAsync_System_String_System_Threading_CancellationToken_"></a> LoadFromFileAsync\(string, CancellationToken\)
 
-Loads and deserializes a KeePassXC passkey from a JSON file.
+Asynchronously loads and deserializes a KeePassXC passkey from a JSON file.
 
 ```csharp
-public static KeePassXCPasskey LoadFromFile(string filePath)
+public static Task<KeePassXCPasskey> LoadFromFileAsync(string filePath, CancellationToken cancellationToken = default)
 ```
 
 #### Parameters
 
 `filePath` [string](https://learn.microsoft.com/dotnet/api/system.string)
 
+Path to the KeePassXC passkey file.
+
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+A token that may be used to cancel the read operation.
+
 #### Returns
 
- [KeePassXCPasskey](DSInternals.Win32.WebAuthn.Cryptography.KeePassXCPasskey.md)
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[KeePassXCPasskey](DSInternals.Win32.WebAuthn.Cryptography.KeePassXCPasskey.md)\>
 
 ### <a id="DSInternals_Win32_WebAuthn_Cryptography_KeePassXCPasskey_LoadFromJson_System_String_"></a> LoadFromJson\(string\)
 

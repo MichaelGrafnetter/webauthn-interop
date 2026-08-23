@@ -6,6 +6,8 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.Interop;
 
@@ -39,12 +41,17 @@ public sealed class KeePassXCPasskey
     public required string PrivateKey { get; set; }
 
     /// <summary>
-    /// Loads and deserializes a KeePassXC passkey from a JSON file.
+    /// Asynchronously loads and deserializes a KeePassXC passkey from a JSON file.
     /// </summary>
-    public static KeePassXCPasskey LoadFromFile(string filePath)
+    /// <param name="filePath">Path to the KeePassXC passkey file.</param>
+    /// <param name="cancellationToken">A token that may be used to cancel the read operation.</param>
+    public static async Task<KeePassXCPasskey> LoadFromFileAsync(string filePath, CancellationToken cancellationToken = default)
     {
-        string json = File.ReadAllText(filePath);
-        return LoadFromJson(json);
+        ArgumentNullException.ThrowIfNull(filePath);
+
+        await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
+        return await JsonSerializer.DeserializeAsync(stream, WebAuthnJsonContext.Default.KeePassXCPasskey, cancellationToken).ConfigureAwait(false)
+            ?? throw new JsonException("Failed to deserialize KeePassXC passkey file.");
     }
 
     /// <summary>

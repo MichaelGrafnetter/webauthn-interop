@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DSInternals.Win32.WebAuthn.Cryptography;
 
@@ -38,14 +40,18 @@ public sealed class BitwardenCleartextVaultExport
     public BitwardenVaultItem[]? Items { get; set; }
 
     /// <summary>
-    /// Loads and parses a cleartext Bitwarden JSON vault export.
+    /// Asynchronously loads and parses a cleartext Bitwarden JSON vault export.
     /// </summary>
     /// <param name="filePath">Path to the Bitwarden JSON export.</param>
+    /// <param name="cancellationToken">A token that may be used to cancel the read operation.</param>
     /// <returns>The parsed cleartext Bitwarden export.</returns>
-    public static BitwardenCleartextVaultExport LoadFromFile(string filePath)
+    public static async Task<BitwardenCleartextVaultExport> LoadFromFileAsync(string filePath, CancellationToken cancellationToken = default)
     {
-        string json = File.ReadAllText(filePath);
-        return LoadFromJson(json);
+        ArgumentNullException.ThrowIfNull(filePath);
+
+        await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
+        return await JsonSerializer.DeserializeAsync(stream, WebAuthnJsonContext.Default.BitwardenCleartextVaultExport, cancellationToken).ConfigureAwait(false)
+            ?? throw new JsonException("Failed to deserialize Bitwarden vault export.");
     }
 
     /// <summary>

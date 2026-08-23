@@ -94,12 +94,12 @@ Indicates whether the request originates from a browser running in private/incog
 
 Zero, one, or more assertions, depending on the number of registered credentials with a locally resolvable key.
 
-### <a id="DSInternals_Win32_WebAuthn_Cryptography_WindowsHelloForBusinessSigner_ListCngKeys_System_String_"></a> ListCngKeys\(string?\)
+### <a id="DSInternals_Win32_WebAuthn_Cryptography_WindowsHelloForBusinessSigner_ListCngKeys_System_String_System_Boolean_"></a> ListCngKeys\(string?, bool\)
 
 Enumerates the keys stored in the given CNG key storage provider.
 
 ```csharp
-public static IReadOnlyList<NCryptKeyName> ListCngKeys(string? providerName = null)
+public static IReadOnlyList<NCryptKeyName> ListCngKeys(string? providerName = null, bool machineKeys = false)
 ```
 
 #### Parameters
@@ -107,6 +107,10 @@ public static IReadOnlyList<NCryptKeyName> ListCngKeys(string? providerName = nu
 `providerName` [string](https://learn.microsoft.com/dotnet/api/system.string)?
 
 The provider name, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> for the default provider.
+
+`machineKeys` [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> to enumerate machine keys; otherwise user keys.
 
 #### Returns
 

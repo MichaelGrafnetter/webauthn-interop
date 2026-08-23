@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Threading.Tasks;
 using DSInternals.Win32.WebAuthn.COSE;
 using DSInternals.Win32.WebAuthn.Cryptography;
 using Microsoft.Win32;
@@ -37,7 +38,7 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
         SignCommand = new DelegateCommand(OnSign, CanSign)
             .ObservesProperty(() => KeyFilePath)
             .ObservesProperty(() => CredentialId);
-        BrowseKeyFileCommand = new DelegateCommand(OnBrowseKeyFile);
+        BrowseKeyFileCommand = new AsyncDelegateCommand(OnBrowseKeyFile);
         GenerateKeyPairCommand = new DelegateCommand(OnGenerateKeyPair);
         GenerateCredentialIdCommand = new DelegateCommand(OnGenerateCredentialId);
         SelectPresetCommand = new DelegateCommand<AuthenticatorPreset>(preset => { AaGuid = preset.AaGuid; });
@@ -50,7 +51,7 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
     public DialogCloseListener RequestClose { get; }
 
     public DelegateCommand SignCommand { get; }
-    public DelegateCommand BrowseKeyFileCommand { get; }
+    public AsyncDelegateCommand BrowseKeyFileCommand { get; }
     public DelegateCommand GenerateKeyPairCommand { get; }
     public DelegateCommand GenerateCredentialIdCommand { get; }
     public DelegateCommand<AuthenticatorPreset> SelectPresetCommand { get; }
@@ -105,7 +106,8 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
 
     public void OnDialogClosed() { }
 
-    public void OnDialogOpened(IDialogParameters parameters)
+    // Async void is acceptable here: IDialogAware.OnDialogOpened is a void callback and LoadKeyFileAsync handles its own exceptions.
+    public async void OnDialogOpened(IDialogParameters parameters)
     {
         var p = AttestationSigningDialogParameters.From(parameters);
         _relyingParty = p.RelyingParty;
@@ -125,7 +127,7 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
         if (_cache.KeyFilePath != null)
         {
             if (File.Exists(_cache.KeyFilePath))
-                LoadKeyFile(_cache.KeyFilePath);
+                await LoadKeyFileAsync(_cache.KeyFilePath);
             else
                 _cache.KeyFilePath = null;
         }
@@ -205,7 +207,7 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
         return SoftwareAuthenticator.LoadPrivateKeyFromPem(KeyFilePath!);
     }
 
-    private void OnBrowseKeyFile()
+    private async Task OnBrowseKeyFile()
     {
         var dialog = new OpenFileDialog
         {
@@ -216,11 +218,11 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
 
         if (dialog.ShowDialog() == true)
         {
-            LoadKeyFile(dialog.FileName);
+            await LoadKeyFileAsync(dialog.FileName);
         }
     }
 
-    private void LoadKeyFile(string filePath)
+    private async Task LoadKeyFileAsync(string filePath)
     {
         _loadedPasskey = null;
 
@@ -230,7 +232,7 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
 
             if (extension == ".passkey")
             {
-                LoadPasskeyFile(filePath);
+                await LoadPasskeyFileAsync(filePath);
             }
             else
             {
@@ -244,9 +246,9 @@ internal sealed class AttestationSigningDialogViewModel : BindableBase, IDialogA
         }
     }
 
-    private void LoadPasskeyFile(string filePath)
+    private async Task LoadPasskeyFileAsync(string filePath)
     {
-        var passkey = KeePassXCPasskey.LoadFromFile(filePath);
+        var passkey = await KeePassXCPasskey.LoadFromFileAsync(filePath);
 
         // Validate RP ID
         if (_relyingParty?.Id != null && passkey.RelyingParty != null

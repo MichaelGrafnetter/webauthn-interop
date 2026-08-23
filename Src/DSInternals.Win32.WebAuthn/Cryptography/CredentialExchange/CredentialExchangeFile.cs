@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DSInternals.Win32.WebAuthn.Cryptography;
 
@@ -53,16 +55,18 @@ public sealed class CredentialExchangeFile
     public CredentialExchangeAccount[]? Accounts { get; set; }
 
     /// <summary>
-    /// Loads and parses a CXF JSON document from disk.
+    /// Asynchronously loads and parses a CXF JSON document from disk.
     /// </summary>
     /// <param name="filePath">Path to the CXF JSON file.</param>
+    /// <param name="cancellationToken">A token that may be used to cancel the read operation.</param>
     /// <returns>The parsed CXF payload.</returns>
-    public static CredentialExchangeFile LoadFromFile(string filePath)
+    public static async Task<CredentialExchangeFile> LoadFromFileAsync(string filePath, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(filePath);
 
-        string json = File.ReadAllText(filePath);
-        return LoadFromJson(json);
+        await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
+        return await JsonSerializer.DeserializeAsync(stream, WebAuthnJsonContext.Default.CredentialExchangeFile, cancellationToken).ConfigureAwait(false)
+            ?? throw new JsonException("Failed to deserialize CXF payload.");
     }
 
     /// <summary>
