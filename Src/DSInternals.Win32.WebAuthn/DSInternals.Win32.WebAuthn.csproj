@@ -7,14 +7,15 @@
     <PackageId>DSInternals.Win32.WebAuthn</PackageId>
     <Product>WebAuthn Interop Assembly</Product>
     <Title>WebAuthn Interop Assembly</Title>
-    <Version>3.3.0</Version>
-    <AssemblyVersion>3.3.0</AssemblyVersion>
-    <ProductVersion>3.3.0</ProductVersion>
-    <FileVersion>3.3.0</FileVersion>
+    <Version>3.4.0</Version>
+    <AssemblyVersion>3.4.0</AssemblyVersion>
+    <ProductVersion>3.4.0</ProductVersion>
+    <FileVersion>3.4.0</FileVersion>
     <Description>FIDO2 / W3C Web Authentication .NET Library for Windows Desktop and CLI Applications</Description>
-    <PackageReleaseNotes>- `WebAuthnApi.AuthenticatorMakeCredential` / `AuthenticatorGetAssertion` now prefer the native `pbRegistrationResponseJSON` / `pbAuthenticationResponseJSON` returned by recent WebAuthn API versions, deserializing the full credential (including `clientExtensionResults`) verbatim from the OS-produced JSON. The legacy field-by-field assembly remains as a fallback for older OS versions.
-- `AuthenticatorDetails.AuthenticatorId` (surfaced by `Get-PasskeyAuthenticator`) was renamed to `AaGuid` and its type changed from `byte[]` to `Guid?`. The big-endian AAGUID returned by the Win32 API is now decoded and exposed as a `Guid` instead of a Base64Url string.
-- Added a `BrowserInPrivateMode` flag (`WEBAUTHN_AUTHENTICATOR_HINTS_FLAGS_BROWSER_IN_PRIVATE_MODE`) so callers can signal that the request originates from a browser running in private/incognito mode; no information about the operation is written to the Windows event log in that case.
+    <PackageReleaseNotes>- BREAKING CHANGE: The `DSInternals.Win32.WebAuthn.Entra` namespace (the `MicrosoftGraphWebauthnCredentialCreationOptions`, `MicrosoftGraphWebauthnAttestationResponse`, and `MicrosoftGraphAttestationPublicKeyCredential` classes) has been removed. Microsoft Graph payloads are now represented by the data model classes from the Microsoft Graph SDK.
+- BREAKING CHANGE: The synchronous `LoadFromFile` methods of the `BitwardenCleartextVaultExport`, `BitwardenEncryptedVaultExport`, `CredentialExchangeFile`, and `KeePassXCPasskey` classes have been replaced by asynchronous `LoadFromFileAsync` methods, which stream-deserialize the JSON files and support cancellation.
+- Added the `BitwardenVaultExportHeader` class for detecting whether a Bitwarden vault export is encrypted and/or password-protected without parsing the entire file.
+- The `WindowsHelloForBusinessSigner.ListCngKeys` method now accepts an optional `machineKeys` parameter to enumerate machine keys instead of user keys.
 </PackageReleaseNotes>
     <!-- The DLL is publishable as part of the PowerShell module -->
     <IsPublishable>true</IsPublishable>

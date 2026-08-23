@@ -6,10 +6,16 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [3.4.0] - 2026-08-23
 
+### Added
+
+- Added the `BitwardenVaultExportHeader` class to the `DSInternals.Win32.WebAuthn` library for detecting whether a Bitwarden vault export is encrypted and/or password-protected without parsing the entire file.
+
 ### Changed
 
 - Microsoft Entra ID passkey registration now uses the generally available v1.0 Microsoft Graph API endpoints instead of the beta ones.
 - **Breaking:** The `Get-EntraPasskeyRegistrationOptions` cmdlet has been replaced by an alias to the native `Invoke-MgCreationUserAuthenticationFido2MethodOption` cmdlet from the `Microsoft.Graph.Identity.SignIns` module, which is now required in version 2.39.0 or later. Existing pipelines keep working, but the emitted object type has changed from `PublicKeyCredentialCreationOptions` to `MicrosoftGraphWebauthnCredentialCreationOptions`. The `Get-PasskeyRegistrationOptions` alias now points to the native cmdlet as well.
+- **Breaking:** The synchronous `LoadFromFile` methods of the `BitwardenCleartextVaultExport`, `BitwardenEncryptedVaultExport`, `CredentialExchangeFile`, and `KeePassXCPasskey` classes in the `DSInternals.Win32.WebAuthn` library have been replaced by asynchronous `LoadFromFileAsync` methods, which stream-deserialize the JSON files and support cancellation.
+- The `WindowsHelloForBusinessSigner.ListCngKeys` method now accepts an optional `machineKeys` parameter to enumerate machine keys instead of user keys.
 
 ### Removed
 
