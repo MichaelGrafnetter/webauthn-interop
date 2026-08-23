@@ -51,8 +51,15 @@ Describe 'EntraID Tests' -Skip {
     }
 
     It "Registers passkeys to Entra ID for each credential parameter option" {
-        [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions] $options = Get-EntraPasskeyRegistrationOptions -UserId $env:EntraIdUserId
-        $options | Should -BeOfType [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions]
+        # Get-EntraPasskeyRegistrationOptions is an alias of Invoke-MgCreationUserAuthenticationFido2MethodOption
+        $graphOptions = Get-EntraPasskeyRegistrationOptions -UserId $env:EntraIdUserId
+        $graphOptions | Should -BeOfType [Microsoft.Graph.PowerShell.Models.IMicrosoftGraphWebauthnCredentialCreationOptions]
+        $graphOptions.PublicKey.Rp.Id | Should -Be "login.microsoft.com"
+        $graphOptions.PublicKey.PubKeyCredParams.Count | Should -Be 2
+
+        # Convert the Graph SDK model into the WebAuthn interop model consumed by the software passkey factory
+        [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions] $options =
+            [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions]::FromJson($graphOptions.PublicKey.ToJsonString())
         $options.RelyingParty.Id | Should -Be "login.microsoft.com"
         $options.PublicKeyCredentialParameters.Count | Should -Be 2
 
@@ -83,13 +90,9 @@ Describe 'EntraID Tests' -Skip {
         $result0.AttestationCertificates[0] | Should -Not -Be $result1.AttestationCertificates[0]
         $result0.Id | Should -Not -Be $result1.Id
 
-        [string] $credentialDeletionUrl0 = '/beta/users/{0}/authentication/fido2Methods/{1}' -f [uri]::EscapeDataString($env:EntraIdUserId), $credentialId0
-        $response0 = Invoke-MgGraphRequest -Method Delete -Uri $credentialDeletionUrl0
-        $response0 | Should -BeNullOrEmpty
+        { Remove-MgUserAuthenticationFido2Method -UserId $env:EntraIdUserId -Fido2AuthenticationMethodId $credentialId0 -ErrorAction Stop } | Should -Not -Throw
 
-        [string] $credentialDeletionUrl1 = '/beta/users/{0}/authentication/fido2Methods/{1}' -f [uri]::EscapeDataString($env:EntraIdUserId), $credentialId1
-        $response1 = Invoke-MgGraphRequest -Method Delete -Uri $credentialDeletionUrl1
-        $response1 | Should -BeNullOrEmpty
+        { Remove-MgUserAuthenticationFido2Method -UserId $env:EntraIdUserId -Fido2AuthenticationMethodId $credentialId1 -ErrorAction Stop } | Should -Not -Throw
     }
 
     AfterAll {

@@ -272,7 +272,7 @@
       </TableControl>
     </View>
 
-    <!-- Get-PasskeyRegistrationOptions (Okta) List View (Default) -->
+    <!-- Get-OktaPasskeyRegistrationOptions List View (Default) -->
     <View>
       <Name>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions.ListView</Name>
       <ViewSelectedBy>
@@ -369,7 +369,7 @@
       </ListControl>
     </View>
 
-    <!-- Get-*PasskeyRegistrationOptions List View (Default) -->
+    <!-- Get-PasskeyCreationOptions List View (Default) -->
     <View>
       <Name>DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions.ListView</Name>
       <ViewSelectedBy>

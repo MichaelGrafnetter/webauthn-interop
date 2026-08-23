@@ -13,9 +13,7 @@ Allows administrative registration of passkeys (i.e. FIDO2 security keys and Mic
 
 ## Microsoft Entra ID Cmdlets
 
-### [Get-EntraPasskeyRegistrationOptions](Get-EntraPasskeyRegistrationOptions.md)
-
-Retrieves creation options required to generate and register a Microsoft Entra ID compatible passkey.
+Creation options are retrieved using the native [Invoke-MgCreationUserAuthenticationFido2MethodOption](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.identity.signins/invoke-mgcreationuserauthenticationfido2methodoption) cmdlet from the Microsoft.Graph.Identity.SignIns module, for which the `Get-EntraPasskeyRegistrationOptions` and `Get-PasskeyRegistrationOptions` aliases are provided.
 
 ### [Register-EntraPasskey](Register-EntraPasskey.md)
 

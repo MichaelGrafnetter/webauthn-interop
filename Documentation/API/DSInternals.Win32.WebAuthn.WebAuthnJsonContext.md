@@ -40,9 +40,6 @@ Source-generated JSON serialization metadata for WebAuthn models.
 [JsonSerializable(typeof(AuthenticatorSelectionCriteria))]
 [JsonSerializable(typeof(PublicKeyCredentialParameter))]
 [JsonSerializable(typeof(PublicKeyCredentialDescriptor))]
-[JsonSerializable(typeof(MicrosoftGraphWebauthnCredentialCreationOptions))]
-[JsonSerializable(typeof(MicrosoftGraphWebauthnAttestationResponse))]
-[JsonSerializable(typeof(MicrosoftGraphAttestationPublicKeyCredential))]
 [JsonSerializable(typeof(OktaWebauthnCredentialCreationOptions))]
 [JsonSerializable(typeof(OktaFido2AuthenticationMethod))]
 [JsonSerializable(typeof(OktaWebauthnAttestationResponse))]
@@ -775,42 +772,6 @@ public JsonTypeInfo<LargeBlobSupport> LargeBlobSupport { get; }
 #### Property Value
 
  [JsonTypeInfo](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.metadata.jsontypeinfo\-1)<[LargeBlobSupport](DSInternals.Win32.WebAuthn.LargeBlobSupport.md)\>
-
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_MicrosoftGraphAttestationPublicKeyCredential"></a> MicrosoftGraphAttestationPublicKeyCredential
-
-Defines the source generated JSON serialization contract metadata for a given type.
-
-```csharp
-public JsonTypeInfo<MicrosoftGraphAttestationPublicKeyCredential> MicrosoftGraphAttestationPublicKeyCredential { get; }
-```
-
-#### Property Value
-
- [JsonTypeInfo](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.metadata.jsontypeinfo\-1)<[MicrosoftGraphAttestationPublicKeyCredential](DSInternals.Win32.WebAuthn.Entra.MicrosoftGraphAttestationPublicKeyCredential.md)\>
-
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_MicrosoftGraphWebauthnAttestationResponse"></a> MicrosoftGraphWebauthnAttestationResponse
-
-Defines the source generated JSON serialization contract metadata for a given type.
-
-```csharp
-public JsonTypeInfo<MicrosoftGraphWebauthnAttestationResponse> MicrosoftGraphWebauthnAttestationResponse { get; }
-```
-
-#### Property Value
-
- [JsonTypeInfo](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.metadata.jsontypeinfo\-1)<[MicrosoftGraphWebauthnAttestationResponse](DSInternals.Win32.WebAuthn.Entra.MicrosoftGraphWebauthnAttestationResponse.md)\>
-
-### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_MicrosoftGraphWebauthnCredentialCreationOptions"></a> MicrosoftGraphWebauthnCredentialCreationOptions
-
-Defines the source generated JSON serialization contract metadata for a given type.
-
-```csharp
-public JsonTypeInfo<MicrosoftGraphWebauthnCredentialCreationOptions> MicrosoftGraphWebauthnCredentialCreationOptions { get; }
-```
-
-#### Property Value
-
- [JsonTypeInfo](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.metadata.jsontypeinfo\-1)<[MicrosoftGraphWebauthnCredentialCreationOptions](DSInternals.Win32.WebAuthn.Entra.MicrosoftGraphWebauthnCredentialCreationOptions.md)\>
 
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_NullableBoolean"></a> NullableBoolean
 

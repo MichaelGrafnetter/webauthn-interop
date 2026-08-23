@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using DSInternals.Win32.WebAuthn.Cryptography;
-using DSInternals.Win32.WebAuthn.Entra;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Okta;
 
@@ -45,9 +44,6 @@ namespace DSInternals.Win32.WebAuthn
     [JsonSerializable(typeof(AuthenticatorSelectionCriteria))]
     [JsonSerializable(typeof(PublicKeyCredentialParameter))]
     [JsonSerializable(typeof(PublicKeyCredentialDescriptor))]
-    [JsonSerializable(typeof(MicrosoftGraphWebauthnCredentialCreationOptions))]
-    [JsonSerializable(typeof(MicrosoftGraphWebauthnAttestationResponse))]
-    [JsonSerializable(typeof(MicrosoftGraphAttestationPublicKeyCredential))]
     [JsonSerializable(typeof(OktaWebauthnCredentialCreationOptions))]
     [JsonSerializable(typeof(OktaFido2AuthenticationMethod))]
     [JsonSerializable(typeof(OktaWebauthnAttestationResponse))]

@@ -8,7 +8,7 @@
 # RootModule is intentionally omitted; all functionality is provided by the nested modules below.
 
 # Version number of this module.
-ModuleVersion = '3.3.0'
+ModuleVersion = '3.4.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -47,7 +47,11 @@ PowerShellVersion = '5.1'
 ProcessorArchitecture = 'None'
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('Microsoft.Graph.Authentication','Microsoft.Graph.Identity.SignIns')
+# Microsoft.Graph.Identity.SignIns >= 2.39.0 is required for the Invoke-MgCreationUserAuthenticationFido2MethodOption cmdlet (v1.0 passkey provisioning API).
+RequiredModules = @(
+    'Microsoft.Graph.Authentication',
+    @{ ModuleName = 'Microsoft.Graph.Identity.SignIns'; ModuleVersion = '2.39.0' }
+)
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = if ($PSEdition -eq 'Core') {
@@ -107,7 +111,6 @@ NestedModules = @('DSInternals.Passkeys.Core.psm1','DSInternals.Passkeys.Entra.p
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
-    'Get-EntraPasskeyRegistrationOptions',
     'Get-OktaPasskeyRegistrationOptions',
     'New-Passkey',
     'Register-EntraPasskey',
@@ -131,7 +134,7 @@ CmdletsToExport = @()
 VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @('Get-PasskeyRegistrationOptions','Register-Passkey','Register-MgUserAuthenticationFido2Method')
+AliasesToExport = @('Get-EntraPasskeyRegistrationOptions','Get-PasskeyRegistrationOptions','Register-Passkey','Register-MgUserAuthenticationFido2Method')
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -207,8 +210,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-        - Added the Test-PasskeyWindowsHelloForBusiness cmdlet for testing Windows Hello for Business passkeys registered for Microsoft Entra ID sign-in.
-        - Improved PowerShell default views.
+        - Microsoft Entra ID passkey registration now uses the generally available v1.0 Microsoft Graph API endpoints instead of the beta ones.
+        - BREAKING CHANGE: The Get-EntraPasskeyRegistrationOptions cmdlet has been replaced by an alias to the native Invoke-MgCreationUserAuthenticationFido2MethodOption cmdlet, which changes the emitted object type. Existing pipelines keep working, as New-Passkey now accepts the native cmdlet's output directly.
+        - BREAKING CHANGE: The -ChallengeTimeout parameter has been removed from Entra ID passkey registration, as the v1.0 Graph API uses a fixed 5-minute challenge validity.
+        - BREAKING CHANGE: The DSInternals.Win32.WebAuthn.Entra namespace has been removed from the bundled library, as Microsoft Graph payloads are now represented by the data model classes from the Microsoft Graph PowerShell SDK.
 '@
 
         # Prerelease string of this module

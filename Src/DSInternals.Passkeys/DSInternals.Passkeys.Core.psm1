@@ -1,3 +1,6 @@
+# Needed for the [Microsoft.Graph.PowerShell.Models.IMicrosoftGraphWebauthnCredentialCreationOptions] type accepted by New-Passkey
+Import-Module -Name Microsoft.Graph.Identity.SignIns -ErrorAction Stop
+
 <#
 .SYNOPSIS
 Creates a new WebAuthn credential by driving the local authenticator.
@@ -6,21 +9,24 @@ Creates a new WebAuthn credential by driving the local authenticator.
 Calls the Windows WebAuthn API to make a credential according to the provided PublicKeyCredentialCreationOptions, triggering the system passkey UI. Returns the resulting AttestationPublicKeyCredential, which can be wrapped into a provider-specific attestation response and submitted to Microsoft Entra ID, Okta, or any other relying party.
 
 .PARAMETER Options
-The WebAuthn public key credential creation options. Returned directly by Get-EntraPasskeyRegistrationOptions.
+The WebAuthn public key credential creation options. Can be built locally by Get-PasskeyCreationOptions.
 
 .PARAMETER HostName
 Optional host name used to derive the WebAuthn origin when the server-issued options omit the relying party identifier.
+
+.PARAMETER GraphOptions
+The Microsoft Graph credential creation options. Returned by the Invoke-MgCreationUserAuthenticationFido2MethodOption cmdlet from the Microsoft.Graph.Identity.SignIns module.
 
 .PARAMETER OktaOptions
 The Okta-specific credential creation options. Returned by Get-OktaPasskeyRegistrationOptions.
 
 .EXAMPLE
-$credential = Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey
+$credential = Invoke-MgCreationUserAuthenticationFido2MethodOption -UserId 'AdeleV@contoso.com' | New-Passkey
 
 Retrieves creation options from Microsoft Entra ID and creates a new passkey on the local authenticator without registering it.
 
 .EXAMPLE
-Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+Invoke-MgCreationUserAuthenticationFido2MethodOption -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 
 Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.
 
@@ -31,9 +37,6 @@ Performs end-to-end passkey registration in Okta in a single pipeline.
 
 .LINK
 Get-PasskeyCreationOptions
-
-.LINK
-Get-EntraPasskeyRegistrationOptions
 
 .LINK
 Get-OktaPasskeyRegistrationOptions
@@ -47,10 +50,13 @@ Register-OktaPasskey
 .LINK
 Test-Passkey
 
+.LINK
+https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions
+
 #>
 function New-Passkey
 {
-    [OutputType([DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential], ParameterSetName = 'Default')]
+    [OutputType([DSInternals.Win32.WebAuthn.AttestationPublicKeyCredential], ParameterSetName = ('Default', 'MicrosoftGraph'))]
     [OutputType([DSInternals.Win32.WebAuthn.Okta.OktaWebauthnAttestationResponse], ParameterSetName = 'Okta')]
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param(
@@ -63,6 +69,11 @@ function New-Passkey
         [string]
         $HostName,
 
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'MicrosoftGraph')]
+        [Alias('CreationOptions')]
+        [Microsoft.Graph.PowerShell.Models.IMicrosoftGraphWebauthnCredentialCreationOptions]
+        $GraphOptions,
+
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Okta')]
         [DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions]
         $OktaOptions
@@ -70,6 +81,19 @@ function New-Passkey
 
     process {
         try {
+            if ($PSCmdlet.ParameterSetName -eq 'MicrosoftGraph') {
+                if ($null -eq $GraphOptions.PublicKey) {
+                    throw 'The Microsoft Graph credential creation options do not contain WebAuthn public key options.'
+                }
+
+                # Round-trip through JSON to convert the Graph SDK model into the WebAuthn interop model
+                $Options = [DSInternals.Win32.WebAuthn.PublicKeyCredentialCreationOptions]::FromJson($GraphOptions.PublicKey.ToJsonString())
+
+                if ($null -eq $Options) {
+                    throw 'Unable to parse the WebAuthn public key options returned by Microsoft Graph.'
+                }
+            }
+
             # Call the WebAuthn API to create a new credential, which will trigger the Windows passkey UI.
             # The `hostName` argument derives the WebAuthn origin and stands in for the rpId when the
             # server-issued options omit it. For Okta, the tenant host is carried on the options object;
@@ -92,7 +116,11 @@ function New-Passkey
             }
         }
         catch {
-            $targetObject = if ($PSCmdlet.ParameterSetName -eq 'Okta') { $OktaOptions } else { $Options }
+            $targetObject = switch ($PSCmdlet.ParameterSetName) {
+                'Okta' { $OktaOptions }
+                'MicrosoftGraph' { $GraphOptions }
+                default { $Options }
+            }
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
                     $PSItem.Exception,

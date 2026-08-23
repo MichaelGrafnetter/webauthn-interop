@@ -14,8 +14,7 @@ Registers a new passkey in Microsoft Entra ID.
 
 ### New (Default)
 ```
-Register-EntraPasskey -UserId <String> -DisplayName <String> [-ChallengeTimeout <TimeSpan>]
- [<CommonParameters>]
+Register-EntraPasskey -UserId <String> -DisplayName <String> [<CommonParameters>]
 ```
 
 ### Existing
@@ -31,14 +30,16 @@ When called without the -Passkey parameter, this cmdlet performs the full regist
 When called with -Passkey, it submits a previously produced attestation, which is useful when the credential ceremony was run separately (e.g.
 via New-Passkey in a pipeline).
 
-Requires an active Microsoft Graph connection (Connect-MgGraph) with the UserAuthenticationMethod.ReadWrite.All scope.
-The caller must be an administrator; self-service is not supported.
+Requires an active Microsoft Graph connection (Connect-MgGraph) with the UserAuthMethod-Passkey.ReadWrite.All scope (least privileged) or UserAuthenticationMethod.ReadWrite.All.
+Registering a passkey on behalf of another user additionally requires the Authentication Administrator or Privileged Authentication Administrator role.
+
+The server-issued challenge has a fixed validity of 5 minutes, which cannot be changed.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```powershell
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+Connect-MgGraph -Scopes 'UserAuthMethod-Passkey.ReadWrite.All'
 Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 ```
 
@@ -46,16 +47,8 @@ Performs the full registration ceremony in one step: fetches creation options, p
 
 ### EXAMPLE 2
 ```powershell
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano' -ChallengeTimeout (New-TimeSpan -Minutes 10)
-```
-
-Registers a passkey using an extended 10-minute challenge timeout, giving the user more time to complete the authenticator ceremony.
-
-### EXAMPLE 3
-```powershell
-Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
-Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+Connect-MgGraph -Scopes 'UserAuthMethod-Passkey.ReadWrite.All'
+Invoke-MgCreationUserAuthenticationFido2MethodOption -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 ```
 
 Splits the registration into explicit pipeline stages: fetch options, create the credential locally, and submit the attestation.
@@ -63,28 +56,12 @@ Equivalent to the single-step form but lets the caller inspect intermediate valu
 
 ## PARAMETERS
 
-### -ChallengeTimeout
-Overrides the timeout of the server-generated challenge returned in the request.
-The default value is 5 minutes, with the accepted range being between 5 minutes and 30 days.
-
-```yaml
-Type: TimeSpan
-Parameter Sets: New
-Aliases: Timeout
-
-Required: False
-Position: Named
-Default value: (New-TimeSpan -Minutes 5)
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DisplayName
 Custom name given to the registered passkey.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: New, Existing
 Aliases:
 
 Required: True
@@ -117,7 +94,7 @@ Either the object id (GUID) or UPN.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: New, Existing
 Aliases: User
 
 Required: True
@@ -136,13 +113,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### Microsoft.Graph.PowerShell.Models.MicrosoftGraphFido2AuthenticationMethod
 ## NOTES
-Self-service operations aren't supported for Entra ID.
+The FIDO2 authentication method policy in Microsoft Entra ID must have the "Allow self-service setup" option enabled.
+This is a documented limitation of the underlying Microsoft Graph API.
 
 ## RELATED LINKS
-
-[Get-EntraPasskeyRegistrationOptions](Get-EntraPasskeyRegistrationOptions.md)
 
 [New-Passkey](New-Passkey.md)
 
 [Create fido2AuthenticationMethod](https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods)
-

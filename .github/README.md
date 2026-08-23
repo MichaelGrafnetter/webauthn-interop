@@ -21,7 +21,7 @@ The `DSInternals.Win32.WebAuthn.Adapter` library additionally uses classes defin
 
 ## PowerShell Module
 
-The [DSInternals.Passkeys](https://www.powershellgallery.com/packages/DSInternals.Passkeys) PowerShell module uses the `DSInternals.Win32.WebAuthn` library together with the [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod?view=graph-rest-beta) and the [Okta API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor) to provide Microsoft Entra ID and Okta administrators respectively the capability of registering passkeys on behalf of other users:
+The [DSInternals.Passkeys](https://www.powershellgallery.com/packages/DSInternals.Passkeys) PowerShell module uses the `DSInternals.Win32.WebAuthn` library together with the [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod?view=graph-rest-1.0) and the [Okta API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/enrollFactor) to provide Microsoft Entra ID and Okta administrators respectively the capability of registering passkeys on behalf of other users:
 
 ![PowerShell Passkey Registration Screenshot](../Documentation/Screenshots/powershell-entra.png)
 
@@ -117,7 +117,7 @@ Windows 10 creates very detailed logs of WebAuthn API calls and CTAP commands. T
 
 - [WebAuthn APIs for password-less authentication on Windows 10](https://learn.microsoft.com/en-us/windows/win32/api/webauthn/)
 - [C header file](https://github.com/microsoft/webauthn/blob/master/webauthn.h)
-- [Graph API Create fido2AuthenticationMethod](https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods?view=graph-rest-beta)
+- [Graph API Create fido2AuthenticationMethod](https://learn.microsoft.com/en-us/graph/api/authentication-post-fido2methods?view=graph-rest-1.0)
 
 ## Acknowledgements
 

@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [3.4.0] - 2026-08-23
+
+### Changed
+
+- Microsoft Entra ID passkey registration now uses the generally available v1.0 Microsoft Graph API endpoints instead of the beta ones.
+- **Breaking:** The `Get-EntraPasskeyRegistrationOptions` cmdlet has been replaced by an alias to the native `Invoke-MgCreationUserAuthenticationFido2MethodOption` cmdlet from the `Microsoft.Graph.Identity.SignIns` module, which is now required in version 2.39.0 or later. Existing pipelines keep working, but the emitted object type has changed from `PublicKeyCredentialCreationOptions` to `MicrosoftGraphWebauthnCredentialCreationOptions`. The `Get-PasskeyRegistrationOptions` alias now points to the native cmdlet as well.
+
+### Removed
+
+- **Breaking:** The `-ChallengeTimeout` parameter has been removed from Entra ID passkey registration, as the v1.0 Graph API uses a fixed 5-minute challenge validity. The corresponding Okta cmdlet parameters are unaffected.
+- **Breaking:** The `DSInternals.Win32.WebAuthn.Entra` namespace (the `MicrosoftGraphWebauthnCredentialCreationOptions`, `MicrosoftGraphWebauthnAttestationResponse`, and `MicrosoftGraphAttestationPublicKeyCredential` classes) has been removed from the `DSInternals.Win32.WebAuthn` library. Microsoft Graph payloads are now represented by the data model classes from the Microsoft Graph PowerShell SDK.
+
 ## [3.3.0] - 2026-08-19
 
 ### Added

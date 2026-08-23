@@ -702,6 +702,21 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>New-Passkey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="CreationOptions">
+          <maml:name>GraphOptions</maml:name>
+          <maml:description>
+            <maml:para>The Microsoft Graph credential creation options. Returned by the Invoke-MgCreationUserAuthenticationFido2MethodOption cmdlet from the Microsoft.Graph.Identity.SignIns module.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">IMicrosoftGraphWebauthnCredentialCreationOptions</command:parameterValue>
+          <dev:type>
+            <maml:name>IMicrosoftGraphWebauthnCredentialCreationOptions</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>New-Passkey</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HostName</maml:name>
           <maml:description>
@@ -717,7 +732,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
           <maml:name>Options</maml:name>
           <maml:description>
-            <maml:para>The WebAuthn public key credential creation options. Returned directly by Get-EntraPasskeyRegistrationOptions.</maml:para>
+            <maml:para>The WebAuthn public key credential creation options. Can be built locally by Get-PasskeyCreationOptions.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">PublicKeyCredentialCreationOptions</command:parameterValue>
           <dev:type>
@@ -744,6 +759,18 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="CreationOptions">
+        <maml:name>GraphOptions</maml:name>
+        <maml:description>
+          <maml:para>The Microsoft Graph credential creation options. Returned by the Invoke-MgCreationUserAuthenticationFido2MethodOption cmdlet from the Microsoft.Graph.Identity.SignIns module.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">IMicrosoftGraphWebauthnCredentialCreationOptions</command:parameterValue>
+        <dev:type>
+          <maml:name>IMicrosoftGraphWebauthnCredentialCreationOptions</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HostName</maml:name>
         <maml:description>
@@ -771,7 +798,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
         <maml:name>Options</maml:name>
         <maml:description>
-          <maml:para>The WebAuthn public key credential creation options. Returned directly by Get-EntraPasskeyRegistrationOptions.</maml:para>
+          <maml:para>The WebAuthn public key credential creation options. Can be built locally by Get-PasskeyCreationOptions.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">PublicKeyCredentialCreationOptions</command:parameterValue>
         <dev:type>
@@ -808,14 +835,14 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$credential = Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey</dev:code>
+        <dev:code>$credential = Invoke-MgCreationUserAuthenticationFido2MethodOption -UserId 'AdeleV@contoso.com' | New-Passkey</dev:code>
         <dev:remarks>
           <maml:para>Retrieves creation options from Microsoft Entra ID and creates a new passkey on the local authenticator without registering it.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'</dev:code>
+        <dev:code>Invoke-MgCreationUserAuthenticationFido2MethodOption -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'</dev:code>
         <dev:remarks>
           <maml:para>Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.</maml:para>
         </dev:remarks>
@@ -838,10 +865,6 @@
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>Get-EntraPasskeyRegistrationOptions</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
         <maml:linkText>Get-OktaPasskeyRegistrationOptions</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -856,6 +879,10 @@
       <maml:navigationLink>
         <maml:linkText>Test-Passkey</maml:linkText>
         <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>fido2AuthenticationMethod: creationOptions</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

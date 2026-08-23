@@ -7,7 +7,7 @@ SHORT DESCRIPTION
     in Microsoft Entra ID (formerly Azure Active Directory) and Okta.
 
 EXAMPLES
-    Connect-MgGraph -Scopes 'UserAuthenticationMethod.ReadWrite.All'
+    Connect-MgGraph -Scopes 'UserAuthMethod-Passkey.ReadWrite.All'
     Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 
 SEE ALSO

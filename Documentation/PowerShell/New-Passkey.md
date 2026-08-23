@@ -17,6 +17,11 @@ Creates a new WebAuthn credential by driving the local authenticator.
 New-Passkey -Options <PublicKeyCredentialCreationOptions> [-HostName <String>] [<CommonParameters>]
 ```
 
+### MicrosoftGraph
+```
+New-Passkey -GraphOptions <IMicrosoftGraphWebauthnCredentialCreationOptions> [<CommonParameters>]
+```
+
 ### Okta
 ```
 New-Passkey -OktaOptions <OktaWebauthnCredentialCreationOptions> [<CommonParameters>]
@@ -30,14 +35,14 @@ Returns the resulting AttestationPublicKeyCredential, which can be wrapped into 
 
 ### EXAMPLE 1
 ```powershell
-$credential = Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey
+$credential = Invoke-MgCreationUserAuthenticationFido2MethodOption -UserId 'AdeleV@contoso.com' | New-Passkey
 ```
 
 Retrieves creation options from Microsoft Entra ID and creates a new passkey on the local authenticator without registering it.
 
 ### EXAMPLE 2
 ```powershell
-Get-EntraPasskeyRegistrationOptions -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
+Invoke-MgCreationUserAuthenticationFido2MethodOption -UserId 'AdeleV@contoso.com' | New-Passkey | Register-EntraPasskey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 ```
 
 Performs end-to-end passkey registration in Microsoft Entra ID in a single pipeline.
@@ -50,6 +55,22 @@ Get-OktaPasskeyRegistrationOptions -UserId 00eDuihq64pgP1gVD0x7 | New-Passkey | 
 Performs end-to-end passkey registration in Okta in a single pipeline.
 
 ## PARAMETERS
+
+### -GraphOptions
+The Microsoft Graph credential creation options.
+Returned by the Invoke-MgCreationUserAuthenticationFido2MethodOption cmdlet from the Microsoft.Graph.Identity.SignIns module.
+
+```yaml
+Type: IMicrosoftGraphWebauthnCredentialCreationOptions
+Parameter Sets: MicrosoftGraph
+Aliases: CreationOptions
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
 
 ### -HostName
 Optional host name used to derive the WebAuthn origin when the server-issued options omit the relying party identifier.
@@ -84,7 +105,7 @@ Accept wildcard characters: False
 
 ### -Options
 The WebAuthn public key credential creation options.
-Returned directly by Get-EntraPasskeyRegistrationOptions.
+Can be built locally by Get-PasskeyCreationOptions.
 
 ```yaml
 Type: PublicKeyCredentialCreationOptions
@@ -113,8 +134,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Get-PasskeyCreationOptions](Get-PasskeyCreationOptions.md)
 
-[Get-EntraPasskeyRegistrationOptions](Get-EntraPasskeyRegistrationOptions.md)
-
 [Get-OktaPasskeyRegistrationOptions](Get-OktaPasskeyRegistrationOptions.md)
 
 [Register-EntraPasskey](Register-EntraPasskey.md)
@@ -123,3 +142,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Test-Passkey](Test-Passkey.md)
 
+[fido2AuthenticationMethod: creationOptions](https://learn.microsoft.com/en-us/graph/api/fido2authenticationmethod-creationoptions)

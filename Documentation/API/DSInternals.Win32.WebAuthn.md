@@ -8,8 +8,6 @@
 
  [DSInternals.Win32.WebAuthn.Cryptography](DSInternals.Win32.WebAuthn.Cryptography.md)
 
- [DSInternals.Win32.WebAuthn.Entra](DSInternals.Win32.WebAuthn.Entra.md)
-
  [DSInternals.Win32.WebAuthn.Events](DSInternals.Win32.WebAuthn.Events.md)
 
  [DSInternals.Win32.WebAuthn.FIDO](DSInternals.Win32.WebAuthn.FIDO.md)

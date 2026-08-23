@@ -8,7 +8,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using DSInternals.Win32.WebAuthn.COSE;
-using DSInternals.Win32.WebAuthn.Entra;
 using DSInternals.Win32.WebAuthn.FIDO;
 using DSInternals.Win32.WebAuthn.Interop;
 using DSInternals.Win32.WebAuthn.Okta;
@@ -320,7 +319,6 @@ namespace DSInternals.Win32.WebAuthn.Tests
             _options = options switch
             {
                 PublicKeyCredentialCreationOptions raw => raw,
-                MicrosoftGraphWebauthnCredentialCreationOptions graph => graph.PublicKeyOptions,
                 OktaWebauthnCredentialCreationOptions okta => okta.PublicKeyOptions,
                 _ => throw new ArgumentOutOfRangeException(nameof(options)),
             };
@@ -345,7 +343,6 @@ namespace DSInternals.Win32.WebAuthn.Tests
             return options switch
             {
                 PublicKeyCredentialCreationOptions => pkc,
-                MicrosoftGraphWebauthnCredentialCreationOptions => new MicrosoftGraphWebauthnAttestationResponse(pkc, $"DSInternals.Passkeys {_alg}"),
                 OktaWebauthnCredentialCreationOptions okta => new OktaWebauthnAttestationResponse(pkc, _options.User.Id, okta.FactorId),
                 _ => throw new ArgumentOutOfRangeException(nameof(options)),
             };

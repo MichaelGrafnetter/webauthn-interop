@@ -206,16 +206,6 @@
     href: DSInternals.Win32.WebAuthn.Cryptography.SoftwareAuthenticator.md
   - name: WindowsHelloForBusinessSigner
     href: DSInternals.Win32.WebAuthn.Cryptography.WindowsHelloForBusinessSigner.md
-- name: DSInternals.Win32.WebAuthn.Entra
-  href: DSInternals.Win32.WebAuthn.Entra.md
-  items:
-  - name: Classes
-  - name: MicrosoftGraphAttestationPublicKeyCredential
-    href: DSInternals.Win32.WebAuthn.Entra.MicrosoftGraphAttestationPublicKeyCredential.md
-  - name: MicrosoftGraphWebauthnAttestationResponse
-    href: DSInternals.Win32.WebAuthn.Entra.MicrosoftGraphWebauthnAttestationResponse.md
-  - name: MicrosoftGraphWebauthnCredentialCreationOptions
-    href: DSInternals.Win32.WebAuthn.Entra.MicrosoftGraphWebauthnCredentialCreationOptions.md
 - name: DSInternals.Win32.WebAuthn.Events
   href: DSInternals.Win32.WebAuthn.Events.md
   items:
