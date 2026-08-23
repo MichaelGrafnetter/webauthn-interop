@@ -218,7 +218,9 @@ jobs:
 
   nuget:
     name: 'Publish to NuGet Gallery'
-    permissions: {}
+    permissions:
+      # Enable GitHub OIDC token issuance for NuGet Trusted Publishing
+      id-token: write
     if: ${{ inputs.publish_nuget }}
     runs-on: ubuntu-latest
     needs: build
@@ -233,9 +235,15 @@ jobs:
         with:
           dotnet-version: 8.x
 
+      - name: NuGet Login (OIDC → Temporary API Key)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Publish NuGet Packages
         run: |
-          dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_GALLERY_APIKEY }} --skip-duplicate
+          dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --skip-duplicate
 
   psgallery:
     name: 'Publish to PowerShell Gallery'
