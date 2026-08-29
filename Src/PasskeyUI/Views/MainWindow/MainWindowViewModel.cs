@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -244,6 +245,30 @@ internal sealed class MainWindowViewModel : BindableBase
             // Convert single hint to array if specified
             string[]? credentialHints = GetCredentialHints(AttestationOptionsViewModel.CredentialHint);
 
+            // Pass the original PublicKeyCredentialCreationOptions JSON so Windows can route
+            // the request to plug-in passkey providers (1Password, Bitwarden, etc.).
+            byte[] creationOptionsJson = Encoding.UTF8.GetBytes(
+                new PublicKeyCredentialCreationOptions
+                {
+                    RelyingParty = AttestationOptionsViewModel.RelyingPartyEntity,
+                    User = AttestationOptionsViewModel.UserEntity,
+                    Challenge = AttestationOptionsViewModel.Challenge!,
+                    PublicKeyCredentialParameters = (AttestationOptionsViewModel.PublicKeyCredentialParameters ?? [Algorithm.ES256])
+                        .Select(alg => new PublicKeyCredentialParameter(alg, ApiConstants.PublicKeyCredentialType))
+                        .ToArray(),
+                    TimeoutMilliseconds = AttestationOptionsViewModel.Timeout,
+                    AuthenticatorSelection = new AuthenticatorSelectionCriteria
+                    {
+                        AuthenticatorAttachment = AttestationOptionsViewModel.AuthenticatorAttachment,
+                        UserVerificationRequirement = AttestationOptionsViewModel.UserVerificationRequirement,
+                        ResidentKey = AttestationOptionsViewModel.ResidentKey,
+                        RequireResidentKey = AttestationOptionsViewModel.ResidentKey == ResidentKeyRequirement.Required,
+                    },
+                    Attestation = AttestationOptionsViewModel.AttestationConveyancePreference,
+                    Extensions = AttestationOptionsViewModel.ClientExtensions,
+                    Hints = credentialHints,
+                }.ToString());
+
             var response = await _api.AuthenticatorMakeCredentialAsync(
                 AttestationOptionsViewModel.RelyingPartyEntity,
                 AttestationOptionsViewModel.UserEntity,
@@ -260,6 +285,7 @@ internal sealed class MainWindowViewModel : BindableBase
                 browserInPrivateMode: AttestationOptionsViewModel.IsBrowserPrivateMode,
                 linkedDevice: null,
                 credentialHints: credentialHints,
+                publicKeyCredentialCreationOptionsJson: creationOptionsJson,
                 windowHandle: WindowHandle.MainWindow
                 );
 
@@ -281,6 +307,19 @@ internal sealed class MainWindowViewModel : BindableBase
             // Convert single hint to array if specified
             string[]? credentialHints = GetCredentialHints(AssertionOptionsViewModel.CredentialHint);
 
+            // Pass the original PublicKeyCredentialRequestOptions JSON so Windows can route
+            // the request to plug-in passkey providers (1Password, Bitwarden, etc.).
+            byte[] requestOptionsJson = Encoding.UTF8.GetBytes(
+                new PublicKeyCredentialRequestOptions
+                {
+                    Challenge = AssertionOptionsViewModel.Challenge!,
+                    Timeout = AssertionOptionsViewModel.Timeout,
+                    RpId = AssertionOptionsViewModel.RelyingPartyId,
+                    UserVerification = AssertionOptionsViewModel.UserVerificationRequirement,
+                    Hints = credentialHints,
+                    Extensions = AssertionOptionsViewModel.ClientExtensions,
+                }.ToString());
+
             var response = await _api.AuthenticatorGetAssertionAsync(
                 AssertionOptionsViewModel.RelyingPartyId,
                 AssertionOptionsViewModel.Challenge,
@@ -292,6 +331,7 @@ internal sealed class MainWindowViewModel : BindableBase
                 browserInPrivateMode: AssertionOptionsViewModel.IsBrowserPrivateMode,
                 linkedDevice: null,
                 credentialHints: credentialHints,
+                publicKeyCredentialRequestOptionsJson: requestOptionsJson,
                 windowHandle: WindowHandle.MainWindow
             );
 
