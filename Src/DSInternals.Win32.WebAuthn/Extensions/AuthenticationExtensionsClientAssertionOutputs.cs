@@ -60,8 +60,12 @@ public sealed class AuthenticationExtensionsClientAssertionOutputs : Authenticat
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IList<UvmEntry>? Uvm { get; set; }
 
+    /// <summary>
+    /// Gets whether this object contains no assertion extension outputs.
+    /// </summary>
     [JsonIgnore]
     internal override bool IsEmpty =>
+        base.IsEmpty &&
         AppID == null &&
         HmacGetSecret == null &&
         CredentialBlob == null &&

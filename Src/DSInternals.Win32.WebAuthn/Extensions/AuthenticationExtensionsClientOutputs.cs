@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Win32.WebAuthn;
 
@@ -7,6 +9,16 @@ namespace DSInternals.Win32.WebAuthn;
 /// </summary>
 public abstract class AuthenticationExtensionsClientOutputs
 {
+    /// <summary>
+    /// Extension outputs not represented by a strongly typed property.
+    /// </summary>
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? AdditionalProperties { get; set; }
+
+    /// <summary>
+    /// Gets whether this object contains no extension outputs.
+    /// </summary>
     [JsonIgnore]
-    internal abstract bool IsEmpty { get; }
+    internal virtual bool IsEmpty =>
+        AdditionalProperties == null || AdditionalProperties.Count == 0;
 }

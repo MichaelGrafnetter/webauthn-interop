@@ -54,4 +54,11 @@ public abstract class PublicKeyCredential<TResponse, TClientExtensionResults>
     [JsonPropertyName("clientExtensionResults")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public TClientExtensionResults? ClientExtensionResults { get; init; }
+
+    /// <summary>
+    /// Raw unsigned extension output map returned by the Windows WebAuthn API.
+    /// This is native metadata, not part of the WebAuthn credential JSON.
+    /// </summary>
+    [JsonIgnore]
+    public byte[]? UnsignedExtensionOutputs { get; init; }
 }

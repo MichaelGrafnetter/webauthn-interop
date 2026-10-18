@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Fixed
+
+- `AuthenticatorMakeCredential` and `AuthenticatorGetAssertion` now merge native response fields and extension outputs into OS-produced response JSON, preserving HMAC-secret/PRF results and other modeled outputs when the JSON omits them. Unrecognized client extension outputs are preserved when deserializing and serializing credentials.
+- Attestation and assertion credentials expose the raw Windows unsigned extension output buffer through a nullable `UnsignedExtensionOutputs` property, excluded from credential JSON serialization.
+
 ## [3.4.0] - 2026-08-23
 
 ### Added
