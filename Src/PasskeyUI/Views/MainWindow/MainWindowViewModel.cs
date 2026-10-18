@@ -245,6 +245,11 @@ internal sealed class MainWindowViewModel : BindableBase
             // Convert single hint to array if specified
             string[]? credentialHints = GetCredentialHints(AttestationOptionsViewModel.CredentialHint);
 
+            // Keep the JSON consistent with the API, which defaults an empty algorithm list to ES256.
+            Algorithm[] publicKeyCredentialParameters = AttestationOptionsViewModel.PublicKeyCredentialParameters is { Count: > 0 } algorithms
+                ? algorithms.ToArray()
+                : [Algorithm.ES256];
+
             // Pass the original PublicKeyCredentialCreationOptions JSON so Windows can route
             // the request to plug-in passkey providers (1Password, Bitwarden, etc.).
             byte[] creationOptionsJson = Encoding.UTF8.GetBytes(
@@ -253,7 +258,7 @@ internal sealed class MainWindowViewModel : BindableBase
                     RelyingParty = AttestationOptionsViewModel.RelyingPartyEntity,
                     User = AttestationOptionsViewModel.UserEntity,
                     Challenge = AttestationOptionsViewModel.Challenge!,
-                    PublicKeyCredentialParameters = (AttestationOptionsViewModel.PublicKeyCredentialParameters ?? [Algorithm.ES256])
+                    PublicKeyCredentialParameters = publicKeyCredentialParameters
                         .Select(alg => new PublicKeyCredentialParameter(alg, ApiConstants.PublicKeyCredentialType))
                         .ToArray(),
                     TimeoutMilliseconds = AttestationOptionsViewModel.Timeout,
@@ -276,7 +281,7 @@ internal sealed class MainWindowViewModel : BindableBase
                 AttestationOptionsViewModel.UserVerificationRequirement,
                 AttestationOptionsViewModel.AuthenticatorAttachment,
                 residentKey: AttestationOptionsViewModel.ResidentKey,
-                AttestationOptionsViewModel.PublicKeyCredentialParameters?.ToArray(),
+                publicKeyCredentialParameters,
                 AttestationOptionsViewModel.AttestationConveyancePreference,
                 AttestationOptionsViewModel.Timeout,
                 extensions: AttestationOptionsViewModel.ClientExtensions,
