@@ -1,18 +1,47 @@
-﻿TOPIC
+TOPIC
     about_DSInternals.Passkeys
 
 SHORT DESCRIPTION
     Allows administrative registration of passkeys
-    (i.e. FIDO2 security keys and Microsoft Authenticator mobile app)
-    in Microsoft Entra ID (formerly Azure Active Directory) and Okta.
+    (i.e. FIDO2 security keys, Windows Hello, and Microsoft Authenticator mobile app)
+    in Microsoft Entra ID (formerly Azure Active Directory) and Okta,
+    and management of compatible platform and roaming authenticators.
+
+LONG DESCRIPTION
+    Registers passkeys in Microsoft Entra ID and Okta using local
+    authenticators. Provides WebAuthn credential creation and authentication
+    testing, including Windows Hello for Business.
+
+    Lists available platform authenticators and authenticator plugins,
+    and lists or removes passkeys stored in Windows Hello or on FIDO2
+    security keys.
+
+    Manages PINs, PIN policy, configuration, and large-blob storage on
+    compatible roaming authenticators. Management
+    requires local administrator rights and uses undocumented Windows APIs
+    that may change with Windows updates. Authenticate
+    explicitly before operations that require a PIN, and close sessions
+    created with Open-PasskeyAuthenticatorSession when finished.
 
 EXAMPLES
     Connect-MgGraph -Scopes 'UserAuthMethod-Passkey.ReadWrite.All'
     Register-Passkey -UserId 'AdeleV@contoso.com' -DisplayName 'YubiKey 5 Nano'
 
+    $session = Open-PasskeyAuthenticatorSession
+    try {
+        Get-PasskeyAuthenticatorCapabilities -Session $session
+        Unlock-PasskeyAuthenticatorSession -Session $session -Pin (Read-Host 'PIN' -AsSecureString)
+        Get-PasskeySecurityKey -Session $session
+    }
+    finally {
+        Close-PasskeyAuthenticatorSession -Session $session
+    }
+
 SEE ALSO
     https://learn.microsoft.com/en-us/graph/api/resources/fido2authenticationmethod
+    https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell
 
 KEYWORDS
     - Passkeys
     - FIDO2
+    - CTAP

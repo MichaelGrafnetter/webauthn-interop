@@ -581,6 +581,18 @@ public static WebAuthnJsonContext Default { get; }
 
  [WebAuthnJsonContext](DSInternals.Win32.WebAuthn.WebAuthnJsonContext.md)
 
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_DictionaryStringJsonElement"></a> DictionaryStringJsonElement
+
+Defines the source generated JSON serialization contract metadata for a given type.
+
+```csharp
+public JsonTypeInfo<Dictionary<string, JsonElement>> DictionaryStringJsonElement { get; }
+```
+
+#### Property Value
+
+ [JsonTypeInfo](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.metadata.jsontypeinfo\-1)<[Dictionary](https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary\-2)<[string](https://learn.microsoft.com/dotnet/api/system.string), [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement)\>\>
+
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_DictionaryStringPRFValues"></a> DictionaryStringPRFValues
 
 Defines the source generated JSON serialization contract metadata for a given type.
@@ -700,6 +712,18 @@ public JsonTypeInfo<int> Int32 { get; }
 #### Property Value
 
  [JsonTypeInfo](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.metadata.jsontypeinfo\-1)<[int](https://learn.microsoft.com/dotnet/api/system.int32)\>
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_JsonElement"></a> JsonElement
+
+Defines the source generated JSON serialization contract metadata for a given type.
+
+```csharp
+public JsonTypeInfo<JsonElement> JsonElement { get; }
+```
+
+#### Property Value
+
+ [JsonTypeInfo](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.metadata.jsontypeinfo\-1)<[JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement)\>
 
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnJsonContext_KeePassXCPasskey"></a> KeePassXCPasskey
 

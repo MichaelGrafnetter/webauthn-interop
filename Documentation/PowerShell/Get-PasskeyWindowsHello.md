@@ -86,5 +86,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Test-Passkey](Test-Passkey.md)
 
-[Get-PasskeyAuthenticator](Get-PasskeyAuthenticator.md)
+[Get-PasskeyPlatformAuthenticator](Get-PasskeyPlatformAuthenticator.md)
 
+
+[Get-PasskeySecurityKey](Get-PasskeySecurityKey.md)

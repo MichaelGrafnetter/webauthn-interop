@@ -35,6 +35,47 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
             });
         }
 
+        /// <summary>Maps HRESULTs without adding management-specific diagnostics.</summary>
+        /// <param name="result">The HRESULT to map.</param>
+        /// <param name="expectedType">The expected managed exception category.</param>
+        [TestMethod]
+        [DataRow(unchecked((int)0x800704C7), typeof(OperationCanceledException))]
+        [DataRow(unchecked((int)0x800705B4), typeof(TimeoutException))]
+        [DataRow(unchecked((int)0x80070032), typeof(NotSupportedException))]
+        [DataRow(unchecked((int)0x8007000D), typeof(ArgumentException))]
+        [DataRow(unchecked((int)0x8001011B), typeof(UnauthorizedAccessException))]
+        [DataRow(unchecked((int)0x80004005), typeof(Win32Exception))]
+        public void ApiHelper_Validate_PreservesHResultOnlySemantics(int result, Type expectedType)
+        {
+            Exception? error = null;
+            try
+            {
+                ApiHelper.Validate(new HRESULT(result));
+            }
+            catch (Exception ex)
+            {
+                error = ex;
+            }
+            Assert.IsNotNull(error);
+            Assert.AreEqual(expectedType, error.GetType());
+            Assert.AreEqual(0, error.Data.Count);
+            Assert.AreEqual(new Win32Exception(result).Message, error.Message);
+            var native = error as Win32Exception ?? error.InnerException as Win32Exception;
+            Assert.IsNotNull(native);
+            Assert.AreEqual(result, native.NativeErrorCode);
+        }
+
+        /// <summary>Keeps the shared validator limited to a single HRESULT parameter.</summary>
+        [TestMethod]
+        public void ApiHelper_Validate_AcceptsOnlyHResult()
+        {
+            var validate = typeof(ApiHelper).GetMethod(nameof(ApiHelper.Validate));
+            Assert.IsNotNull(validate);
+            var parameters = validate.GetParameters();
+            Assert.AreEqual(1, parameters.Length);
+            Assert.AreEqual(typeof(HRESULT), parameters[0].ParameterType);
+        }
+
         [TestMethod]
         public void ApiHelper_Translate_CredentialDetails_MapsCurrentNativeFields()
         {

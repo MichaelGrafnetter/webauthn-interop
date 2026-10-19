@@ -61,7 +61,7 @@ Custom name given to the registered passkey.
 
 ```yaml
 Type: String
-Parameter Sets: New, Existing
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -94,7 +94,7 @@ Either the object id (GUID) or UPN.
 
 ```yaml
 Type: String
-Parameter Sets: New, Existing
+Parameter Sets: (All)
 Aliases: User
 
 Required: True

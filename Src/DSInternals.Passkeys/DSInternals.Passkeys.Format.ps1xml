@@ -272,6 +272,76 @@
       </TableControl>
     </View>
 
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.DiscoverableCredentialDetails.TableView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.DiscoverableCredentialDetails</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader><Label>CredentialId</Label><Width>42</Width></TableColumnHeader>
+          <TableColumnHeader><Label>RelyingPartyId</Label><Width>25</Width></TableColumnHeader>
+          <TableColumnHeader><Label>UserName</Label><Width>22</Width></TableColumnHeader>
+          <TableColumnHeader><Label>UserDisplayName</Label></TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem><ScriptBlock>[System.Buffers.Text.Base64Url]::EncodeToString($PSItem.CredentialId)</ScriptBlock></TableColumnItem>
+              <TableColumnItem><PropertyName>RelyingPartyId</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>UserName</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>UserDisplayName</PropertyName></TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.AuthenticatorManagementCapabilities.ListView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.AuthenticatorManagementCapabilities</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry><ListItems>
+            <ListItem><PropertyName>ContextVersion</PropertyName></ListItem>
+            <ListItem><PropertyName>Transport</PropertyName></ListItem>
+            <ListItem><PropertyName>PinState</PropertyName></ListItem>
+            <ListItem><PropertyName>PinRetries</PropertyName></ListItem>
+            <ListItem><PropertyName>FingerprintState</PropertyName></ListItem>
+            <ListItem><PropertyName>FingerprintKind</PropertyName></ListItem>
+            <ListItem><PropertyName>MaximumFingerprintCaptureSamples</PropertyName></ListItem>
+            <ListItem><PropertyName>CredentialManagementState</PropertyName></ListItem>
+            <ListItem><PropertyName>PinPolicy</PropertyName></ListItem>
+            <ListItem><PropertyName>MaximumMessageSize</PropertyName></ListItem>
+            <ListItem><PropertyName>RemainingDiscoverableCredentials</PropertyName></ListItem>
+          </ListItems></ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DSInternals.Win32.WebAuthn.AuthenticatorPinPolicy.ListView</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Win32.WebAuthn.AuthenticatorPinPolicy</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry><ListItems>
+            <ListItem><PropertyName>MinimumPinLength</PropertyName></ListItem>
+            <ListItem><PropertyName>ForcePinChangeRequired</PropertyName></ListItem>
+            <ListItem><PropertyName>AuthenticatorConfigSupported</PropertyName></ListItem>
+            <ListItem><PropertyName>SetMinPinLengthSupported</PropertyName></ListItem>
+            <ListItem><PropertyName>MaximumRpIds</PropertyName></ListItem>
+            <ListItem><PropertyName>EnterpriseAttestationEnabled</PropertyName></ListItem>
+            <ListItem><PropertyName>AlwaysUvEnabled</PropertyName></ListItem>
+            <ListItem><PropertyName>MaximumLargeBlobBytes</PropertyName></ListItem>
+          </ListItems></ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
     <!-- Get-OktaPasskeyRegistrationOptions List View (Default) -->
     <View>
       <Name>DSInternals.Win32.WebAuthn.Okta.OktaWebauthnCredentialCreationOptions.ListView</Name>

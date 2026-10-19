@@ -121,3 +121,17 @@ public required string Type { get; init; }
 
  [string](https://learn.microsoft.com/dotnet/api/system.string)
 
+### <a id="DSInternals_Win32_WebAuthn_PublicKeyCredential_2_UnsignedExtensionOutputs"></a> UnsignedExtensionOutputs
+
+Raw unsigned extension output map returned by the Windows WebAuthn API.
+This is native metadata, not part of the WebAuthn credential JSON.
+
+```csharp
+[JsonIgnore]
+public byte[]? UnsignedExtensionOutputs { get; init; }
+```
+
+#### Property Value
+
+ [byte](https://learn.microsoft.com/dotnet/api/system.byte)\[\]?
+

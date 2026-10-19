@@ -16,6 +16,7 @@
 - BREAKING CHANGE: The synchronous `LoadFromFile` methods of the `BitwardenCleartextVaultExport`, `BitwardenEncryptedVaultExport`, `CredentialExchangeFile`, and `KeePassXCPasskey` classes have been replaced by asynchronous `LoadFromFileAsync` methods, which stream-deserialize the JSON files and support cancellation.
 - Added the `BitwardenVaultExportHeader` class for detecting whether a Bitwarden vault export is encrypted and/or password-protected without parsing the entire file.
 - The `WindowsHelloForBusinessSigner.ListCngKeys` method now accepts an optional `machineKeys` parameter to enumerate machine keys instead of user keys.
+- Added experimental authenticator management sessions for resident credentials, PINs/policy, configuration, supported transports, and whole-store large blobs using the examined private WebAuthn API version 9 ABI.
 </PackageReleaseNotes>
     <!-- The DLL is publishable as part of the PowerShell module -->
     <IsPublishable>true</IsPublishable>

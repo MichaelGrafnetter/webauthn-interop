@@ -1,11 +1,11 @@
 ---
 external help file: DSInternals.Passkeys.Core.psm1-help.xml
 Module Name: DSInternals.Passkeys
-online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyAuthenticator.md
+online version: https://github.com/MichaelGrafnetter/webauthn-interop/tree/main/Documentation/PowerShell/Get-PasskeyPlatformAuthenticator.md
 schema: 2.0.0
 ---
 
-# Get-PasskeyAuthenticator
+# Get-PasskeyPlatformAuthenticator
 
 ## SYNOPSIS
 Gets the list of available authenticators from the WebAuthn API.
@@ -13,7 +13,7 @@ Gets the list of available authenticators from the WebAuthn API.
 ## SYNTAX
 
 ```
-Get-PasskeyAuthenticator [<CommonParameters>]
+Get-PasskeyPlatformAuthenticator [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,21 +24,21 @@ This includes information about authenticator IDs, names, logos, and lock status
 
 ### EXAMPLE 1
 ```powershell
-Get-PasskeyAuthenticator
+Get-PasskeyPlatformAuthenticator
 ```
 
 Lists all available authenticators.
 
 ### EXAMPLE 2
 ```powershell
-Get-PasskeyAuthenticator | Where-Object { -not $PSItem.Locked }
+Get-PasskeyPlatformAuthenticator | Where-Object { -not $PSItem.Locked }
 ```
 
 Lists only unlocked authenticators.
 
 ### EXAMPLE 3
 ```powershell
-Get-PasskeyAuthenticator | Format-Table -Prperty AuthenticatorName,Locked
+Get-PasskeyPlatformAuthenticator | Format-Table -Prperty AuthenticatorName,Locked
 ```
 
 Lists authenticator names and lock status in a table.
@@ -55,9 +55,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### DSInternals.Win32.WebAuthn.AuthenticatorDetails
 ## NOTES
 
+Aliases: `Get-PasskeyAuthenticator`, `GetPasskeyWindowsHelloAuthenticator`.
+
 ## RELATED LINKS
 
 [Get-PasskeyAuthenticatorPlugin](Get-PasskeyAuthenticatorPlugin.md)
 
 [Get-PasskeyWindowsHello](Get-PasskeyWindowsHello.md)
-

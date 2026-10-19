@@ -23,6 +23,7 @@ public sealed class AttestationPublicKeyCredential : PublicKeyCredential<Authent
 [PublicKeyCredential<AuthenticatorAttestationResponse, AuthenticationExtensionsClientAttestationOutputs\>.AuthenticatorAttachment](DSInternals.Win32.WebAuthn.PublicKeyCredential\-2.md\#DSInternals\_Win32\_WebAuthn\_PublicKeyCredential\_2\_AuthenticatorAttachment), 
 [PublicKeyCredential<AuthenticatorAttestationResponse, AuthenticationExtensionsClientAttestationOutputs\>.Response](DSInternals.Win32.WebAuthn.PublicKeyCredential\-2.md\#DSInternals\_Win32\_WebAuthn\_PublicKeyCredential\_2\_Response), 
 [PublicKeyCredential<AuthenticatorAttestationResponse, AuthenticationExtensionsClientAttestationOutputs\>.ClientExtensionResults](DSInternals.Win32.WebAuthn.PublicKeyCredential\-2.md\#DSInternals\_Win32\_WebAuthn\_PublicKeyCredential\_2\_ClientExtensionResults), 
+[PublicKeyCredential<AuthenticatorAttestationResponse, AuthenticationExtensionsClientAttestationOutputs\>.UnsignedExtensionOutputs](DSInternals.Win32.WebAuthn.PublicKeyCredential\-2.md\#DSInternals\_Win32\_WebAuthn\_PublicKeyCredential\_2\_UnsignedExtensionOutputs), 
 [object.Equals\(object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\)), 
 [object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
 [object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 

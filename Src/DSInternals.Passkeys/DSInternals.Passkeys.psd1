@@ -26,7 +26,7 @@ CompanyName = 'DSInternals'
 Copyright = 'Copyright (c) 2021-2026 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) and Okta.'
+Description = 'Allows administrative registration of passkeys (i.e. FIDO2 security keys, Windows Hello, and Microsoft Authenticator mobile app) in Microsoft Entra ID (formerly Azure Active Directory) and Okta, and management of compatible platform and roaming authenticators.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.1'
@@ -120,11 +120,24 @@ FunctionsToExport = @(
     'Connect-Okta',
     'Disconnect-Okta',
     'Get-PasskeyAuthenticatorPlugin',
-    'Get-PasskeyAuthenticator',
+    'Get-PasskeyPlatformAuthenticator',
     'Get-PasskeyWindowsHello',
     'Remove-PasskeyWindowsHello',
     'New-PasskeyRandomChallenge',
-    'Get-PasskeyCreationOptions'
+    'Get-PasskeyCreationOptions',
+    'Open-PasskeyAuthenticatorSession',
+    'Close-PasskeyAuthenticatorSession',
+    'Unlock-PasskeyAuthenticatorSession',
+    'Get-PasskeySupportedTransport',
+    'Get-PasskeyAuthenticatorCapabilities',
+    'Get-PasskeyAuthenticatorPinPolicy',
+    'Get-PasskeySecurityKey',
+    'Remove-PasskeySecurityKey',
+    'Set-PasskeyAuthenticatorPin',
+    'Set-PasskeyAuthenticatorPinPolicy',
+    'Set-PasskeyAuthenticatorConfiguration',
+    'Get-PasskeyAuthenticatorLargeBlob',
+    'Set-PasskeyAuthenticatorLargeBlob'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -134,7 +147,7 @@ CmdletsToExport = @()
 VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @('Get-EntraPasskeyRegistrationOptions','Get-PasskeyRegistrationOptions','Register-Passkey','Register-MgUserAuthenticationFido2Method')
+AliasesToExport = @('Get-EntraPasskeyRegistrationOptions','Get-PasskeyRegistrationOptions','Register-Passkey','Register-MgUserAuthenticationFido2Method','Get-PasskeyAuthenticator','GetPasskeyWindowsHelloAuthenticator')
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -235,4 +248,3 @@ PrivateData = @{
 # DefaultCommandPrefix = ''
 
 }
-

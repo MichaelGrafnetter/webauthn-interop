@@ -18,6 +18,10 @@ Property declaration order is significant: the WebAuthn spec requires type → c
 
 ### Enums
 
+ [AuthenticatorFingerprintKind](DSInternals.Win32.WebAuthn.FIDO.AuthenticatorFingerprintKind.md)
+
+Identifies how an authenticator's fingerprint sensor captures a fingerprint.
+
  [KeyProtectionType](DSInternals.Win32.WebAuthn.FIDO.KeyProtectionType.md)
 
 Methods used by the authenticator to protect FIDO registration private key material, as reported in the WebAuthn uvm extension.
@@ -29,4 +33,3 @@ Methods used by the authenticator to protect the matcher that performs user veri
  [UserVerificationMethod](DSInternals.Win32.WebAuthn.FIDO.UserVerificationMethod.md)
 
 User verification methods reported by the authenticator in the WebAuthn uvm extension.
-

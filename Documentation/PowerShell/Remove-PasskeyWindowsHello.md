@@ -130,3 +130,5 @@ This operation requires appropriate permissions and may trigger a Windows Securi
 
 [Get-PasskeyWindowsHello](Get-PasskeyWindowsHello.md)
 
+
+[Remove-PasskeySecurityKey](Remove-PasskeySecurityKey.md)

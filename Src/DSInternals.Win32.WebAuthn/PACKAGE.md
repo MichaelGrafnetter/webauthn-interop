@@ -63,6 +63,36 @@ Async variants (`AuthenticatorMakeCredentialAsync` and `AuthenticatorGetAssertio
 
 > The samples above are illustrative and not production-ready: they omit validation and use hardcoded values. In particular, the `challenge` must be generated with a cryptographically secure random number generator.
 
+### Authenticator Management (Experimental)
+
+This feature is experimental because it uses Windows APIs that are **undocumented
+and unsupported by Microsoft**. Compatibility across Windows updates is not guaranteed.
+
+The management API requires **local administrator rights** because Windows
+restricts low-level USB and NFC access to elevated processes.
+
+`WebAuthnApi.OpenAuthenticatorManagementSession` selects an authenticator for resident
+credential enumeration/deletion, PIN authentication and changes, PIN policy,
+Always Require User Verification, enterprise attestation, and whole-store large-blob management.
+
+```csharp
+using DSInternals.Win32.WebAuthn;
+using System.Security;
+using System.Threading;
+
+// pin is a caller-owned SecureString obtained from the application's secure input UI.
+void ListCredentials(SecureString pin, CancellationToken cancellationToken)
+{
+    using var session = WebAuthnApi.OpenAuthenticatorManagementSession(
+        AuthenticatorTransport.USB, cancellationToken: cancellationToken);
+    session.AuthenticatePin(pin, cancellationToken); // One attempt, never retried.
+    foreach (var credential in session.GetCredentials(cancellationToken))
+    {
+        // Display credential.RelyingPartyId and credential.UserName.
+    }
+}
+```
+
 ## Related Packages
 
 - [DSInternals.Win32.WebAuthn.Adapter](https://www.nuget.org/packages/DSInternals.Win32.WebAuthn.Adapter/) — bridge that exposes this library through the [Fido2.Models](https://www.nuget.org/packages/Fido2.Models/) types from [fido2-net-lib](https://github.com/abergs/fido2-net-lib).

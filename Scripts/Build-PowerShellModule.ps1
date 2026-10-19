@@ -42,6 +42,9 @@ foreach($currentConfiguration in $Configuration) {
 
         # Copy the compiled binaries
         dotnet.exe publish $libraryProject --output $frameworkSpecificPath --nologo --framework $framework --configuration $currentConfiguration --no-restore --no-build
+        if ($LASTEXITCODE -ne 0) {
+            throw "Publishing the $framework library for the $currentConfiguration PowerShell module failed with exit code $LASTEXITCODE."
+        }
 
         # Remove dependency manifests that are not consumed by PowerShell's assembly loader
         Get-ChildItem -Path $frameworkSpecificPath -Filter '*.deps.json' -File |

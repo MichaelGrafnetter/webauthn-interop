@@ -58,6 +58,18 @@ Represents an authenticator attestation response.
 
 Information about an authenticator.
 
+ [AuthenticatorManagementCapabilities](DSInternals.Win32.WebAuthn.AuthenticatorManagementCapabilities.md)
+
+Describes the selected authenticator's management capabilities, configuration, and available storage.
+
+ [AuthenticatorManagementSession](DSInternals.Win32.WebAuthn.AuthenticatorManagementSession.md)
+
+Provides credential, PIN, configuration, and large blob management for a selected authenticator.
+
+ [AuthenticatorPinPolicy](DSInternals.Win32.WebAuthn.AuthenticatorPinPolicy.md)
+
+Describes an authenticator's PIN requirements, user-verification settings, and configuration limits.
+
  [AuthenticatorPluginInformation](DSInternals.Win32.WebAuthn.AuthenticatorPluginInformation.md)
 
 Represents information about an authenticator plugin registered in Windows.
@@ -85,6 +97,10 @@ Information about credential.
  [CredentialPropertiesOutputs](DSInternals.Win32.WebAuthn.CredentialPropertiesOutputs.md)
 
 Outputs for the WebAuthn credProps client extension.
+
+ [DiscoverableCredentialDetails](DSInternals.Win32.WebAuthn.DiscoverableCredentialDetails.md)
+
+Describes a discoverable credential's identifier, relying party, and user account.
 
  [GuidPolyfill](DSInternals.Win32.WebAuthn.GuidPolyfill.md)
 
@@ -234,9 +250,21 @@ WebAuthn attestation statement format identifiers registered with IANA.
 
 This enumeration’s values describe authenticators' attachment modalities.
 
+ [AuthenticatorCredentialManagementState](DSInternals.Win32.WebAuthn.AuthenticatorCredentialManagementState.md)
+
+Describes the availability of credential management on an authenticator.
+
+ [AuthenticatorFingerprintState](DSInternals.Win32.WebAuthn.AuthenticatorFingerprintState.md)
+
+Describes the authenticator fingerprint enrollment status.
+
  [AuthenticatorFlags](DSInternals.Win32.WebAuthn.AuthenticatorFlags.md)
 
 Authenticator data flags
+
+ [AuthenticatorPinState](DSInternals.Win32.WebAuthn.AuthenticatorPinState.md)
+
+Describes the authenticator PIN configuration status.
 
  [AuthenticatorTransport](DSInternals.Win32.WebAuthn.AuthenticatorTransport.md)
 
@@ -261,6 +289,10 @@ Known credential mediation requirements as defined by the Credential Management 
  [PackageSignatureKind](DSInternals.Win32.WebAuthn.PackageSignatureKind.md)
 
 The kind of package signature for an authenticator plugin.
+
+ [PinAuthenticationStatus](DSInternals.Win32.WebAuthn.PinAuthenticationStatus.md)
+
+Describes the PIN authentication or policy condition reported by an authenticator management operation.
 
  [PublicKeyCredentialHint](DSInternals.Win32.WebAuthn.PublicKeyCredentialHint.md)
 

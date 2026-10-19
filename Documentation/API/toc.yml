@@ -23,6 +23,12 @@
     href: DSInternals.Win32.WebAuthn.AuthenticatorAttestationResponse.md
   - name: AuthenticatorDetails
     href: DSInternals.Win32.WebAuthn.AuthenticatorDetails.md
+  - name: AuthenticatorManagementCapabilities
+    href: DSInternals.Win32.WebAuthn.AuthenticatorManagementCapabilities.md
+  - name: AuthenticatorManagementSession
+    href: DSInternals.Win32.WebAuthn.AuthenticatorManagementSession.md
+  - name: AuthenticatorPinPolicy
+    href: DSInternals.Win32.WebAuthn.AuthenticatorPinPolicy.md
   - name: AuthenticatorPluginInformation
     href: DSInternals.Win32.WebAuthn.AuthenticatorPluginInformation.md
   - name: AuthenticatorResponse
@@ -37,6 +43,8 @@
     href: DSInternals.Win32.WebAuthn.CredentialDetails.md
   - name: CredentialPropertiesOutputs
     href: DSInternals.Win32.WebAuthn.CredentialPropertiesOutputs.md
+  - name: DiscoverableCredentialDetails
+    href: DSInternals.Win32.WebAuthn.DiscoverableCredentialDetails.md
   - name: GuidPolyfill
     href: DSInternals.Win32.WebAuthn.GuidPolyfill.md
   - name: HMACGetSecretInput
@@ -111,8 +119,14 @@
     href: DSInternals.Win32.WebAuthn.AttestationStatementFormatIdentifier.md
   - name: AuthenticatorAttachment
     href: DSInternals.Win32.WebAuthn.AuthenticatorAttachment.md
+  - name: AuthenticatorCredentialManagementState
+    href: DSInternals.Win32.WebAuthn.AuthenticatorCredentialManagementState.md
+  - name: AuthenticatorFingerprintState
+    href: DSInternals.Win32.WebAuthn.AuthenticatorFingerprintState.md
   - name: AuthenticatorFlags
     href: DSInternals.Win32.WebAuthn.AuthenticatorFlags.md
+  - name: AuthenticatorPinState
+    href: DSInternals.Win32.WebAuthn.AuthenticatorPinState.md
   - name: AuthenticatorTransport
     href: DSInternals.Win32.WebAuthn.AuthenticatorTransport.md
   - name: CredentialLargeBlobOperation
@@ -125,6 +139,8 @@
     href: DSInternals.Win32.WebAuthn.Mediation.md
   - name: PackageSignatureKind
     href: DSInternals.Win32.WebAuthn.PackageSignatureKind.md
+  - name: PinAuthenticationStatus
+    href: DSInternals.Win32.WebAuthn.PinAuthenticationStatus.md
   - name: PublicKeyCredentialHint
     href: DSInternals.Win32.WebAuthn.PublicKeyCredentialHint.md
   - name: ResidentKeyRequirement
@@ -284,6 +300,8 @@
   - name: CollectedClientData
     href: DSInternals.Win32.WebAuthn.FIDO.CollectedClientData.md
   - name: Enums
+  - name: AuthenticatorFingerprintKind
+    href: DSInternals.Win32.WebAuthn.FIDO.AuthenticatorFingerprintKind.md
   - name: KeyProtectionType
     href: DSInternals.Win32.WebAuthn.FIDO.KeyProtectionType.md
   - name: MatcherProtectionType

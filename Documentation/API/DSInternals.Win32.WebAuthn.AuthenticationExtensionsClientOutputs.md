@@ -29,3 +29,18 @@ public abstract class AuthenticationExtensionsClientOutputs
 [object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals), 
 [object.ToString\(\)](https://learn.microsoft.com/dotnet/api/system.object.tostring)
 
+## Properties
+
+### <a id="DSInternals_Win32_WebAuthn_AuthenticationExtensionsClientOutputs_AdditionalProperties"></a> AdditionalProperties
+
+Extension outputs not represented by a strongly typed property.
+
+```csharp
+[JsonExtensionData]
+public Dictionary<string, JsonElement>? AdditionalProperties { get; set; }
+```
+
+#### Property Value
+
+ [Dictionary](https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary\-2)<[string](https://learn.microsoft.com/dotnet/api/system.string), [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement)\>?
+

@@ -17,6 +17,7 @@ public sealed class AuthenticationExtensionsClientAssertionOutputs : Authenticat
 
 #### Inherited Members
 
+[AuthenticationExtensionsClientOutputs.AdditionalProperties](DSInternals.Win32.WebAuthn.AuthenticationExtensionsClientOutputs.md\#DSInternals\_Win32\_WebAuthn\_AuthenticationExtensionsClientOutputs\_AdditionalProperties), 
 [object.Equals\(object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\)), 
 [object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
 [object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 

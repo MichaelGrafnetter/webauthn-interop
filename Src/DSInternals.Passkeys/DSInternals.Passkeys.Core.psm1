@@ -1,4 +1,4 @@
-# Needed for the [Microsoft.Graph.PowerShell.Models.IMicrosoftGraphWebauthnCredentialCreationOptions] type accepted by New-Passkey
+﻿# Needed for the [Microsoft.Graph.PowerShell.Models.IMicrosoftGraphWebauthnCredentialCreationOptions] type accepted by New-Passkey
 Import-Module -Name Microsoft.Graph.Identity.SignIns -ErrorAction Stop
 
 <#
@@ -601,7 +601,7 @@ Get-PasskeyAuthenticatorPlugin | Select-Object -Property Name,PackageFamilyName,
 Lists authenticator plugins with selected properties.
 
 .LINK
-Get-PasskeyAuthenticator
+Get-PasskeyPlatformAuthenticator
 
 #>
 function Get-PasskeyAuthenticatorPlugin
@@ -643,17 +643,17 @@ Retrieves a list of authenticators available on the system using the Windows Web
 This includes information about authenticator IDs, names, logos, and lock status.
 
 .EXAMPLE
-Get-PasskeyAuthenticator
+Get-PasskeyPlatformAuthenticator
 
 Lists all available authenticators.
 
 .EXAMPLE
-Get-PasskeyAuthenticator | Where-Object { -not $PSItem.Locked }
+Get-PasskeyPlatformAuthenticator | Where-Object { -not $PSItem.Locked }
 
 Lists only unlocked authenticators.
 
 .EXAMPLE
-Get-PasskeyAuthenticator | Format-Table -Prperty AuthenticatorName,Locked
+Get-PasskeyPlatformAuthenticator | Format-Table -Prperty AuthenticatorName,Locked
 
 Lists authenticator names and lock status in a table.
 
@@ -664,8 +664,9 @@ Get-PasskeyAuthenticatorPlugin
 Get-PasskeyWindowsHello
 
 #>
-function Get-PasskeyAuthenticator
+function Get-PasskeyPlatformAuthenticator
 {
+    [Alias('Get-PasskeyAuthenticator', 'GetPasskeyWindowsHelloAuthenticator')]
     [OutputType([DSInternals.Win32.WebAuthn.AuthenticatorDetails])]
     [CmdletBinding()]
     param()
@@ -726,7 +727,10 @@ Remove-PasskeyWindowsHello
 Test-Passkey
 
 .LINK
-Get-PasskeyAuthenticator
+Get-PasskeyPlatformAuthenticator
+
+.LINK
+Get-PasskeySecurityKey
 
 #>
 function Get-PasskeyWindowsHello
@@ -804,6 +808,9 @@ This operation requires appropriate permissions and may trigger a Windows Securi
 
 .LINK
 Get-PasskeyWindowsHello
+
+.LINK
+Remove-PasskeySecurityKey
 
 #>
 function Remove-PasskeyWindowsHello
@@ -928,6 +935,691 @@ function ConvertFrom-Base64UrlParameter
         return $InputObject
     } else {
         throw [System.ArgumentException]::new("The value must be a byte array or a Base64Url encoded string.")
+    }
+}
+
+<#
+.SYNOPSIS
+Opens a session with a roaming authenticator for management operations.
+
+.DESCRIPTION
+Selects an authenticator once and returns an explicitly disposable session. The cmdlet does not authenticate or prompt for a PIN. Management uses private Windows APIs which may change between Windows releases.
+
+.PARAMETER Transports
+Optional transport mask used to select the authenticator.
+
+.EXAMPLE
+$session = Open-PasskeyAuthenticatorSession
+try { Get-PasskeyAuthenticatorCapabilities -Session $session } finally { Close-PasskeyAuthenticatorSession $session }
+#>
+function Open-PasskeyAuthenticatorSession
+{
+    [CmdletBinding()]
+    [OutputType([DSInternals.Win32.WebAuthn.AuthenticatorManagementSession])]
+    param(
+        [Parameter(Position = 0)]
+        [DSInternals.Win32.WebAuthn.AuthenticatorTransport] $Transports = [DSInternals.Win32.WebAuthn.AuthenticatorTransport]::NoRestrictions
+    )
+
+    try {
+        return [DSInternals.Win32.WebAuthn.WebAuthnApi]::OpenAuthenticatorManagementSession(
+            $Transports)
+    }
+    catch {
+        $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+            $PSItem.Exception, $PSItem.Exception.Message,
+            [System.Management.Automation.ErrorCategory]::ResourceUnavailable, $Transports))
+    }
+}
+
+<#
+.SYNOPSIS
+Closes an authenticator management session.
+
+.PARAMETER Session
+The session returned by Open-PasskeyAuthenticatorSession.
+
+.EXAMPLE
+Close-PasskeyAuthenticatorSession -Session $session
+#>
+function Close-PasskeyAuthenticatorSession
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session
+    )
+
+    process {
+        $Session.Dispose()
+    }
+}
+
+<#
+.SYNOPSIS
+Authenticates to the selected authenticator using a PIN.
+
+.DESCRIPTION
+Authentication is explicit and consumes an authenticator PIN retry on failure.
+If a command reports an uncertain outcome, dispose and reopen the session to select the authenticator and obtain fresh state before deciding whether to retry. Capability and PIN-policy reads on the same session use its last native context refresh and may be stale.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.PARAMETER Pin
+The PIN as a SecureString.
+
+.EXAMPLE
+Unlock-PasskeyAuthenticatorSession -Session $session -Pin (Read-Host 'Authenticator PIN' -AsSecureString)
+#>
+function Unlock-PasskeyAuthenticatorSession
+{
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session,
+
+        [Parameter(Mandatory = $true, Position = 1)]
+        [ValidateNotNull()]
+        [System.Security.SecureString] $Pin
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            if ($PSCmdlet.ShouldProcess('Selected authenticator', 'Authenticate with PIN')) {
+                try {
+                    $null = $Session.AuthenticatePin($Pin)
+                }
+                catch {
+                    $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                        $PSItem.Exception, $PSItem.Exception.Message,
+                        [System.Management.Automation.ErrorCategory]::SecurityError, $Session))
+                }
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Gets transports supported by authenticator management on this system.
+
+.EXAMPLE
+Get-PasskeySupportedTransport
+#>
+function Get-PasskeySupportedTransport
+{
+    [CmdletBinding()]
+    [OutputType([DSInternals.Win32.WebAuthn.AuthenticatorTransport])]
+    param()
+
+    try {
+        return [DSInternals.Win32.WebAuthn.WebAuthnApi]::GetSupportedManagementTransports()
+    }
+    catch {
+        $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+            $PSItem.Exception, $PSItem.Exception.Message,
+            [System.Management.Automation.ErrorCategory]::ReadError, $null))
+    }
+}
+
+<#
+.SYNOPSIS
+Gets a snapshot of the selected authenticator's management capabilities and state.
+
+.DESCRIPTION
+Returns a pointer-free snapshot copied from the session's last native context refresh; it does not query the device independently. After a mutation with an uncertain outcome, dispose and reopen the session to select the authenticator and obtain fresh state before deciding whether to retry. Calling this cmdlet again on the same session can return stale state.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.EXAMPLE
+Get-PasskeyAuthenticatorCapabilities -Session $session
+#>
+function Get-PasskeyAuthenticatorCapabilities
+{
+    [CmdletBinding()]
+    [OutputType([DSInternals.Win32.WebAuthn.AuthenticatorManagementCapabilities])]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            try { $Session.GetCapabilities() }
+            catch {
+                $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                    $PSItem.Exception, $PSItem.Exception.Message,
+                    [System.Management.Automation.ErrorCategory]::ReadError, $Session))
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Gets PIN and configuration policy for the selected authenticator.
+
+.DESCRIPTION
+Returns policy copied from the session's last native context refresh; it does not query the device independently. After a mutation with an uncertain outcome, dispose and reopen the session to select the authenticator and obtain fresh state before deciding whether to retry. Calling this cmdlet again on the same session can return stale state.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.EXAMPLE
+Get-PasskeyAuthenticatorPinPolicy -Session $session
+#>
+function Get-PasskeyAuthenticatorPinPolicy
+{
+    [CmdletBinding()]
+    [OutputType([DSInternals.Win32.WebAuthn.AuthenticatorPinPolicy])]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            try { $Session.GetPinPolicy() }
+            catch {
+                $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                    $PSItem.Exception, $PSItem.Exception.Message,
+                    [System.Management.Automation.ErrorCategory]::ReadError, $Session))
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Lists resident (discoverable) credentials on the selected authenticator.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.EXAMPLE
+Get-PasskeySecurityKey -Session $session
+
+.LINK
+Get-PasskeyWindowsHello
+
+.LINK
+Remove-PasskeySecurityKey
+#>
+function Get-PasskeySecurityKey
+{
+    [CmdletBinding()]
+    [OutputType([DSInternals.Win32.WebAuthn.DiscoverableCredentialDetails])]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            try {
+                foreach ($credential in $Session.GetCredentials()) {
+                    Write-Output $credential
+                }
+            }
+            catch {
+                $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                    $PSItem.Exception, $PSItem.Exception.Message,
+                    [System.Management.Automation.ErrorCategory]::ReadError, $Session))
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Deletes a resident credential by its exact credential ID.
+
+.DESCRIPTION
+Deletion is destructive and requires confirmation unless -Confirm:$false is specified. Credential IDs may be byte arrays or Base64Url strings. Credential objects from Get-PasskeySecurityKey can be piped directly.
+If the deletion outcome is uncertain, dispose and reopen the session before deciding whether to retry; same-session capability and policy snapshots may be stale.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.PARAMETER CredentialId
+Exact credential identifier as bytes or Base64Url text.
+
+.PARAMETER InputObject
+Resident credential object to delete.
+
+.EXAMPLE
+Get-PasskeySecurityKey -Session $session | Where-Object RelyingPartyId -eq 'example.com' | Remove-PasskeySecurityKey -Session $session
+
+.LINK
+Remove-PasskeyWindowsHello
+
+.LINK
+Get-PasskeySecurityKey
+#>
+function Remove-PasskeySecurityKey
+{
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High', DefaultParameterSetName = 'ByCredentialId')]
+    param(
+        [Parameter(Position = 0, ParameterSetName = 'ByCredentialId')]
+        [Parameter(Position = 0, ParameterSetName = 'ByCredential')]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session,
+
+        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByCredentialId')]
+        [ValidateNotNull()]
+        [object] $CredentialId,
+
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ByCredential')]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.DiscoverableCredentialDetails] $InputObject
+    )
+
+    begin {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+    }
+
+    process {
+        [bool] $completed = $false
+        try {
+            [byte[]] $credentialBytes = $null
+            try {
+                if ($PSCmdlet.ParameterSetName -eq 'ByCredential') {
+                    $credentialBytes = $InputObject.CredentialId
+                }
+                else {
+                    $credentialBytes = ConvertFrom-Base64UrlParameter -InputObject $CredentialId
+                }
+
+                if ($null -eq $credentialBytes -or $credentialBytes.Length -eq 0) {
+                    throw [System.ArgumentException]::new('A non-empty credential ID is required.')
+                }
+
+                [string] $credentialIdText = [System.Buffers.Text.Base64Url]::EncodeToString($credentialBytes)
+                if ($PSCmdlet.ShouldProcess($credentialIdText, 'Delete resident credential')) {
+                    $Session.DeleteCredential($credentialBytes)
+                }
+            }
+            catch {
+                $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                    $PSItem.Exception, $PSItem.Exception.Message,
+                    [System.Management.Automation.ErrorCategory]::WriteError, $credentialBytes))
+            }
+            $completed = $true
+        }
+        finally {
+            if ($ownsSession -and -not $completed) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+                $ownsSession = $false
+            }
+        }
+    }
+
+    end {
+        if ($ownsSession) {
+            Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Sets or changes the PIN for the selected authenticator.
+
+.DESCRIPTION
+The initial-PIN parameter set installs a PIN. The change-PIN parameter set changes an existing PIN. Both operations are sensitive and require confirmation. PINs must be supplied explicitly as SecureString values; no prompt is generated.
+If a command reports an uncertain outcome, dispose and reopen the session to select the authenticator and obtain fresh state before deciding whether to retry. Capability and PIN-policy reads on the same session use its last native context refresh and may be stale.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.PARAMETER NewPin
+New PIN as a SecureString.
+
+.PARAMETER CurrentPin
+Current PIN as a SecureString, required when changing an existing PIN.
+
+.EXAMPLE
+Set-PasskeyAuthenticatorPin -Session $session -NewPin (Read-Host 'New PIN' -AsSecureString)
+#>
+function Set-PasskeyAuthenticatorPin
+{
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High', DefaultParameterSetName = 'Initial')]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session,
+
+        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'Initial')]
+        [Parameter(Mandatory = $true, Position = 2, ParameterSetName = 'Change')]
+        [ValidateNotNull()]
+        [System.Security.SecureString] $NewPin,
+
+        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'Change')]
+        [ValidateNotNull()]
+        [System.Security.SecureString] $CurrentPin
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            if ($PSCmdlet.ShouldProcess('Selected authenticator', 'Set authenticator PIN')) {
+                try {
+                    if ($PSCmdlet.ParameterSetName -eq 'Change') {
+                        $null = $Session.ChangePin($CurrentPin, $NewPin)
+                    }
+                    else {
+                        $null = $Session.SetPin($NewPin)
+                    }
+                }
+                catch {
+                    $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                        $PSItem.Exception, $PSItem.Exception.Message,
+                        [System.Management.Automation.ErrorCategory]::WriteError, $Session))
+                }
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Configures minimum PIN length and relying-party policy.
+
+.DESCRIPTION
+Changes authenticator security policy. -ForcePinChange requires the authenticator to request a PIN change at the next authentication. This operation requires explicit PIN authentication beforehand when the authenticator requires it. If the command reports an uncertain mutation outcome, do not retry based on a policy read from the same session: that session may hold stale context. Dispose and reopen it to select the authenticator and obtain fresh state first.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.PARAMETER MinimumPinLength
+Requested minimum PIN length from 4 to 63 Unicode code points. Omit it to preserve the current minimum.
+
+.PARAMETER RelyingPartyId
+Optional relying-party identifiers allowed to use the minimum-length policy.
+
+.PARAMETER ForcePinChange
+Requires a PIN change at the next authentication.
+
+.EXAMPLE
+Set-PasskeyAuthenticatorPinPolicy -Session $session -MinimumPinLength 8 -RelyingPartyId 'example.com'
+#>
+function Set-PasskeyAuthenticatorPinPolicy
+{
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session,
+
+        [Parameter()]
+        [ValidateRange(4, 63)]
+        [Nullable[uint32]] $MinimumPinLength = $null,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string[]] $RelyingPartyId,
+
+        [Parameter()]
+        [switch] $ForcePinChange
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            if ($PSCmdlet.ShouldProcess('Selected authenticator', 'Set authenticator PIN policy')) {
+                try {
+                    $Session.SetPinPolicy($MinimumPinLength, $ForcePinChange.IsPresent, $RelyingPartyId)
+                }
+                catch {
+                    $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                        $PSItem.Exception, $PSItem.Exception.Message,
+                        [System.Management.Automation.ErrorCategory]::WriteError, $Session))
+                }
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Enables Always Require User Verification or enterprise attestation on the selected authenticator.
+
+.DESCRIPTION
+This sensitive configuration change requires confirmation and may be irreversible. Authenticate explicitly with Unlock-PasskeyAuthenticatorSession first if required. If the command reports an uncertain mutation outcome, do not retry based on capability or policy reads from the same session: it may hold stale context. Dispose and reopen it to select the authenticator and obtain fresh state first.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.PARAMETER AlwaysUv
+Enables Always Require User Verification.
+
+.PARAMETER EnableEnterpriseAttestation
+Enables enterprise attestation.
+
+.EXAMPLE
+Set-PasskeyAuthenticatorConfiguration -Session $session -AlwaysUv
+#>
+function Set-PasskeyAuthenticatorConfiguration
+{
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High', DefaultParameterSetName = 'AlwaysUv')]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'AlwaysUv')]
+        [switch] $AlwaysUv,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'EnterpriseAttestation')]
+        [switch] $EnableEnterpriseAttestation
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            [string] $operation = if ($PSCmdlet.ParameterSetName -eq 'AlwaysUv') { 'Enable Always Require User Verification' } else { 'Enable enterprise attestation' }
+            if ($PSCmdlet.ShouldProcess('Selected authenticator', $operation)) {
+                try {
+                    if ($PSCmdlet.ParameterSetName -eq 'AlwaysUv') {
+                        $Session.SetAlwaysUv($true)
+                    }
+                    else {
+                        $Session.EnableEnterpriseAttestation()
+                    }
+                }
+                catch {
+                    $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                        $PSItem.Exception, $PSItem.Exception.Message,
+                        [System.Management.Automation.ErrorCategory]::WriteError, $Session))
+                }
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Reads the complete serialized large-blob store from an authenticator.
+
+.DESCRIPTION
+Returns the raw store as one byte-array object. The store is not parsed, repaired, or decrypted by this cmdlet.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.EXAMPLE
+[byte[]] $store = Get-PasskeyAuthenticatorLargeBlob -Session $session
+#>
+function Get-PasskeyAuthenticatorLargeBlob
+{
+    [CmdletBinding()]
+    [OutputType([byte[]])]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            try {
+                [byte[]] $data = $Session.GetLargeBlobs()
+                if ($null -ne $data) {
+                    Write-PasskeyManagementByteArray -Data $data
+                }
+            }
+            catch {
+                $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                    $PSItem.Exception, $PSItem.Exception.Message,
+                    [System.Management.Automation.ErrorCategory]::ReadError, $Session))
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
+    }
+}
+
+function Write-PasskeyManagementByteArray
+{
+    [CmdletBinding()]
+    [OutputType([byte[]])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNull()]
+        [byte[]] $Data
+    )
+
+    Write-Output -NoEnumerate $Data
+}
+
+<#
+.SYNOPSIS
+Replaces the complete serialized large-blob store on an authenticator.
+
+.DESCRIPTION
+This replaces all serialized large-blob store data and is destructive. The caller is responsible for store schema, integrity, and device capacity validation. Authenticate explicitly first if required. If the write outcome is uncertain, do not blindly retry: dispose and reopen the session to select the authenticator and obtain fresh state first. Same-session capability and PIN-policy snapshots may be stale.
+
+.PARAMETER Session
+An existing authenticator session. If omitted, a session is opened automatically and closed after the command.
+
+.PARAMETER Data
+Complete serialized large-blob store as bytes.
+
+.EXAMPLE
+Set-PasskeyAuthenticatorLargeBlob -Session $session -Data $store
+#>
+function Set-PasskeyAuthenticatorLargeBlob
+{
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    param(
+        [Parameter(Position = 0)]
+        [ValidateNotNull()]
+        [DSInternals.Win32.WebAuthn.AuthenticatorManagementSession] $Session,
+
+        [Parameter(Mandatory = $true, Position = 1)]
+        [ValidateNotNull()]
+        [byte[]] $Data
+    )
+
+    process {
+        [bool] $ownsSession = -not $PSBoundParameters.ContainsKey('Session')
+        if ($ownsSession) {
+            $Session = Open-PasskeyAuthenticatorSession -ErrorAction Stop
+        }
+        try {
+            if ($PSCmdlet.ShouldProcess('Selected authenticator', 'Replace complete large-blob store')) {
+                try {
+                    $Session.SetLargeBlobs($Data)
+                }
+                catch {
+                    $PSCmdlet.ThrowTerminatingError([System.Management.Automation.ErrorRecord]::new(
+                        $PSItem.Exception, $PSItem.Exception.Message,
+                        [System.Management.Automation.ErrorCategory]::WriteError, $Session))
+                }
+            }
+        }
+        finally {
+            if ($ownsSession) {
+                Close-PasskeyAuthenticatorSession -Session $Session -ErrorAction Stop
+            }
+        }
     }
 }
 

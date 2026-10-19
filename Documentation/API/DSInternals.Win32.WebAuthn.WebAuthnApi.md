@@ -72,6 +72,22 @@ public static bool IsAuthenticatorListSupported { get; }
 
 Support for the authenticator list API was added in V9 API.
 
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_IsAuthenticatorManagementSupported"></a> IsAuthenticatorManagementSupported
+
+Indicates whether Windows reports the public API version examined for private management.
+
+```csharp
+public static bool IsAuthenticatorManagementSupported { get; }
+```
+
+#### Property Value
+
+ [bool](https://learn.microsoft.com/dotnet/api/system.boolean)
+
+#### Remarks
+
+Public API version does not guarantee private ABI compatibility.
+
 ### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_IsAvailable"></a> IsAvailable
 
 Indicates the availability of the WebAuthn API.
@@ -1189,4 +1205,70 @@ A list of authenticator plugin information, or null if no plugins are registered
 
 Authenticator plugins (e.g., 1Password, Bitwarden) are registered under
 HKLM\SOFTWARE\Microsoft\FIDO\{UserSID}\Plugins\{PluginGuid}.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_GetSupportedManagementTransports"></a> GetSupportedManagementTransports\(\)
+
+Gets Windows' broker-wide supported CTAP transport mask without selecting a device.
+
+```csharp
+public static AuthenticatorTransport GetSupportedManagementTransports()
+```
+
+#### Returns
+
+ [AuthenticatorTransport](DSInternals.Win32.WebAuthn.AuthenticatorTransport.md)
+
+Reported bits; zero means none reported, not unrestricted selection.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_OpenAuthenticatorManagementSession_DSInternals_Win32_WebAuthn_AuthenticatorTransport_System_Threading_CancellationToken_"></a> OpenAuthenticatorManagementSession\(AuthenticatorTransport, CancellationToken\)
+
+Selects an authenticator and opens a disposable private management session.
+
+```csharp
+public static AuthenticatorManagementSession OpenAuthenticatorManagementSession(AuthenticatorTransport transports = AuthenticatorTransport.NoRestrictions, CancellationToken cancellationToken = default)
+```
+
+#### Parameters
+
+`transports` [AuthenticatorTransport](DSInternals.Win32.WebAuthn.AuthenticatorTransport.md)
+
+Provider-selection mask validated by Windows. Zero requests default selection.
+
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Signals the native selection cancellation event.
+
+#### Returns
+
+ [AuthenticatorManagementSession](DSInternals.Win32.WebAuthn.AuthenticatorManagementSession.md)
+
+An owned session; dispose it even when subsequent operations fail.
+
+#### Remarks
+
+Undocumented ABI compatibility is not guaranteed by the public API version.
+
+### <a id="DSInternals_Win32_WebAuthn_WebAuthnApi_OpenAuthenticatorManagementSessionAsync_DSInternals_Win32_WebAuthn_AuthenticatorTransport_System_Threading_CancellationToken_"></a> OpenAuthenticatorManagementSessionAsync\(AuthenticatorTransport, CancellationToken\)
+
+Asynchronously selects an authenticator for private management.
+
+```csharp
+public static Task<AuthenticatorManagementSession> OpenAuthenticatorManagementSessionAsync(AuthenticatorTransport transports = AuthenticatorTransport.NoRestrictions, CancellationToken cancellationToken = default)
+```
+
+#### Parameters
+
+`transports` [AuthenticatorTransport](DSInternals.Win32.WebAuthn.AuthenticatorTransport.md)
+
+Provider-selection mask, or zero for default selection.
+
+`cancellationToken` [CancellationToken](https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken)
+
+Cancels selection.
+
+#### Returns
+
+ [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task\-1)<[AuthenticatorManagementSession](DSInternals.Win32.WebAuthn.AuthenticatorManagementSession.md)\>
+
+An owned disposable management session.
 
