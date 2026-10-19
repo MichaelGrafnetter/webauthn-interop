@@ -1,0 +1,28 @@
+<Window x:Class="DSInternals.Win32.WebAuthn.PasskeyUI.ChangePinPolicyDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DSInternals.Win32.WebAuthn.PasskeyUI"
+        Title="Change PIN Policy" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <StackPanel Margin="24" Width="420">
+        <TextBlock Text="&#xE713;" FontFamily="{StaticResource FluentIcons}" FontSize="48"
+                   HorizontalAlignment="Center" Margin="0,0,0,16" />
+        <CheckBox x:Name="ChangeMinimumPinLengthBox" Content="_Change minimum PIN length (4-63)" />
+        <local:PinLengthEditor x:Name="MinimumPinLengthBox" Width="150" HorizontalAlignment="Left" Margin="5,0,5,24"
+                               IsEnabled="{Binding IsChecked, ElementName=ChangeMinimumPinLengthBox}"
+                               Validation.ErrorTemplate="{StaticResource FieldValidationErrorTemplate}"
+                               Tag="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}" />
+        <CheckBox x:Name="ForcePinChangeBox" Content="_Force a PIN change at the next authentication" IsThreeState="True" />
+        <Label Content="_Additional relying-party IDs (one per line; blank preserves current):"
+               Target="{Binding ElementName=RelyingPartyIdsBox}" />
+        <TextBox x:Name="RelyingPartyIdsBox" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto"
+                 Validation.ErrorTemplate="{StaticResource FieldValidationErrorTemplate}"
+                 Tag="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}" Margin="5,0,5,24" />
+        <TextBlock Text="Minimum length increases and a forced PIN change may not be reversible."
+                   TextWrapping="Wrap" Margin="5,0,5,16" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="AcceptButton" Content="Change policy" IsDefault="True" MinWidth="100" Click="OnAccept" />
+            <Button Content="Cancel" IsCancel="True" MinWidth="80" />
+        </StackPanel>
+    </StackPanel>
+</Window>

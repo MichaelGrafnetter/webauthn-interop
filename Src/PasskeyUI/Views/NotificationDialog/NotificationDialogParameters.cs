@@ -4,15 +4,17 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI;
 
 internal sealed class NotificationDialogParameters
 {
-    private const string MessageKey = "Message";
+    /// <summary>Title displayed in the notification window.</summary>
+    public string Title { get; init; } = "Error";
 
     public required string Message { get; init; }
 
     public static NotificationDialogParameters From(IDialogParameters parameters) => new()
     {
-        Message = parameters.GetValue<string>(MessageKey) ?? string.Empty
+        Message = parameters.GetValue<string>(nameof(Message)) ?? string.Empty,
+        Title = parameters.GetValue<string>(nameof(Title)) ?? "Error"
     };
 
     public IDialogParameters ToDialogParameters() =>
-        new DialogParameters { { MessageKey, Message } };
+        new DialogParameters { { nameof(Message), Message }, { nameof(Title), Title } };
 }

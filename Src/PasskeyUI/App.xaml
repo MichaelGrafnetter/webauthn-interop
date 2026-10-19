@@ -19,6 +19,48 @@
                     <!-- Shared font for Fluent icons -->
                     <FontFamily x:Key="FluentIcons">Segoe Fluent Icons</FontFamily>
 
+                    <ControlTemplate x:Key="FieldValidationErrorTemplate">
+                        <StackPanel>
+                            <Border BorderBrush="{DynamicResource SystemFillColorCriticalBrush}" BorderThickness="1" HorizontalAlignment="Left">
+                                <AdornedElementPlaceholder x:Name="Field" />
+                            </Border>
+                            <TextBlock Foreground="{DynamicResource SystemFillColorCriticalBrush}" Margin="0,2,0,0"
+                                       Text="{Binding AdornedElement.(Validation.Errors)[0].ErrorContent, ElementName=Field}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                    <Style x:Key="PinInputStyle" TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}">
+                        <!-- PasswordBox has no bindable password; validate a nonsecret self-binding instead. -->
+                        <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}" />
+                        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource FieldValidationErrorTemplate}" />
+                    </Style>
+
+                    <Style x:Key="PinFeedbackStyle" TargetType="TextBlock">
+                        <!-- Without a rejected PIN, show the reported count in the normal theme color. -->
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                        <Setter Property="Text" Value="{Binding RemainingAttempts, RelativeSource={RelativeSource AncestorType=Window}, StringFormat='Remaining PIN attempts: {0}.'}" />
+                        <Style.Triggers>
+                            <!-- Hide feedback when neither a retry count nor a PIN error is available. -->
+                            <DataTrigger Binding="{Binding RemainingAttempts, RelativeSource={RelativeSource AncestorType=Window}}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <!-- A rejected PIN overrides the hidden state and shows an error with the count. -->
+                            <DataTrigger Binding="{Binding IncorrectPin, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                                <Setter Property="Text" Value="{Binding RemainingAttempts, RelativeSource={RelativeSource AncestorType=Window}, StringFormat='The PIN was incorrect. Remaining PIN attempts: {0}.'}" />
+                            </DataTrigger>
+                            <!-- When the rejected PIN has no reported count, show only the error sentence. -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IncorrectPin, RelativeSource={RelativeSource AncestorType=Window}}" Value="True" />
+                                    <Condition Binding="{Binding RemainingAttempts, RelativeSource={RelativeSource AncestorType=Window}}" Value="{x:Null}" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Text" Value="The PIN was incorrect." />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
                     <!-- Common control margins -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                         <Setter Property="Margin" Value="5,2,5,2"/>

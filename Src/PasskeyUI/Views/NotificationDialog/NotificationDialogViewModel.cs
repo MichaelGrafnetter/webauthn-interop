@@ -35,6 +35,7 @@ internal sealed class NotificationDialogViewModel : BindableBase, IDialogAware
     public void OnDialogOpened(IDialogParameters parameters)
     {
         Message = NotificationDialogParameters.From(parameters).Message;
+        Title = NotificationDialogParameters.From(parameters).Title;
     }
 
     public NotificationDialogViewModel()

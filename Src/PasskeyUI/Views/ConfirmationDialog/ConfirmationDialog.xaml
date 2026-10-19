@@ -11,8 +11,7 @@
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
             <Setter Property="ResizeMode" Value="NoResize" />
             <Setter Property="ShowInTaskbar" Value="False"/>
-            <Setter Property="SizeToContent" Value="Width"/>
-            <Setter Property="Height" Value="180" />
+            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
         </Style>
     </prism:Dialog.WindowStyle>
     <Grid x:Name="LayoutRoot" Margin="10">

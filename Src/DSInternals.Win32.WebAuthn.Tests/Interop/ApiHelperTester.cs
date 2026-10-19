@@ -44,6 +44,7 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
         [DataRow(unchecked((int)0x80070032), typeof(NotSupportedException))]
         [DataRow(unchecked((int)0x8007000D), typeof(ArgumentException))]
         [DataRow(unchecked((int)0x8001011B), typeof(UnauthorizedAccessException))]
+        [DataRow(unchecked((int)0x80070056), typeof(System.Security.Authentication.AuthenticationException))]
         [DataRow(unchecked((int)0x80004005), typeof(Win32Exception))]
         public void ApiHelper_Validate_PreservesHResultOnlySemantics(int result, Type expectedType)
         {

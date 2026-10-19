@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DSInternals.Win32.WebAuthn.Interop;
 using Microsoft.Win32.SafeHandles;
+using Windows.Win32.Foundation;
 
 namespace DSInternals.Win32.WebAuthn
 {
@@ -82,6 +83,7 @@ namespace DSInternals.Win32.WebAuthn
             GetCapabilities(cancellationToken).PinPolicy;
 
         /// <summary>Submits a PIN exactly once to unlock PIN-gated management operations.</summary>
+        /// <remarks>Invalid-password results with a reported PIN diagnostic return that diagnostic and native retry count. Other native failures still throw.</remarks>
         /// <param name="pin">Caller-owned PIN; copied to temporary writable memory and never retained.</param>
         /// <param name="cancellationToken">Signals native cancellation.</param>
         /// <returns>The PIN diagnostic and remaining retry count; zero retries can also mean unreported.</returns>
@@ -89,7 +91,8 @@ namespace DSInternals.Win32.WebAuthn
             Run(cancel =>
             {
                 ArgumentNullException.ThrowIfNull(pin);
-                ApiHelper.Validate(NativeMethods.CtapManageAuthenticatePin(cancel, _context, pin, out var status, out uint retries));
+                var result = NativeMethods.CtapManageAuthenticatePin(cancel, _context, pin, out var status, out uint retries);
+                ValidatePinResult(result, status);
                 return (status, retries);
             }, cancellationToken);
 
@@ -129,6 +132,7 @@ namespace DSInternals.Win32.WebAuthn
         }
 
         /// <summary>Installs an initial PIN. This does not replace an existing PIN.</summary>
+        /// <remarks>Invalid-password results with a reported PIN diagnostic return that diagnostic. Other native failures still throw.</remarks>
         /// <param name="newPin">Caller-owned new PIN; at least four code points and at most 63 UTF-8 bytes.</param>
         /// <param name="cancellationToken">Signals native cancellation.</param>
         /// <returns>The PIN diagnostic reported by the operation.</returns>
@@ -136,11 +140,13 @@ namespace DSInternals.Win32.WebAuthn
             Run(cancel =>
             {
                 ArgumentNullException.ThrowIfNull(newPin);
-                ApiHelper.Validate(NativeMethods.CtapManageSetPin(cancel, _context, newPin, out var status));
+                var result = NativeMethods.CtapManageSetPin(cancel, _context, newPin, out var status);
+                ValidatePinResult(result, status);
                 return status;
             }, cancellationToken);
 
         /// <summary>Changes a PIN directly without first submitting a separate authentication attempt.</summary>
+        /// <remarks>Invalid-password results with a reported PIN diagnostic return that diagnostic and native retry count. Other native failures still throw.</remarks>
         /// <param name="currentPin">Caller-owned current PIN.</param>
         /// <param name="newPin">Caller-owned replacement PIN.</param>
         /// <param name="cancellationToken">Signals native cancellation.</param>
@@ -150,9 +156,24 @@ namespace DSInternals.Win32.WebAuthn
             {
                 ArgumentNullException.ThrowIfNull(currentPin);
                 ArgumentNullException.ThrowIfNull(newPin);
-                ApiHelper.Validate(NativeMethods.CtapManageChangePin(cancel, _context, currentPin, newPin, out var status, out uint retries));
+                var result = NativeMethods.CtapManageChangePin(cancel, _context, currentPin, newPin, out var status, out uint retries);
+                ValidatePinResult(result, status);
                 return (status, retries);
             }, cancellationToken);
+
+        /// <summary>Preserves PIN diagnostics for invalid-password results while propagating unrelated native failures.</summary>
+        /// <param name="result">Native PIN operation HRESULT.</param>
+        /// <param name="status">PIN diagnostic returned alongside the HRESULT.</param>
+        /// <remarks>Invalid-password results require a reported PIN diagnostic; unspecified diagnostics do not suppress failures.</remarks>
+        internal static void ValidatePinResult(HRESULT result, PinAuthenticationStatus status)
+        {
+            if (result == Windows.Win32.PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_INVALID_PASSWORD) &&
+                status != PinAuthenticationStatus.Unspecified)
+            {
+                return;
+            }
+            ApiHelper.Validate(result);
+        }
 
         /// <summary>Updates minimum PIN length, authorized RP IDs, and/or a future PIN-change requirement.</summary>
         /// <param name="minimumPinLength">4 to 63 Unicode code points; null preserves the existing policy.</param>

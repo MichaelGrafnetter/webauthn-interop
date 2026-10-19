@@ -33,6 +33,7 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
             // Services
             containerRegistry.RegisterSingleton<WebAuthnApi>();
             containerRegistry.RegisterSingleton<SigningDialogCache>();
+            containerRegistry.Register<ISecurityKeyInteractionService, SecurityKeyInteractionService>();
         }
     }
 }

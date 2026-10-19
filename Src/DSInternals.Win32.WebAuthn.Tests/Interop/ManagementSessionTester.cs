@@ -13,6 +13,38 @@ namespace DSInternals.Win32.WebAuthn.Interop.Tests
     [TestClass]
     public class ManagementSessionTester
     {
+        /// <summary>Accepts reported PIN diagnostics without modifying them.</summary>
+        [TestMethod]
+        public void ValidatePinResult_InvalidPasswordReturnsDiagnostic()
+        {
+            var invalidPassword = Windows.Win32.PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_INVALID_PASSWORD);
+            AuthenticatorManagementSession.ValidatePinResult(invalidPassword, PinAuthenticationStatus.PinVerificationFailed);
+            AuthenticatorManagementSession.ValidatePinResult(invalidPassword, PinAuthenticationStatus.PinBlocked);
+            AuthenticatorManagementSession.ValidatePinResult(HRESULT.S_OK, PinAuthenticationStatus.PinVerificationFailed);
+            Assert.AreEqual(typeof(void), typeof(AuthenticatorManagementSession).GetMethod("ValidatePinResult",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)!.ReturnType);
+        }
+
+        /// <summary>Does not turn an invalid-password failure without a diagnostic into a successful result.</summary>
+        [TestMethod]
+        public void ValidatePinResult_UnspecifiedInvalidPasswordThrows()
+        {
+            Assert.ThrowsExactly<System.Security.Authentication.AuthenticationException>(() =>
+                AuthenticatorManagementSession.ValidatePinResult(
+                    Windows.Win32.PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_INVALID_PASSWORD),
+                    PinAuthenticationStatus.Unspecified));
+        }
+
+        /// <summary>Does not mask unrelated native failures merely because a PIN diagnostic is populated.</summary>
+        [TestMethod]
+        public void ValidatePinResult_UnrelatedFailureStillThrows()
+        {
+            Assert.ThrowsExactly<Win32Exception>(() =>
+                AuthenticatorManagementSession.ValidatePinResult(
+                    Windows.Win32.PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_GEN_FAILURE),
+                    PinAuthenticationStatus.PinVerificationFailed));
+        }
+
         /// <summary>Copies independent snapshots and releases a synthetic context exactly once.</summary>
         [TestMethod]
         public void GetCapabilities_CopiesContextAndDisposeReleasesItOnce()

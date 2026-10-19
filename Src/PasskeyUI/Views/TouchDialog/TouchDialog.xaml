@@ -1,0 +1,13 @@
+<Window x:Class="DSInternals.Win32.WebAuthn.PasskeyUI.TouchDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Security Key" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <StackPanel Margin="24" Width="360">
+        <TextBlock Text="&#xE815;" FontFamily="{StaticResource FluentIcons}" FontSize="48"
+                   HorizontalAlignment="Center" Margin="0,0,0,16" />
+        <TextBlock x:Name="PromptText" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,16" />
+        <ProgressBar IsIndeterminate="True" Height="4" Margin="0,0,0,20" />
+        <Button x:Name="CancelButton" Content="Cancel" MinWidth="90" HorizontalAlignment="Center" Click="OnCancel" />
+    </StackPanel>
+</Window>

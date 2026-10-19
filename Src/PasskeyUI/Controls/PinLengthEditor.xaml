@@ -1,0 +1,18 @@
+<UserControl x:Class="DSInternals.Win32.WebAuthn.PasskeyUI.PinLengthEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Editor" MinWidth="150" PreviewKeyDown="OnPreviewKeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="24" /></Grid.ColumnDefinitions>
+        <TextBox x:Name="ValueBox" Text="{Binding Text, ElementName=Editor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 MaxLength="2" PreviewTextInput="OnPreviewTextInput" DataObject.Pasting="OnPasting"
+                 HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+            <RepeatButton x:Name="IncreaseButton" Content="&#xE70E;" FontFamily="{StaticResource FluentIcons}"
+                          FontSize="8" Padding="2,0" Focusable="False" Click="OnIncrease" ToolTip="Increase minimum PIN length" />
+            <RepeatButton x:Name="DecreaseButton" Grid.Row="1" Content="&#xE70D;" FontFamily="{StaticResource FluentIcons}"
+                          FontSize="8" Padding="2,0" Focusable="False" Click="OnDecrease" ToolTip="Decrease minimum PIN length" />
+        </Grid>
+    </Grid>
+</UserControl>

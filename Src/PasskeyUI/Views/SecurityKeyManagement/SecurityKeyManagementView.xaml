@@ -1,0 +1,189 @@
+<UserControl x:Class="DSInternals.Win32.WebAuthn.PasskeyUI.SecurityKeyManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <UserControl.Resources>
+        <Style x:Key="InfoLabel" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,4,16,4" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="ReportedBoolean" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Style.Triggers>
+                <!-- An unreported Boolean is not the same as a reported false value. -->
+                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <sys:Boolean x:Key="TrueValue">True</sys:Boolean>
+        <sys:Boolean x:Key="FalseValue">False</sys:Boolean>
+        <Style x:Key="InfoValue" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+        <Style x:Key="NumericInfoValue" TargetType="TextBlock" BasedOn="{StaticResource InfoValue}">
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}"
+                                       FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <AccessText Text="{Binding}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel Margin="10">
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock Text="Experimental: uses undocumented Windows APIs that may change with Windows updates. Local administrator rights are required."
+                       TextWrapping="Wrap" Margin="5" />
+            <TextBlock Text="{Binding AvailabilityMessage}" TextWrapping="Wrap" Margin="5">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AvailabilityMessage}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Button x:Name="ReadAuthenticatorInfoButton" Command="{Binding ReadAuthenticatorInfoCommand}" HorizontalAlignment="Center"
+                    ContentTemplate="{x:Null}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE895;" FontFamily="{StaticResource FluentIcons}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <AccessText Text="_Read security key info" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid x:Name="ManagementGroups" MaxWidth="1100" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Grid.IsSharedSizeScope="True">
+                    <GroupBox Header="PIN status">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="PIN state" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Capabilities.PinState, TargetNullValue=N/A}" Style="{StaticResource InfoValue}" />
+                            <TextBlock Grid.Row="1" Text="PIN retries (zero may mean unreported)" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Capabilities.PinRetries, TargetNullValue=N/A}" Style="{StaticResource NumericInfoValue}" />
+                            <WrapPanel Grid.Row="2" Grid.ColumnSpan="2">
+                                <Button x:Name="SetPinButton" Content="Set initial PIN" Tag="&#xE710;" Command="{Binding SetPinCommand}" />
+                                <Button x:Name="ChangePinButton" Content="Change PIN" Tag="&#xE70F;" Command="{Binding ChangePinCommand}" />
+                            </WrapPanel>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="PIN policy" Margin="5,10,5,0">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Minimum PIN length" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Capabilities.PinPolicy.MinimumPinLength, TargetNullValue=N/A}" Style="{StaticResource NumericInfoValue}" />
+                            <TextBlock Grid.Row="1" Text="Forced PIN change" Style="{StaticResource InfoLabel}" />
+                            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Capabilities.PinPolicy.ForcePinChangeRequired, Mode=OneWay, FallbackValue={x:Null}}" Style="{StaticResource ReportedBoolean}" />
+                            <TextBlock Grid.Row="2" Text="Authenticator configuration supported" Style="{StaticResource InfoLabel}" />
+                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Capabilities.PinPolicy.AuthenticatorConfigSupported, Mode=OneWay, FallbackValue={x:Null}}" Style="{StaticResource ReportedBoolean}" />
+                            <TextBlock Grid.Row="3" Text="Minimum PIN length configuration supported" Style="{StaticResource InfoLabel}" />
+                            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding Capabilities.PinPolicy.SetMinPinLengthSupported, Mode=OneWay, FallbackValue={x:Null}}" Style="{StaticResource ReportedBoolean}" />
+                            <TextBlock Grid.Row="4" Text="Maximum additional relying-party IDs" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Capabilities.PinPolicy.MaximumRpIds, TargetNullValue=N/A}" Style="{StaticResource NumericInfoValue}" />
+                            <Button x:Name="ChangePinPolicyButton" Grid.Row="5" Grid.ColumnSpan="2" Content="Change policy" Tag="&#xE713;"
+                                    Command="{Binding SetPinPolicyCommand}" HorizontalAlignment="Left" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="User verification" Margin="5,10,5,0">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Text="Always Require User Verification enabled" Style="{StaticResource InfoLabel}" />
+                            <CheckBox x:Name="AlwaysUvCheckBox" Grid.Column="1" IsChecked="{Binding Capabilities.PinPolicy.AlwaysUvEnabled, Mode=OneWay, FallbackValue={x:Null}}" Style="{StaticResource ReportedBoolean}" />
+                            <Button x:Name="SetAlwaysUvButton" Grid.Row="1" Grid.ColumnSpan="2" Tag="&#xE72E;" Command="{Binding SetAlwaysUvCommand}" HorizontalAlignment="Left">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Content" Value="Enable" />
+                                        <Setter Property="CommandParameter" Value="{StaticResource TrueValue}" />
+                                        <Style.Triggers>
+                                            <!-- Unknown settings retain the visible Enable action, disabled by the command. -->
+                                            <DataTrigger Binding="{Binding Capabilities.PinPolicy.AlwaysUvEnabled}" Value="False">
+                                                <Setter Property="Content" Value="Enable" />
+                                                <Setter Property="CommandParameter" Value="{StaticResource TrueValue}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Capabilities.PinPolicy.AlwaysUvEnabled}" Value="True">
+                                                <Setter Property="Content" Value="Disable" />
+                                                <Setter Property="CommandParameter" Value="{StaticResource FalseValue}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Enterprise attestation" Margin="5,10,5,0">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Text="Enterprise attestation enabled" Style="{StaticResource InfoLabel}" />
+                            <CheckBox x:Name="EnterpriseAttestationCheckBox" Grid.Column="1" IsChecked="{Binding Capabilities.PinPolicy.EnterpriseAttestationEnabled, Mode=OneWay, FallbackValue={x:Null}}" Style="{StaticResource ReportedBoolean}" />
+                            <Button x:Name="EnableEnterpriseAttestationButton" Grid.Row="1" Grid.ColumnSpan="2" Content="Enable" Tag="&#xEC06;" Command="{Binding EnableEnterpriseAttestationCommand}" HorizontalAlignment="Left" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.IsSharedSizeScope="True">
+                    <GroupBox Header="Authenticator">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Text="Transport" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Capabilities.Transport, TargetNullValue=N/A}" Style="{StaticResource InfoValue}" />
+                            <TextBlock Grid.Row="1" Text="Maximum message bytes" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Capabilities.MaximumMessageSize, TargetNullValue=N/A}" Style="{StaticResource NumericInfoValue}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Discoverable credentials" Margin="5,10,5,0">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Text="Credential management" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Capabilities.CredentialManagementState, TargetNullValue=N/A}" Style="{StaticResource InfoValue}" />
+                            <TextBlock Grid.Row="1" Text="Remaining discoverable credentials" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Capabilities.RemainingDiscoverableCredentials, TargetNullValue=N/A}" Style="{StaticResource NumericInfoValue}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Biometrics" Margin="5,10,5,0">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Fingerprint state" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Capabilities.FingerprintState, TargetNullValue=N/A}" Style="{StaticResource InfoValue}" />
+                            <TextBlock Grid.Row="1" Text="Fingerprint sensor" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Capabilities.FingerprintKind, TargetNullValue=N/A}" Style="{StaticResource InfoValue}" />
+                            <TextBlock Grid.Row="2" Text="Maximum fingerprint capture samples" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Capabilities.MaximumFingerprintCaptureSamples, TargetNullValue=N/A}" Style="{StaticResource NumericInfoValue}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Large blob" Margin="5,10,5,0">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" SharedSizeGroup="Value" /></Grid.ColumnDefinitions>
+                            <TextBlock Text="Maximum large-blob bytes" Style="{StaticResource InfoLabel}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Capabilities.PinPolicy.MaximumLargeBlobBytes, TargetNullValue=N/A}" Style="{StaticResource NumericInfoValue}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

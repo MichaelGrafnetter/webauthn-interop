@@ -153,6 +153,12 @@
                     </GroupBox>
                 </DockPanel>
             </TabItem>
+            <TabItem Header="Security Key Management">
+                <local:SecurityKeyManagementView DataContext="{Binding SecurityKeyManagementViewModel}" />
+            </TabItem>
+            <TabItem Header="Roaming Credentials">
+                <local:RoamingCredentialsView DataContext="{Binding RoamingCredentialsViewModel}" />
+            </TabItem>
             <TabItem Header="Authenticators">
                 <local:AuthenticatorListView />
             </TabItem>

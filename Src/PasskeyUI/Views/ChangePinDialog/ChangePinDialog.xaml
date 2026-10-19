@@ -1,0 +1,21 @@
+<Window x:Class="DSInternals.Win32.WebAuthn.PasskeyUI.ChangePinDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Change PIN" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <StackPanel Margin="24" Width="360">
+        <TextBlock Text="&#xEF3E;" FontFamily="{StaticResource FluentIcons}" FontSize="48"
+                   HorizontalAlignment="Center" Margin="0,0,0,16" />
+        <Label Content="_Current PIN:" Target="{Binding ElementName=CurrentPinBox}" />
+        <PasswordBox x:Name="CurrentPinBox" Style="{StaticResource PinInputStyle}" PasswordChanged="OnPasswordChanged" Margin="0,0,0,24" />
+        <TextBlock x:Name="PinFeedbackText" Style="{StaticResource PinFeedbackStyle}" TextWrapping="Wrap" Margin="0,0,0,16" />
+        <Label Content="_New PIN:" Target="{Binding ElementName=NewPinBox}" />
+        <PasswordBox x:Name="NewPinBox" Style="{StaticResource PinInputStyle}" PasswordChanged="OnPasswordChanged" Margin="0,0,0,24" />
+        <Label Content="C_onfirm new PIN:" Target="{Binding ElementName=ConfirmPinBox}" />
+        <PasswordBox x:Name="ConfirmPinBox" Style="{StaticResource PinInputStyle}" PasswordChanged="OnPasswordChanged" Margin="0,0,0,24" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="AcceptButton" Content="OK" IsDefault="True" IsEnabled="False" MinWidth="80" Click="OnAccept" />
+            <Button Content="Cancel" IsCancel="True" MinWidth="80" />
+        </StackPanel>
+    </StackPanel>
+</Window>

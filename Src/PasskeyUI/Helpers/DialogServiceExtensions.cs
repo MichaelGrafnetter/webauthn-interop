@@ -6,10 +6,10 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI;
 
 internal static class DialogServiceExtensions
 {
-    public static void ShowNotificationDialog(this IDialogService service, string message)
+    public static void ShowNotificationDialog(this IDialogService service, string message, string title = "Error")
     {
         service.ShowDialog(nameof(NotificationDialog),
-            new NotificationDialogParameters { Message = message }.ToDialogParameters());
+            new NotificationDialogParameters { Message = message, Title = title }.ToDialogParameters());
     }
 
     public static void ShowConfirmationDialog(this IDialogService service,

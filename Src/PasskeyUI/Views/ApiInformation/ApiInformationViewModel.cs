@@ -34,5 +34,8 @@ namespace DSInternals.Win32.WebAuthn.PasskeyUI
         public bool IsPublicKeyCredentialHintSupported => WebAuthnApi.IsPublicKeyCredentialHintSupported;
 
         public bool IsAuthenticatorListSupported => WebAuthnApi.IsAuthenticatorListSupported;
+
+        /// <summary>Whether Windows exposes security-key authenticator management APIs.</summary>
+        public bool IsAuthenticatorManagementSupported => WebAuthnApi.IsAuthenticatorManagementSupported;
     }
 }

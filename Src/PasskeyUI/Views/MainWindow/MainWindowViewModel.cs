@@ -34,6 +34,8 @@ internal sealed class MainWindowViewModel : BindableBase
         IAttestationOptionsViewModel attestationOptionsViewModel,
         IAssertionOptionsViewModel assertionOptionsViewModel,
         ICredentialManagementViewModel credentialManagementViewModel,
+        SecurityKeyManagementViewModel securityKeyManagementViewModel,
+        ISecurityKeyInteractionService securityKeyInteractionService,
         IDialogService dialogService,
         IRegionManager regionManager)
     {
@@ -42,6 +44,10 @@ internal sealed class MainWindowViewModel : BindableBase
         AttestationOptionsViewModel = attestationOptionsViewModel;
         AssertionOptionsViewModel = assertionOptionsViewModel;
         CredentialManagementViewModel = credentialManagementViewModel;
+        SecurityKeyManagementViewModel = securityKeyManagementViewModel;
+        RoamingCredentialsViewModel = new SecurityKeyManagementViewModel(dialogService, securityKeyInteractionService);
+        RoamingCredentialsViewModel.CredentialTestCompleted += OnRoamingCredentialTestCompleted;
+        SecurityKeyManagementViewModel.CredentialTestCompleted += OnRoamingCredentialTestCompleted;
         DialogService = dialogService;
         RegionManager = regionManager;
 
@@ -88,6 +94,12 @@ internal sealed class MainWindowViewModel : BindableBase
     public IAttestationOptionsViewModel AttestationOptionsViewModel { get; private set; }
     public IAssertionOptionsViewModel AssertionOptionsViewModel { get; private set; }
     public ICredentialManagementViewModel CredentialManagementViewModel { get; private set; }
+
+    /// <summary>Shared security-key selection and management tabs.</summary>
+    public SecurityKeyManagementViewModel SecurityKeyManagementViewModel { get; }
+
+    /// <summary>Independent selection, PIN authentication, and credential actions for the roaming credentials tab.</summary>
+    public SecurityKeyManagementViewModel RoamingCredentialsViewModel { get; }
 
     public ICommand ResetCommand { get; private set; }
     public ICommand RegisterCommand { get; private set; }
@@ -200,24 +212,40 @@ internal sealed class MainWindowViewModel : BindableBase
                 windowHandle: WindowHandle.MainWindow
             );
 
-            // On success, show the result in the Authentication tab
-            this.AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.AssertionPublicKeyCredential);
-
-            // Pre-fill the assertion options view model for easier retesting
-            AssertionOptionsViewModel.ResetOptionsCommand.Execute(null);
-            AssertionOptionsViewModel.RelyingPartyId = credential.RelyingPartyInformation.Id;
-            AssertionOptionsViewModel.Challenge = challenge;
-            AssertionOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Preferred;
-            AssertionOptionsViewModel.AuthenticatorAttachment = AuthenticatorAttachment.Platform;
-            AssertionOptionsViewModel.CredentialHint = PublicKeyCredentialHint.ClientDevice;
-
-            // Switch to the Authentication tab (index 2)
-            this.SelectedTabIndex = 2;
+            ShowCredentialTestResult(response, credential.RelyingPartyInformation.Id, challenge,
+                AuthenticatorAttachment.Platform, PublicKeyCredentialHint.ClientDevice);
         }
         catch (Exception ex)
         {
             DialogService.ShowNotificationDialog(ex.Message);
         }
+    }
+
+    /// <summary>Displays a roaming credential test using the same assertion view as platform credential tests.</summary>
+    /// <param name="response">Completed WebAuthn assertion.</param>
+    /// <param name="relyingPartyId">Credential's relying-party ID.</param>
+    /// <param name="challenge">Challenge used for this test.</param>
+    private void OnRoamingCredentialTestCompleted(AssertionPublicKeyCredential response, string relyingPartyId, byte[] challenge) =>
+        ShowCredentialTestResult(response, relyingPartyId, challenge,
+            AuthenticatorAttachment.CrossPlatform, PublicKeyCredentialHint.SecurityKey);
+
+    /// <summary>Displays an assertion and fills authentication options consistently for credential retesting.</summary>
+    /// <param name="response">Completed WebAuthn assertion.</param>
+    /// <param name="relyingPartyId">Credential's relying-party ID.</param>
+    /// <param name="challenge">Challenge used for this test.</param>
+    /// <param name="attachment">Authenticator attachment used for the test.</param>
+    /// <param name="hint">Matching authenticator UI hint.</param>
+    private void ShowCredentialTestResult(AssertionPublicKeyCredential response, string relyingPartyId, byte[] challenge,
+        AuthenticatorAttachment attachment, PublicKeyCredentialHint hint)
+    {
+        AssertionResponse = JsonSerializer.Serialize(response, _indentedJsonContext.AssertionPublicKeyCredential);
+        AssertionOptionsViewModel.ResetOptionsCommand.Execute(null);
+        AssertionOptionsViewModel.RelyingPartyId = relyingPartyId;
+        AssertionOptionsViewModel.Challenge = challenge;
+        AssertionOptionsViewModel.UserVerificationRequirement = UserVerificationRequirement.Preferred;
+        AssertionOptionsViewModel.AuthenticatorAttachment = attachment;
+        AssertionOptionsViewModel.CredentialHint = hint;
+        SelectedTabIndex = 2;
     }
 
     private void OnOpenHyperLink(string link)

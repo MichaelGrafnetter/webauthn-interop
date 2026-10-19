@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
@@ -20,6 +21,7 @@ namespace DSInternals.Win32.WebAuthn.Interop
         /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="AuthenticationException">The supplied password or PIN is invalid.</exception>
         /// <exception cref="Win32Exception"></exception>
         public static void Validate(HRESULT result)
         {
@@ -50,6 +52,10 @@ namespace DSInternals.Win32.WebAuthn.Interop
                      result == PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_INVALID_DATA))
             {
                 throw new ArgumentException(win32Exception.Message, win32Exception);
+            }
+            else if (result == PInvoke.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_INVALID_PASSWORD))
+            {
+                throw new AuthenticationException(win32Exception.Message, win32Exception);
             }
             else if (result == HRESULT.RPC_E_ACCESS_DENIED)
             {

@@ -30,6 +30,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <!-- FIDO2 Support -->
                 <Label Name="FIDOSupportedLabel" Content="WebAuthn/FIDO2 API availability:" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
@@ -73,6 +74,8 @@
                 <!-- Authenticator List Support -->
                 <Label Name="AuthenticatorListSupportedLabel" Content="Authenticator list support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="13"/>
                 <CheckBox x:Name="AuthenticatorListSupportedCheckBox" IsChecked="{Binding IsAuthenticatorListSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="13"/>
+                <Label Name="AuthenticatorManagementSupportedLabel" Content="Security key management support:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="14"/>
+                <CheckBox x:Name="AuthenticatorManagementSupportedCheckBox" IsChecked="{Binding IsAuthenticatorManagementSupported, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Grid.Column="1" Grid.Row="14"/>
             </Grid>
         </GroupBox>
     </StackPanel>
